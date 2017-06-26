@@ -1,4 +1,5 @@
-# E3db
+# e3db-swift
+Client SDK in Swift for Tozny's E3DB.
 
 [![CI Status](http://img.shields.io/travis/gstro/E3db.svg?style=flat)](https://travis-ci.org/gstro/E3db)
 [![Version](https://img.shields.io/cocoapods/v/E3db.svg?style=flat)](http://cocoapods.org/pods/E3db)
@@ -22,7 +23,7 @@ pod "E3db"
 
 ## Author
 
-gstro, gstromire@gmail.com
+greg@tozny.com
 
 ## License
 

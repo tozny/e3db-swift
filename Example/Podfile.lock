@@ -1,0 +1,16 @@
+PODS:
+  - E3db (0.1.0)
+
+DEPENDENCIES:
+  - E3db (from `../`)
+
+EXTERNAL SOURCES:
+  E3db:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  E3db: 5c4e98812420154f1a455ef40dab0461c2f1de04
+
+PODFILE CHECKSUM: debc8a58d5ae61461b5ff78119004dcfacab41bd
+
+COCOAPODS: 1.2.1
