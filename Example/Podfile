@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'E3db_Example' do
+  pod 'E3db', :path => '../'
+
+  target 'E3db_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
