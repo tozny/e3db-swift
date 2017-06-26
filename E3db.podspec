@@ -40,4 +40,6 @@ TODO: Add long description of the pod here.
   # s.frameworks = 'UIKit', 'MapKit'
 
   s.dependency 'Swish', '~> 2.0'
+  s.dependency 'ResponseDetective', '~> 1.1'
+  s.dependency 'Sodium', '~> 0.3'
 end
