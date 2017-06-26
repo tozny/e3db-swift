@@ -1,5 +1,13 @@
 PODS:
-  - E3db (0.1.0)
+  - Argo (4.1.2):
+    - Runes (>= 4.0.0)
+  - E3db (0.1.0):
+    - Swish (~> 2.0)
+  - Result (3.2.1)
+  - Runes (4.0.1)
+  - Swish (2.0.2):
+    - Argo (~> 4.0)
+    - Result (~> 3.1)
 
 DEPENDENCIES:
   - E3db (from `../`)
@@ -9,7 +17,11 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  E3db: 5c4e98812420154f1a455ef40dab0461c2f1de04
+  Argo: 5db06502fc1222d83011f574243089dab25202ff
+  E3db: e6fd3470c25db22bbfe650f449bd8d02b49e2054
+  Result: 2453a22e5c5b11c0c3a478736e82cd02f763b781
+  Runes: ff20f163b478ac2c0e18158d6086fd5b1997f983
+  Swish: ae4ee862dbcf6c77ebb308e787ffaa22de8a0705
 
 PODFILE CHECKSUM: debc8a58d5ae61461b5ff78119004dcfacab41bd
 

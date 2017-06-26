@@ -7,10 +7,13 @@
 //
 
 import UIKit
+import E3db
 
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
+        print(Tester.test)
+
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
     }
