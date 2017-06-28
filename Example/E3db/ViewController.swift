@@ -12,7 +12,9 @@ import E3db
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
-        Client.healthCheck()
+//        let email = "greg+test3@tozny.com"
+//        Client.register(email: email)
+
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
     }

@@ -1,10 +1,13 @@
 PODS:
   - Argo (4.1.2):
     - Runes (>= 4.0.0)
+  - Curry (3.0.0)
   - E3db (0.1.0):
+    - Curry (~> 3.0)
     - ResponseDetective (~> 1.1)
     - Sodium (~> 0.3)
     - Swish (~> 2.0)
+    - Valet (~> 2.4)
   - ResponseDetective (1.1)
   - Result (3.2.1)
   - Runes (4.0.1)
@@ -12,6 +15,7 @@ PODS:
   - Swish (2.0.2):
     - Argo (~> 4.0)
     - Result (~> 3.1)
+  - Valet (2.4.0)
 
 DEPENDENCIES:
   - E3db (from `../`)
@@ -22,12 +26,14 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Argo: 5db06502fc1222d83011f574243089dab25202ff
-  E3db: fcbedf9bb45ea793eb4a79a4715796d8ff0f1d2a
+  Curry: eb3d2c75aec678b3cc7fb2729d2ad6dd121531d1
+  E3db: ea44c4ff93cd63d080652cd0364f232bf6b42e6f
   ResponseDetective: 58281558cda442747b3c4c711edf20b647018240
   Result: 2453a22e5c5b11c0c3a478736e82cd02f763b781
   Runes: ff20f163b478ac2c0e18158d6086fd5b1997f983
   Sodium: 73874dde37170731f6455aede9419a74d391dc51
   Swish: ae4ee862dbcf6c77ebb308e787ffaa22de8a0705
+  Valet: e4cbde64b8cbbad4d6610fc10d4473502ba1548e
 
 PODFILE CHECKSUM: debc8a58d5ae61461b5ff78119004dcfacab41bd
 
