@@ -6,14 +6,17 @@
 import Foundation
 import Swish
 import Argo
+import Ogra
 import Curry
 import Runes
 
 public struct PublicKey: Encodable, Decodable {
     let curve25519: String
 
-    var asJson: JsonPayload {
-        return ["curve25519": curve25519]
+    public func encode() -> JSON {
+        return JSON.object([
+                "curve25519": curve25519.encode()
+            ])
     }
 
     public static func decode(_ j: JSON) -> Decoded<PublicKey> {
@@ -29,18 +32,18 @@ public struct RegisterRequest: Request, Encodable {
     let publicKey: PublicKey
     let findByEmail: Bool
 
-    var asJson: JsonPayload {
-        return [
-            "email": email,
-            "public_key": publicKey.asJson,
-            "find_by_email": findByEmail
-        ]
+    public func encode() -> JSON {
+        return JSON.object([
+            "email": email.encode(),
+            "public_key": publicKey.encode(),
+            "find_by_email": findByEmail.encode()
+        ])
     }
 
     public func build() -> URLRequest {
         let url = Endpoints.clients.url()
         var req = URLRequest(url: url)
-        return req.setJsonPost(payload: asJson)
+        return req.setJsonPost(payload: encode())
     }
 }
 

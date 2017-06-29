@@ -44,4 +44,5 @@ TODO: Add long description of the pod here.
   s.dependency 'ResponseDetective', '~> 1.1'
   s.dependency 'Sodium', '~> 0.3'
   s.dependency 'Valet', '~> 2.4'
+  s.dependency 'Ogra', '~> 4.1'
 end
