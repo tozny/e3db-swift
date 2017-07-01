@@ -12,28 +12,25 @@ import E3db
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
-        let email = "greg+test7@tozny.com"
-//        Client.register(email: email, findByEmail: false) { (res) in
-//            switch res {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+
+        let email = "greg+test8@tozny.com"
+//        let dev   = "https://dev.e3db.com/v1/storage"
+//        E3db.register(email: email, findByEmail: true, apiUrl: dev) { (result) in
+//            switch result {
 //            case let .success(config):
-//                if config.save(profileName: email) {
-//                    print("Saved: \(config)")
-//                } else {
-//                    print("Failed to save: \(config)")
-//                }
-//
+//                print("\(config.save(profile: email) ? "Saved" : "Failed to save"): \(config)")
 //            case let .failure(err):
 //                print("Failed: \(err)")
 //            }
 //        }
 
-        if let loaded = Config(loadProfile: email) {
-            print("Loaded: \(loaded)")
-        } else {
-            print("Failed to load :(")
+        guard let config = Config(loadProfile: email),
+              let e3db = E3db(config: config) else {
+            return print("Could not create e3db instance.")
         }
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+
     }
 
     override func didReceiveMemoryWarning() {

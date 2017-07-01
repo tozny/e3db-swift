@@ -1,7 +1,8 @@
 //
 //  Config.swift
-//  Pods
+//  E3db
 //
+
 
 import Foundation
 import Argo
@@ -49,18 +50,20 @@ extension Config: Encodable, Decodable {
     }
 }
 
+private let defaultProfileName = "com.tozny.e3db.sdk.profileName"
+
 public extension Config {
 
-    public func save(profileName: String) -> Bool {
-        guard let valet  = VALSecureEnclaveValet(identifier: profileName, accessControl: .userPresence),
+    public func save(profile: String = defaultProfileName) -> Bool {
+        guard let valet  = VALSecureEnclaveValet(identifier: profile, accessControl: .userPresence),
               let config = try? JSONSerialization.data(withJSONObject: self.encode().JSONObject(), options: [])
             else { return false }
 
-        return valet.setObject(config, forKey: profileName)
+        return valet.setObject(config, forKey: profile)
     }
 
 
-    public init?(loadProfile: String) {
+    public init?(loadProfile: String = defaultProfileName) {
         guard let valet = VALSecureEnclaveValet(identifier: loadProfile, accessControl: .userPresence),
               let data  = valet.object(forKey: loadProfile, userPrompt: "Unlock to load profile"),
               let json  = try? JSONSerialization.jsonObject(with: data, options: []),

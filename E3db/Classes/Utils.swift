@@ -7,6 +7,7 @@ import Foundation
 import Sodium
 import Result
 import Argo
+import Swish
 
 public enum E3dbError: Swift.Error {
     case cryptoError(String)        // Message
@@ -16,19 +17,21 @@ public enum E3dbError: Swift.Error {
     case error
 }
 
-enum Endpoints: String {
-    case records, clients
+struct Api {
+    let baseUrl: URL
 
-    static let apiUrl = URL(string: "https://dev.e3db.com/v1/storage")!
-
-    func url() -> URL {
-        return Endpoints.apiUrl.appendingPathComponent(self.rawValue)
+    func url(endpoint: Endpoint) -> URL {
+        return baseUrl.appendingPathComponent(endpoint.rawValue)
     }
 }
 
+enum Endpoint: String {
+    case records, clients
+}
+
 extension URLRequest {
-    mutating func setJsonPost(payload: JSON) -> URLRequest {
-        self.httpMethod  = "POST"
+    mutating func asJsonRequest(_ method: RequestMethod, payload: JSON) -> URLRequest {
+        self.httpMethod  = method.rawValue
         self.jsonPayload = payload.JSONObject()
         self.setValue("appication/json", forHTTPHeaderField: "Accept")
         self.setValue("application/json", forHTTPHeaderField: "Content-Type")

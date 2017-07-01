@@ -27,6 +27,7 @@ public struct PublicKey: Encodable, Decodable {
 
 public struct RegisterRequest: Request, Encodable {
     public typealias ResponseObject = RegisterResponse
+    let api: Api
 
     let email: String
     let publicKey: PublicKey
@@ -41,9 +42,9 @@ public struct RegisterRequest: Request, Encodable {
     }
 
     public func build() -> URLRequest {
-        let url = Endpoints.clients.url()
+        let url = api.url(endpoint: .clients)
         var req = URLRequest(url: url)
-        return req.setJsonPost(payload: encode())
+        return req.asJsonRequest(.POST, payload: encode())
     }
 }
 
@@ -59,4 +60,3 @@ public struct RegisterResponse: Decodable {
             <*> j <| "api_secret"
     }
 }
-
