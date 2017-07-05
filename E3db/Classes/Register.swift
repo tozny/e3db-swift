@@ -15,8 +15,8 @@ public struct PublicKey: Encodable, Decodable {
 
     public func encode() -> JSON {
         return JSON.object([
-                "curve25519": curve25519.encode()
-            ])
+            "curve25519": curve25519.encode()
+        ])
     }
 
     public static func decode(_ j: JSON) -> Decoded<PublicKey> {

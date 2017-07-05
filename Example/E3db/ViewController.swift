@@ -19,9 +19,9 @@ class ViewController: UIViewController {
 //        let dev   = "https://dev.e3db.com/v1/storage"
 //        E3db.register(email: email, findByEmail: true, apiUrl: dev) { (result) in
 //            switch result {
-//            case let .success(config):
+//            case .success(let config):
 //                print("\(config.save(profile: email) ? "Saved" : "Failed to save"): \(config)")
-//            case let .failure(err):
+//            case .failure(let err):
 //                print("Failed: \(err)")
 //            }
 //        }
@@ -29,6 +29,15 @@ class ViewController: UIViewController {
         guard let config = Config(loadProfile: email),
               let e3db = E3db(config: config) else {
             return print("Could not create e3db instance.")
+        }
+
+        e3db.getClientInfo() { (result) in
+            switch result {
+            case .success(let clientInfo):
+                print("Got client info! \(clientInfo)")
+            case .failure(let error):
+                print("Failed to get client info! \(error)")
+            }
         }
 
     }

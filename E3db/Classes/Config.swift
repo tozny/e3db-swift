@@ -50,7 +50,7 @@ extension Config: Encodable, Decodable {
     }
 }
 
-private let defaultProfileName = "com.tozny.e3db.sdk.profileName"
+private let defaultProfileName = "com.tozny.e3db.sdk.defaultProfile"
 
 public extension Config {
 
