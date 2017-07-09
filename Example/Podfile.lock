@@ -17,10 +17,10 @@ PODS:
   - Ogra (4.1.2):
     - Argo (= 4.1.2)
   - ResponseDetective (1.1)
-  - Result (3.2.1)
-  - Runes (4.0.1)
+  - Result (3.2.3)
+  - Runes (4.1.0)
   - Sodium (0.3)
-  - Swish (2.0.2):
+  - Swish (2.0.3):
     - Argo (~> 4.0)
     - Result (~> 3.1)
   - Valet (2.4.0)
@@ -39,10 +39,10 @@ SPEC CHECKSUMS:
   Heimdallr: 7b17b8fffd77ea82fe331418408af7b7a5a5d7a4
   Ogra: fc959d1038250a83e4ffa11ece1a6bbd3a1e547f
   ResponseDetective: 58281558cda442747b3c4c711edf20b647018240
-  Result: 2453a22e5c5b11c0c3a478736e82cd02f763b781
-  Runes: ff20f163b478ac2c0e18158d6086fd5b1997f983
+  Result: 128640a6347e8d2ae48b142556739a2d13f90ce6
+  Runes: 72a67a5bbbe1b5fdae08b5a01b10c60d83fc69aa
   Sodium: 73874dde37170731f6455aede9419a74d391dc51
-  Swish: ae4ee862dbcf6c77ebb308e787ffaa22de8a0705
+  Swish: c6d30b86eb5bdcab7b79081afcb254105bb526d6
   Valet: e4cbde64b8cbbad4d6610fc10d4473502ba1548e
 
 PODFILE CHECKSUM: 7133fc5efa36a642e007fc6e5a22c69ca596d056
