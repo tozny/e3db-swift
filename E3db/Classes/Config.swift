@@ -23,7 +23,7 @@ public struct Config {
 }
 
 // MARK: Json
-extension Config: Encodable, Decodable {
+extension Config: Ogra.Encodable, Argo.Decodable {
     public func encode() -> JSON {
         return JSON.object([
             "version": version.encode(),

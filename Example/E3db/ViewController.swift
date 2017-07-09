@@ -15,7 +15,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
 
-        let email = "greg+test8@tozny.com"
+        let email = "greg+test9@tozny.com"
 //        let dev   = "https://dev.e3db.com/v1/storage"
 //        E3db.register(email: email, findByEmail: true, apiUrl: dev) { (result) in
 //            switch result {

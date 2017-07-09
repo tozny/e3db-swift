@@ -27,7 +27,25 @@ struct Api {
 }
 
 enum Endpoint: String {
-    case records, clients
+    case records
+    case clients
+    case accessKeys = "access_keys"
+}
+
+struct AkCacheKey: Hashable {
+    let writerId: String
+    let readerId: String
+    let recordType: String
+
+    var hashValue: Int {
+        return (writerId + readerId + recordType).hashValue
+    }
+
+    static func == (lhs: AkCacheKey, rhs: AkCacheKey) -> Bool {
+        return lhs.writerId == rhs.writerId &&
+            lhs.readerId == rhs.readerId &&
+            lhs.recordType == rhs.recordType
+    }
 }
 
 struct AuthedRequestPerformer {

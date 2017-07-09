@@ -9,16 +9,18 @@ import Argo
 import Ogra
 import Curry
 import Runes
+import Result
 
-public typealias RecordData = [String: String]
-public typealias Plain      = [String: String]
+public typealias RecordData = [String: Data]
+public typealias CypherData = [String: String]
+public typealias PlainMeta  = [String: String]
 
-public struct Meta: Encodable, Decodable {
+public struct Meta: Ogra.Encodable, Argo.Decodable {
     let recordId: String?
     let writerId: String
     let userId: String
     let type: String
-    let plain: Plain
+    let plain: PlainMeta
     let created: Date?
     let lastModified: Date?
     let version: String?
@@ -49,16 +51,16 @@ public struct Meta: Encodable, Decodable {
         // The >>- (flatMap) decodes to [String: String]
         // and ?? coalesces to empty default value
         return tmp
-            <*> (j <|? "plain" >>- { Plain.decode($0 ?? JSON.object([:])) })
+            <*> ((j <|? "plain").flatMap { PlainMeta.decode($0 ?? JSON.object([:])) })
             <*> j <|? "created"
             <*> j <|? "last_modified"
             <*> j <|? "version"
     }
 }
 
-public struct Record: Encodable, Decodable {
+public struct Record: Ogra.Encodable, Argo.Decodable {
     let meta: Meta
-    let data: RecordData
+    let data: CypherData
 
     public func encode() -> JSON {
         return JSON.object([
@@ -70,28 +72,61 @@ public struct Record: Encodable, Decodable {
     public static func decode(_ j: JSON) -> Decoded<Record> {
         return curry(Record.init)
             <^> j  <| "meta"
-            <*> (j <| "data" >>- { RecordData.decode($0) })
+            <*> ((j <| "data").flatMap { CypherData.decode($0) })
     }
 }
 
+// MARK: Write Record
 
-public struct ClientInfo: Encodable, Decodable {
-    let clientId: String
-    let publicKey: PublicKey
-    let validated: Bool
+extension E3db {
+    private struct CreateRecordRequest: Request {
+        typealias ResponseObject = Record
+        let api: Api
+        let record: Record
 
-    public func encode() -> JSON {
-        return JSON.object([
-            "client_id": clientId.encode(),
-            "public_key": publicKey.encode(),
-            "validated": validated.encode()
-        ])
+        func build() -> URLRequest {
+            let url = api.url(endpoint: .records)
+            var req = URLRequest(url: url)
+            return req.asJsonRequest(.POST, payload: record.encode())
+        }
     }
 
-    public static func decode(_ j: JSON) -> Decoded<ClientInfo> {
-        return curry(ClientInfo.init)
-            <^> j <| "client_id"
-            <*> j <| "public_key"
-            <*> j <| "validated"
+    private func write(_ type: String, data: RecordData, meta: PlainMeta, ak: AccessKey, completion: @escaping E3dbCompletion<Record>) {
+        do {
+            let cypher = try Crypto.encrypt(recordData: data, ak: ak)
+            let meta   = Meta(
+                recordId: nil,
+                writerId: config.clientId,
+                userId: config.clientId,    // for now
+                type: type,
+                plain: meta,
+                created: nil,
+                lastModified: nil,
+                version: nil
+            )
+            let record = Record(meta: meta, data: cypher)
+
+            let req = CreateRecordRequest(api: api, record: record)
+            authedClient.perform(req) { result in
+                print("Result: \(result)")
+                completion(result.mapError { _ in E3dbError.error })
+            }
+        } catch E3dbError.cryptoError(let msg) {
+            completion(Result(error: E3dbError.cryptoError(msg)))
+        } catch {
+            completion(Result(error: E3dbError.cryptoError("Failed to encrypt record")))
+        }
+    }
+
+    public func write(_ type: String, data: RecordData, meta: PlainMeta, completion: @escaping E3dbCompletion<Record>) {
+        let clientId = config.clientId
+        getAccessKey(writerId: clientId, userId: clientId, readerId: clientId, recordType: type) { (result) in
+            switch result {
+            case .success(let ak):
+                self.write(type, data: data, meta: meta, ak: ak, completion: completion)
+            case .failure(_):
+                completion(Result(error: E3dbError.error))
+            }
+        }
     }
 }

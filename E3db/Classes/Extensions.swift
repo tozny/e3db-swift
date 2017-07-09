@@ -33,7 +33,7 @@ extension String {
     }
 }
 
-extension Date: Encodable, Decodable {
+extension Date: Ogra.Encodable, Argo.Decodable {
     public func encode() -> JSON {
         return self.iso8601.encode()
     }
