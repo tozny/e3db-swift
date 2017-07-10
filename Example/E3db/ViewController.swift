@@ -31,12 +31,25 @@ class ViewController: UIViewController {
             return print("Could not create e3db instance.")
         }
 
-        e3db.getClientInfo() { (result) in
+//        e3db.getClientInfo() { (result) in
+//            switch result {
+//            case .success(let clientInfo):
+//                print("Got client info! \(clientInfo)")
+//            case .failure(let error):
+//                print("Failed to get client info! \(error)")
+//            }
+//        }
+
+        guard let data = "secret value".data(using: .utf8) else {
+            return print("Could not create data?")
+        }
+
+        e3db.write("sdk-test", data: ["secret key": data], plain: ["test key": "test value"]) { (result) in
             switch result {
-            case .success(let clientInfo):
-                print("Got client info! \(clientInfo)")
+            case .success(let record):
+                print("Wrote record! \(record)")
             case .failure(let error):
-                print("Failed to get client info! \(error)")
+                print("Failed to write record! \(error)")
             }
         }
 

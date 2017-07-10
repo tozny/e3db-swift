@@ -91,41 +91,37 @@ extension E3db {
         }
     }
 
-    private func write(_ type: String, data: RecordData, meta: PlainMeta, ak: AccessKey, completion: @escaping E3dbCompletion<Record>) {
-        do {
-            let cypher = try Crypto.encrypt(recordData: data, ak: ak)
-            let meta   = Meta(
-                recordId: nil,
-                writerId: config.clientId,
-                userId: config.clientId,    // for now
-                type: type,
-                plain: meta,
-                created: nil,
-                lastModified: nil,
-                version: nil
-            )
-            let record = Record(meta: meta, data: cypher)
+    private func write(_ type: String, data: RecordData, plain: PlainMeta, ak: AccessKey, completion: @escaping E3dbCompletion<Record>) {
+        guard let cypher = try? Crypto.encrypt(recordData: data, ak: ak) else {
+            return completion(Result(error: .cryptoError("Failed to encrypt record")))
+        }
 
-            let req = CreateRecordRequest(api: api, record: record)
-            authedClient.perform(req) { result in
-                print("Result: \(result)")
-                completion(result.mapError { _ in E3dbError.error })
-            }
-        } catch E3dbError.cryptoError(let msg) {
-            completion(Result(error: E3dbError.cryptoError(msg)))
-        } catch {
-            completion(Result(error: E3dbError.cryptoError("Failed to encrypt record")))
+        let meta = Meta(
+            recordId: nil,
+            writerId: config.clientId,
+            userId: config.clientId,    // for now
+            type: type,
+            plain: plain,
+            created: nil,
+            lastModified: nil,
+            version: nil
+        )
+        let record = Record(meta: meta, data: cypher)
+
+        let req = CreateRecordRequest(api: api, record: record)
+        authedClient.perform(req) { result in
+            completion(result.mapError { _ in E3dbError.error })
         }
     }
 
-    public func write(_ type: String, data: RecordData, meta: PlainMeta, completion: @escaping E3dbCompletion<Record>) {
+    public func write(_ type: String, data: RecordData, plain: PlainMeta, completion: @escaping E3dbCompletion<Record>) {
         let clientId = config.clientId
         getAccessKey(writerId: clientId, userId: clientId, readerId: clientId, recordType: type) { (result) in
             switch result {
             case .success(let ak):
-                self.write(type, data: data, meta: meta, ak: ak, completion: completion)
-            case .failure(_):
-                completion(Result(error: E3dbError.error))
+                self.write(type, data: data, plain: plain, ak: ak, completion: completion)
+            case .failure(let error):
+                completion(Result(error: error))
             }
         }
     }
