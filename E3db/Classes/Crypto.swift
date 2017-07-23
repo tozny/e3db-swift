@@ -22,18 +22,12 @@ struct Crypto {
 
 // MARK: Utilities
 extension Crypto {
-    static func generateKeyPair() throws -> Box.KeyPair {
-        guard let keyPair = sodium.box.keyPair() else {
-            throw E3dbError.cryptoError("Failed to generate box key pair.")
-        }
-        return keyPair
+    static func generateKeyPair() -> Box.KeyPair? {
+        return sodium.box.keyPair()
     }
 
-    static func generateAccessKey() throws -> AccessKey {
-        guard let ak = sodium.randomBytes.buf(length: sodium.box.SecretKeyBytes) else {
-            throw E3dbError.cryptoError("Failed to generate access key.")
-        }
-        return ak
+    static func generateAccessKey() -> AccessKey? {
+        return sodium.randomBytes.buf(length: sodium.box.SecretKeyBytes)
     }
 
     static func b64Join(_ cyphertexts: Data...) -> String {
@@ -44,13 +38,18 @@ extension Crypto {
 // MARK: Access Key Crypto
 extension Crypto {
 
-    static func encrypt(accessKey: AccessKey, readerClientKey: ClientKey, authorizerPrivKey: Box.SecretKey) throws -> EncryptedAccessKey {
-        guard let readerPubKey = Box.PublicKey(base64URLEncoded: readerClientKey.curve25519),
-            let eakData: BoxCypherNonce = sodium.box.seal(message: accessKey, recipientPublicKey: readerPubKey, senderSecretKey: authorizerPrivKey) else {
-            throw E3dbError.cryptoError("Failed to encrypt access key")
-        }
-        let eak = b64Join(eakData.authenticatedCipherText, eakData.nonce)
-        return eak
+    static func encrypt(accessKey: AccessKey, readerClientKey: ClientKey, authorizerPrivKey: Box.SecretKey) -> EncryptedAccessKey? {
+        return Box.PublicKey(base64URLEncoded: readerClientKey.curve25519)
+            .flatMap { sodium.box.seal(message: accessKey, recipientPublicKey: $0, senderSecretKey: authorizerPrivKey) }
+            .map { (eakData: BoxCypherNonce) in b64Join(eakData.authenticatedCipherText, eakData.nonce) }
+//        guard let readerPubKey = Box.PublicKey(base64URLEncoded: readerClientKey.curve25519)
+//             else {
+//            return nil
+//        }
+//        let eakData: BoxCypherNonce? = sodium.box.seal(message: accessKey, recipientPublicKey: readerPubKey, senderSecretKey: authorizerPrivKey)
+//        let eak = eakData.map { b64Join($0.authenticatedCipherText, $0.nonce) }
+//        let eak = b64Join(eakData.authenticatedCipherText, eakData.nonce)
+//        return eak
     }
 
     static func decrypt(eakResponse: EAKResponse, clientPrivateKey: String) throws -> AccessKey {

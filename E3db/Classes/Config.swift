@@ -55,20 +55,38 @@ private let defaultProfileName = "com.tozny.e3db.sdk.defaultProfile"
 public extension Config {
 
     public func save(profile: String = defaultProfileName) -> Bool {
-        guard let valet  = VALSecureEnclaveValet(identifier: profile, accessControl: .userPresence),
-              let config = try? JSONSerialization.data(withJSONObject: self.encode().JSONObject(), options: [])
-            else { return false }
+
+
+        guard let valet  = VALSecureEnclaveValet(identifier: profile, accessControl: .touchIDAnyFingerprint) else {
+            print("Could not create valet.")
+            return false
+        }
+        guard let config = try? JSONSerialization.data(withJSONObject: self.encode().JSONObject(), options: []) else {
+            print("Could not serialize json.")
+            return false
+        }
 
         return valet.setObject(config, forKey: profile)
     }
 
 
     public init?(loadProfile: String = defaultProfileName) {
-        guard let valet = VALSecureEnclaveValet(identifier: loadProfile, accessControl: .userPresence),
-              let data  = valet.object(forKey: loadProfile, userPrompt: "Unlock to load profile"),
-              let json  = try? JSONSerialization.jsonObject(with: data, options: []),
-         case let .success(config) = Config.decode(JSON(json))
-            else { return nil }
+        guard let valet = VALSecureEnclaveValet(identifier: loadProfile, accessControl: .touchIDAnyFingerprint) else {
+            print("Could not create valet.")
+            return nil
+        }
+        guard let data  = valet.object(forKey: loadProfile, userPrompt: "Unlock to load profile") else {
+            print("Could not load valet object.")
+            return nil
+        }
+        guard let json  = try? JSONSerialization.jsonObject(with: data, options: []) else {
+            print("Could not deserialize json.")
+            return nil
+        }
+        guard case .success(let config) = Config.decode(JSON(json)) else {
+            print("Could not create config from json.")
+            return nil
+        }
 
         self = config
     }

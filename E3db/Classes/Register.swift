@@ -71,7 +71,7 @@ extension E3db {
         }
 
         // create key pair
-        guard let keyPair = try? Crypto.generateKeyPair() else {
+        guard let keyPair = Crypto.generateKeyPair() else {
             return completion(Result(error: .cryptoError("Could not create key pair.")))
         }
 

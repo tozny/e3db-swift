@@ -101,7 +101,7 @@ extension E3db {
 
             // EAK not found on server, generate one
             guard case .failure(.serverError(404, _)) = result,
-                let ak = try? Crypto.generateAccessKey() else {
+                let ak = Crypto.generateAccessKey() else {
 
                 // TODO: Better error handling
                 return completion(Result(error: E3dbError.error))
@@ -131,7 +131,7 @@ extension E3db {
             case .success(let client):
                 // encrypt ak
                 guard let authorizerPrivKey = Box.SecretKey(base64URLEncoded: self.config.privateKey),
-                    let eak = try? Crypto.encrypt(accessKey: ak, readerClientKey: client.publicKey, authorizerPrivKey: authorizerPrivKey) else {
+                    let eak = Crypto.encrypt(accessKey: ak, readerClientKey: client.publicKey, authorizerPrivKey: authorizerPrivKey) else {
                         return completion(Result(error: .cryptoError("Failed to encrypt access key")))
                 }
 

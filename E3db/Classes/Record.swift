@@ -16,7 +16,7 @@ public typealias CypherData = [String: String]
 public typealias PlainMeta  = [String: String]
 
 public struct Meta: Ogra.Encodable, Argo.Decodable {
-    let recordId: String?
+    public let recordId: String?
     let writerId: String
     let userId: String
     let type: String
@@ -59,8 +59,8 @@ public struct Meta: Ogra.Encodable, Argo.Decodable {
 }
 
 public struct Record: Ogra.Encodable, Argo.Decodable {
-    let meta: Meta
-    let data: CypherData
+    public let meta: Meta
+    public let data: CypherData
 
     public func encode() -> JSON {
         return JSON.object([
