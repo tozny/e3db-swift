@@ -21,8 +21,23 @@ public enum E3dbError: Swift.Error {
 struct Api {
     let baseUrl: URL
 
+    private let version   = "v1"
+    private let pdsPath   = "storage"
+    private let authPath  = "auth"
+    private let tokenPath = "token"
+
     func url(endpoint: Endpoint) -> URL {
-        return baseUrl.appendingPathComponent(endpoint.rawValue)
+        return baseUrl
+            .appendingPathComponent(version)
+            .appendingPathComponent(pdsPath)
+            .appendingPathComponent(endpoint.rawValue)
+    }
+
+    func tokenUrl() -> URL {
+        return baseUrl
+            .appendingPathComponent(version)
+            .appendingPathComponent(authPath)
+            .appendingPathComponent(tokenPath)
     }
 }
 
@@ -58,7 +73,6 @@ struct AuthedRequestPerformer {
     }
 }
 
-// TODO: Better error handling
 extension AuthedRequestPerformer: RequestPerformer {
 
     @discardableResult

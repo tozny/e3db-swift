@@ -64,7 +64,7 @@ public struct RegisterResponse: Argo.Decodable {
 }
 
 extension E3db {
-    public static func register(email: String, findByEmail: Bool, apiUrl: String, completion: @escaping E3dbCompletion<Config>) {
+    public static func register(email: String, findByEmail: Bool, apiUrl: String = "https://api.e3db.com/", completion: @escaping E3dbCompletion<Config>) {
         // ensure api url is valid
         guard let url = URL(string: apiUrl) else {
             return completion(Result(error: .configError("Invalid apiUrl: \(apiUrl)")))

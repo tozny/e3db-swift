@@ -73,7 +73,7 @@ extension E3db {
 
     // Workaround for strange scoping issue related to Result(try ...) inside "perform" callback,
     // error reads: "Invalid conversion from throwing function of type '(_) throws -> _' to
-    // non-throwing function type '(Result<_.ResponseObject, SwishError>) -> Void'
+    // non-throwing function type '(Result<_.ResponseObject, SwishError>) -> Void'"
     private func decryptEak(eakResponse: EAKResponse, clientPrivateKey: String) -> Result<AccessKey, E3dbError> {
         return Result(try Crypto.decrypt(eakResponse: eakResponse, clientPrivateKey: clientPrivateKey))
     }

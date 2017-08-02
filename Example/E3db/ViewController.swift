@@ -19,9 +19,12 @@ class ViewController: UIViewController {
     var shouldRegister = true
 
     @IBAction func write() {
-        guard let config = Config(loadProfile: email) else {
+        guard let config = Config() else {
             return print("Could not load config for \(email)")
         }
+//        guard let config = Config(loadProfile: email) else {
+//            return print("Could not load config for \(email)")
+//        }
 
         guard let e3db = E3db(config: config) else {
             return print("Could not create e3db instance.")
@@ -37,7 +40,7 @@ class ViewController: UIViewController {
             let text: String
             switch result {
             case .success(let record):
-                text = "Wrote record! \(record.meta.recordId!)"
+                text = "Wrote record! \(record.meta.recordId)"
             case .failure(let error):
                 text = "Failed to write record! \(error)"
             }
@@ -51,7 +54,8 @@ class ViewController: UIViewController {
         E3db.register(email: email, findByEmail: true, apiUrl: dev) { (result) in
             switch result {
             case .success(let config):
-                let saved = config.save(profile: self.email)
+                let saved = config.save()
+//                let saved = config.save(profile: self.email)
                 print("\(saved ? "Saved" : "Failed to save"): \(config)")
             case .failure(let err):
                 print("Failed: \(err)")

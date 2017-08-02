@@ -15,35 +15,38 @@ public typealias RecordData = [String: Data]
 public typealias CypherData = [String: String]
 public typealias PlainMeta  = [String: String]
 
-public struct Meta: Ogra.Encodable, Argo.Decodable {
-    public let recordId: String?
+struct MetaRequest: Ogra.Encodable {
     let writerId: String
     let userId: String
     let type: String
     let plain: PlainMeta
-    let created: Date?
-    let lastModified: Date?
-    let version: String?
 
     public func encode() -> JSON {
         return JSON.object([
-            "record_id": recordId.encode(),
             "writer_id": writerId.encode(),
             "user_id": userId.encode(),
             "type": type.encode(),
             "plain": plain.encode(),
-            "created": created.encode(),
-            "last_modified": lastModified.encode(),
-            "version": version.encode()
         ])
     }
+}
+
+public struct Meta: Argo.Decodable {
+    public let recordId: String
+    public let writerId: String
+    public let userId: String
+    public let type: String
+    public let plain: PlainMeta
+    public let created: Date
+    public let lastModified: Date
+    public let version: String?
 
     public static func decode(_ j: JSON) -> Decoded<Meta> {
         let tmp = curry(Meta.init)
-            <^> j <|? "record_id"
-            <*> j <|  "writer_id"
-            <*> j <|  "user_id"
-            <*> j <|  "type"
+            <^> j <| "record_id"
+            <*> j <| "writer_id"
+            <*> j <| "user_id"
+            <*> j <| "type"
 
         // split decode fixes: "expression was too complex
         // to be solved in reasonable time."
@@ -52,15 +55,15 @@ public struct Meta: Ogra.Encodable, Argo.Decodable {
         // and ?? coalesces to empty default value
         return tmp
             <*> ((j <|? "plain").flatMap { PlainMeta.decode($0 ?? JSON.object([:])) })
-            <*> j <|? "created"
-            <*> j <|? "last_modified"
+            <*> j <|  "created"
+            <*> j <|  "last_modified"
             <*> j <|? "version"
     }
 }
 
-public struct Record: Ogra.Encodable, Argo.Decodable {
-    public let meta: Meta
-    public let data: CypherData
+struct RecordRequest: Ogra.Encodable {
+    let meta: MetaRequest
+    let data: CypherData
 
     public func encode() -> JSON {
         return JSON.object([
@@ -68,6 +71,11 @@ public struct Record: Ogra.Encodable, Argo.Decodable {
             "data": data.encode()
         ])
     }
+}
+
+public struct Record: Argo.Decodable {
+    public let meta: Meta
+    public let data: CypherData
 
     public static func decode(_ j: JSON) -> Decoded<Record> {
         return curry(Record.init)
@@ -82,7 +90,7 @@ extension E3db {
     private struct CreateRecordRequest: Request {
         typealias ResponseObject = Record
         let api: Api
-        let record: Record
+        let record: RecordRequest
 
         func build() -> URLRequest {
             let url = api.url(endpoint: .records)
@@ -96,20 +104,18 @@ extension E3db {
             return completion(Result(error: .cryptoError("Failed to encrypt record")))
         }
 
-        let meta = Meta(
-            recordId: nil,
+        let meta = MetaRequest(
             writerId: config.clientId,
             userId: config.clientId,    // for now
             type: type,
-            plain: plain,
-            created: nil,
-            lastModified: nil,
-            version: nil
+            plain: plain
         )
-        let record = Record(meta: meta, data: cypher)
+        let record = RecordRequest(meta: meta, data: cypher)
 
         let req = CreateRecordRequest(api: api, record: record)
         authedClient.perform(req) { result in
+
+            // TODO: Better error handling
             completion(result.mapError { _ in E3dbError.error })
         }
     }

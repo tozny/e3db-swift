@@ -42,13 +42,11 @@ public class E3db {
         self.api    = Api(baseUrl: url)
         self.config = config
 
-        // TODO: Clean up url handling
-        let tokenUrl = "https://dev.e3db.com/v1/auth/token"
-        let creds = OAuthClientCredentials(id: config.apiKeyId, secret: config.apiSecret)
-        let client = HeimdallrHTTPClientURLSession(urlSession: E3db.debugSession)
-        let heimdallr = Heimdallr(tokenURL: URL(string: tokenUrl)!, credentials: creds, httpClient: client)
-        let performer = AuthedRequestPerformer(authenticator: heimdallr, session: E3db.debugSession)
-        self.authedClient = APIClient(requestPerformer: performer)
+        let credentials   = OAuthClientCredentials(id: config.apiKeyId, secret: config.apiSecret)
+        let httpClient    = HeimdallrHTTPClientURLSession(urlSession: E3db.debugSession)
+        let heimdallr     = Heimdallr(tokenURL: api.tokenUrl(), credentials: credentials, httpClient: httpClient)
+        let reqPerformer  = AuthedRequestPerformer(authenticator: heimdallr, session: E3db.debugSession)
+        self.authedClient = APIClient(requestPerformer: reqPerformer)
     }
 }
 

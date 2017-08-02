@@ -6,10 +6,6 @@
 import Foundation
 import Sodium
 
-enum CryptoError {
-    case keyGen
-}
-
 typealias AccessKey          = Box.SecretKey
 typealias EncryptedAccessKey = String
 
@@ -42,14 +38,6 @@ extension Crypto {
         return Box.PublicKey(base64URLEncoded: readerClientKey.curve25519)
             .flatMap { sodium.box.seal(message: accessKey, recipientPublicKey: $0, senderSecretKey: authorizerPrivKey) }
             .map { (eakData: BoxCypherNonce) in b64Join(eakData.authenticatedCipherText, eakData.nonce) }
-//        guard let readerPubKey = Box.PublicKey(base64URLEncoded: readerClientKey.curve25519)
-//             else {
-//            return nil
-//        }
-//        let eakData: BoxCypherNonce? = sodium.box.seal(message: accessKey, recipientPublicKey: readerPubKey, senderSecretKey: authorizerPrivKey)
-//        let eak = eakData.map { b64Join($0.authenticatedCipherText, $0.nonce) }
-//        let eak = b64Join(eakData.authenticatedCipherText, eakData.nonce)
-//        return eak
     }
 
     static func decrypt(eakResponse: EAKResponse, clientPrivateKey: String) throws -> AccessKey {
