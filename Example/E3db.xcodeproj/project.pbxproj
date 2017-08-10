@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C18845C1F3D0DAA00C8CDC2 /* E3db.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C1884431F3D0BDA00C8CDC2 /* E3db.framework */; };
 		49564ACEB57D0E66804FF993 /* Pods_E3db_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 150B4C0D6B8E8E1C0919315E /* Pods_E3db_Example.framework */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
@@ -18,6 +19,104 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		2C18843E1F3D0BDA00C8CDC2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2C1883271F3D0BDA00C8CDC2 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 68DED083414B3FAFA166BB03CFEB7D8C;
+			remoteInfo = Argo;
+		};
+		2C1884401F3D0BDA00C8CDC2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2C1883271F3D0BDA00C8CDC2 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EB1D84C03F1EDA88D274643489A982F4;
+			remoteInfo = Curry;
+		};
+		2C1884421F3D0BDA00C8CDC2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2C1883271F3D0BDA00C8CDC2 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 68A82E7439236D0FA80781926806A53F;
+			remoteInfo = E3db;
+		};
+		2C1884441F3D0BDA00C8CDC2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2C1883271F3D0BDA00C8CDC2 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E3FCF232F6FACDFE1CA1192C3EF40836;
+			remoteInfo = Heimdallr;
+		};
+		2C1884461F3D0BDA00C8CDC2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2C1883271F3D0BDA00C8CDC2 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5207E06C35C5643C1831552E64185C65;
+			remoteInfo = Ogra;
+		};
+		2C1884481F3D0BDA00C8CDC2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2C1883271F3D0BDA00C8CDC2 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 29B7034B0D77EF17635746939B31FC92;
+			remoteInfo = "Pods-E3db_Example";
+		};
+		2C18844A1F3D0BDA00C8CDC2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2C1883271F3D0BDA00C8CDC2 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C21C4DA8DEA13C9670677033477AA5FB;
+			remoteInfo = "Pods-E3db_Tests";
+		};
+		2C18844C1F3D0BDA00C8CDC2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2C1883271F3D0BDA00C8CDC2 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D5B72F0D646F390E448C5718CC726D1D;
+			remoteInfo = ResponseDetective;
+		};
+		2C18844E1F3D0BDA00C8CDC2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2C1883271F3D0BDA00C8CDC2 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 616855B94D45314BEAE4854B5273EEA6;
+			remoteInfo = Result;
+		};
+		2C1884501F3D0BDA00C8CDC2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2C1883271F3D0BDA00C8CDC2 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B592CEF7C18665020F9AD6249AC9A975;
+			remoteInfo = Runes;
+		};
+		2C1884521F3D0BDA00C8CDC2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2C1883271F3D0BDA00C8CDC2 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6D3F3064665512BD1F6E3474A3CFAA35;
+			remoteInfo = Sodium;
+		};
+		2C1884541F3D0BDA00C8CDC2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2C1883271F3D0BDA00C8CDC2 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F696282184239C1F860351EB3C0310FC;
+			remoteInfo = Swish;
+		};
+		2C1884561F3D0BDA00C8CDC2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2C1883271F3D0BDA00C8CDC2 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C68F46C4939696217E53E7613C31F1D9;
+			remoteInfo = Valet;
+		};
+		2C18845D1F3D0DB000C8CDC2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2C1883271F3D0BDA00C8CDC2 /* Pods.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = ECE1B4D4C3FA5FD4261BD1466CD11243;
+			remoteInfo = E3db;
+		};
 		607FACE61AFB9204008FA782 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 607FACC81AFB9204008FA782 /* Project object */;
@@ -30,6 +129,289 @@
 /* Begin PBXFileReference section */
 		150B4C0D6B8E8E1C0919315E /* Pods_E3db_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_E3db_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		181DD6CB7459FD4B80E26DCB /* Pods-E3db_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-E3db_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-E3db_Tests/Pods-E3db_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		2C1882D91F3D0BDA00C8CDC2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		2C1882DB1F3D0BDA00C8CDC2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		2C1882DD1F3D0BDA00C8CDC2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		2C1882DE1F3D0BDA00C8CDC2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		2C1882DF1F3D0BDA00C8CDC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2C1882E01F3D0BDA00C8CDC2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		2C1882E11F3D0BDA00C8CDC2 /* E3db.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = E3db.xcodeproj; sourceTree = "<group>"; };
+		2C1882E41F3D0BDA00C8CDC2 /* E3db.xcworkspace */ = {isa = PBXFileReference; lastKnownFileType = wrapper.workspace; path = E3db.xcworkspace; sourceTree = "<group>"; };
+		2C1882E51F3D0BDA00C8CDC2 /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
+		2C1882E61F3D0BDA00C8CDC2 /* Podfile.lock */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile.lock; sourceTree = "<group>"; };
+		2C1882E91F3D0BDA00C8CDC2 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		2C1882EA1F3D0BDA00C8CDC2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		2C1882EE1F3D0BDA00C8CDC2 /* Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
+		2C1882EF1F3D0BDA00C8CDC2 /* NSNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSNumber.swift; sourceTree = "<group>"; };
+		2C1882F01F3D0BDA00C8CDC2 /* RawRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawRepresentable.swift; sourceTree = "<group>"; };
+		2C1882F21F3D0BDA00C8CDC2 /* catDecoded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = catDecoded.swift; sourceTree = "<group>"; };
+		2C1882F31F3D0BDA00C8CDC2 /* decode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = decode.swift; sourceTree = "<group>"; };
+		2C1882F41F3D0BDA00C8CDC2 /* flatReduce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = flatReduce.swift; sourceTree = "<group>"; };
+		2C1882F51F3D0BDA00C8CDC2 /* sequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sequence.swift; sourceTree = "<group>"; };
+		2C1882F71F3D0BDA00C8CDC2 /* Argo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Argo.swift; sourceTree = "<group>"; };
+		2C1882F81F3D0BDA00C8CDC2 /* DecodeOperators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodeOperators.swift; sourceTree = "<group>"; };
+		2C1882FA1F3D0BDA00C8CDC2 /* Decodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decodable.swift; sourceTree = "<group>"; };
+		2C1882FC1F3D0BDA00C8CDC2 /* Alternative.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alternative.swift; sourceTree = "<group>"; };
+		2C1882FD1F3D0BDA00C8CDC2 /* Applicative.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Applicative.swift; sourceTree = "<group>"; };
+		2C1882FE1F3D0BDA00C8CDC2 /* Decoded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decoded.swift; sourceTree = "<group>"; };
+		2C1882FF1F3D0BDA00C8CDC2 /* FailureCoalescing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailureCoalescing.swift; sourceTree = "<group>"; };
+		2C1883001F3D0BDA00C8CDC2 /* Functor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functor.swift; sourceTree = "<group>"; };
+		2C1883011F3D0BDA00C8CDC2 /* Monad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monad.swift; sourceTree = "<group>"; };
+		2C1883021F3D0BDA00C8CDC2 /* DecodeError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodeError.swift; sourceTree = "<group>"; };
+		2C1883031F3D0BDA00C8CDC2 /* JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
+		2C1883041F3D0BDA00C8CDC2 /* StandardTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandardTypes.swift; sourceTree = "<group>"; };
+		2C1883061F3D0BDA00C8CDC2 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		2C1883071F3D0BDA00C8CDC2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		2C1883091F3D0BDA00C8CDC2 /* Curry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Curry.swift; sourceTree = "<group>"; };
+		2C18830E1F3D0BDA00C8CDC2 /* Heimdallr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Heimdallr.swift; sourceTree = "<group>"; };
+		2C18830F1F3D0BDA00C8CDC2 /* HeimdallrHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeimdallrHTTPClient.swift; sourceTree = "<group>"; };
+		2C1883101F3D0BDA00C8CDC2 /* HeimdallrHTTPClientURLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeimdallrHTTPClientURLSession.swift; sourceTree = "<group>"; };
+		2C1883111F3D0BDA00C8CDC2 /* HeimdallrResourceRequestAuthenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeimdallrResourceRequestAuthenticator.swift; sourceTree = "<group>"; };
+		2C1883121F3D0BDA00C8CDC2 /* HeimdallrResourceRequestAuthenticatorHTTPAuthorizationHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeimdallrResourceRequestAuthenticatorHTTPAuthorizationHeader.swift; sourceTree = "<group>"; };
+		2C1883131F3D0BDA00C8CDC2 /* OAuthAccessToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthAccessToken.swift; sourceTree = "<group>"; };
+		2C1883141F3D0BDA00C8CDC2 /* OAuthAccessTokenDefaultParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthAccessTokenDefaultParser.swift; sourceTree = "<group>"; };
+		2C1883151F3D0BDA00C8CDC2 /* OAuthAccessTokenKeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthAccessTokenKeychainStore.swift; sourceTree = "<group>"; };
+		2C1883161F3D0BDA00C8CDC2 /* OAuthAccessTokenParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthAccessTokenParser.swift; sourceTree = "<group>"; };
+		2C1883171F3D0BDA00C8CDC2 /* OAuthAccessTokenStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthAccessTokenStore.swift; sourceTree = "<group>"; };
+		2C1883181F3D0BDA00C8CDC2 /* OAuthAuthorizationGrant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthAuthorizationGrant.swift; sourceTree = "<group>"; };
+		2C1883191F3D0BDA00C8CDC2 /* OAuthClientCredentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthClientCredentials.swift; sourceTree = "<group>"; };
+		2C18831A1F3D0BDA00C8CDC2 /* OAuthError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthError.swift; sourceTree = "<group>"; };
+		2C18831B1F3D0BDA00C8CDC2 /* URLRequestExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequestExtensions.swift; sourceTree = "<group>"; };
+		2C18831C1F3D0BDA00C8CDC2 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		2C18831D1F3D0BDA00C8CDC2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		2C18831F1F3D0BDA00C8CDC2 /* E3db.podspec.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = E3db.podspec.json; sourceTree = "<group>"; };
+		2C1883201F3D0BDA00C8CDC2 /* Manifest.lock */ = {isa = PBXFileReference; lastKnownFileType = text; path = Manifest.lock; sourceTree = "<group>"; };
+		2C1883221F3D0BDA00C8CDC2 /* licence.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = licence.md; sourceTree = "<group>"; };
+		2C1883231F3D0BDA00C8CDC2 /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
+		2C1883251F3D0BDA00C8CDC2 /* Encodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encodable.swift; sourceTree = "<group>"; };
+		2C1883261F3D0BDA00C8CDC2 /* Ogra.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Ogra.h; sourceTree = "<group>"; };
+		2C1883271F3D0BDA00C8CDC2 /* Pods.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Pods.xcodeproj; sourceTree = "<group>"; };
+		2C18832B1F3D0BDA00C8CDC2 /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
+		2C18832C1F3D0BDA00C8CDC2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		2C18832F1F3D0BDA00C8CDC2 /* Framework.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = Framework.modulemap; sourceTree = "<group>"; };
+		2C1883311F3D0BDA00C8CDC2 /* BufferOutputFacility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BufferOutputFacility.swift; sourceTree = "<group>"; };
+		2C1883321F3D0BDA00C8CDC2 /* ConsoleOutputFacility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleOutputFacility.swift; sourceTree = "<group>"; };
+		2C1883331F3D0BDA00C8CDC2 /* Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
+		2C1883341F3D0BDA00C8CDC2 /* ErrorRepresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorRepresentation.swift; sourceTree = "<group>"; };
+		2C1883351F3D0BDA00C8CDC2 /* ImageBodyDeserializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageBodyDeserializer.swift; sourceTree = "<group>"; };
+		2C1883361F3D0BDA00C8CDC2 /* JSONBodyDeserializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONBodyDeserializer.swift; sourceTree = "<group>"; };
+		2C1883371F3D0BDA00C8CDC2 /* OutputFacility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputFacility.swift; sourceTree = "<group>"; };
+		2C1883381F3D0BDA00C8CDC2 /* PlaintextBodyDeserializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaintextBodyDeserializer.swift; sourceTree = "<group>"; };
+		2C1883391F3D0BDA00C8CDC2 /* RDTBodyDeserializer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RDTBodyDeserializer.h; sourceTree = "<group>"; };
+		2C18833A1F3D0BDA00C8CDC2 /* RDTHTMLBodyDeserializer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RDTHTMLBodyDeserializer.h; sourceTree = "<group>"; };
+		2C18833B1F3D0BDA00C8CDC2 /* RDTHTMLBodyDeserializer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RDTHTMLBodyDeserializer.m; sourceTree = "<group>"; };
+		2C18833C1F3D0BDA00C8CDC2 /* RDTXMLBodyDeserializer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RDTXMLBodyDeserializer.h; sourceTree = "<group>"; };
+		2C18833D1F3D0BDA00C8CDC2 /* RDTXMLBodyDeserializer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RDTXMLBodyDeserializer.m; sourceTree = "<group>"; };
+		2C18833E1F3D0BDA00C8CDC2 /* RequestRepresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestRepresentation.swift; sourceTree = "<group>"; };
+		2C18833F1F3D0BDA00C8CDC2 /* ResponseDetective.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ResponseDetective.h; sourceTree = "<group>"; };
+		2C1883401F3D0BDA00C8CDC2 /* ResponseDetective.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseDetective.swift; sourceTree = "<group>"; };
+		2C1883411F3D0BDA00C8CDC2 /* ResponseRepresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseRepresentation.swift; sourceTree = "<group>"; };
+		2C1883421F3D0BDA00C8CDC2 /* URLEncodedBodyDeserializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLEncodedBodyDeserializer.swift; sourceTree = "<group>"; };
+		2C1883431F3D0BDA00C8CDC2 /* URLProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLProtocol.swift; sourceTree = "<group>"; };
+		2C1883451F3D0BDA00C8CDC2 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		2C1883461F3D0BDA00C8CDC2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		2C1883481F3D0BDA00C8CDC2 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		2C1883491F3D0BDA00C8CDC2 /* ResultProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultProtocol.swift; sourceTree = "<group>"; };
+		2C18834B1F3D0BDA00C8CDC2 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		2C18834C1F3D0BDA00C8CDC2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		2C1883501F3D0BDA00C8CDC2 /* Array+Alternative.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Alternative.swift"; sourceTree = "<group>"; };
+		2C1883511F3D0BDA00C8CDC2 /* Array+Applicative.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Applicative.swift"; sourceTree = "<group>"; };
+		2C1883521F3D0BDA00C8CDC2 /* Array+Functor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Functor.swift"; sourceTree = "<group>"; };
+		2C1883531F3D0BDA00C8CDC2 /* Array+Monad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Monad.swift"; sourceTree = "<group>"; };
+		2C1883551F3D0BDA00C8CDC2 /* Optional+Alternative.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Alternative.swift"; sourceTree = "<group>"; };
+		2C1883561F3D0BDA00C8CDC2 /* Optional+Applicative.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Applicative.swift"; sourceTree = "<group>"; };
+		2C1883571F3D0BDA00C8CDC2 /* Optional+Functor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Functor.swift"; sourceTree = "<group>"; };
+		2C1883581F3D0BDA00C8CDC2 /* Optional+Monad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Monad.swift"; sourceTree = "<group>"; };
+		2C1883591F3D0BDA00C8CDC2 /* Runes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Runes.swift; sourceTree = "<group>"; };
+		2C18835B1F3D0BDA00C8CDC2 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		2C18835C1F3D0BDA00C8CDC2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		2C18835E1F3D0BDA00C8CDC2 /* Box.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
+		2C18835F1F3D0BDA00C8CDC2 /* core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = core.h; sourceTree = "<group>"; };
+		2C1883601F3D0BDA00C8CDC2 /* crypto_aead_aes256gcm.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_aead_aes256gcm.h; sourceTree = "<group>"; };
+		2C1883611F3D0BDA00C8CDC2 /* crypto_aead_chacha20poly1305.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_aead_chacha20poly1305.h; sourceTree = "<group>"; };
+		2C1883621F3D0BDA00C8CDC2 /* crypto_auth.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_auth.h; sourceTree = "<group>"; };
+		2C1883631F3D0BDA00C8CDC2 /* crypto_auth_hmacsha256.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_auth_hmacsha256.h; sourceTree = "<group>"; };
+		2C1883641F3D0BDA00C8CDC2 /* crypto_auth_hmacsha512.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_auth_hmacsha512.h; sourceTree = "<group>"; };
+		2C1883651F3D0BDA00C8CDC2 /* crypto_auth_hmacsha512256.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_auth_hmacsha512256.h; sourceTree = "<group>"; };
+		2C1883661F3D0BDA00C8CDC2 /* crypto_box.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_box.h; sourceTree = "<group>"; };
+		2C1883671F3D0BDA00C8CDC2 /* crypto_box_curve25519xsalsa20poly1305.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_box_curve25519xsalsa20poly1305.h; sourceTree = "<group>"; };
+		2C1883681F3D0BDA00C8CDC2 /* crypto_core_hchacha20.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_core_hchacha20.h; sourceTree = "<group>"; };
+		2C1883691F3D0BDA00C8CDC2 /* crypto_core_hsalsa20.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_core_hsalsa20.h; sourceTree = "<group>"; };
+		2C18836A1F3D0BDA00C8CDC2 /* crypto_core_salsa20.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_core_salsa20.h; sourceTree = "<group>"; };
+		2C18836B1F3D0BDA00C8CDC2 /* crypto_core_salsa2012.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_core_salsa2012.h; sourceTree = "<group>"; };
+		2C18836C1F3D0BDA00C8CDC2 /* crypto_core_salsa208.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_core_salsa208.h; sourceTree = "<group>"; };
+		2C18836D1F3D0BDA00C8CDC2 /* crypto_generichash.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_generichash.h; sourceTree = "<group>"; };
+		2C18836E1F3D0BDA00C8CDC2 /* crypto_generichash_blake2b.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_generichash_blake2b.h; sourceTree = "<group>"; };
+		2C18836F1F3D0BDA00C8CDC2 /* crypto_hash.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_hash.h; sourceTree = "<group>"; };
+		2C1883701F3D0BDA00C8CDC2 /* crypto_hash_sha256.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_hash_sha256.h; sourceTree = "<group>"; };
+		2C1883711F3D0BDA00C8CDC2 /* crypto_hash_sha512.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_hash_sha512.h; sourceTree = "<group>"; };
+		2C1883721F3D0BDA00C8CDC2 /* crypto_int32.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_int32.h; sourceTree = "<group>"; };
+		2C1883731F3D0BDA00C8CDC2 /* crypto_int64.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_int64.h; sourceTree = "<group>"; };
+		2C1883741F3D0BDA00C8CDC2 /* crypto_onetimeauth.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_onetimeauth.h; sourceTree = "<group>"; };
+		2C1883751F3D0BDA00C8CDC2 /* crypto_onetimeauth_poly1305.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_onetimeauth_poly1305.h; sourceTree = "<group>"; };
+		2C1883761F3D0BDA00C8CDC2 /* crypto_pwhash.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_pwhash.h; sourceTree = "<group>"; };
+		2C1883771F3D0BDA00C8CDC2 /* crypto_pwhash_argon2i.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_pwhash_argon2i.h; sourceTree = "<group>"; };
+		2C1883781F3D0BDA00C8CDC2 /* crypto_pwhash_scryptsalsa208sha256.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_pwhash_scryptsalsa208sha256.h; sourceTree = "<group>"; };
+		2C1883791F3D0BDA00C8CDC2 /* crypto_scalarmult.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_scalarmult.h; sourceTree = "<group>"; };
+		2C18837A1F3D0BDA00C8CDC2 /* crypto_scalarmult_curve25519.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_scalarmult_curve25519.h; sourceTree = "<group>"; };
+		2C18837B1F3D0BDA00C8CDC2 /* crypto_secretbox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_secretbox.h; sourceTree = "<group>"; };
+		2C18837C1F3D0BDA00C8CDC2 /* crypto_secretbox_xsalsa20poly1305.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_secretbox_xsalsa20poly1305.h; sourceTree = "<group>"; };
+		2C18837D1F3D0BDA00C8CDC2 /* crypto_shorthash.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_shorthash.h; sourceTree = "<group>"; };
+		2C18837E1F3D0BDA00C8CDC2 /* crypto_shorthash_siphash24.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_shorthash_siphash24.h; sourceTree = "<group>"; };
+		2C18837F1F3D0BDA00C8CDC2 /* crypto_sign.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_sign.h; sourceTree = "<group>"; };
+		2C1883801F3D0BDA00C8CDC2 /* crypto_sign_ed25519.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_sign_ed25519.h; sourceTree = "<group>"; };
+		2C1883811F3D0BDA00C8CDC2 /* crypto_sign_edwards25519sha512batch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_sign_edwards25519sha512batch.h; sourceTree = "<group>"; };
+		2C1883821F3D0BDA00C8CDC2 /* crypto_stream.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_stream.h; sourceTree = "<group>"; };
+		2C1883831F3D0BDA00C8CDC2 /* crypto_stream_aes128ctr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_stream_aes128ctr.h; sourceTree = "<group>"; };
+		2C1883841F3D0BDA00C8CDC2 /* crypto_stream_chacha20.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_stream_chacha20.h; sourceTree = "<group>"; };
+		2C1883851F3D0BDA00C8CDC2 /* crypto_stream_salsa20.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_stream_salsa20.h; sourceTree = "<group>"; };
+		2C1883861F3D0BDA00C8CDC2 /* crypto_stream_salsa2012.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_stream_salsa2012.h; sourceTree = "<group>"; };
+		2C1883871F3D0BDA00C8CDC2 /* crypto_stream_salsa208.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_stream_salsa208.h; sourceTree = "<group>"; };
+		2C1883881F3D0BDA00C8CDC2 /* crypto_stream_xsalsa20.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_stream_xsalsa20.h; sourceTree = "<group>"; };
+		2C1883891F3D0BDA00C8CDC2 /* crypto_uint16.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_uint16.h; sourceTree = "<group>"; };
+		2C18838A1F3D0BDA00C8CDC2 /* crypto_uint32.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_uint32.h; sourceTree = "<group>"; };
+		2C18838B1F3D0BDA00C8CDC2 /* crypto_uint64.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_uint64.h; sourceTree = "<group>"; };
+		2C18838C1F3D0BDA00C8CDC2 /* crypto_uint8.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_uint8.h; sourceTree = "<group>"; };
+		2C18838D1F3D0BDA00C8CDC2 /* crypto_verify_16.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_verify_16.h; sourceTree = "<group>"; };
+		2C18838E1F3D0BDA00C8CDC2 /* crypto_verify_32.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_verify_32.h; sourceTree = "<group>"; };
+		2C18838F1F3D0BDA00C8CDC2 /* crypto_verify_64.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto_verify_64.h; sourceTree = "<group>"; };
+		2C1883901F3D0BDA00C8CDC2 /* export.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = export.h; sourceTree = "<group>"; };
+		2C1883911F3D0BDA00C8CDC2 /* GenericHash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericHash.swift; sourceTree = "<group>"; };
+		2C1883921F3D0BDA00C8CDC2 /* libsodium-ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libsodium-ios.a"; sourceTree = "<group>"; };
+		2C1883931F3D0BDA00C8CDC2 /* PWHash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PWHash.swift; sourceTree = "<group>"; };
+		2C1883941F3D0BDA00C8CDC2 /* randombytes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = randombytes.h; sourceTree = "<group>"; };
+		2C1883951F3D0BDA00C8CDC2 /* RandomBytes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomBytes.swift; sourceTree = "<group>"; };
+		2C1883961F3D0BDA00C8CDC2 /* randombytes_salsa20_random.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = randombytes_salsa20_random.h; sourceTree = "<group>"; };
+		2C1883971F3D0BDA00C8CDC2 /* randombytes_sysrandom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = randombytes_sysrandom.h; sourceTree = "<group>"; };
+		2C1883981F3D0BDA00C8CDC2 /* runtime.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = runtime.h; sourceTree = "<group>"; };
+		2C1883991F3D0BDA00C8CDC2 /* SecretBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecretBox.swift; sourceTree = "<group>"; };
+		2C18839A1F3D0BDA00C8CDC2 /* ShortHash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortHash.swift; sourceTree = "<group>"; };
+		2C18839B1F3D0BDA00C8CDC2 /* Sign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sign.swift; sourceTree = "<group>"; };
+		2C18839C1F3D0BDA00C8CDC2 /* Sodium.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sodium.h; sourceTree = "<group>"; };
+		2C18839D1F3D0BDA00C8CDC2 /* Sodium.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sodium.swift; sourceTree = "<group>"; };
+		2C18839E1F3D0BDA00C8CDC2 /* sodium_lib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sodium_lib.h; sourceTree = "<group>"; };
+		2C18839F1F3D0BDA00C8CDC2 /* utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
+		2C1883A01F3D0BDA00C8CDC2 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		2C1883A11F3D0BDA00C8CDC2 /* version.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = version.h; sourceTree = "<group>"; };
+		2C1883A31F3D0BDA00C8CDC2 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		2C1883A41F3D0BDA00C8CDC2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		2C1883A71F3D0BDA00C8CDC2 /* Deprecations+Removals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Deprecations+Removals.swift"; sourceTree = "<group>"; };
+		2C1883A81F3D0BDA00C8CDC2 /* NSURLRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSURLRequest.swift; sourceTree = "<group>"; };
+		2C1883A91F3D0BDA00C8CDC2 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		2C1883AB1F3D0BDA00C8CDC2 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		2C1883AC1F3D0BDA00C8CDC2 /* HTTPResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPResponse.swift; sourceTree = "<group>"; };
+		2C1883AD1F3D0BDA00C8CDC2 /* JSONDeserializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDeserializer.swift; sourceTree = "<group>"; };
+		2C1883AE1F3D0BDA00C8CDC2 /* NetworkRequestPerformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequestPerformer.swift; sourceTree = "<group>"; };
+		2C1883AF1F3D0BDA00C8CDC2 /* RequestMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestMethod.swift; sourceTree = "<group>"; };
+		2C1883B01F3D0BDA00C8CDC2 /* Scheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
+		2C1883B11F3D0BDA00C8CDC2 /* SwishError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwishError.swift; sourceTree = "<group>"; };
+		2C1883B31F3D0BDA00C8CDC2 /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
+		2C1883B41F3D0BDA00C8CDC2 /* Deserializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deserializer.swift; sourceTree = "<group>"; };
+		2C1883B51F3D0BDA00C8CDC2 /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
+		2C1883B61F3D0BDA00C8CDC2 /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
+		2C1883B71F3D0BDA00C8CDC2 /* RequestPerformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestPerformer.swift; sourceTree = "<group>"; };
+		2C1883B91F3D0BDA00C8CDC2 /* Swish.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Swish.h; sourceTree = "<group>"; };
+		2C1883BC1F3D0BDA00C8CDC2 /* Argo-dummy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Argo-dummy.m"; sourceTree = "<group>"; };
+		2C1883BD1F3D0BDA00C8CDC2 /* Argo-prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Argo-prefix.pch"; sourceTree = "<group>"; };
+		2C1883BE1F3D0BDA00C8CDC2 /* Argo-umbrella.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Argo-umbrella.h"; sourceTree = "<group>"; };
+		2C1883BF1F3D0BDA00C8CDC2 /* Argo.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = Argo.modulemap; sourceTree = "<group>"; };
+		2C1883C01F3D0BDA00C8CDC2 /* Argo.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Argo.xcconfig; sourceTree = "<group>"; };
+		2C1883C11F3D0BDA00C8CDC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2C1883C31F3D0BDA00C8CDC2 /* Curry-dummy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Curry-dummy.m"; sourceTree = "<group>"; };
+		2C1883C41F3D0BDA00C8CDC2 /* Curry-prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Curry-prefix.pch"; sourceTree = "<group>"; };
+		2C1883C51F3D0BDA00C8CDC2 /* Curry-umbrella.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Curry-umbrella.h"; sourceTree = "<group>"; };
+		2C1883C61F3D0BDA00C8CDC2 /* Curry.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = Curry.modulemap; sourceTree = "<group>"; };
+		2C1883C71F3D0BDA00C8CDC2 /* Curry.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Curry.xcconfig; sourceTree = "<group>"; };
+		2C1883C81F3D0BDA00C8CDC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2C1883CA1F3D0BDA00C8CDC2 /* E3db-dummy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "E3db-dummy.m"; sourceTree = "<group>"; };
+		2C1883CB1F3D0BDA00C8CDC2 /* E3db-prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "E3db-prefix.pch"; sourceTree = "<group>"; };
+		2C1883CC1F3D0BDA00C8CDC2 /* E3db-umbrella.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "E3db-umbrella.h"; sourceTree = "<group>"; };
+		2C1883CD1F3D0BDA00C8CDC2 /* E3db.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = E3db.modulemap; sourceTree = "<group>"; };
+		2C1883CE1F3D0BDA00C8CDC2 /* E3db.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = E3db.xcconfig; sourceTree = "<group>"; };
+		2C1883CF1F3D0BDA00C8CDC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2C1883D11F3D0BDA00C8CDC2 /* Heimdallr-dummy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Heimdallr-dummy.m"; sourceTree = "<group>"; };
+		2C1883D21F3D0BDA00C8CDC2 /* Heimdallr-prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Heimdallr-prefix.pch"; sourceTree = "<group>"; };
+		2C1883D31F3D0BDA00C8CDC2 /* Heimdallr-umbrella.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Heimdallr-umbrella.h"; sourceTree = "<group>"; };
+		2C1883D41F3D0BDA00C8CDC2 /* Heimdallr.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = Heimdallr.modulemap; sourceTree = "<group>"; };
+		2C1883D51F3D0BDA00C8CDC2 /* Heimdallr.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Heimdallr.xcconfig; sourceTree = "<group>"; };
+		2C1883D61F3D0BDA00C8CDC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2C1883D81F3D0BDA00C8CDC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2C1883D91F3D0BDA00C8CDC2 /* Ogra-dummy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Ogra-dummy.m"; sourceTree = "<group>"; };
+		2C1883DA1F3D0BDA00C8CDC2 /* Ogra-prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Ogra-prefix.pch"; sourceTree = "<group>"; };
+		2C1883DB1F3D0BDA00C8CDC2 /* Ogra-umbrella.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Ogra-umbrella.h"; sourceTree = "<group>"; };
+		2C1883DC1F3D0BDA00C8CDC2 /* Ogra.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = Ogra.modulemap; sourceTree = "<group>"; };
+		2C1883DD1F3D0BDA00C8CDC2 /* Ogra.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Ogra.xcconfig; sourceTree = "<group>"; };
+		2C1883DF1F3D0BDA00C8CDC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2C1883E01F3D0BDA00C8CDC2 /* Pods-E3db_Example-acknowledgements.markdown */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "Pods-E3db_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
+		2C1883E11F3D0BDA00C8CDC2 /* Pods-E3db_Example-acknowledgements.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Pods-E3db_Example-acknowledgements.plist"; sourceTree = "<group>"; };
+		2C1883E21F3D0BDA00C8CDC2 /* Pods-E3db_Example-dummy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Pods-E3db_Example-dummy.m"; sourceTree = "<group>"; };
+		2C1883E31F3D0BDA00C8CDC2 /* Pods-E3db_Example-frameworks.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "Pods-E3db_Example-frameworks.sh"; sourceTree = "<group>"; };
+		2C1883E41F3D0BDA00C8CDC2 /* Pods-E3db_Example-resources.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "Pods-E3db_Example-resources.sh"; sourceTree = "<group>"; };
+		2C1883E51F3D0BDA00C8CDC2 /* Pods-E3db_Example-umbrella.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Pods-E3db_Example-umbrella.h"; sourceTree = "<group>"; };
+		2C1883E61F3D0BDA00C8CDC2 /* Pods-E3db_Example.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Pods-E3db_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		2C1883E71F3D0BDA00C8CDC2 /* Pods-E3db_Example.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = "Pods-E3db_Example.modulemap"; sourceTree = "<group>"; };
+		2C1883E81F3D0BDA00C8CDC2 /* Pods-E3db_Example.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Pods-E3db_Example.release.xcconfig"; sourceTree = "<group>"; };
+		2C1883EA1F3D0BDA00C8CDC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2C1883EB1F3D0BDA00C8CDC2 /* Pods-E3db_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "Pods-E3db_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
+		2C1883EC1F3D0BDA00C8CDC2 /* Pods-E3db_Tests-acknowledgements.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Pods-E3db_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
+		2C1883ED1F3D0BDA00C8CDC2 /* Pods-E3db_Tests-dummy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Pods-E3db_Tests-dummy.m"; sourceTree = "<group>"; };
+		2C1883EE1F3D0BDA00C8CDC2 /* Pods-E3db_Tests-frameworks.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "Pods-E3db_Tests-frameworks.sh"; sourceTree = "<group>"; };
+		2C1883EF1F3D0BDA00C8CDC2 /* Pods-E3db_Tests-resources.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "Pods-E3db_Tests-resources.sh"; sourceTree = "<group>"; };
+		2C1883F01F3D0BDA00C8CDC2 /* Pods-E3db_Tests-umbrella.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Pods-E3db_Tests-umbrella.h"; sourceTree = "<group>"; };
+		2C1883F11F3D0BDA00C8CDC2 /* Pods-E3db_Tests.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Pods-E3db_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		2C1883F21F3D0BDA00C8CDC2 /* Pods-E3db_Tests.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = "Pods-E3db_Tests.modulemap"; sourceTree = "<group>"; };
+		2C1883F31F3D0BDA00C8CDC2 /* Pods-E3db_Tests.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Pods-E3db_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		2C1883F51F3D0BDA00C8CDC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2C1883F61F3D0BDA00C8CDC2 /* ResponseDetective-dummy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "ResponseDetective-dummy.m"; sourceTree = "<group>"; };
+		2C1883F71F3D0BDA00C8CDC2 /* ResponseDetective-prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ResponseDetective-prefix.pch"; sourceTree = "<group>"; };
+		2C1883F81F3D0BDA00C8CDC2 /* ResponseDetective.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = ResponseDetective.modulemap; sourceTree = "<group>"; };
+		2C1883F91F3D0BDA00C8CDC2 /* ResponseDetective.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ResponseDetective.xcconfig; sourceTree = "<group>"; };
+		2C1883FB1F3D0BDA00C8CDC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2C1883FC1F3D0BDA00C8CDC2 /* Result-dummy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Result-dummy.m"; sourceTree = "<group>"; };
+		2C1883FD1F3D0BDA00C8CDC2 /* Result-prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Result-prefix.pch"; sourceTree = "<group>"; };
+		2C1883FE1F3D0BDA00C8CDC2 /* Result-umbrella.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Result-umbrella.h"; sourceTree = "<group>"; };
+		2C1883FF1F3D0BDA00C8CDC2 /* Result.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = Result.modulemap; sourceTree = "<group>"; };
+		2C1884001F3D0BDA00C8CDC2 /* Result.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Result.xcconfig; sourceTree = "<group>"; };
+		2C1884021F3D0BDA00C8CDC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2C1884031F3D0BDA00C8CDC2 /* Runes-dummy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Runes-dummy.m"; sourceTree = "<group>"; };
+		2C1884041F3D0BDA00C8CDC2 /* Runes-prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runes-prefix.pch"; sourceTree = "<group>"; };
+		2C1884051F3D0BDA00C8CDC2 /* Runes-umbrella.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runes-umbrella.h"; sourceTree = "<group>"; };
+		2C1884061F3D0BDA00C8CDC2 /* Runes.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = Runes.modulemap; sourceTree = "<group>"; };
+		2C1884071F3D0BDA00C8CDC2 /* Runes.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Runes.xcconfig; sourceTree = "<group>"; };
+		2C1884091F3D0BDA00C8CDC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2C18840A1F3D0BDA00C8CDC2 /* Sodium-dummy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Sodium-dummy.m"; sourceTree = "<group>"; };
+		2C18840B1F3D0BDA00C8CDC2 /* Sodium-prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Sodium-prefix.pch"; sourceTree = "<group>"; };
+		2C18840C1F3D0BDA00C8CDC2 /* Sodium-umbrella.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Sodium-umbrella.h"; sourceTree = "<group>"; };
+		2C18840D1F3D0BDA00C8CDC2 /* Sodium.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = Sodium.modulemap; sourceTree = "<group>"; };
+		2C18840E1F3D0BDA00C8CDC2 /* Sodium.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Sodium.xcconfig; sourceTree = "<group>"; };
+		2C1884101F3D0BDA00C8CDC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2C1884111F3D0BDA00C8CDC2 /* Swish-dummy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Swish-dummy.m"; sourceTree = "<group>"; };
+		2C1884121F3D0BDA00C8CDC2 /* Swish-prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Swish-prefix.pch"; sourceTree = "<group>"; };
+		2C1884131F3D0BDA00C8CDC2 /* Swish-umbrella.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Swish-umbrella.h"; sourceTree = "<group>"; };
+		2C1884141F3D0BDA00C8CDC2 /* Swish.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = Swish.modulemap; sourceTree = "<group>"; };
+		2C1884151F3D0BDA00C8CDC2 /* Swish.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Swish.xcconfig; sourceTree = "<group>"; };
+		2C1884171F3D0BDA00C8CDC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2C1884181F3D0BDA00C8CDC2 /* Valet-dummy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Valet-dummy.m"; sourceTree = "<group>"; };
+		2C1884191F3D0BDA00C8CDC2 /* Valet-prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Valet-prefix.pch"; sourceTree = "<group>"; };
+		2C18841A1F3D0BDA00C8CDC2 /* Valet-umbrella.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Valet-umbrella.h"; sourceTree = "<group>"; };
+		2C18841B1F3D0BDA00C8CDC2 /* Valet.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = Valet.modulemap; sourceTree = "<group>"; };
+		2C18841C1F3D0BDA00C8CDC2 /* Valet.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Valet.xcconfig; sourceTree = "<group>"; };
+		2C18841E1F3D0BDA00C8CDC2 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		2C1884201F3D0BDA00C8CDC2 /* ValetDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ValetDefines.h; sourceTree = "<group>"; };
+		2C1884211F3D0BDA00C8CDC2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		2C1884231F3D0BDA00C8CDC2 /* Valet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Valet.h; sourceTree = "<group>"; };
+		2C1884241F3D0BDA00C8CDC2 /* VALSecureEnclaveValet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VALSecureEnclaveValet.h; sourceTree = "<group>"; };
+		2C1884251F3D0BDA00C8CDC2 /* VALSecureEnclaveValet.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VALSecureEnclaveValet.m; sourceTree = "<group>"; };
+		2C1884261F3D0BDA00C8CDC2 /* VALSecureEnclaveValet_Protected.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VALSecureEnclaveValet_Protected.h; sourceTree = "<group>"; };
+		2C1884271F3D0BDA00C8CDC2 /* VALSinglePromptSecureEnclaveValet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VALSinglePromptSecureEnclaveValet.h; sourceTree = "<group>"; };
+		2C1884281F3D0BDA00C8CDC2 /* VALSinglePromptSecureEnclaveValet.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VALSinglePromptSecureEnclaveValet.m; sourceTree = "<group>"; };
+		2C1884291F3D0BDA00C8CDC2 /* VALSynchronizableValet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VALSynchronizableValet.h; sourceTree = "<group>"; };
+		2C18842A1F3D0BDA00C8CDC2 /* VALSynchronizableValet.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VALSynchronizableValet.m; sourceTree = "<group>"; };
+		2C18842B1F3D0BDA00C8CDC2 /* VALValet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VALValet.h; sourceTree = "<group>"; };
+		2C18842C1F3D0BDA00C8CDC2 /* VALValet.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VALValet.m; sourceTree = "<group>"; };
+		2C18842D1F3D0BDA00C8CDC2 /* VALValet_Protected.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VALValet_Protected.h; sourceTree = "<group>"; };
+		2C18842F1F3D0BDA00C8CDC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2C1884301F3D0BDA00C8CDC2 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		540D9DECD06230712274E4BA /* Pods-E3db_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-E3db_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-E3db_Tests/Pods-E3db_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* E3db_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = E3db_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -54,6 +436,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C18845C1F3D0DAA00C8CDC2 /* E3db.framework in Frameworks */,
 				49564ACEB57D0E66804FF993 /* Pods_E3db_Example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -69,9 +452,773 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2C1882D71F3D0BDA00C8CDC2 /* Example */ = {
+			isa = PBXGroup;
+			children = (
+				2C1882D81F3D0BDA00C8CDC2 /* E3db */,
+				2C1882E11F3D0BDA00C8CDC2 /* E3db.xcodeproj */,
+				2C1882E41F3D0BDA00C8CDC2 /* E3db.xcworkspace */,
+				2C1882E51F3D0BDA00C8CDC2 /* Podfile */,
+				2C1882E61F3D0BDA00C8CDC2 /* Podfile.lock */,
+				2C1882E71F3D0BDA00C8CDC2 /* Pods */,
+				2C18842E1F3D0BDA00C8CDC2 /* Tests */,
+			);
+			name = Example;
+			sourceTree = "<group>";
+		};
+		2C1882D81F3D0BDA00C8CDC2 /* E3db */ = {
+			isa = PBXGroup;
+			children = (
+				2C1882D91F3D0BDA00C8CDC2 /* AppDelegate.swift */,
+				2C1882DA1F3D0BDA00C8CDC2 /* LaunchScreen.xib */,
+				2C1882DC1F3D0BDA00C8CDC2 /* Main.storyboard */,
+				2C1882DE1F3D0BDA00C8CDC2 /* Images.xcassets */,
+				2C1882DF1F3D0BDA00C8CDC2 /* Info.plist */,
+				2C1882E01F3D0BDA00C8CDC2 /* ViewController.swift */,
+			);
+			path = E3db;
+			sourceTree = "<group>";
+		};
+		2C1882E21F3D0BDA00C8CDC2 /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2C1882E71F3D0BDA00C8CDC2 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				2C1882E81F3D0BDA00C8CDC2 /* Argo */,
+				2C1883051F3D0BDA00C8CDC2 /* Curry */,
+				2C18830A1F3D0BDA00C8CDC2 /* Headers */,
+				2C18830B1F3D0BDA00C8CDC2 /* Heimdallr */,
+				2C18831E1F3D0BDA00C8CDC2 /* Local Podspecs */,
+				2C1883201F3D0BDA00C8CDC2 /* Manifest.lock */,
+				2C1883211F3D0BDA00C8CDC2 /* Ogra */,
+				2C1883271F3D0BDA00C8CDC2 /* Pods.xcodeproj */,
+				2C18832A1F3D0BDA00C8CDC2 /* ResponseDetective */,
+				2C1883441F3D0BDA00C8CDC2 /* Result */,
+				2C18834A1F3D0BDA00C8CDC2 /* Runes */,
+				2C18835A1F3D0BDA00C8CDC2 /* Sodium */,
+				2C1883A21F3D0BDA00C8CDC2 /* Swish */,
+				2C1883BA1F3D0BDA00C8CDC2 /* Target Support Files */,
+				2C18841D1F3D0BDA00C8CDC2 /* Valet */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		2C1882E81F3D0BDA00C8CDC2 /* Argo */ = {
+			isa = PBXGroup;
+			children = (
+				2C1882E91F3D0BDA00C8CDC2 /* LICENSE */,
+				2C1882EA1F3D0BDA00C8CDC2 /* README.md */,
+				2C1882EB1F3D0BDA00C8CDC2 /* Sources */,
+			);
+			path = Argo;
+			sourceTree = "<group>";
+		};
+		2C1882EB1F3D0BDA00C8CDC2 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				2C1882EC1F3D0BDA00C8CDC2 /* Argo */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		2C1882EC1F3D0BDA00C8CDC2 /* Argo */ = {
+			isa = PBXGroup;
+			children = (
+				2C1882ED1F3D0BDA00C8CDC2 /* Extensions */,
+				2C1882F11F3D0BDA00C8CDC2 /* Functions */,
+				2C1882F61F3D0BDA00C8CDC2 /* Operators */,
+				2C1882F91F3D0BDA00C8CDC2 /* Types */,
+			);
+			path = Argo;
+			sourceTree = "<group>";
+		};
+		2C1882ED1F3D0BDA00C8CDC2 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				2C1882EE1F3D0BDA00C8CDC2 /* Dictionary.swift */,
+				2C1882EF1F3D0BDA00C8CDC2 /* NSNumber.swift */,
+				2C1882F01F3D0BDA00C8CDC2 /* RawRepresentable.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		2C1882F11F3D0BDA00C8CDC2 /* Functions */ = {
+			isa = PBXGroup;
+			children = (
+				2C1882F21F3D0BDA00C8CDC2 /* catDecoded.swift */,
+				2C1882F31F3D0BDA00C8CDC2 /* decode.swift */,
+				2C1882F41F3D0BDA00C8CDC2 /* flatReduce.swift */,
+				2C1882F51F3D0BDA00C8CDC2 /* sequence.swift */,
+			);
+			path = Functions;
+			sourceTree = "<group>";
+		};
+		2C1882F61F3D0BDA00C8CDC2 /* Operators */ = {
+			isa = PBXGroup;
+			children = (
+				2C1882F71F3D0BDA00C8CDC2 /* Argo.swift */,
+				2C1882F81F3D0BDA00C8CDC2 /* DecodeOperators.swift */,
+			);
+			path = Operators;
+			sourceTree = "<group>";
+		};
+		2C1882F91F3D0BDA00C8CDC2 /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				2C1882FA1F3D0BDA00C8CDC2 /* Decodable.swift */,
+				2C1882FB1F3D0BDA00C8CDC2 /* Decoded */,
+				2C1883021F3D0BDA00C8CDC2 /* DecodeError.swift */,
+				2C1883031F3D0BDA00C8CDC2 /* JSON.swift */,
+				2C1883041F3D0BDA00C8CDC2 /* StandardTypes.swift */,
+			);
+			path = Types;
+			sourceTree = "<group>";
+		};
+		2C1882FB1F3D0BDA00C8CDC2 /* Decoded */ = {
+			isa = PBXGroup;
+			children = (
+				2C1882FC1F3D0BDA00C8CDC2 /* Alternative.swift */,
+				2C1882FD1F3D0BDA00C8CDC2 /* Applicative.swift */,
+				2C1882FE1F3D0BDA00C8CDC2 /* Decoded.swift */,
+				2C1882FF1F3D0BDA00C8CDC2 /* FailureCoalescing.swift */,
+				2C1883001F3D0BDA00C8CDC2 /* Functor.swift */,
+				2C1883011F3D0BDA00C8CDC2 /* Monad.swift */,
+			);
+			path = Decoded;
+			sourceTree = "<group>";
+		};
+		2C1883051F3D0BDA00C8CDC2 /* Curry */ = {
+			isa = PBXGroup;
+			children = (
+				2C1883061F3D0BDA00C8CDC2 /* LICENSE */,
+				2C1883071F3D0BDA00C8CDC2 /* README.md */,
+				2C1883081F3D0BDA00C8CDC2 /* Source */,
+			);
+			path = Curry;
+			sourceTree = "<group>";
+		};
+		2C1883081F3D0BDA00C8CDC2 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				2C1883091F3D0BDA00C8CDC2 /* Curry.swift */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		2C18830A1F3D0BDA00C8CDC2 /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Headers;
+			sourceTree = "<group>";
+		};
+		2C18830B1F3D0BDA00C8CDC2 /* Heimdallr */ = {
+			isa = PBXGroup;
+			children = (
+				2C18830C1F3D0BDA00C8CDC2 /* Heimdallr */,
+				2C18831C1F3D0BDA00C8CDC2 /* LICENSE */,
+				2C18831D1F3D0BDA00C8CDC2 /* README.md */,
+			);
+			path = Heimdallr;
+			sourceTree = "<group>";
+		};
+		2C18830C1F3D0BDA00C8CDC2 /* Heimdallr */ = {
+			isa = PBXGroup;
+			children = (
+				2C18830D1F3D0BDA00C8CDC2 /* Core */,
+			);
+			path = Heimdallr;
+			sourceTree = "<group>";
+		};
+		2C18830D1F3D0BDA00C8CDC2 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				2C18830E1F3D0BDA00C8CDC2 /* Heimdallr.swift */,
+				2C18830F1F3D0BDA00C8CDC2 /* HeimdallrHTTPClient.swift */,
+				2C1883101F3D0BDA00C8CDC2 /* HeimdallrHTTPClientURLSession.swift */,
+				2C1883111F3D0BDA00C8CDC2 /* HeimdallrResourceRequestAuthenticator.swift */,
+				2C1883121F3D0BDA00C8CDC2 /* HeimdallrResourceRequestAuthenticatorHTTPAuthorizationHeader.swift */,
+				2C1883131F3D0BDA00C8CDC2 /* OAuthAccessToken.swift */,
+				2C1883141F3D0BDA00C8CDC2 /* OAuthAccessTokenDefaultParser.swift */,
+				2C1883151F3D0BDA00C8CDC2 /* OAuthAccessTokenKeychainStore.swift */,
+				2C1883161F3D0BDA00C8CDC2 /* OAuthAccessTokenParser.swift */,
+				2C1883171F3D0BDA00C8CDC2 /* OAuthAccessTokenStore.swift */,
+				2C1883181F3D0BDA00C8CDC2 /* OAuthAuthorizationGrant.swift */,
+				2C1883191F3D0BDA00C8CDC2 /* OAuthClientCredentials.swift */,
+				2C18831A1F3D0BDA00C8CDC2 /* OAuthError.swift */,
+				2C18831B1F3D0BDA00C8CDC2 /* URLRequestExtensions.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		2C18831E1F3D0BDA00C8CDC2 /* Local Podspecs */ = {
+			isa = PBXGroup;
+			children = (
+				2C18831F1F3D0BDA00C8CDC2 /* E3db.podspec.json */,
+			);
+			path = "Local Podspecs";
+			sourceTree = "<group>";
+		};
+		2C1883211F3D0BDA00C8CDC2 /* Ogra */ = {
+			isa = PBXGroup;
+			children = (
+				2C1883221F3D0BDA00C8CDC2 /* licence.md */,
+				2C1883231F3D0BDA00C8CDC2 /* readme.md */,
+				2C1883241F3D0BDA00C8CDC2 /* Sources */,
+			);
+			path = Ogra;
+			sourceTree = "<group>";
+		};
+		2C1883241F3D0BDA00C8CDC2 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				2C1883251F3D0BDA00C8CDC2 /* Encodable.swift */,
+				2C1883261F3D0BDA00C8CDC2 /* Ogra.h */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		2C1883281F3D0BDA00C8CDC2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2C18843F1F3D0BDA00C8CDC2 /* Argo.framework */,
+				2C1884411F3D0BDA00C8CDC2 /* Curry.framework */,
+				2C1884431F3D0BDA00C8CDC2 /* E3db.framework */,
+				2C1884451F3D0BDA00C8CDC2 /* Heimdallr.framework */,
+				2C1884471F3D0BDA00C8CDC2 /* Ogra.framework */,
+				2C1884491F3D0BDA00C8CDC2 /* Pods_E3db_Example.framework */,
+				2C18844B1F3D0BDA00C8CDC2 /* Pods_E3db_Tests.framework */,
+				2C18844D1F3D0BDA00C8CDC2 /* ResponseDetective.framework */,
+				2C18844F1F3D0BDA00C8CDC2 /* Result.framework */,
+				2C1884511F3D0BDA00C8CDC2 /* Runes.framework */,
+				2C1884531F3D0BDA00C8CDC2 /* Sodium.framework */,
+				2C1884551F3D0BDA00C8CDC2 /* Swish.framework */,
+				2C1884571F3D0BDA00C8CDC2 /* Valet.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2C18832A1F3D0BDA00C8CDC2 /* ResponseDetective */ = {
+			isa = PBXGroup;
+			children = (
+				2C18832B1F3D0BDA00C8CDC2 /* LICENSE.md */,
+				2C18832C1F3D0BDA00C8CDC2 /* README.md */,
+				2C18832D1F3D0BDA00C8CDC2 /* ResponseDetective */,
+			);
+			path = ResponseDetective;
+			sourceTree = "<group>";
+		};
+		2C18832D1F3D0BDA00C8CDC2 /* ResponseDetective */ = {
+			isa = PBXGroup;
+			children = (
+				2C18832E1F3D0BDA00C8CDC2 /* Resources */,
+				2C1883301F3D0BDA00C8CDC2 /* Sources */,
+			);
+			path = ResponseDetective;
+			sourceTree = "<group>";
+		};
+		2C18832E1F3D0BDA00C8CDC2 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				2C18832F1F3D0BDA00C8CDC2 /* Framework.modulemap */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		2C1883301F3D0BDA00C8CDC2 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				2C1883311F3D0BDA00C8CDC2 /* BufferOutputFacility.swift */,
+				2C1883321F3D0BDA00C8CDC2 /* ConsoleOutputFacility.swift */,
+				2C1883331F3D0BDA00C8CDC2 /* Dictionary.swift */,
+				2C1883341F3D0BDA00C8CDC2 /* ErrorRepresentation.swift */,
+				2C1883351F3D0BDA00C8CDC2 /* ImageBodyDeserializer.swift */,
+				2C1883361F3D0BDA00C8CDC2 /* JSONBodyDeserializer.swift */,
+				2C1883371F3D0BDA00C8CDC2 /* OutputFacility.swift */,
+				2C1883381F3D0BDA00C8CDC2 /* PlaintextBodyDeserializer.swift */,
+				2C1883391F3D0BDA00C8CDC2 /* RDTBodyDeserializer.h */,
+				2C18833A1F3D0BDA00C8CDC2 /* RDTHTMLBodyDeserializer.h */,
+				2C18833B1F3D0BDA00C8CDC2 /* RDTHTMLBodyDeserializer.m */,
+				2C18833C1F3D0BDA00C8CDC2 /* RDTXMLBodyDeserializer.h */,
+				2C18833D1F3D0BDA00C8CDC2 /* RDTXMLBodyDeserializer.m */,
+				2C18833E1F3D0BDA00C8CDC2 /* RequestRepresentation.swift */,
+				2C18833F1F3D0BDA00C8CDC2 /* ResponseDetective.h */,
+				2C1883401F3D0BDA00C8CDC2 /* ResponseDetective.swift */,
+				2C1883411F3D0BDA00C8CDC2 /* ResponseRepresentation.swift */,
+				2C1883421F3D0BDA00C8CDC2 /* URLEncodedBodyDeserializer.swift */,
+				2C1883431F3D0BDA00C8CDC2 /* URLProtocol.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		2C1883441F3D0BDA00C8CDC2 /* Result */ = {
+			isa = PBXGroup;
+			children = (
+				2C1883451F3D0BDA00C8CDC2 /* LICENSE */,
+				2C1883461F3D0BDA00C8CDC2 /* README.md */,
+				2C1883471F3D0BDA00C8CDC2 /* Result */,
+			);
+			path = Result;
+			sourceTree = "<group>";
+		};
+		2C1883471F3D0BDA00C8CDC2 /* Result */ = {
+			isa = PBXGroup;
+			children = (
+				2C1883481F3D0BDA00C8CDC2 /* Result.swift */,
+				2C1883491F3D0BDA00C8CDC2 /* ResultProtocol.swift */,
+			);
+			path = Result;
+			sourceTree = "<group>";
+		};
+		2C18834A1F3D0BDA00C8CDC2 /* Runes */ = {
+			isa = PBXGroup;
+			children = (
+				2C18834B1F3D0BDA00C8CDC2 /* LICENSE */,
+				2C18834C1F3D0BDA00C8CDC2 /* README.md */,
+				2C18834D1F3D0BDA00C8CDC2 /* Sources */,
+			);
+			path = Runes;
+			sourceTree = "<group>";
+		};
+		2C18834D1F3D0BDA00C8CDC2 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				2C18834E1F3D0BDA00C8CDC2 /* Runes */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		2C18834E1F3D0BDA00C8CDC2 /* Runes */ = {
+			isa = PBXGroup;
+			children = (
+				2C18834F1F3D0BDA00C8CDC2 /* Array */,
+				2C1883541F3D0BDA00C8CDC2 /* Optional */,
+				2C1883591F3D0BDA00C8CDC2 /* Runes.swift */,
+			);
+			path = Runes;
+			sourceTree = "<group>";
+		};
+		2C18834F1F3D0BDA00C8CDC2 /* Array */ = {
+			isa = PBXGroup;
+			children = (
+				2C1883501F3D0BDA00C8CDC2 /* Array+Alternative.swift */,
+				2C1883511F3D0BDA00C8CDC2 /* Array+Applicative.swift */,
+				2C1883521F3D0BDA00C8CDC2 /* Array+Functor.swift */,
+				2C1883531F3D0BDA00C8CDC2 /* Array+Monad.swift */,
+			);
+			path = Array;
+			sourceTree = "<group>";
+		};
+		2C1883541F3D0BDA00C8CDC2 /* Optional */ = {
+			isa = PBXGroup;
+			children = (
+				2C1883551F3D0BDA00C8CDC2 /* Optional+Alternative.swift */,
+				2C1883561F3D0BDA00C8CDC2 /* Optional+Applicative.swift */,
+				2C1883571F3D0BDA00C8CDC2 /* Optional+Functor.swift */,
+				2C1883581F3D0BDA00C8CDC2 /* Optional+Monad.swift */,
+			);
+			path = Optional;
+			sourceTree = "<group>";
+		};
+		2C18835A1F3D0BDA00C8CDC2 /* Sodium */ = {
+			isa = PBXGroup;
+			children = (
+				2C18835B1F3D0BDA00C8CDC2 /* LICENSE */,
+				2C18835C1F3D0BDA00C8CDC2 /* README.md */,
+				2C18835D1F3D0BDA00C8CDC2 /* Sodium */,
+			);
+			path = Sodium;
+			sourceTree = "<group>";
+		};
+		2C18835D1F3D0BDA00C8CDC2 /* Sodium */ = {
+			isa = PBXGroup;
+			children = (
+				2C18835E1F3D0BDA00C8CDC2 /* Box.swift */,
+				2C18835F1F3D0BDA00C8CDC2 /* core.h */,
+				2C1883601F3D0BDA00C8CDC2 /* crypto_aead_aes256gcm.h */,
+				2C1883611F3D0BDA00C8CDC2 /* crypto_aead_chacha20poly1305.h */,
+				2C1883621F3D0BDA00C8CDC2 /* crypto_auth.h */,
+				2C1883631F3D0BDA00C8CDC2 /* crypto_auth_hmacsha256.h */,
+				2C1883641F3D0BDA00C8CDC2 /* crypto_auth_hmacsha512.h */,
+				2C1883651F3D0BDA00C8CDC2 /* crypto_auth_hmacsha512256.h */,
+				2C1883661F3D0BDA00C8CDC2 /* crypto_box.h */,
+				2C1883671F3D0BDA00C8CDC2 /* crypto_box_curve25519xsalsa20poly1305.h */,
+				2C1883681F3D0BDA00C8CDC2 /* crypto_core_hchacha20.h */,
+				2C1883691F3D0BDA00C8CDC2 /* crypto_core_hsalsa20.h */,
+				2C18836A1F3D0BDA00C8CDC2 /* crypto_core_salsa20.h */,
+				2C18836B1F3D0BDA00C8CDC2 /* crypto_core_salsa2012.h */,
+				2C18836C1F3D0BDA00C8CDC2 /* crypto_core_salsa208.h */,
+				2C18836D1F3D0BDA00C8CDC2 /* crypto_generichash.h */,
+				2C18836E1F3D0BDA00C8CDC2 /* crypto_generichash_blake2b.h */,
+				2C18836F1F3D0BDA00C8CDC2 /* crypto_hash.h */,
+				2C1883701F3D0BDA00C8CDC2 /* crypto_hash_sha256.h */,
+				2C1883711F3D0BDA00C8CDC2 /* crypto_hash_sha512.h */,
+				2C1883721F3D0BDA00C8CDC2 /* crypto_int32.h */,
+				2C1883731F3D0BDA00C8CDC2 /* crypto_int64.h */,
+				2C1883741F3D0BDA00C8CDC2 /* crypto_onetimeauth.h */,
+				2C1883751F3D0BDA00C8CDC2 /* crypto_onetimeauth_poly1305.h */,
+				2C1883761F3D0BDA00C8CDC2 /* crypto_pwhash.h */,
+				2C1883771F3D0BDA00C8CDC2 /* crypto_pwhash_argon2i.h */,
+				2C1883781F3D0BDA00C8CDC2 /* crypto_pwhash_scryptsalsa208sha256.h */,
+				2C1883791F3D0BDA00C8CDC2 /* crypto_scalarmult.h */,
+				2C18837A1F3D0BDA00C8CDC2 /* crypto_scalarmult_curve25519.h */,
+				2C18837B1F3D0BDA00C8CDC2 /* crypto_secretbox.h */,
+				2C18837C1F3D0BDA00C8CDC2 /* crypto_secretbox_xsalsa20poly1305.h */,
+				2C18837D1F3D0BDA00C8CDC2 /* crypto_shorthash.h */,
+				2C18837E1F3D0BDA00C8CDC2 /* crypto_shorthash_siphash24.h */,
+				2C18837F1F3D0BDA00C8CDC2 /* crypto_sign.h */,
+				2C1883801F3D0BDA00C8CDC2 /* crypto_sign_ed25519.h */,
+				2C1883811F3D0BDA00C8CDC2 /* crypto_sign_edwards25519sha512batch.h */,
+				2C1883821F3D0BDA00C8CDC2 /* crypto_stream.h */,
+				2C1883831F3D0BDA00C8CDC2 /* crypto_stream_aes128ctr.h */,
+				2C1883841F3D0BDA00C8CDC2 /* crypto_stream_chacha20.h */,
+				2C1883851F3D0BDA00C8CDC2 /* crypto_stream_salsa20.h */,
+				2C1883861F3D0BDA00C8CDC2 /* crypto_stream_salsa2012.h */,
+				2C1883871F3D0BDA00C8CDC2 /* crypto_stream_salsa208.h */,
+				2C1883881F3D0BDA00C8CDC2 /* crypto_stream_xsalsa20.h */,
+				2C1883891F3D0BDA00C8CDC2 /* crypto_uint16.h */,
+				2C18838A1F3D0BDA00C8CDC2 /* crypto_uint32.h */,
+				2C18838B1F3D0BDA00C8CDC2 /* crypto_uint64.h */,
+				2C18838C1F3D0BDA00C8CDC2 /* crypto_uint8.h */,
+				2C18838D1F3D0BDA00C8CDC2 /* crypto_verify_16.h */,
+				2C18838E1F3D0BDA00C8CDC2 /* crypto_verify_32.h */,
+				2C18838F1F3D0BDA00C8CDC2 /* crypto_verify_64.h */,
+				2C1883901F3D0BDA00C8CDC2 /* export.h */,
+				2C1883911F3D0BDA00C8CDC2 /* GenericHash.swift */,
+				2C1883921F3D0BDA00C8CDC2 /* libsodium-ios.a */,
+				2C1883931F3D0BDA00C8CDC2 /* PWHash.swift */,
+				2C1883941F3D0BDA00C8CDC2 /* randombytes.h */,
+				2C1883951F3D0BDA00C8CDC2 /* RandomBytes.swift */,
+				2C1883961F3D0BDA00C8CDC2 /* randombytes_salsa20_random.h */,
+				2C1883971F3D0BDA00C8CDC2 /* randombytes_sysrandom.h */,
+				2C1883981F3D0BDA00C8CDC2 /* runtime.h */,
+				2C1883991F3D0BDA00C8CDC2 /* SecretBox.swift */,
+				2C18839A1F3D0BDA00C8CDC2 /* ShortHash.swift */,
+				2C18839B1F3D0BDA00C8CDC2 /* Sign.swift */,
+				2C18839C1F3D0BDA00C8CDC2 /* Sodium.h */,
+				2C18839D1F3D0BDA00C8CDC2 /* Sodium.swift */,
+				2C18839E1F3D0BDA00C8CDC2 /* sodium_lib.h */,
+				2C18839F1F3D0BDA00C8CDC2 /* utils.h */,
+				2C1883A01F3D0BDA00C8CDC2 /* Utils.swift */,
+				2C1883A11F3D0BDA00C8CDC2 /* version.h */,
+			);
+			path = Sodium;
+			sourceTree = "<group>";
+		};
+		2C1883A21F3D0BDA00C8CDC2 /* Swish */ = {
+			isa = PBXGroup;
+			children = (
+				2C1883A31F3D0BDA00C8CDC2 /* LICENSE */,
+				2C1883A41F3D0BDA00C8CDC2 /* README.md */,
+				2C1883A51F3D0BDA00C8CDC2 /* Source */,
+			);
+			path = Swish;
+			sourceTree = "<group>";
+		};
+		2C1883A51F3D0BDA00C8CDC2 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				2C1883A61F3D0BDA00C8CDC2 /* Extensions */,
+				2C1883AA1F3D0BDA00C8CDC2 /* Models */,
+				2C1883B21F3D0BDA00C8CDC2 /* Protocols */,
+				2C1883B81F3D0BDA00C8CDC2 /* Resources */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		2C1883A61F3D0BDA00C8CDC2 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				2C1883A71F3D0BDA00C8CDC2 /* Deprecations+Removals.swift */,
+				2C1883A81F3D0BDA00C8CDC2 /* NSURLRequest.swift */,
+				2C1883A91F3D0BDA00C8CDC2 /* Result.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		2C1883AA1F3D0BDA00C8CDC2 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				2C1883AB1F3D0BDA00C8CDC2 /* APIClient.swift */,
+				2C1883AC1F3D0BDA00C8CDC2 /* HTTPResponse.swift */,
+				2C1883AD1F3D0BDA00C8CDC2 /* JSONDeserializer.swift */,
+				2C1883AE1F3D0BDA00C8CDC2 /* NetworkRequestPerformer.swift */,
+				2C1883AF1F3D0BDA00C8CDC2 /* RequestMethod.swift */,
+				2C1883B01F3D0BDA00C8CDC2 /* Scheduler.swift */,
+				2C1883B11F3D0BDA00C8CDC2 /* SwishError.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		2C1883B21F3D0BDA00C8CDC2 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				2C1883B31F3D0BDA00C8CDC2 /* Client.swift */,
+				2C1883B41F3D0BDA00C8CDC2 /* Deserializer.swift */,
+				2C1883B51F3D0BDA00C8CDC2 /* Parser.swift */,
+				2C1883B61F3D0BDA00C8CDC2 /* Request.swift */,
+				2C1883B71F3D0BDA00C8CDC2 /* RequestPerformer.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		2C1883B81F3D0BDA00C8CDC2 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				2C1883B91F3D0BDA00C8CDC2 /* Swish.h */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		2C1883BA1F3D0BDA00C8CDC2 /* Target Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				2C1883BB1F3D0BDA00C8CDC2 /* Argo */,
+				2C1883C21F3D0BDA00C8CDC2 /* Curry */,
+				2C1883C91F3D0BDA00C8CDC2 /* E3db */,
+				2C1883D01F3D0BDA00C8CDC2 /* Heimdallr */,
+				2C1883D71F3D0BDA00C8CDC2 /* Ogra */,
+				2C1883DE1F3D0BDA00C8CDC2 /* Pods-E3db_Example */,
+				2C1883E91F3D0BDA00C8CDC2 /* Pods-E3db_Tests */,
+				2C1883F41F3D0BDA00C8CDC2 /* ResponseDetective */,
+				2C1883FA1F3D0BDA00C8CDC2 /* Result */,
+				2C1884011F3D0BDA00C8CDC2 /* Runes */,
+				2C1884081F3D0BDA00C8CDC2 /* Sodium */,
+				2C18840F1F3D0BDA00C8CDC2 /* Swish */,
+				2C1884161F3D0BDA00C8CDC2 /* Valet */,
+			);
+			path = "Target Support Files";
+			sourceTree = "<group>";
+		};
+		2C1883BB1F3D0BDA00C8CDC2 /* Argo */ = {
+			isa = PBXGroup;
+			children = (
+				2C1883BC1F3D0BDA00C8CDC2 /* Argo-dummy.m */,
+				2C1883BD1F3D0BDA00C8CDC2 /* Argo-prefix.pch */,
+				2C1883BE1F3D0BDA00C8CDC2 /* Argo-umbrella.h */,
+				2C1883BF1F3D0BDA00C8CDC2 /* Argo.modulemap */,
+				2C1883C01F3D0BDA00C8CDC2 /* Argo.xcconfig */,
+				2C1883C11F3D0BDA00C8CDC2 /* Info.plist */,
+			);
+			path = Argo;
+			sourceTree = "<group>";
+		};
+		2C1883C21F3D0BDA00C8CDC2 /* Curry */ = {
+			isa = PBXGroup;
+			children = (
+				2C1883C31F3D0BDA00C8CDC2 /* Curry-dummy.m */,
+				2C1883C41F3D0BDA00C8CDC2 /* Curry-prefix.pch */,
+				2C1883C51F3D0BDA00C8CDC2 /* Curry-umbrella.h */,
+				2C1883C61F3D0BDA00C8CDC2 /* Curry.modulemap */,
+				2C1883C71F3D0BDA00C8CDC2 /* Curry.xcconfig */,
+				2C1883C81F3D0BDA00C8CDC2 /* Info.plist */,
+			);
+			path = Curry;
+			sourceTree = "<group>";
+		};
+		2C1883C91F3D0BDA00C8CDC2 /* E3db */ = {
+			isa = PBXGroup;
+			children = (
+				2C1883CA1F3D0BDA00C8CDC2 /* E3db-dummy.m */,
+				2C1883CB1F3D0BDA00C8CDC2 /* E3db-prefix.pch */,
+				2C1883CC1F3D0BDA00C8CDC2 /* E3db-umbrella.h */,
+				2C1883CD1F3D0BDA00C8CDC2 /* E3db.modulemap */,
+				2C1883CE1F3D0BDA00C8CDC2 /* E3db.xcconfig */,
+				2C1883CF1F3D0BDA00C8CDC2 /* Info.plist */,
+			);
+			path = E3db;
+			sourceTree = "<group>";
+		};
+		2C1883D01F3D0BDA00C8CDC2 /* Heimdallr */ = {
+			isa = PBXGroup;
+			children = (
+				2C1883D11F3D0BDA00C8CDC2 /* Heimdallr-dummy.m */,
+				2C1883D21F3D0BDA00C8CDC2 /* Heimdallr-prefix.pch */,
+				2C1883D31F3D0BDA00C8CDC2 /* Heimdallr-umbrella.h */,
+				2C1883D41F3D0BDA00C8CDC2 /* Heimdallr.modulemap */,
+				2C1883D51F3D0BDA00C8CDC2 /* Heimdallr.xcconfig */,
+				2C1883D61F3D0BDA00C8CDC2 /* Info.plist */,
+			);
+			path = Heimdallr;
+			sourceTree = "<group>";
+		};
+		2C1883D71F3D0BDA00C8CDC2 /* Ogra */ = {
+			isa = PBXGroup;
+			children = (
+				2C1883D81F3D0BDA00C8CDC2 /* Info.plist */,
+				2C1883D91F3D0BDA00C8CDC2 /* Ogra-dummy.m */,
+				2C1883DA1F3D0BDA00C8CDC2 /* Ogra-prefix.pch */,
+				2C1883DB1F3D0BDA00C8CDC2 /* Ogra-umbrella.h */,
+				2C1883DC1F3D0BDA00C8CDC2 /* Ogra.modulemap */,
+				2C1883DD1F3D0BDA00C8CDC2 /* Ogra.xcconfig */,
+			);
+			path = Ogra;
+			sourceTree = "<group>";
+		};
+		2C1883DE1F3D0BDA00C8CDC2 /* Pods-E3db_Example */ = {
+			isa = PBXGroup;
+			children = (
+				2C1883DF1F3D0BDA00C8CDC2 /* Info.plist */,
+				2C1883E01F3D0BDA00C8CDC2 /* Pods-E3db_Example-acknowledgements.markdown */,
+				2C1883E11F3D0BDA00C8CDC2 /* Pods-E3db_Example-acknowledgements.plist */,
+				2C1883E21F3D0BDA00C8CDC2 /* Pods-E3db_Example-dummy.m */,
+				2C1883E31F3D0BDA00C8CDC2 /* Pods-E3db_Example-frameworks.sh */,
+				2C1883E41F3D0BDA00C8CDC2 /* Pods-E3db_Example-resources.sh */,
+				2C1883E51F3D0BDA00C8CDC2 /* Pods-E3db_Example-umbrella.h */,
+				2C1883E61F3D0BDA00C8CDC2 /* Pods-E3db_Example.debug.xcconfig */,
+				2C1883E71F3D0BDA00C8CDC2 /* Pods-E3db_Example.modulemap */,
+				2C1883E81F3D0BDA00C8CDC2 /* Pods-E3db_Example.release.xcconfig */,
+			);
+			path = "Pods-E3db_Example";
+			sourceTree = "<group>";
+		};
+		2C1883E91F3D0BDA00C8CDC2 /* Pods-E3db_Tests */ = {
+			isa = PBXGroup;
+			children = (
+				2C1883EA1F3D0BDA00C8CDC2 /* Info.plist */,
+				2C1883EB1F3D0BDA00C8CDC2 /* Pods-E3db_Tests-acknowledgements.markdown */,
+				2C1883EC1F3D0BDA00C8CDC2 /* Pods-E3db_Tests-acknowledgements.plist */,
+				2C1883ED1F3D0BDA00C8CDC2 /* Pods-E3db_Tests-dummy.m */,
+				2C1883EE1F3D0BDA00C8CDC2 /* Pods-E3db_Tests-frameworks.sh */,
+				2C1883EF1F3D0BDA00C8CDC2 /* Pods-E3db_Tests-resources.sh */,
+				2C1883F01F3D0BDA00C8CDC2 /* Pods-E3db_Tests-umbrella.h */,
+				2C1883F11F3D0BDA00C8CDC2 /* Pods-E3db_Tests.debug.xcconfig */,
+				2C1883F21F3D0BDA00C8CDC2 /* Pods-E3db_Tests.modulemap */,
+				2C1883F31F3D0BDA00C8CDC2 /* Pods-E3db_Tests.release.xcconfig */,
+			);
+			path = "Pods-E3db_Tests";
+			sourceTree = "<group>";
+		};
+		2C1883F41F3D0BDA00C8CDC2 /* ResponseDetective */ = {
+			isa = PBXGroup;
+			children = (
+				2C1883F51F3D0BDA00C8CDC2 /* Info.plist */,
+				2C1883F61F3D0BDA00C8CDC2 /* ResponseDetective-dummy.m */,
+				2C1883F71F3D0BDA00C8CDC2 /* ResponseDetective-prefix.pch */,
+				2C1883F81F3D0BDA00C8CDC2 /* ResponseDetective.modulemap */,
+				2C1883F91F3D0BDA00C8CDC2 /* ResponseDetective.xcconfig */,
+			);
+			path = ResponseDetective;
+			sourceTree = "<group>";
+		};
+		2C1883FA1F3D0BDA00C8CDC2 /* Result */ = {
+			isa = PBXGroup;
+			children = (
+				2C1883FB1F3D0BDA00C8CDC2 /* Info.plist */,
+				2C1883FC1F3D0BDA00C8CDC2 /* Result-dummy.m */,
+				2C1883FD1F3D0BDA00C8CDC2 /* Result-prefix.pch */,
+				2C1883FE1F3D0BDA00C8CDC2 /* Result-umbrella.h */,
+				2C1883FF1F3D0BDA00C8CDC2 /* Result.modulemap */,
+				2C1884001F3D0BDA00C8CDC2 /* Result.xcconfig */,
+			);
+			path = Result;
+			sourceTree = "<group>";
+		};
+		2C1884011F3D0BDA00C8CDC2 /* Runes */ = {
+			isa = PBXGroup;
+			children = (
+				2C1884021F3D0BDA00C8CDC2 /* Info.plist */,
+				2C1884031F3D0BDA00C8CDC2 /* Runes-dummy.m */,
+				2C1884041F3D0BDA00C8CDC2 /* Runes-prefix.pch */,
+				2C1884051F3D0BDA00C8CDC2 /* Runes-umbrella.h */,
+				2C1884061F3D0BDA00C8CDC2 /* Runes.modulemap */,
+				2C1884071F3D0BDA00C8CDC2 /* Runes.xcconfig */,
+			);
+			path = Runes;
+			sourceTree = "<group>";
+		};
+		2C1884081F3D0BDA00C8CDC2 /* Sodium */ = {
+			isa = PBXGroup;
+			children = (
+				2C1884091F3D0BDA00C8CDC2 /* Info.plist */,
+				2C18840A1F3D0BDA00C8CDC2 /* Sodium-dummy.m */,
+				2C18840B1F3D0BDA00C8CDC2 /* Sodium-prefix.pch */,
+				2C18840C1F3D0BDA00C8CDC2 /* Sodium-umbrella.h */,
+				2C18840D1F3D0BDA00C8CDC2 /* Sodium.modulemap */,
+				2C18840E1F3D0BDA00C8CDC2 /* Sodium.xcconfig */,
+			);
+			path = Sodium;
+			sourceTree = "<group>";
+		};
+		2C18840F1F3D0BDA00C8CDC2 /* Swish */ = {
+			isa = PBXGroup;
+			children = (
+				2C1884101F3D0BDA00C8CDC2 /* Info.plist */,
+				2C1884111F3D0BDA00C8CDC2 /* Swish-dummy.m */,
+				2C1884121F3D0BDA00C8CDC2 /* Swish-prefix.pch */,
+				2C1884131F3D0BDA00C8CDC2 /* Swish-umbrella.h */,
+				2C1884141F3D0BDA00C8CDC2 /* Swish.modulemap */,
+				2C1884151F3D0BDA00C8CDC2 /* Swish.xcconfig */,
+			);
+			path = Swish;
+			sourceTree = "<group>";
+		};
+		2C1884161F3D0BDA00C8CDC2 /* Valet */ = {
+			isa = PBXGroup;
+			children = (
+				2C1884171F3D0BDA00C8CDC2 /* Info.plist */,
+				2C1884181F3D0BDA00C8CDC2 /* Valet-dummy.m */,
+				2C1884191F3D0BDA00C8CDC2 /* Valet-prefix.pch */,
+				2C18841A1F3D0BDA00C8CDC2 /* Valet-umbrella.h */,
+				2C18841B1F3D0BDA00C8CDC2 /* Valet.modulemap */,
+				2C18841C1F3D0BDA00C8CDC2 /* Valet.xcconfig */,
+			);
+			path = Valet;
+			sourceTree = "<group>";
+		};
+		2C18841D1F3D0BDA00C8CDC2 /* Valet */ = {
+			isa = PBXGroup;
+			children = (
+				2C18841E1F3D0BDA00C8CDC2 /* LICENSE */,
+				2C18841F1F3D0BDA00C8CDC2 /* Other */,
+				2C1884211F3D0BDA00C8CDC2 /* README.md */,
+				2C1884221F3D0BDA00C8CDC2 /* Valet */,
+			);
+			path = Valet;
+			sourceTree = "<group>";
+		};
+		2C18841F1F3D0BDA00C8CDC2 /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				2C1884201F3D0BDA00C8CDC2 /* ValetDefines.h */,
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
+		2C1884221F3D0BDA00C8CDC2 /* Valet */ = {
+			isa = PBXGroup;
+			children = (
+				2C1884231F3D0BDA00C8CDC2 /* Valet.h */,
+				2C1884241F3D0BDA00C8CDC2 /* VALSecureEnclaveValet.h */,
+				2C1884251F3D0BDA00C8CDC2 /* VALSecureEnclaveValet.m */,
+				2C1884261F3D0BDA00C8CDC2 /* VALSecureEnclaveValet_Protected.h */,
+				2C1884271F3D0BDA00C8CDC2 /* VALSinglePromptSecureEnclaveValet.h */,
+				2C1884281F3D0BDA00C8CDC2 /* VALSinglePromptSecureEnclaveValet.m */,
+				2C1884291F3D0BDA00C8CDC2 /* VALSynchronizableValet.h */,
+				2C18842A1F3D0BDA00C8CDC2 /* VALSynchronizableValet.m */,
+				2C18842B1F3D0BDA00C8CDC2 /* VALValet.h */,
+				2C18842C1F3D0BDA00C8CDC2 /* VALValet.m */,
+				2C18842D1F3D0BDA00C8CDC2 /* VALValet_Protected.h */,
+			);
+			path = Valet;
+			sourceTree = "<group>";
+		};
+		2C18842E1F3D0BDA00C8CDC2 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				2C18842F1F3D0BDA00C8CDC2 /* Info.plist */,
+				2C1884301F3D0BDA00C8CDC2 /* Tests.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
 		38E4965FD4A1FE80A0BFD57F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2C1882D71F3D0BDA00C8CDC2 /* Example */,
 				150B4C0D6B8E8E1C0919315E /* Pods_E3db_Example.framework */,
 				9FCF73768FDCA66BEC76472E /* Pods_E3db_Tests.framework */,
 			);
@@ -176,6 +1323,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				2C18845E1F3D0DB000C8CDC2 /* PBXTargetDependency */,
 			);
 			name = E3db_Example;
 			productName = E3db;
@@ -215,12 +1363,12 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = CEJ5Z747JS;
+						DevelopmentTeam = 97LZRZ7U3B;
 						LastSwiftMigration = 0820;
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = CEJ5Z747JS;
+						DevelopmentTeam = 97LZRZ7U3B;
 						LastSwiftMigration = 0820;
 						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
@@ -237,6 +1385,16 @@
 			mainGroup = 607FACC71AFB9204008FA782;
 			productRefGroup = 607FACD11AFB9204008FA782 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 2C1882E21F3D0BDA00C8CDC2 /* Products */;
+					ProjectRef = 2C1882E11F3D0BDA00C8CDC2 /* E3db.xcodeproj */;
+				},
+				{
+					ProductGroup = 2C1883281F3D0BDA00C8CDC2 /* Products */;
+					ProjectRef = 2C1883271F3D0BDA00C8CDC2 /* Pods.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				607FACCF1AFB9204008FA782 /* E3db_Example */,
@@ -244,6 +1402,100 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		2C18843F1F3D0BDA00C8CDC2 /* Argo.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Argo.framework;
+			remoteRef = 2C18843E1F3D0BDA00C8CDC2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2C1884411F3D0BDA00C8CDC2 /* Curry.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Curry.framework;
+			remoteRef = 2C1884401F3D0BDA00C8CDC2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2C1884431F3D0BDA00C8CDC2 /* E3db.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = E3db.framework;
+			remoteRef = 2C1884421F3D0BDA00C8CDC2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2C1884451F3D0BDA00C8CDC2 /* Heimdallr.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Heimdallr.framework;
+			remoteRef = 2C1884441F3D0BDA00C8CDC2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2C1884471F3D0BDA00C8CDC2 /* Ogra.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Ogra.framework;
+			remoteRef = 2C1884461F3D0BDA00C8CDC2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2C1884491F3D0BDA00C8CDC2 /* Pods_E3db_Example.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Pods_E3db_Example.framework;
+			remoteRef = 2C1884481F3D0BDA00C8CDC2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2C18844B1F3D0BDA00C8CDC2 /* Pods_E3db_Tests.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Pods_E3db_Tests.framework;
+			remoteRef = 2C18844A1F3D0BDA00C8CDC2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2C18844D1F3D0BDA00C8CDC2 /* ResponseDetective.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = ResponseDetective.framework;
+			remoteRef = 2C18844C1F3D0BDA00C8CDC2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2C18844F1F3D0BDA00C8CDC2 /* Result.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Result.framework;
+			remoteRef = 2C18844E1F3D0BDA00C8CDC2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2C1884511F3D0BDA00C8CDC2 /* Runes.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Runes.framework;
+			remoteRef = 2C1884501F3D0BDA00C8CDC2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2C1884531F3D0BDA00C8CDC2 /* Sodium.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Sodium.framework;
+			remoteRef = 2C1884521F3D0BDA00C8CDC2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2C1884551F3D0BDA00C8CDC2 /* Swish.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Swish.framework;
+			remoteRef = 2C1884541F3D0BDA00C8CDC2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2C1884571F3D0BDA00C8CDC2 /* Valet.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Valet.framework;
+			remoteRef = 2C1884561F3D0BDA00C8CDC2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		607FACCE1AFB9204008FA782 /* Resources */ = {
@@ -272,13 +1524,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-E3db_Tests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		617A66FEE50531A442A49B5D /* [CP] Copy Pods Resources */ = {
@@ -302,9 +1557,32 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-E3db_Example/Pods-E3db_Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Argo/Argo.framework",
+				"${BUILT_PRODUCTS_DIR}/Curry/Curry.framework",
+				"${BUILT_PRODUCTS_DIR}/E3db/E3db.framework",
+				"${BUILT_PRODUCTS_DIR}/Heimdallr/Heimdallr.framework",
+				"${BUILT_PRODUCTS_DIR}/Ogra/Ogra.framework",
+				"${BUILT_PRODUCTS_DIR}/ResponseDetective/ResponseDetective.framework",
+				"${BUILT_PRODUCTS_DIR}/Result/Result.framework",
+				"${BUILT_PRODUCTS_DIR}/Runes/Runes.framework",
+				"${BUILT_PRODUCTS_DIR}/Sodium/Sodium.framework",
+				"${BUILT_PRODUCTS_DIR}/Swish/Swish.framework",
+				"${BUILT_PRODUCTS_DIR}/Valet/Valet.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Argo.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Curry.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/E3db.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Heimdallr.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Ogra.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ResponseDetective.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Runes.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Sodium.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swish.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Valet.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -332,13 +1610,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-E3db_Example-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DD5019A20CEF786AE7C0D8B9 /* [CP] Copy Pods Resources */ = {
@@ -379,6 +1660,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		2C18845E1F3D0DB000C8CDC2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = E3db;
+			targetProxy = 2C18845D1F3D0DB000C8CDC2 /* PBXContainerItemProxy */;
+		};
 		607FACE71AFB9204008FA782 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 607FACCF1AFB9204008FA782 /* E3db_Example */;
@@ -387,6 +1673,22 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		2C1882DA1F3D0BDA00C8CDC2 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2C1882DB1F3D0BDA00C8CDC2 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+		2C1882DC1F3D0BDA00C8CDC2 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2C1882DD1F3D0BDA00C8CDC2 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
 		607FACD91AFB9204008FA782 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -512,7 +1814,7 @@
 			baseConfigurationReference = D48E746D3071A3663455A117 /* Pods-E3db_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = CEJ5Z747JS;
+				DEVELOPMENT_TEAM = 97LZRZ7U3B;
 				INFOPLIST_FILE = E3db/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -528,7 +1830,7 @@
 			baseConfigurationReference = 6CAE69CFF2FDF7CB4D8DE37F /* Pods-E3db_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = CEJ5Z747JS;
+				DEVELOPMENT_TEAM = 97LZRZ7U3B;
 				INFOPLIST_FILE = E3db/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -543,7 +1845,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 181DD6CB7459FD4B80E26DCB /* Pods-E3db_Tests.debug.xcconfig */;
 			buildSettings = {
-				DEVELOPMENT_TEAM = CEJ5Z747JS;
+				DEVELOPMENT_TEAM = 97LZRZ7U3B;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -563,7 +1865,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 540D9DECD06230712274E4BA /* Pods-E3db_Tests.release.xcconfig */;
 			buildSettings = {
-				DEVELOPMENT_TEAM = CEJ5Z747JS;
+				DEVELOPMENT_TEAM = 97LZRZ7U3B;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;

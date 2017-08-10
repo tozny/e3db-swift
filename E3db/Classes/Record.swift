@@ -11,9 +11,16 @@ import Curry
 import Runes
 import Result
 
-public typealias RecordData = [String: Data]
 public typealias CypherData = [String: String]
 public typealias PlainMeta  = [String: String]
+
+public struct RecordData {
+    let data: [String: String]
+
+    public init(data: [String: String]) {
+        self.data = data
+    }
+}
 
 struct MetaRequest: Ogra.Encodable {
     let writerId: String

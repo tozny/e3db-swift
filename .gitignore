@@ -1,4 +1,7 @@
 
+# testing credentials -- not strictly confidential, but don't need them in repo
+TestData.swift
+
 # Created by https://www.gitignore.io/api/xcode,osx,swift,cocoapods
 
 ### CocoaPods ###

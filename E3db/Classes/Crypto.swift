@@ -69,8 +69,9 @@ extension Crypto {
         return secretKey
     }
 
-    private static func encrypt(value: Data, key: SecretBox.Key) throws -> SecretBoxCypherNonce {
-        guard let cypher: SecretBoxCypherNonce = sodium.secretBox.seal(message: value, secretKey: key) else {
+    private static func encrypt(value: Data?, key: SecretBox.Key) throws -> SecretBoxCypherNonce {
+        guard let data = value,
+              let cypher: SecretBoxCypherNonce = sodium.secretBox.seal(message: data, secretKey: key) else {
             throw E3dbError.cryptoError("Failed to encrypt value.")
         }
         return cypher
@@ -78,9 +79,11 @@ extension Crypto {
 
     static func encrypt(recordData: RecordData, ak: AccessKey) throws -> CypherData {
         var encrypted = CypherData()
-        for (key, value) in recordData {
+
+        for (key, value) in recordData.data {
+            let bytes       = value.data(using: .utf8)
             let dk          = try generateSecretKey()
-            let (ef, efN)   = try encrypt(value: value, key: dk)
+            let (ef, efN)   = try encrypt(value: bytes, key: dk)
             let (edk, edkN) = try encrypt(value: dk, key: ak)
             encrypted[key]  = b64Join(edk, edkN, ef, efN)
         }

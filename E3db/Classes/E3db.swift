@@ -37,9 +37,9 @@ public class E3db {
 
     internal static var akCache = [AkCacheKey: AccessKey]()
 
-    public init?(config: Config) {
-        guard let url = URL(string: config.baseApiUrl) else { return nil }
-        self.api    = Api(baseUrl: url)
+    public init(config: Config) {
+        // TODO: refactor the URL optional
+        self.api    = Api(baseUrl: URL(string: config.baseApiUrl)!)
         self.config = config
 
         let credentials   = OAuthClientCredentials(id: config.apiKeyId, secret: config.apiSecret)
@@ -95,5 +95,4 @@ extension E3db {
         }
     }
 }
-
 
