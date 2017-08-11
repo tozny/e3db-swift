@@ -29,6 +29,12 @@ extension Crypto {
     static func b64Join(_ cyphertexts: Data...) -> String {
         return cyphertexts.map { $0.base64URLEncodedString() }.joined(separator: ".")
     }
+
+    static func b64Split(_ value: String) -> (Data, Data, Data, Data)? {
+        let split = value.split(separator: ".").flatMap { Data(base64URLEncoded: String($0)) }
+        guard split.count == 4 else { return nil }
+        return (split[0], split[1], split[2], split[3])
+    }
 }
 
 // MARK: Access Key Crypto
@@ -88,5 +94,26 @@ extension Crypto {
             encrypted[key]  = b64Join(edk, edkN, ef, efN)
         }
         return encrypted
+    }
+
+    private static func decrypt(cyphertext: Data, nonce: SecretBox.Nonce, key: SecretBox.Key) throws -> Data {
+        guard let plain = sodium.secretBox.open(authenticatedCipherText: cyphertext, secretKey: key, nonce: nonce) else {
+            throw E3dbError.cryptoError("Failed to encrypt value.")
+        }
+        return plain
+    }
+
+    static func decrypt(cypherData: CypherData, ak: AccessKey) throws -> RecordData {
+        var decrypted = [String: String]()
+
+        for (key, value) in cypherData {
+            guard let (edk, edkN, ef, efN) = b64Split(value) else {
+                throw E3dbError.cryptoError("Invalid data format")
+            }
+            let dk    = try decrypt(cyphertext: edk, nonce: edkN, key: ak)
+            let field = try decrypt(cyphertext: ef, nonce: efN, key: dk)
+            decrypted[key] = String(data: field, encoding: .utf8)
+        }
+        return RecordData(data: decrypted)
     }
 }

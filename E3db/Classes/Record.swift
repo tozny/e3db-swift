@@ -139,3 +139,62 @@ extension E3db {
         }
     }
 }
+
+// MARK: Read Record
+
+extension E3db {
+    private struct RecordRequest: Request {
+        typealias ResponseObject = Record
+        let api: Api
+        let recordId: String
+
+        func build() -> URLRequest {
+            let url = api.url(endpoint: .records)
+                .appendingPathComponent(recordId)
+            let req = URLRequest(url: url)
+            return req
+        }
+    }
+
+    // Workaround for strange scoping issue related to Result(try ...) inside "perform" callback,
+    // error reads: "Invalid conversion from throwing function of type '(_) throws -> _' to
+    // non-throwing function type '(Result<_.ResponseObject, SwishError>) -> Void'"
+    private func decryptRecord(record: Record, accessKey: AccessKey) -> Result<RecordData, E3dbError> {
+        return Result(try Crypto.decrypt(cypherData: record.data, ak: accessKey))
+    }
+
+    private func readRaw(_ recordId: String, completion: @escaping E3dbCompletion<Record>) {
+        let req = RecordRequest(api: api, recordId: recordId)
+        authedClient.perform(req) { (result) in
+            switch result {
+            case .success(let r):
+                completion(Result(value: r))
+            case .failure(.serverError(code: 401, data: _)):
+                completion(Result(error: .apiError(401, "Unauthorized")))
+            case .failure(.serverError(code: 404, data: _)):
+                completion(Result(error: .apiError(404, "Record \(recordId) not found.")))
+            case .failure(_):
+                completion(Result(error: .error))
+            }
+        }
+    }
+
+    public func read(recordId: String, completion: @escaping E3dbCompletion<RecordData>) {
+        readRaw(recordId) { (result) in
+            switch result {
+            case .success(let r):
+                let clientId = self.config.clientId
+                self.getAccessKey(writerId: r.meta.writerId, userId: r.meta.userId, readerId: clientId, recordType: r.meta.type) { (akResult) in
+                    switch akResult {
+                    case .success(let ak):
+                        completion(self.decryptRecord(record: r, accessKey: ak))
+                    case .failure(let err):
+                        completion(Result(error: err))
+                    }
+                }
+            case .failure(let err):
+                completion(Result(error: err))
+            }
+        }
+    }
+}
