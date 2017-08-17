@@ -2,19 +2,25 @@
 //  ViewController.swift
 //  E3db
 //
-//  Created by gstro on 06/25/2017.
-//  Copyright (c) 2017 gstro. All rights reserved.
-//
 
 import UIKit
 import E3db
+
+struct DataTest: RecordData {
+    let data: [String: String]
+}
 
 class ViewController: UIViewController {
 
     @IBOutlet weak var messageField: UITextField!
     @IBOutlet weak var responseLabel: UILabel!
 
-    let e3db: E3db = E3db(config: TestData.config)
+    lazy var e3db: E3db? = {
+        // load config from secure enclave
+        guard let config = Config() else { return nil }
+        return E3db(config: config)
+    }()
+
     var latest: String = ""
 
     @IBAction func write() {
@@ -22,8 +28,8 @@ class ViewController: UIViewController {
             return print("TextField contains no text")
         }
 
-        let recordData = RecordData(data: ["secret message": msg])
-        e3db.write("sdk-test", data: recordData, plain: ["Sent from": "my iPhone"]) { (result) in
+        let recordData = DataTest(data: ["secret message": msg])
+        e3db?.write("sdk-test-2", data: recordData, plain: ["Sent from": "my iPhone"]) { (result) in
             let text: String
             switch result {
             case .success(let record):
@@ -41,24 +47,26 @@ class ViewController: UIViewController {
         guard latest.count > 0 else {
             return print("No records written this session")
         }
-        e3db.read(recordId: latest) { (result) in
+        e3db?.read(recordId: latest) { (result: E3dbResult<DataTest>) in
             let text: String
             switch result {
-            case .success(let data):
-                text = "Record data: \(data)"
+            case .success(let record):
+                text = "Record data: \(record.data)"
             case .failure(let error):
                 text = "Failed to read record! \(error)"
             }
             print(text)
             let alert = UIAlertController(title: "Read Record", message: text, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
+            alert.addAction(UIAlertAction(title: "Ok", style: .default))
+            self.present(alert, animated: true)
         }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+
+        // save test config under default profile name, protects it in secure enclave w/ TouchID
+        guard TestData.config.save() else { return print("Could not save config") }
     }
 
     override func didReceiveMemoryWarning() {

@@ -45,6 +45,7 @@ enum Endpoint: String {
     case records
     case clients
     case accessKeys = "access_keys"
+    case search
 }
 
 struct AkCacheKey: Hashable {

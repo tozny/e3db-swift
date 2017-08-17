@@ -16,7 +16,8 @@ import Runes
 
 import ResponseDetective
 
-public typealias E3dbCompletion<T> = (Result<T, E3dbError>) -> Void
+public typealias E3dbResult<T>     = Result<T, E3dbError>
+public typealias E3dbCompletion<T> = (E3dbResult<T>) -> Void
 
 public class E3db {
     internal let api: Api

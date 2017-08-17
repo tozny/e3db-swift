@@ -11,16 +11,13 @@ import Curry
 import Runes
 import Result
 
+public protocol RecordData {
+    var data: [String: String] { get }
+    init(data: [String: String])
+}
+
 public typealias CypherData = [String: String]
 public typealias PlainMeta  = [String: String]
-
-public struct RecordData {
-    let data: [String: String]
-
-    public init(data: [String: String]) {
-        self.data = data
-    }
-}
 
 struct MetaRequest: Ogra.Encodable {
     let writerId: String
@@ -58,10 +55,9 @@ public struct Meta: Argo.Decodable {
         // split decode fixes: "expression was too complex
         // to be solved in reasonable time."
         //
-        // The >>- (flatMap) decodes to [String: String]
-        // and ?? coalesces to empty default value
+        // the <|> provides a default empty value
         return tmp
-            <*> ((j <|? "plain").flatMap { PlainMeta.decode($0 ?? JSON.object([:])) })
+            <*> ((j <| "plain").flatMap(PlainMeta.decode) <|> .success(PlainMeta()))
             <*> j <|  "created"
             <*> j <|  "last_modified"
             <*> j <|? "version"
@@ -87,7 +83,7 @@ public struct Record: Argo.Decodable {
     public static func decode(_ j: JSON) -> Decoded<Record> {
         return curry(Record.init)
             <^> j  <| "meta"
-            <*> ((j <| "data").flatMap { CypherData.decode($0) })
+            <*> (j <| "data").flatMap(CypherData.decode)
     }
 }
 
@@ -156,11 +152,18 @@ extension E3db {
         }
     }
 
-    // Workaround for strange scoping issue related to Result(try ...) inside "perform" callback,
-    // error reads: "Invalid conversion from throwing function of type '(_) throws -> _' to
-    // non-throwing function type '(Result<_.ResponseObject, SwishError>) -> Void'"
-    private func decryptRecord(record: Record, accessKey: AccessKey) -> Result<RecordData, E3dbError> {
+    private func decrypt(record: Record, accessKey: AccessKey) -> Result<[String: String], E3dbError> {
         return Result(try Crypto.decrypt(cypherData: record.data, ak: accessKey))
+    }
+
+    private func decryptRecord<T: RecordData>(record r: Record, completion: @escaping E3dbCompletion<T>) {
+        let clientId = config.clientId
+        getAccessKey(writerId: r.meta.writerId, userId: r.meta.userId, readerId: clientId, recordType: r.meta.type) { (akResult) in
+            let result = akResult
+                .flatMap { self.decrypt(record: r, accessKey: $0) }
+                .map(T.init)
+            completion(result)
+        }
     }
 
     private func readRaw(_ recordId: String, completion: @escaping E3dbCompletion<Record>) {
@@ -179,19 +182,11 @@ extension E3db {
         }
     }
 
-    public func read(recordId: String, completion: @escaping E3dbCompletion<RecordData>) {
+    public func read<T: RecordData>(recordId: String, completion: @escaping E3dbCompletion<T>) {
         readRaw(recordId) { (result) in
             switch result {
             case .success(let r):
-                let clientId = self.config.clientId
-                self.getAccessKey(writerId: r.meta.writerId, userId: r.meta.userId, readerId: clientId, recordType: r.meta.type) { (akResult) in
-                    switch akResult {
-                    case .success(let ak):
-                        completion(self.decryptRecord(record: r, accessKey: ak))
-                    case .failure(let err):
-                        completion(Result(error: err))
-                    }
-                }
+                self.decryptRecord(record: r, completion: completion)
             case .failure(let err):
                 completion(Result(error: err))
             }

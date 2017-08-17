@@ -103,7 +103,7 @@ extension Crypto {
         return plain
     }
 
-    static func decrypt(cypherData: CypherData, ak: AccessKey) throws -> RecordData {
+    static func decrypt(cypherData: CypherData, ak: AccessKey) throws -> [String: String] {
         var decrypted = [String: String]()
 
         for (key, value) in cypherData {
@@ -114,6 +114,6 @@ extension Crypto {
             let field = try decrypt(cyphertext: ef, nonce: efN, key: dk)
             decrypted[key] = String(data: field, encoding: .utf8)
         }
-        return RecordData(data: decrypted)
+        return decrypted
     }
 }
