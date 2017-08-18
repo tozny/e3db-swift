@@ -62,14 +62,10 @@ extension Query: Ogra.Encodable {
 }
 
 
-public struct SearchRecord {
-    public let meta: Meta
-    public let data: CypherData?
-    let ak: EncryptedAccessKey?
-
-    public func toRecord() -> Record {
-        return Record(meta: meta, data: data ?? CypherData())
-    }
+struct SearchRecord {
+    let meta: Meta
+    let data: CypherData?
+    let eakResponse: EAKResponse?
 }
 
 extension SearchRecord: Argo.Decodable {
@@ -81,9 +77,9 @@ extension SearchRecord: Argo.Decodable {
     }
 }
 
-public struct SearchResponse {
-    public let results: [SearchRecord]
-    public let lastIndex: Int
+struct SearchResponse {
+    let results: [SearchRecord]
+    let lastIndex: Int
 }
 
 extension SearchResponse: Argo.Decodable {
@@ -109,16 +105,31 @@ extension E3db {
         }
     }
 
+    private func decryptSearchRecord(_ searchRecord: SearchRecord) -> E3dbResult<Record> {
+        guard let cypherData = searchRecord.data,
+              let eakResp = searchRecord.eakResponse else {
+                return Result(value: Record(meta: searchRecord.meta, data: RecordData(data: [:])))
+        }
+
+        return decryptEak(eakResponse: eakResp, clientPrivateKey: self.config.privateKey)
+            .flatMap { decrypt(data: cypherData, accessKey: $0) }
+            .map { Record(meta: searchRecord.meta, data: $0) }
+    }
+
     public func search(query: Query, completion: @escaping E3dbCompletion<[Record]>) {
         let req = SearchRequest(api: api, q: query)
         authedClient.perform(req) { (result) in
             switch result {
             case .success(let resp):
-                completion(Result(value: resp.results.map { $0.toRecord() }))
+                completion(resp.results.map(self.decryptSearchRecord).sequence())
             case .failure(.serverError(code: 401, data: _)):
                 completion(Result(error: .apiError(401, "Unauthorized")))
             case .failure(let err):
-                print("search failure: \(err)")
+                if case .serverError(code: let code, data: _) = err,
+                    let desc = err.errorDescription {
+                    return completion(Result(error: .apiError(code, desc)))
+                }
+                // TODO: Better error management
                 completion(Result(error: .error))
             }
         }

@@ -9,6 +9,7 @@ import Argo
 import Ogra
 import Curry
 import Runes
+import Result
 
 extension Formatter {
     static let iso8601: DateFormatter = {
@@ -61,5 +62,21 @@ extension String {
     func capitalizedFirst() -> String {
         let firstIndex = self.index(startIndex, offsetBy: 1)
         return self.substring(to: firstIndex).capitalized + self.substring(from: firstIndex)
+    }
+}
+
+extension Array where Element: ResultProtocol {
+    public func sequence<T, E>() -> Result<[T], E> {
+        var accum: [T] = []
+        accum.reserveCapacity(self.count)
+
+        for case let result as Result<T, E> in self {
+            switch result {
+            case let .success(value): accum.append(value)
+            case let .failure(error): return .failure(error)
+            }
+        }
+
+        return Result(accum)
     }
 }

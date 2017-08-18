@@ -6,10 +6,6 @@
 import UIKit
 import E3db
 
-struct DataTest: RecordData {
-    let data: [String: String]
-}
-
 class ViewController: UIViewController {
 
     @IBOutlet weak var messageField: UITextField!
@@ -28,7 +24,7 @@ class ViewController: UIViewController {
             return print("TextField contains no text")
         }
 
-        let recordData = DataTest(data: ["secret message": msg])
+        let recordData = RecordData(data: ["secret message": msg])
         e3db?.write("sdk-test-2", data: recordData, plain: ["Sent from": "my iPhone"]) { (result) in
             let text: String
             switch result {
@@ -44,21 +40,9 @@ class ViewController: UIViewController {
     }
 
     @IBAction func read() {
-        guard latest.count > 0 else {
-            return print("No records written this session")
-        }
-        e3db?.read(recordId: latest) { (result: E3dbResult<DataTest>) in
-            let text: String
-            switch result {
-            case .success(let record):
-                text = "Record data: \(record.data)"
-            case .failure(let error):
-                text = "Failed to read record! \(error)"
-            }
-            print(text)
-            let alert = UIAlertController(title: "Read Record", message: text, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: .default))
-            self.present(alert, animated: true)
+        let q = Query(count: 2, includeData: true)
+        e3db?.search(query: q) { (result) in
+            result.map { $0.forEach { print("\($0)") } }
         }
     }
 

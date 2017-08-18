@@ -11,9 +11,11 @@ import Curry
 import Runes
 import Result
 
-public protocol RecordData {
-    var data: [String: String] { get }
-    init(data: [String: String])
+public struct RecordData {
+    public let data: [String: String]
+    public init(data: [String: String]) {
+        self.data = data
+    }
 }
 
 public typealias CypherData = [String: String]
@@ -76,22 +78,27 @@ struct RecordRequest: Ogra.Encodable {
     }
 }
 
-public struct Record: Argo.Decodable {
-    public let meta: Meta
-    public let data: CypherData
+struct RecordResponse: Argo.Decodable {
+    let meta: Meta
+    let cypherData: CypherData
 
-    public static func decode(_ j: JSON) -> Decoded<Record> {
-        return curry(Record.init)
+    static func decode(_ j: JSON) -> Decoded<RecordResponse> {
+        return curry(RecordResponse.init)
             <^> j  <| "meta"
             <*> (j <| "data").flatMap(CypherData.decode)
     }
+}
+
+public struct Record {
+    public let meta: Meta
+    public let data: RecordData
 }
 
 // MARK: Write Record
 
 extension E3db {
     private struct CreateRecordRequest: Request {
-        typealias ResponseObject = Record
+        typealias ResponseObject = RecordResponse
         let api: Api
         let record: RecordRequest
 
@@ -119,7 +126,10 @@ extension E3db {
         authedClient.perform(req) { result in
 
             // TODO: Better error handling
-            completion(result.mapError { _ in E3dbError.error })
+            let resp = result
+                .map { Record(meta: $0.meta, data: data) }
+                .mapError { _ in E3dbError.error }
+            completion(resp)
         }
     }
 
@@ -140,7 +150,7 @@ extension E3db {
 
 extension E3db {
     private struct RecordRequest: Request {
-        typealias ResponseObject = Record
+        typealias ResponseObject = RecordResponse
         let api: Api
         let recordId: String
 
@@ -152,21 +162,21 @@ extension E3db {
         }
     }
 
-    private func decrypt(record: Record, accessKey: AccessKey) -> Result<[String: String], E3dbError> {
-        return Result(try Crypto.decrypt(cypherData: record.data, ak: accessKey))
+    internal func decrypt(data: CypherData, accessKey: AccessKey) -> E3dbResult<RecordData> {
+        return Result(try Crypto.decrypt(cypherData: data, ak: accessKey)).map(RecordData.init)
     }
 
-    private func decryptRecord<T: RecordData>(record r: Record, completion: @escaping E3dbCompletion<T>) {
+    private func decryptRecord(record r: RecordResponse, completion: @escaping E3dbCompletion<Record>) {
         let clientId = config.clientId
         getAccessKey(writerId: r.meta.writerId, userId: r.meta.userId, readerId: clientId, recordType: r.meta.type) { (akResult) in
             let result = akResult
-                .flatMap { self.decrypt(record: r, accessKey: $0) }
-                .map(T.init)
+                .flatMap { self.decrypt(data: r.cypherData, accessKey: $0) }
+                .map { Record(meta: r.meta, data: $0) }
             completion(result)
         }
     }
 
-    private func readRaw(_ recordId: String, completion: @escaping E3dbCompletion<Record>) {
+    private func readRaw(_ recordId: String, completion: @escaping E3dbCompletion<RecordResponse>) {
         let req = RecordRequest(api: api, recordId: recordId)
         authedClient.perform(req) { (result) in
             switch result {
@@ -182,7 +192,7 @@ extension E3db {
         }
     }
 
-    public func read<T: RecordData>(recordId: String, completion: @escaping E3dbCompletion<T>) {
+    public func read(recordId: String, completion: @escaping E3dbCompletion<Record>) {
         readRaw(recordId) { (result) in
             switch result {
             case .success(let r):
