@@ -13,9 +13,28 @@ import Heimdallr
 public enum E3dbError: Swift.Error {
     case cryptoError(String)        // Message
     case configError(String)        // Message
+    case networkError(String)       // Message
     case jsonError(String, String)  // (Expected, Actual)
     case apiError(Int, String)      // (StatusCode, Message)
-    case error
+
+    init(swishError: SwishError) {
+        switch swishError {
+        case .argoError(.typeMismatch(let exp, let act)):
+            self = .jsonError(exp, act)
+        case .argoError(.missingKey(let key)):
+            self = .jsonError(key, "")
+        case .argoError(let err):
+            self = .jsonError("Failed to decode response", err.description)
+        case .serverError(code: 401, data: _):
+            self = .apiError(401, "Unauthorized")
+        case .serverError(code: 404, data: _):
+            self = .apiError(404, "Requested item not found")
+        case .serverError(code: let code, data: _):
+            self = .apiError(code, swishError.errorDescription ?? "Failed request")
+        case .deserializationError, .parseError, .urlSessionError:
+            self = .networkError(swishError.errorDescription ?? "Failed request")
+        }
+    }
 }
 
 struct Api {
@@ -68,7 +87,7 @@ struct AuthedRequestPerformer {
     fileprivate let session: URLSession
     fileprivate let authenticator: Heimdallr
 
-    public init(authenticator: Heimdallr, session: URLSession = .shared) {
+    init(authenticator: Heimdallr, session: URLSession = .shared) {
         self.session = session
         self.authenticator = authenticator
     }
@@ -77,7 +96,7 @@ struct AuthedRequestPerformer {
 extension AuthedRequestPerformer: RequestPerformer {
 
     @discardableResult
-    func perform(_ request: URLRequest, completionHandler: @escaping (Result<HTTPResponse, SwishError>) -> Void) -> URLSessionDataTask {
+    internal func perform(_ request: URLRequest, completionHandler: @escaping (Result<HTTPResponse, SwishError>) -> Void) -> URLSessionDataTask {
         if authenticator.hasAccessToken {
             authenticator.authenticateRequest(request) { (result) in
                 if case .success(let req) = result {

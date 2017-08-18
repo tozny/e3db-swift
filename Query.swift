@@ -61,7 +61,6 @@ extension Query: Ogra.Encodable {
     }
 }
 
-
 struct SearchRecord {
     let meta: Meta
     let data: CypherData?
@@ -83,7 +82,7 @@ struct SearchResponse {
 }
 
 extension SearchResponse: Argo.Decodable {
-    public static func decode(_ j: JSON) -> Decoded<SearchResponse> {
+    static func decode(_ j: JSON) -> Decoded<SearchResponse> {
         return curry(SearchResponse.init)
             <^> j <|| "results"
             <*> j <|  "last_index"
@@ -119,19 +118,10 @@ extension E3db {
     public func search(query: Query, completion: @escaping E3dbCompletion<[Record]>) {
         let req = SearchRequest(api: api, q: query)
         authedClient.perform(req) { (result) in
-            switch result {
-            case .success(let resp):
-                completion(resp.results.map(self.decryptSearchRecord).sequence())
-            case .failure(.serverError(code: 401, data: _)):
-                completion(Result(error: .apiError(401, "Unauthorized")))
-            case .failure(let err):
-                if case .serverError(code: let code, data: _) = err,
-                    let desc = err.errorDescription {
-                    return completion(Result(error: .apiError(code, desc)))
-                }
-                // TODO: Better error management
-                completion(Result(error: .error))
-            }
+            let resp: E3dbResult<[Record]> = result
+                .flatMap { $0.results.map(self.decryptSearchRecord).sequence() }
+                .mapError(E3dbError.init)
+            completion(resp)
         }
     }
 

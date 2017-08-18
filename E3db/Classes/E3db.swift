@@ -87,13 +87,9 @@ extension E3db {
         }
     }
 
-    // TODO: defaults to current client, probably change later
     public func getClientInfo(clientId: String? = nil, completion: @escaping E3dbCompletion<ClientInfo>) {
         let req = ClientInfoRequest(api: api, clientId: clientId ?? config.clientId)
-        authedClient.perform(req) { result in
-            // TODO: Better error handling
-            completion(result.mapError { _ in E3dbError.error })
-        }
+        authedClient.perform(req, completionHandler: { completion($0.mapError(E3dbError.init)) })
     }
 }
 

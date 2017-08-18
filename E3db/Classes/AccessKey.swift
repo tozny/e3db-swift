@@ -71,9 +71,6 @@ struct EAKResponse: Argo.Decodable {
 
 extension E3db {
 
-    // Workaround for strange scoping issue related to Result(try ...) inside "perform" callback,
-    // error reads: "Invalid conversion from throwing function of type '(_) throws -> _' to
-    // non-throwing function type '(Result<_.ResponseObject, SwishError>) -> Void'"
     internal func decryptEak(eakResponse: EAKResponse, clientPrivateKey: String) -> E3dbResult<AccessKey> {
         return Result(try Crypto.decrypt(eakResponse: eakResponse, clientPrivateKey: clientPrivateKey))
     }
@@ -102,9 +99,7 @@ extension E3db {
             // EAK not found on server, generate one
             guard case .failure(.serverError(404, _)) = result,
                 let ak = Crypto.generateAccessKey() else {
-
-                // TODO: Better error handling
-                return completion(Result(error: E3dbError.error))
+                return completion(Result(error: .cryptoError("Could not create access key")))
             }
 
             // stores AK on server and local cache before returning it to caller
@@ -119,10 +114,7 @@ extension E3db {
 
     private func putAccessKey(eak: EncryptedAccessKey, writerId: String, userId: String, readerId: String, recordType: String, completion: @escaping E3dbCompletion<Void>) {
         let req = PutEAKRequest(api: api, eak: eak, writerId: writerId, userId: userId, readerId: readerId, recordType: recordType)
-        authedClient.perform(req) { (result) in
-            // TODO: Better error handling
-            completion(result.mapError { _ in E3dbError.error })
-        }
+        authedClient.perform(req, completionHandler: { completion($0.mapError(E3dbError.init)) })
     }
 
     func putAccessKey(ak: AccessKey, cacheKey: AkCacheKey, writerId: String, userId: String, readerId: String, recordType: String, completion: @escaping E3dbCompletion<AccessKey>) {

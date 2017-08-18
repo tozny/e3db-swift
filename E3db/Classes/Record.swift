@@ -109,9 +109,18 @@ extension E3db {
         }
     }
 
+    internal func encrypt(_ data: RecordData, ak: AccessKey) -> E3dbResult<CypherData> {
+        return Result(try Crypto.encrypt(recordData: data, ak: ak))
+    }
+
     private func write(_ type: String, data: RecordData, plain: PlainMeta, ak: AccessKey, completion: @escaping E3dbCompletion<Record>) {
-        guard let cypher = try? Crypto.encrypt(recordData: data, ak: ak) else {
-            return completion(Result(error: .cryptoError("Failed to encrypt record")))
+
+        let cypher: CypherData
+        switch encrypt(data, ak: ak) {
+        case .success(let c):
+            cypher = c
+        case .failure(let err):
+            return completion(Result(error: err))
         }
 
         let meta = MetaRequest(
@@ -124,11 +133,9 @@ extension E3db {
 
         let req = CreateRecordRequest(api: api, record: record)
         authedClient.perform(req) { result in
-
-            // TODO: Better error handling
             let resp = result
                 .map { Record(meta: $0.meta, data: data) }
-                .mapError { _ in E3dbError.error }
+                .mapError(E3dbError.init)
             completion(resp)
         }
     }
@@ -139,8 +146,8 @@ extension E3db {
             switch result {
             case .success(let ak):
                 self.write(type, data: data, plain: plain, ak: ak, completion: completion)
-            case .failure(let error):
-                completion(Result(error: error))
+            case .failure(let err):
+                completion(Result(error: err))
             }
         }
     }
@@ -178,18 +185,7 @@ extension E3db {
 
     private func readRaw(_ recordId: String, completion: @escaping E3dbCompletion<RecordResponse>) {
         let req = RecordRequest(api: api, recordId: recordId)
-        authedClient.perform(req) { (result) in
-            switch result {
-            case .success(let r):
-                completion(Result(value: r))
-            case .failure(.serverError(code: 401, data: _)):
-                completion(Result(error: .apiError(401, "Unauthorized")))
-            case .failure(.serverError(code: 404, data: _)):
-                completion(Result(error: .apiError(404, "Record \(recordId) not found.")))
-            case .failure(_):
-                completion(Result(error: .error))
-            }
-        }
+        authedClient.perform(req, completionHandler: { completion($0.mapError(E3dbError.init)) })
     }
 
     public func read(recordId: String, completion: @escaping E3dbCompletion<Record>) {
