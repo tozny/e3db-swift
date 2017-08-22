@@ -12,6 +12,27 @@ import Runes
 import Result
 import Sodium
 
+// example registration
+//{
+//    "token": "example_token",
+//    "client": {
+//        "name": "example_name",
+//        "public_key": {
+//            "curve25519": "a9d9d90d0"
+//        }
+//    }
+//}
+
+struct AccountRegistrationRequest {
+    let token: String
+    let client: ClientRequest
+}
+
+struct ClientRequest {
+    let name: String
+    let publicKey: ClientKey
+}
+
 public struct ClientKey: Ogra.Encodable, Argo.Decodable {
     let curve25519: String
 

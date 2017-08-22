@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2C18845C1F3D0DAA00C8CDC2 /* E3db.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C1884431F3D0BDA00C8CDC2 /* E3db.framework */; };
+		2C4687BF1F4B58E300B4362B /* E3db.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C1884431F3D0BDA00C8CDC2 /* E3db.framework */; };
 		49564ACEB57D0E66804FF993 /* Pods_E3db_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 150B4C0D6B8E8E1C0919315E /* Pods_E3db_Example.framework */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
@@ -111,6 +112,13 @@
 			remoteInfo = Valet;
 		};
 		2C18845D1F3D0DB000C8CDC2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2C1883271F3D0BDA00C8CDC2 /* Pods.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = ECE1B4D4C3FA5FD4261BD1466CD11243;
+			remoteInfo = E3db;
+		};
+		2C4687B11F4B58C400B4362B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2C1883271F3D0BDA00C8CDC2 /* Pods.xcodeproj */;
 			proxyType = 1;
@@ -445,6 +453,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C4687BF1F4B58E300B4362B /* E3db.framework in Frameworks */,
 				EF5807BA22190CD44375AE0C /* Pods_E3db_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -481,6 +490,8 @@
 		};
 		2C1882E21F3D0BDA00C8CDC2 /* Products */ = {
 			isa = PBXGroup;
+			children = (
+			);
 			name = Products;
 			sourceTree = "<group>";
 		};
@@ -1344,6 +1355,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				2C4687B21F4B58C400B4362B /* PBXTargetDependency */,
 				607FACE71AFB9204008FA782 /* PBXTargetDependency */,
 			);
 			name = E3db_Tests;
@@ -1595,9 +1607,32 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-E3db_Tests/Pods-E3db_Tests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Argo/Argo.framework",
+				"${BUILT_PRODUCTS_DIR}/Curry/Curry.framework",
+				"${BUILT_PRODUCTS_DIR}/E3db/E3db.framework",
+				"${BUILT_PRODUCTS_DIR}/Heimdallr/Heimdallr.framework",
+				"${BUILT_PRODUCTS_DIR}/Ogra/Ogra.framework",
+				"${BUILT_PRODUCTS_DIR}/ResponseDetective/ResponseDetective.framework",
+				"${BUILT_PRODUCTS_DIR}/Result/Result.framework",
+				"${BUILT_PRODUCTS_DIR}/Runes/Runes.framework",
+				"${BUILT_PRODUCTS_DIR}/Sodium/Sodium.framework",
+				"${BUILT_PRODUCTS_DIR}/Swish/Swish.framework",
+				"${BUILT_PRODUCTS_DIR}/Valet/Valet.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Argo.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Curry.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/E3db.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Heimdallr.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Ogra.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ResponseDetective.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Runes.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Sodium.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swish.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Valet.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1664,6 +1699,11 @@
 			isa = PBXTargetDependency;
 			name = E3db;
 			targetProxy = 2C18845D1F3D0DB000C8CDC2 /* PBXContainerItemProxy */;
+		};
+		2C4687B21F4B58C400B4362B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = E3db;
+			targetProxy = 2C4687B11F4B58C400B4362B /* PBXContainerItemProxy */;
 		};
 		607FACE71AFB9204008FA782 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

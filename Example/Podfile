@@ -6,7 +6,7 @@ target 'E3db_Example' do
 
   target 'E3db_Tests' do
     inherit! :search_paths
-
+    pod 'E3db', :path => '../'
     
   end
 end

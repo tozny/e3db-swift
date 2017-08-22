@@ -29,6 +29,8 @@ public enum E3dbError: Swift.Error {
             self = .apiError(401, "Unauthorized")
         case .serverError(code: 404, data: _):
             self = .apiError(404, "Requested item not found")
+        case .serverError(code: 409, data: _):
+            self = .apiError(409, "Requested item cannot be updated")
         case .serverError(code: let code, data: _):
             self = .apiError(code, swishError.errorDescription ?? "Failed request")
         case .deserializationError, .parseError, .urlSessionError:
@@ -94,9 +96,10 @@ struct AuthedRequestPerformer {
 }
 
 extension AuthedRequestPerformer: RequestPerformer {
+    typealias ResponseHandler = (Result<HTTPResponse, SwishError>) -> Void
 
     @discardableResult
-    internal func perform(_ request: URLRequest, completionHandler: @escaping (Result<HTTPResponse, SwishError>) -> Void) -> URLSessionDataTask {
+    internal func perform(_ request: URLRequest, completionHandler: @escaping ResponseHandler) -> URLSessionDataTask {
         if authenticator.hasAccessToken {
             authenticator.authenticateRequest(request) { (result) in
                 if case .success(let req) = result {
@@ -116,7 +119,7 @@ extension AuthedRequestPerformer: RequestPerformer {
         return URLSessionDataTask()
     }
 
-    private func requestAccessToken(_ request: URLRequest, completionHandler: @escaping (Result<HTTPResponse, SwishError>) -> Void) {
+    private func requestAccessToken(_ request: URLRequest, completionHandler: @escaping ResponseHandler) {
         authenticator.requestAccessToken(grantType: "client_credentials", parameters: ["grant_type": "client_credentials"]) { (result) in
             guard case .success = result else {
                 // Failed to request token
@@ -128,7 +131,7 @@ extension AuthedRequestPerformer: RequestPerformer {
         }
     }
 
-    private func authenticateRequest(_ request: URLRequest, completionHandler: @escaping (Result<HTTPResponse, SwishError>) -> Void) {
+    private func authenticateRequest(_ request: URLRequest, completionHandler: @escaping ResponseHandler) {
         authenticator.authenticateRequest(request) { (result) in
             guard case .success(let req) = result else {
                 // Failed to authenticate request
@@ -140,7 +143,7 @@ extension AuthedRequestPerformer: RequestPerformer {
         }
     }
 
-    private func perform(authedRequest: URLRequest, completionHandler: @escaping (Result<HTTPResponse, SwishError>) -> Void) {
+    private func perform(authedRequest: URLRequest, completionHandler: @escaping ResponseHandler) {
         // Must capitalize "Bearer" since the Heimdallr lib chooses
         // to use exactly what is returned from the token request.
         // https://github.com/trivago/Heimdallr.swift/pull/59

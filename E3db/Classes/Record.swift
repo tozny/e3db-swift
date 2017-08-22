@@ -25,7 +25,7 @@ struct MetaRequest: Ogra.Encodable {
     let writerId: String
     let userId: String
     let type: String
-    let plain: PlainMeta
+    let plain: PlainMeta?
 
     public func encode() -> JSON {
         return JSON.object([
@@ -78,11 +78,11 @@ struct RecordRequest: Ogra.Encodable {
     }
 }
 
-struct RecordResponse: Argo.Decodable {
-    let meta: Meta
-    let cypherData: CypherData
+public struct RecordResponse: Argo.Decodable {
+    public let meta: Meta
+    public let cypherData: CypherData
 
-    static func decode(_ j: JSON) -> Decoded<RecordResponse> {
+    public static func decode(_ j: JSON) -> Decoded<RecordResponse> {
         return curry(RecordResponse.init)
             <^> j  <| "meta"
             <*> (j <| "data").flatMap(CypherData.decode)
@@ -92,6 +92,10 @@ struct RecordResponse: Argo.Decodable {
 public struct Record {
     public let meta: Meta
     public let data: RecordData
+
+    public func updated(data: RecordData) -> Record {
+        return Record(meta: self.meta, data: data)
+    }
 }
 
 // MARK: Write Record
@@ -113,7 +117,7 @@ extension E3db {
         return Result(try Crypto.encrypt(recordData: data, ak: ak))
     }
 
-    private func write(_ type: String, data: RecordData, plain: PlainMeta, ak: AccessKey, completion: @escaping E3dbCompletion<Record>) {
+    private func write(_ type: String, data: RecordData, plain: PlainMeta?, ak: AccessKey, completion: @escaping E3dbCompletion<Record>) {
 
         let cypher: CypherData
         switch encrypt(data, ak: ak) {
@@ -140,7 +144,7 @@ extension E3db {
         }
     }
 
-    public func write(_ type: String, data: RecordData, plain: PlainMeta, completion: @escaping E3dbCompletion<Record>) {
+    public func write(_ type: String, data: RecordData, plain: PlainMeta? = nil, completion: @escaping E3dbCompletion<Record>) {
         let clientId = config.clientId
         getAccessKey(writerId: clientId, userId: clientId, readerId: clientId, recordType: type) { (result) in
             switch result {
@@ -153,7 +157,7 @@ extension E3db {
     }
 }
 
-// MARK: Read Record
+// MARK: Read Record / Read Raw
 
 extension E3db {
     private struct RecordRequest: Request {
@@ -183,13 +187,13 @@ extension E3db {
         }
     }
 
-    private func readRaw(_ recordId: String, completion: @escaping E3dbCompletion<RecordResponse>) {
+    public func readRaw(recordId: String, completion: @escaping E3dbCompletion<RecordResponse>) {
         let req = RecordRequest(api: api, recordId: recordId)
         authedClient.perform(req, completionHandler: { completion($0.mapError(E3dbError.init)) })
     }
 
     public func read(recordId: String, completion: @escaping E3dbCompletion<Record>) {
-        readRaw(recordId) { (result) in
+        readRaw(recordId: recordId) { (result) in
             switch result {
             case .success(let r):
                 self.decryptRecord(record: r, completion: completion)
@@ -197,5 +201,89 @@ extension E3db {
                 completion(Result(error: err))
             }
         }
+    }
+}
+
+// MARK: Update Record
+
+extension E3db {
+    private struct RecordUpdateRequest: Request {
+        typealias ResponseObject = RecordResponse
+        let api: Api
+        let recordId: String
+        let version: String
+        let record: RecordRequest
+
+        func build() -> URLRequest {
+            let url = api.url(endpoint: .records)
+                .appendingPathComponent("safe")
+                .appendingPathComponent(recordId)
+                .appendingPathComponent(version)
+            var req = URLRequest(url: url)
+            return req.asJsonRequest(.PUT, payload: record.encode())
+        }
+    }
+
+    private func update(meta: Meta, data: RecordData, ak: AccessKey, completion: @escaping E3dbCompletion<Record>) {
+        let cypher: CypherData
+        switch self.encrypt(data, ak: ak) {
+        case .success(let c):
+            cypher = c
+        case .failure(let err):
+            return completion(Result(error: err))
+        }
+        let metaReq = MetaRequest(
+            writerId: meta.writerId,
+            userId: meta.userId,
+            type: meta.type,
+            plain: meta.plain
+        )
+        let record = RecordRequest(meta: metaReq, data: cypher)
+        let req    = RecordUpdateRequest(api: api, recordId: meta.recordId, version: meta.version ?? "", record: record)
+        authedClient.perform(req) { (result) in
+            let resp = result
+                .map { Record(meta: $0.meta, data: data) }
+                .mapError(E3dbError.init)
+            completion(resp)
+        }
+    }
+
+    public func update(record: Record, completion: @escaping E3dbCompletion<Record>) {
+        let clientId = config.clientId
+        let meta     = record.meta
+        getAccessKey(writerId: meta.writerId, userId: meta.userId, readerId: clientId, recordType: meta.type) { (result) in
+            switch result {
+            case .success(let ak):
+                self.update(meta: meta, data: record.data, ak: ak, completion: completion)
+            case .failure(let err):
+                completion(Result(error: err))
+            }
+        }
+    }
+}
+
+// MARK: Delete Record
+
+extension E3db {
+    private struct DeleteRecordRequest: Request {
+        typealias ResponseObject = Void
+        let api: Api
+        let recordId: String
+        let version: String
+
+        func build() -> URLRequest {
+            let url = api.url(endpoint: .records)
+                .appendingPathComponent("safe")
+                .appendingPathComponent(recordId)
+                .appendingPathComponent(version)
+            var req = URLRequest(url: url)
+            req.httpMethod = RequestMethod.DELETE.rawValue
+            return req
+        }
+    }
+
+    public func delete(record: Record, completion: @escaping E3dbCompletion<Void>) {
+        let req = DeleteRecordRequest(api: api, recordId: record.meta.recordId, version: record.meta.version ?? "")
+        authedClient.perform(req, completionHandler: { completion($0.mapError(E3dbError.init)) })
     }
 }
