@@ -48,6 +48,34 @@ extension Date: Ogra.Encodable, Argo.Decodable {
     }
 }
 
+extension URL: Ogra.Encodable, Argo.Decodable {
+    public func encode() -> JSON {
+        return self.absoluteString.encode()
+    }
+
+    public static func decode(_ json: JSON) -> Decoded<URL> {
+        guard case let .string(s) = json,
+            let url = URL(string: s) else {
+                return .typeMismatch(expected: "URL", actual: json)
+        }
+        return pure(url)
+    }
+}
+
+extension UUID: Ogra.Encodable, Argo.Decodable {
+    public func encode() -> JSON {
+        return self.uuidString.encode()
+    }
+
+    public static func decode(_ json: JSON) -> Decoded<UUID> {
+        guard case let .string(s) = json,
+            let uuid = UUID(uuidString: s) else {
+                return .typeMismatch(expected: "UUID", actual: json)
+        }
+        return pure(uuid)
+    }
+}
+
 extension URLRequest {
     mutating func asJsonRequest(_ method: RequestMethod, payload: JSON) -> URLRequest {
         self.httpMethod  = method.rawValue
@@ -78,5 +106,11 @@ extension Array where Element: ResultProtocol {
         }
 
         return Result(accum)
+    }
+}
+
+extension APIClient {
+    func performDefault<T: Request>(_ request: T, completion: @escaping (Result<T.ResponseObject, E3dbError>) -> Void) {
+        perform(request, completionHandler: { completion($0.mapError(E3dbError.init)) })
     }
 }

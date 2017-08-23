@@ -39,8 +39,7 @@ public class E3db {
     internal static var akCache = [AkCacheKey: AccessKey]()
 
     public init(config: Config) {
-        // TODO: refactor the URL optional
-        self.api    = Api(baseUrl: URL(string: config.baseApiUrl)!)
+        self.api    = Api(baseUrl: config.baseApiUrl)
         self.config = config
 
         let credentials   = OAuthClientCredentials(id: config.apiKeyId, secret: config.apiSecret)
@@ -54,18 +53,10 @@ public class E3db {
 // MARK: Get Client Info
 
 extension E3db {
-    public struct ClientInfo: Ogra.Encodable, Argo.Decodable {
-        let clientId: String
+    public struct ClientInfo: Argo.Decodable {
+        let clientId: UUID
         let publicKey: ClientKey
         let validated: Bool
-
-        public func encode() -> JSON {
-            return JSON.object([
-                "client_id": clientId.encode(),
-                "public_key": publicKey.encode(),
-                "validated": validated.encode()
-                ])
-        }
 
         public static func decode(_ j: JSON) -> Decoded<ClientInfo> {
             return curry(ClientInfo.init)
@@ -75,21 +66,21 @@ extension E3db {
         }
     }
 
-    struct ClientInfoRequest: Request {
+    private struct ClientInfoRequest: Request {
         typealias ResponseObject = ClientInfo
         let api: Api
-        let clientId: String
+        let clientId: UUID
 
         func build() -> URLRequest {
             let url = api.url(endpoint: .clients)
-                .appendingPathComponent(clientId)
+                .appendingPathComponent(clientId.uuidString)
             return URLRequest(url: url)
         }
     }
 
-    public func getClientInfo(clientId: String? = nil, completion: @escaping E3dbCompletion<ClientInfo>) {
+    public func getClientInfo(clientId: UUID? = nil, completion: @escaping E3dbCompletion<ClientInfo>) {
         let req = ClientInfoRequest(api: api, clientId: clientId ?? config.clientId)
-        authedClient.perform(req, completionHandler: { completion($0.mapError(E3dbError.init)) })
+        authedClient.performDefault(req, completion: completion)
     }
 }
 

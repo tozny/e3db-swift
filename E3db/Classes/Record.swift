@@ -22,8 +22,8 @@ public typealias CypherData = [String: String]
 public typealias PlainMeta  = [String: String]
 
 struct MetaRequest: Ogra.Encodable {
-    let writerId: String
-    let userId: String
+    let writerId: UUID
+    let userId: UUID
     let type: String
     let plain: PlainMeta?
 
@@ -38,9 +38,9 @@ struct MetaRequest: Ogra.Encodable {
 }
 
 public struct Meta: Argo.Decodable {
-    public let recordId: String
-    public let writerId: String
-    public let userId: String
+    public let recordId: UUID
+    public let writerId: UUID
+    public let userId: UUID
     public let type: String
     public let plain: PlainMeta
     public let created: Date
@@ -163,11 +163,11 @@ extension E3db {
     private struct RecordRequest: Request {
         typealias ResponseObject = RecordResponse
         let api: Api
-        let recordId: String
+        let recordId: UUID
 
         func build() -> URLRequest {
             let url = api.url(endpoint: .records)
-                .appendingPathComponent(recordId)
+                .appendingPathComponent(recordId.uuidString)
             let req = URLRequest(url: url)
             return req
         }
@@ -187,12 +187,12 @@ extension E3db {
         }
     }
 
-    public func readRaw(recordId: String, completion: @escaping E3dbCompletion<RecordResponse>) {
+    public func readRaw(recordId: UUID, completion: @escaping E3dbCompletion<RecordResponse>) {
         let req = RecordRequest(api: api, recordId: recordId)
-        authedClient.perform(req, completionHandler: { completion($0.mapError(E3dbError.init)) })
+        authedClient.performDefault(req, completion: completion)
     }
 
-    public func read(recordId: String, completion: @escaping E3dbCompletion<Record>) {
+    public func read(recordId: UUID, completion: @escaping E3dbCompletion<Record>) {
         readRaw(recordId: recordId) { (result) in
             switch result {
             case .success(let r):
@@ -210,14 +210,14 @@ extension E3db {
     private struct RecordUpdateRequest: Request {
         typealias ResponseObject = RecordResponse
         let api: Api
-        let recordId: String
+        let recordId: UUID
         let version: String
         let record: RecordRequest
 
         func build() -> URLRequest {
             let url = api.url(endpoint: .records)
                 .appendingPathComponent("safe")
-                .appendingPathComponent(recordId)
+                .appendingPathComponent(recordId.uuidString)
                 .appendingPathComponent(version)
             var req = URLRequest(url: url)
             return req.asJsonRequest(.PUT, payload: record.encode())
@@ -268,13 +268,13 @@ extension E3db {
     private struct DeleteRecordRequest: Request {
         typealias ResponseObject = Void
         let api: Api
-        let recordId: String
+        let recordId: UUID
         let version: String
 
         func build() -> URLRequest {
             let url = api.url(endpoint: .records)
                 .appendingPathComponent("safe")
-                .appendingPathComponent(recordId)
+                .appendingPathComponent(recordId.uuidString)
                 .appendingPathComponent(version)
             var req = URLRequest(url: url)
             req.httpMethod = RequestMethod.DELETE.rawValue
@@ -284,6 +284,6 @@ extension E3db {
 
     public func delete(record: Record, completion: @escaping E3dbCompletion<Void>) {
         let req = DeleteRecordRequest(api: api, recordId: record.meta.recordId, version: record.meta.version ?? "")
-        authedClient.perform(req, completionHandler: { completion($0.mapError(E3dbError.init)) })
+        authedClient.performDefault(req, completion: completion)
     }
 }

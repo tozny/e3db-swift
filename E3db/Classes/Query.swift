@@ -14,9 +14,9 @@ import Result
 public struct QueryParams {
     let count: Int?
     let includeData: Bool?
-    let writerIds: [String]?
-    let userIds: [String]?
-    let recordIds: [String]?
+    let writerIds: [UUID]?
+    let userIds: [UUID]?
+    let recordIds: [UUID]?
     let contentTypes: [String]?
     let afterIndex: Int?
     let plain: [String: String]?
@@ -25,9 +25,9 @@ public struct QueryParams {
     public init(
         count: Int? = nil,
         includeData: Bool? = nil,
-        writerIds: [String]? = nil,
-        userIds: [String]? = nil,
-        recordIds: [String]? = nil,
+        writerIds: [UUID]? = nil,
+        userIds: [UUID]? = nil,
+        recordIds: [UUID]? = nil,
         contentTypes: [String]? = nil,
         afterIndex: Int? = nil,
         plain: [String: String]? = nil,
@@ -108,7 +108,7 @@ extension SearchResponse: Argo.Decodable {
 
 public struct QueryResponse {
     public let records: [Record]
-    public let lastIndex: Int
+    public let last: Int
 }
 
 // MARK: Search
@@ -137,81 +137,21 @@ extension E3db {
             .map { Record(meta: searchRecord.meta, data: $0) }
     }
 
-    private func queryResultsB(_ response: SearchResponse, params: QueryParams, onRecord: @escaping (Record) -> Void, done: @escaping (E3dbError?) -> Void) {
-        let recs: E3dbResult<[Record]> = response
+    private func decryptResults(response: SearchResponse) -> E3dbResult<QueryResponse> {
+        return response
             .results
             .map(self.decryptSearchRecord)
             .sequence()
-
-        switch recs {
-        case .success(let records):
-            records.forEach(onRecord)
-            if records.count > 0 && records.count < (params.count ?? 50) {
-                let nextQuery = params.next(index: response.lastIndex)
-                self.queryB(params: nextQuery, onRecord: onRecord, done: done)
-            } else {
-                done(nil)
-            }
-        case .failure(let err):
-            return done(err)
-        }
+            .map { QueryResponse(records: $0, last: response.lastIndex) }
     }
 
-    public func queryB(params: QueryParams, onRecord: @escaping (Record) -> Void, done: @escaping (E3dbError?) -> Void) {
+    public func query(params: QueryParams, completion: @escaping E3dbCompletion<QueryResponse>) {
         let req = SearchRequest(api: api, q: params)
         authedClient.perform(req) { (result) in
-            switch result {
-            case .success(let response):
-                self.queryResultsB(response, params: params, onRecord: onRecord, done: done)
-            case .failure(let err):
-                return done(E3dbError(swishError: err))
-            }
-        }
-    }
-
-    public func queryA(query: QueryParams, completion: @escaping E3dbCompletion<[Record]>) {
-        let req = SearchRequest(api: api, q: query)
-        authedClient.perform(req) { (result) in
-            let resp: E3dbResult<[Record]> = result
-                .flatMap { $0.results.map(self.decryptSearchRecord).sequence() }
+            let resp = result
                 .mapError(E3dbError.init)
+                .flatMap(self.decryptResults)
             completion(resp)
-        }
-    }
-
-    private func queryResultsC(_ response: SearchResponse, params: QueryParams, completion: @escaping E3dbCompletion<QueryResponse>) {
-        let recs: E3dbResult<[Record]> = response
-            .results
-            .map(self.decryptSearchRecord)
-            .sequence()
-
-        switch recs {
-        case .success(let records):
-            if records.count > 0 && records.count < (params.count ?? 50) {
-                let nextQuery = params.next(index: response.lastIndex)
-                self.queryC(params: nextQuery, completion: completion)
-            } else {
-
-            }
-        case .failure(let err):
-            return completion(Result(error: err))
-        }
-    }
-
-    public func queryC(params: QueryParams, completion: @escaping E3dbCompletion<QueryResponse>) {
-        let req = SearchRequest(api: api, q: params)
-        authedClient.perform(req) { (result) in
-            switch result {
-            case .success(let response):
-                let records: E3dbResult<[Record]> = response
-                    .results
-                    .map(self.decryptSearchRecord)
-                    .sequence()
-                let resp = records.map { QueryResponse(records: $0, lastIndex: response.lastIndex) }
-                completion(resp)
-            case .failure(let err):
-                completion(Result(error: E3dbError(swishError: err)))
-            }
         }
     }
 

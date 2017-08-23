@@ -13,11 +13,11 @@ import Valet
 
 public struct Config {
     let version: Int
-    let baseApiUrl: String
+    let baseApiUrl: URL
     let apiKeyId: String
     let apiSecret: String
-    let clientId: String
-    let clientEmail: String
+    let clientId: UUID
+    let clientName: String
     let publicKey: String
     let privateKey: String
 }
@@ -31,26 +31,28 @@ extension Config: Ogra.Encodable, Argo.Decodable {
             "api_key_id": apiKeyId.encode(),
             "api_secret": apiSecret.encode(),
             "client_id": clientId.encode(),
-            "client_email": clientEmail.encode(),
+            "client_name": clientName.encode(),
             "public_key": publicKey.encode(),
             "private_key": privateKey.encode()
         ])
     }
 
     public static func decode(_ j: JSON) -> Decoded<Config> {
-        return curry(Config.init)
+        let tmp = curry(Config.init)
             <^> j <| "version"
             <*> j <| "base_api_url"
             <*> j <| "api_key_id"
             <*> j <| "api_secret"
+
+        return tmp
             <*> j <| "client_id"
-            <*> j <| "client_email"
+            <*> j <| "client_name"
             <*> j <| "public_key"
             <*> j <| "private_key"
     }
 }
 
-private let defaultProfileName = "com.tozny.e3db.sdk.defaultProfile"
+private let defaultProfileName = "com.tozny.e3db.defaultProfile"
 
 public extension Config {
 

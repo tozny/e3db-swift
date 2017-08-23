@@ -40,7 +40,7 @@ class ViewController: UIViewController {
         return E3db(config: config)
     }()
 
-    var latest: String = ""
+    var latest: UUID?
 
     @IBAction func write() {
         guard let msg = messageField.text else {
@@ -53,7 +53,7 @@ class ViewController: UIViewController {
             switch result {
             case .success(let record):
                 self.latest = record.meta.recordId
-                text = "Wrote record! \(self.latest)"
+                text = "Wrote record! \(record.meta.recordId)"
             case .failure(let error):
                 text = "Failed to write record! \(error)"
             }

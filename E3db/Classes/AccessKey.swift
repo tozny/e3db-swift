@@ -19,16 +19,16 @@ import Runes
 struct GetEAKRequest: Request {
     typealias ResponseObject = EAKResponse
     let api: Api
-    let writerId: String
-    let userId: String
-    let readerId: String
+    let writerId: UUID
+    let userId: UUID
+    let readerId: UUID
     let recordType: String
 
     func build() -> URLRequest {
         let url = api.url(endpoint: .accessKeys)
-            .appendingPathComponent(writerId)
-            .appendingPathComponent(userId)
-            .appendingPathComponent(readerId)
+            .appendingPathComponent(writerId.uuidString)
+            .appendingPathComponent(userId.uuidString)
+            .appendingPathComponent(readerId.uuidString)
             .appendingPathComponent(recordType)
         return URLRequest(url: url)
     }
@@ -38,16 +38,16 @@ struct PutEAKRequest: Request {
     typealias ResponseObject = EmptyResponse
     let api: Api
     let eak: EncryptedAccessKey
-    let writerId: String
-    let userId: String
-    let readerId: String
+    let writerId: UUID
+    let userId: UUID
+    let readerId: UUID
     let recordType: String
 
     func build() -> URLRequest {
         let url = api.url(endpoint: .accessKeys)
-            .appendingPathComponent(writerId)
-            .appendingPathComponent(userId)
-            .appendingPathComponent(readerId)
+            .appendingPathComponent(writerId.uuidString)
+            .appendingPathComponent(userId.uuidString)
+            .appendingPathComponent(readerId.uuidString)
             .appendingPathComponent(recordType)
         var req = URLRequest(url: url)
         return req.asJsonRequest(.PUT, payload: JSON.object(["eak": eak.encode()]))
@@ -56,7 +56,7 @@ struct PutEAKRequest: Request {
 
 struct EAKResponse: Argo.Decodable {
     let eak: String
-    let authorizerId: String
+    let authorizerId: UUID
     let authorizerPublicKey: ClientKey
 
     static func decode(_ j: JSON) -> Decoded<EAKResponse> {
@@ -75,8 +75,8 @@ extension E3db {
         return Result(try Crypto.decrypt(eakResponse: eakResponse, clientPrivateKey: clientPrivateKey))
     }
 
-    func getAccessKey(writerId: String, userId: String, readerId: String, recordType: String, completion: @escaping E3dbCompletion<AccessKey>) {
-        let cacheKey = AkCacheKey(writerId: writerId, readerId: readerId, recordType: recordType)
+    func getAccessKey(writerId: UUID, userId: UUID, readerId: UUID, recordType: String, completion: @escaping E3dbCompletion<AccessKey>) {
+        let cacheKey = AkCacheKey(recordType: recordType, writerId: writerId, readerId: readerId)
 
         // Check for AK in local cache
         if let ak = E3db.akCache[cacheKey] {
@@ -112,12 +112,12 @@ extension E3db {
 
 extension E3db {
 
-    private func putAccessKey(eak: EncryptedAccessKey, writerId: String, userId: String, readerId: String, recordType: String, completion: @escaping E3dbCompletion<Void>) {
+    private func putAccessKey(eak: EncryptedAccessKey, writerId: UUID, userId: UUID, readerId: UUID, recordType: String, completion: @escaping E3dbCompletion<Void>) {
         let req = PutEAKRequest(api: api, eak: eak, writerId: writerId, userId: userId, readerId: readerId, recordType: recordType)
-        authedClient.perform(req, completionHandler: { completion($0.mapError(E3dbError.init)) })
+        authedClient.performDefault(req, completion: completion)
     }
 
-    func putAccessKey(ak: AccessKey, cacheKey: AkCacheKey, writerId: String, userId: String, readerId: String, recordType: String, completion: @escaping E3dbCompletion<AccessKey>) {
+    func putAccessKey(ak: AccessKey, cacheKey: AkCacheKey, writerId: UUID, userId: UUID, readerId: UUID, recordType: String, completion: @escaping E3dbCompletion<AccessKey>) {
         getClientInfo(clientId: readerId) { (result) in
             switch result {
             case .success(let client):

@@ -13,6 +13,16 @@ class Tests: XCTestCase {
     override func tearDown() {
         super.tearDown()
     }
+
+    func testRegistration() {
+        let desc   = #function + UUID().uuidString
+        let expect = expectation(description: desc)
+        E3db.register(token: TestData.token, clientName: desc, apiUrl: TestData.apiUrl) { (result) in
+            XCTAssertNotNil(result.value)
+            expect.fulfill()
+        }
+        waitForExpectations(timeout: 10, handler: noErrorHandler)
+    }
     
     func testGetClientInfo() {
         let expect = expectation(description: #function)
@@ -28,7 +38,7 @@ class Tests: XCTestCase {
         let expect1 = expectation(description: #function + "write")
         let e3db    = E3db(config: TestData.config)
         let data    = RecordData(data: ["test": "message"])
-        var recordId: String?
+        var recordId: UUID?
 
         // write record
         e3db.write("test-data", data: data) { (result) in
@@ -52,7 +62,7 @@ class Tests: XCTestCase {
         let expect1 = expectation(description: #function + "write")
         let e3db    = E3db(config: TestData.config)
         let data    = RecordData(data: ["test": "message"])
-        var recordId: String?
+        var recordId: UUID?
 
         // write record
         e3db.write("test-data", data: data) { (result) in

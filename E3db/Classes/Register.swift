@@ -12,80 +12,75 @@ import Runes
 import Result
 import Sodium
 
-// example registration
-//{
-//    "token": "example_token",
-//    "client": {
-//        "name": "example_name",
-//        "public_key": {
-//            "curve25519": "a9d9d90d0"
-//        }
-//    }
-//}
-
-struct AccountRegistrationRequest {
-    let token: String
-    let client: ClientRequest
-}
-
-struct ClientRequest {
-    let name: String
-    let publicKey: ClientKey
-}
-
-public struct ClientKey: Ogra.Encodable, Argo.Decodable {
-    let curve25519: String
-
-    public func encode() -> JSON {
-        return JSON.object([
-            "curve25519": curve25519.encode()
-        ])
-    }
-
-    public static func decode(_ j: JSON) -> Decoded<ClientKey> {
-        return curry(ClientKey.init)
-            <^> j <| "curve25519"
-    }
-}
-
-public struct RegisterRequest: Request, Ogra.Encodable {
-    public typealias ResponseObject = RegisterResponse
+struct RegistrationRequest: Request, Ogra.Encodable {
+    public typealias ResponseObject = RegistrationResponse
     let api: Api
 
-    let email: String
-    let publicKey: ClientKey
-    let findByEmail: Bool
+    let token: String
+    let client: ClientRequest
 
-    public func encode() -> JSON {
+    func encode() -> JSON {
         return JSON.object([
-            "email": email.encode(),
-            "public_key": publicKey.encode(),
-            "find_by_email": findByEmail.encode()
+            "token": token.encode(),
+            "client": client.encode()
         ])
     }
 
-    public func build() -> URLRequest {
-        let url = api.url(endpoint: .clients)
+    func build() -> URLRequest {
+        let url = api.registerUrl()
         var req = URLRequest(url: url)
         return req.asJsonRequest(.POST, payload: encode())
     }
 }
 
-public struct RegisterResponse: Argo.Decodable {
-    let clientId: String
+struct ClientRequest: Ogra.Encodable {
+    let name: String
+    let publicKey: ClientKey
+
+    func encode() -> JSON {
+        return JSON.object([
+            "name": name.encode(),
+            "public_key": publicKey.encode()
+        ])
+    }
+}
+
+struct ClientKey: Ogra.Encodable, Argo.Decodable {
+    let curve25519: String
+
+    func encode() -> JSON {
+        return JSON.object([
+            "curve25519": curve25519.encode()
+        ])
+    }
+
+    static func decode(_ j: JSON) -> Decoded<ClientKey> {
+        return curry(ClientKey.init)
+            <^> j <| "curve25519"
+    }
+}
+
+struct RegistrationResponse: Argo.Decodable {
+    let clientId: UUID
     let apiKeyId: String
     let apiSecret: String
+    let name: String
+    let publicKey: ClientKey
+    let enabled: Bool
 
-    public static func decode(_ j: JSON) -> Decoded<RegisterResponse> {
-        return curry(RegisterResponse.init)
+    public static func decode(_ j: JSON) -> Decoded<RegistrationResponse> {
+        return curry(RegistrationResponse.init)
             <^> j <| "client_id"
             <*> j <| "api_key_id"
             <*> j <| "api_secret"
+            <*> j <| "name"
+            <*> j <| "public_key"
+            <*> j <| "enabled"
     }
 }
 
 extension E3db {
-    public static func register(email: String, findByEmail: Bool, apiUrl: String = "https://api.e3db.com/", completion: @escaping E3dbCompletion<Config>) {
+    public static func register(token: String, clientName: String, apiUrl: String = Api.defaultUrl, completion: @escaping E3dbCompletion<Config>) {
         // ensure api url is valid
         guard let url = URL(string: apiUrl) else {
             return completion(Result(error: .configError("Invalid apiUrl: \(apiUrl)")))
@@ -96,21 +91,21 @@ extension E3db {
             return completion(Result(error: .cryptoError("Could not create key pair.")))
         }
 
-        // send registration request
-        let api  = Api(baseUrl: url)
-        let pubK = ClientKey(curve25519: keyPair.publicKey.base64URLEncodedString())
-        let req  = RegisterRequest(api: api, email: email, publicKey: pubK, findByEmail: findByEmail)
-        staticClient.perform(req) { result in
+        let api    = Api(baseUrl: url)
+        let pubK   = ClientKey(curve25519: keyPair.publicKey.base64URLEncodedString())
+        let client = ClientRequest(name: clientName, publicKey: pubK)
+        let req    = RegistrationRequest(api: api, token: token, client: client)
+        staticClient.perform(req) { (result) in
             let resp = result
-                .mapError { E3dbError.configError($0.localizedDescription) }
-                .map { reg in
+                .mapError(E3dbError.init)
+                .map { registration in
                     Config(
                         version: 1,
-                        baseApiUrl: api.baseUrl.absoluteString,
-                        apiKeyId: reg.apiKeyId,
-                        apiSecret: reg.apiSecret,
-                        clientId: reg.clientId,
-                        clientEmail: email,
+                        baseApiUrl: api.baseUrl,
+                        apiKeyId: registration.apiKeyId,
+                        apiSecret: registration.apiSecret,
+                        clientId: registration.clientId,
+                        clientName: clientName,
                         publicKey: pubK.curve25519,
                         privateKey: keyPair.secretKey.base64URLEncodedString()
                     )

@@ -40,25 +40,35 @@ public enum E3dbError: Swift.Error {
 }
 
 struct Api {
+    static let defaultUrl = "https://api.e3db.com/"
     let baseUrl: URL
 
-    private let version   = "v1"
-    private let pdsPath   = "storage"
-    private let authPath  = "auth"
-    private let tokenPath = "token"
+    private let version     = "v1"
+    private let pdsService  = "storage"
+    private let authService = "auth"
+    private let acctService = "account"
 
     func url(endpoint: Endpoint) -> URL {
         return baseUrl
             .appendingPathComponent(version)
-            .appendingPathComponent(pdsPath)
+            .appendingPathComponent(pdsService)
             .appendingPathComponent(endpoint.rawValue)
     }
 
     func tokenUrl() -> URL {
         return baseUrl
             .appendingPathComponent(version)
-            .appendingPathComponent(authPath)
-            .appendingPathComponent(tokenPath)
+            .appendingPathComponent(authService)
+            .appendingPathComponent("token")
+    }
+
+    func registerUrl() -> URL {
+        return baseUrl
+            .appendingPathComponent(version)
+            .appendingPathComponent(acctService)
+            .appendingPathComponent("e3db")
+            .appendingPathComponent("clients")
+            .appendingPathComponent("register")
     }
 }
 
@@ -70,18 +80,21 @@ enum Endpoint: String {
 }
 
 struct AkCacheKey: Hashable {
-    let writerId: String
-    let readerId: String
     let recordType: String
+    let writerId: UUID
+    let readerId: UUID
 
     var hashValue: Int {
-        return (writerId + readerId + recordType).hashValue
+        return [writerId, readerId]
+            .map { $0.uuidString }
+            .reduce(recordType, +)
+            .hashValue
     }
 
     static func == (lhs: AkCacheKey, rhs: AkCacheKey) -> Bool {
-        return lhs.writerId == rhs.writerId &&
-            lhs.readerId == rhs.readerId &&
-            lhs.recordType == rhs.recordType
+        return lhs.recordType == rhs.recordType &&
+            lhs.writerId == rhs.writerId &&
+            lhs.readerId == rhs.readerId
     }
 }
 
