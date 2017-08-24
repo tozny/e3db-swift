@@ -46,8 +46,7 @@ public struct QueryParams {
 }
 
 extension QueryParams {
-
-    func next(index: Double) -> QueryParams {
+    public func next(after: Double) -> QueryParams {
         return QueryParams(
             count: self.count,
             includeData: self.includeData,
@@ -55,7 +54,7 @@ extension QueryParams {
             userIds: self.userIds,
             recordIds: self.recordIds,
             contentTypes: self.contentTypes,
-            after: index,
+            after: after,
             plain: self.plain,
             includeAllWriters: self.includeAllWriters
         )
@@ -78,13 +77,11 @@ extension QueryParams: Ogra.Encodable {
     }
 }
 
-struct SearchRecord {
+struct SearchRecord: Argo.Decodable {
     let meta: Meta
     let data: CypherData?
     let eakResponse: EAKResponse?
-}
 
-extension SearchRecord: Argo.Decodable {
     static func decode(_ j: JSON) -> Decoded<SearchRecord> {
         return curry(SearchRecord.init)
             <^> j <| "meta"
@@ -93,12 +90,10 @@ extension SearchRecord: Argo.Decodable {
     }
 }
 
-struct SearchResponse {
+struct SearchResponse: Argo.Decodable {
     let results: [SearchRecord]
     let lastIndex: Double
-}
 
-extension SearchResponse: Argo.Decodable {
     static func decode(_ j: JSON) -> Decoded<SearchResponse> {
         return curry(SearchResponse.init)
             <^> j <|| "results"
@@ -128,8 +123,8 @@ extension E3db {
 
     private func decryptSearchRecord(_ searchRecord: SearchRecord) -> E3dbResult<Record> {
         guard let cypherData = searchRecord.data,
-              let eakResp = searchRecord.eakResponse else {
-                return Result(value: Record(meta: searchRecord.meta, data: RecordData(data: [:])))
+              let eakResp    = searchRecord.eakResponse else {
+                return Result(value: Record(meta: searchRecord.meta, data: RecordData(clearText: [:])))
         }
 
         return decryptEak(eakResponse: eakResp, clientPrivateKey: self.config.privateKey)

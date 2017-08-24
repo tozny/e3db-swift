@@ -26,7 +26,7 @@ class Tests: XCTestCase {
 
     func testWriteReadRecord() {
         let e3db = client()
-        let data = RecordData(data: ["test": "message"])
+        let data = RecordData(clearText: ["test": "message"])
         var record: Record?
 
         // write record
@@ -42,7 +42,7 @@ class Tests: XCTestCase {
         asyncTest(#function + "read") { (expect) in
             e3db.read(recordId: record!.meta.recordId) { (result) in
                 XCTAssertNotNil(result.value)
-                XCTAssertEqual(result.value!.data.data, data.data)
+                XCTAssertEqual(result.value!.data.clearText, data.clearText)
                 expect.fulfill()
             }
         }
@@ -53,14 +53,14 @@ class Tests: XCTestCase {
 
     func testReadRaw() {
         let e3db   = client()
-        let data   = RecordData(data: ["test": "message"])
+        let data   = RecordData(clearText: ["test": "message"])
         let record = writeTestRecord(e3db)
 
         // read it back out raw
         asyncTest(#function + "readRaw") { (expect) in
             e3db.readRaw(recordId: record.meta.recordId) { (result) in
                 XCTAssertNotNil(result.value)
-                XCTAssertNotEqual(result.value!.cypherData, data.data)
+                XCTAssertNotEqual(result.value!.cypherData, data.clearText)
                 expect.fulfill()
             }
         }
@@ -71,7 +71,7 @@ class Tests: XCTestCase {
 
     func testDeleteRecord() {
         let e3db   = client()
-        let data   = RecordData(data: ["test": "message"])
+        let data   = RecordData(clearText: ["test": "message"])
         let record = writeTestRecord(e3db)
 
         // delete record
@@ -99,13 +99,13 @@ class Tests: XCTestCase {
         var record = writeTestRecord(e3db)
 
         // update record
-        let newData = RecordData(data: ["test": "updated"])
+        let newData = RecordData(clearText: ["test": "updated"])
         let updated = record.updated(data: newData)
         asyncTest(#function + "update") { (expect) in
             e3db.update(record: updated) { (result) in
                 XCTAssertNotNil(result.value)
                 XCTAssertEqual(result.value!.meta.recordId, record.meta.recordId)
-                XCTAssertEqual(result.value!.data.data, newData.data)
+                XCTAssertEqual(result.value!.data.clearText, newData.clearText)
                 record = result.value!
                 expect.fulfill()
             }
@@ -115,7 +115,7 @@ class Tests: XCTestCase {
         asyncTest(#function + "read") { (expect) in
             e3db.read(recordId: record.meta.recordId) { (result) in
                 XCTAssertNotNil(result.value)
-                XCTAssertEqual(result.value!.data.data, newData.data)
+                XCTAssertEqual(result.value!.data.clearText, newData.clearText)
                 expect.fulfill()
             }
         }
@@ -170,7 +170,7 @@ class Tests: XCTestCase {
         }
 
         // query for 2nd record
-        let q2 = QueryParams(count: 1, after: last)
+        let q2 = q1.next(after: last!)
         asyncTest(#function) { (expect) in
             e3db.query(params: q2) { (result) in
                 tests(result)
@@ -213,7 +213,7 @@ class Tests: XCTestCase {
         asyncTest(#function) { (expect) in
             e3db.query(params: query) { (result) in
                 XCTAssertNotNil(result.value)
-                XCTAssert(result.value!.records.map { $0.data.data }.contains { $0 == record.data.data })
+                XCTAssert(result.value!.records.map { $0.data.clearText }.contains { $0 == record.data.clearText })
                 expect.fulfill()
             }
         }
@@ -252,7 +252,7 @@ extension Tests {
     func writeTestRecord(_ e3db: E3db) -> Record {
         var record: Record?
         asyncTest(#function + "write") { (expect) in
-            e3db.write("test-data", data: RecordData(data: ["test": "message"])) { (result) in
+            e3db.write("test-data", data: RecordData(clearText: ["test": "message"])) { (result) in
                 record = result.value!
                 expect.fulfill()
             }

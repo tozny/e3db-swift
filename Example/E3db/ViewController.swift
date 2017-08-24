@@ -47,7 +47,7 @@ class ViewController: UIViewController {
             return print("TextField contains no text")
         }
 
-        let recordData = RecordData(data: ["secret message": msg])
+        let recordData = RecordData(clearText: ["secret message": msg])
         e3db?.write("sdk-test-2", data: recordData, plain: ["Sent from": "my iPhone"]) { (result) in
             let text: String
             switch result {

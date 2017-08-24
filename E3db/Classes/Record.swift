@@ -11,15 +11,15 @@ import Curry
 import Runes
 import Result
 
-public struct RecordData {
-    public let data: [String: String]
-    public init(data: [String: String]) {
-        self.data = data
-    }
-}
-
 public typealias CypherData = [String: String]
 public typealias PlainMeta  = [String: String]
+
+public struct RecordData {
+    public let clearText: [String: String]
+    public init(clearText: [String: String]) {
+        self.clearText = clearText
+    }
+}
 
 struct MetaRequest: Ogra.Encodable {
     let writerId: UUID
@@ -174,7 +174,7 @@ extension E3db {
     }
 
     internal func decrypt(data: CypherData, accessKey: AccessKey) -> E3dbResult<RecordData> {
-        return Result(try Crypto.decrypt(cypherData: data, ak: accessKey)).map(RecordData.init)
+        return Result(try Crypto.decrypt(cypherData: data, ak: accessKey))
     }
 
     private func decryptRecord(record r: RecordResponse, completion: @escaping E3dbCompletion<Record>) {

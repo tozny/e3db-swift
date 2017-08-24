@@ -16,44 +16,6 @@ import Runes
 
 // MARK: Access Key Management
 
-struct GetEAKRequest: Request {
-    typealias ResponseObject = EAKResponse
-    let api: Api
-    let writerId: UUID
-    let userId: UUID
-    let readerId: UUID
-    let recordType: String
-
-    func build() -> URLRequest {
-        let url = api.url(endpoint: .accessKeys)
-            .appendingPathComponent(writerId.uuidString)
-            .appendingPathComponent(userId.uuidString)
-            .appendingPathComponent(readerId.uuidString)
-            .appendingPathComponent(recordType)
-        return URLRequest(url: url)
-    }
-}
-
-struct PutEAKRequest: Request {
-    typealias ResponseObject = EmptyResponse
-    let api: Api
-    let eak: EncryptedAccessKey
-    let writerId: UUID
-    let userId: UUID
-    let readerId: UUID
-    let recordType: String
-
-    func build() -> URLRequest {
-        let url = api.url(endpoint: .accessKeys)
-            .appendingPathComponent(writerId.uuidString)
-            .appendingPathComponent(userId.uuidString)
-            .appendingPathComponent(readerId.uuidString)
-            .appendingPathComponent(recordType)
-        var req = URLRequest(url: url)
-        return req.asJsonRequest(.PUT, payload: JSON.object(["eak": eak.encode()]))
-    }
-}
-
 struct EAKResponse: Argo.Decodable {
     let eak: String
     let authorizerId: UUID
@@ -70,8 +32,25 @@ struct EAKResponse: Argo.Decodable {
 // MARK: Get Access Key
 
 extension E3db {
+    private struct GetEAKRequest: Request {
+        typealias ResponseObject = EAKResponse
+        let api: Api
+        let writerId: UUID
+        let userId: UUID
+        let readerId: UUID
+        let recordType: String
 
-    internal func decryptEak(eakResponse: EAKResponse, clientPrivateKey: String) -> E3dbResult<AccessKey> {
+        func build() -> URLRequest {
+            let url = api.url(endpoint: .accessKeys)
+                .appendingPathComponent(writerId.uuidString)
+                .appendingPathComponent(userId.uuidString)
+                .appendingPathComponent(readerId.uuidString)
+                .appendingPathComponent(recordType)
+            return URLRequest(url: url)
+        }
+    }
+
+    func decryptEak(eakResponse: EAKResponse, clientPrivateKey: String) -> E3dbResult<AccessKey> {
         return Result(try Crypto.decrypt(eakResponse: eakResponse, clientPrivateKey: clientPrivateKey))
     }
 
@@ -111,6 +90,25 @@ extension E3db {
 // MARK: Put Access Key
 
 extension E3db {
+    private struct PutEAKRequest: Request {
+        typealias ResponseObject = EmptyResponse
+        let api: Api
+        let eak: EncryptedAccessKey
+        let writerId: UUID
+        let userId: UUID
+        let readerId: UUID
+        let recordType: String
+
+        func build() -> URLRequest {
+            let url = api.url(endpoint: .accessKeys)
+                .appendingPathComponent(writerId.uuidString)
+                .appendingPathComponent(userId.uuidString)
+                .appendingPathComponent(readerId.uuidString)
+                .appendingPathComponent(recordType)
+            var req = URLRequest(url: url)
+            return req.asJsonRequest(.PUT, payload: JSON.object(["eak": eak.encode()]))
+        }
+    }
 
     private func putAccessKey(eak: EncryptedAccessKey, writerId: UUID, userId: UUID, readerId: UUID, recordType: String, completion: @escaping E3dbCompletion<Void>) {
         let req = PutEAKRequest(api: api, eak: eak, writerId: writerId, userId: userId, readerId: readerId, recordType: recordType)

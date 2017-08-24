@@ -12,27 +12,6 @@ import Runes
 import Result
 import Sodium
 
-struct RegistrationRequest: Request, Ogra.Encodable {
-    public typealias ResponseObject = RegistrationResponse
-    let api: Api
-
-    let token: String
-    let client: ClientRequest
-
-    func encode() -> JSON {
-        return JSON.object([
-            "token": token.encode(),
-            "client": client.encode()
-        ])
-    }
-
-    func build() -> URLRequest {
-        let url = api.registerUrl()
-        var req = URLRequest(url: url)
-        return req.asJsonRequest(.POST, payload: encode())
-    }
-}
-
 struct ClientRequest: Ogra.Encodable {
     let name: String
     let publicKey: ClientKey
@@ -79,7 +58,30 @@ struct RegistrationResponse: Argo.Decodable {
     }
 }
 
+// MARK: Registration
+
 extension E3db {
+    private struct RegistrationRequest: Request, Ogra.Encodable {
+        typealias ResponseObject = RegistrationResponse
+        let api: Api
+
+        let token: String
+        let client: ClientRequest
+
+        func encode() -> JSON {
+            return JSON.object([
+                "token": token.encode(),
+                "client": client.encode()
+                ])
+        }
+
+        func build() -> URLRequest {
+            let url = api.registerUrl()
+            var req = URLRequest(url: url)
+            return req.asJsonRequest(.POST, payload: encode())
+        }
+    }
+
     public static func register(token: String, clientName: String, apiUrl: String = Api.defaultUrl, completion: @escaping E3dbCompletion<Config>) {
         // ensure api url is valid
         guard let url = URL(string: apiUrl) else {

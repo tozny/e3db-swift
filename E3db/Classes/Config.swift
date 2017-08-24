@@ -23,6 +23,7 @@ public struct Config {
 }
 
 // MARK: Json
+
 extension Config: Ogra.Encodable, Argo.Decodable {
     public func encode() -> JSON {
         return JSON.object([
@@ -54,7 +55,9 @@ extension Config: Ogra.Encodable, Argo.Decodable {
 
 private let defaultProfileName = "com.tozny.e3db.defaultProfile"
 
-public extension Config {
+// MARK: Storage in keychain / secure enclave
+
+extension Config {
 
     public func save(profile: String = defaultProfileName) -> Bool {
         guard let valet  = VALSecureEnclaveValet(identifier: profile, accessControl: .touchIDAnyFingerprint),

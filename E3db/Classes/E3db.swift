@@ -52,20 +52,20 @@ public class E3db {
 
 // MARK: Get Client Info
 
-extension E3db {
-    public struct ClientInfo: Argo.Decodable {
-        let clientId: UUID
-        let publicKey: ClientKey
-        let validated: Bool
+public struct ClientInfo: Argo.Decodable {
+    let clientId: UUID
+    let publicKey: ClientKey
+    let validated: Bool
 
-        public static func decode(_ j: JSON) -> Decoded<ClientInfo> {
-            return curry(ClientInfo.init)
-                <^> j <| "client_id"
-                <*> j <| "public_key"
-                <*> j <| "validated"
-        }
+    public static func decode(_ j: JSON) -> Decoded<ClientInfo> {
+        return curry(ClientInfo.init)
+            <^> j <| "client_id"
+            <*> j <| "public_key"
+            <*> j <| "validated"
     }
+}
 
+extension E3db {
     private struct ClientInfoRequest: Request {
         typealias ResponseObject = ClientInfo
         let api: Api
