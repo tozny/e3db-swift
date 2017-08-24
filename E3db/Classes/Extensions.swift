@@ -109,6 +109,12 @@ extension Array where Element: ResultProtocol {
     }
 }
 
+extension Sequence {
+    public func all(predicate: (Iterator.Element) -> Bool) -> Bool {
+        return first(where: { !predicate($0) }) == nil
+    }
+}
+
 extension APIClient {
     func performDefault<T: Request>(_ request: T, completion: @escaping (Result<T.ResponseObject, E3dbError>) -> Void) {
         perform(request, completionHandler: { completion($0.mapError(E3dbError.init)) })

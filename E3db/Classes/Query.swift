@@ -18,7 +18,7 @@ public struct QueryParams {
     let userIds: [UUID]?
     let recordIds: [UUID]?
     let contentTypes: [String]?
-    let afterIndex: Int?
+    let after: Double?
     let plain: [String: String]?
     let includeAllWriters: Bool?
 
@@ -29,7 +29,7 @@ public struct QueryParams {
         userIds: [UUID]? = nil,
         recordIds: [UUID]? = nil,
         contentTypes: [String]? = nil,
-        afterIndex: Int? = nil,
+        after: Double? = nil,
         plain: [String: String]? = nil,
         includeAllWriters: Bool? = nil
     ) {
@@ -39,7 +39,7 @@ public struct QueryParams {
         self.userIds = userIds
         self.recordIds = recordIds
         self.contentTypes = contentTypes
-        self.afterIndex = afterIndex
+        self.after = after
         self.plain = plain
         self.includeAllWriters = includeAllWriters
     }
@@ -47,7 +47,7 @@ public struct QueryParams {
 
 extension QueryParams {
 
-    func next(index: Int) -> QueryParams {
+    func next(index: Double) -> QueryParams {
         return QueryParams(
             count: self.count,
             includeData: self.includeData,
@@ -55,7 +55,7 @@ extension QueryParams {
             userIds: self.userIds,
             recordIds: self.recordIds,
             contentTypes: self.contentTypes,
-            afterIndex: index,
+            after: index,
             plain: self.plain,
             includeAllWriters: self.includeAllWriters
         )
@@ -71,7 +71,7 @@ extension QueryParams: Ogra.Encodable {
             "user_ids": userIds.encode(),
             "record_ids": recordIds.encode(),
             "content_types": contentTypes.encode(),
-            "after_index": afterIndex.encode(),
+            "after_index": after.encode(),
             "plain": plain.encode(),
             "include_all_writers": includeAllWriters.encode()
         ])
@@ -95,7 +95,7 @@ extension SearchRecord: Argo.Decodable {
 
 struct SearchResponse {
     let results: [SearchRecord]
-    let lastIndex: Int
+    let lastIndex: Double
 }
 
 extension SearchResponse: Argo.Decodable {
@@ -108,7 +108,7 @@ extension SearchResponse: Argo.Decodable {
 
 public struct QueryResponse {
     public let records: [Record]
-    public let last: Int
+    public let last: Double
 }
 
 // MARK: Search
