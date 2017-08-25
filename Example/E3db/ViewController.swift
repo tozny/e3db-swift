@@ -34,10 +34,10 @@ class ViewController: UIViewController {
 //        return UITableViewCell()
 //    }
 
-    lazy var e3db: E3db? = {
+    lazy var e3db: Client? = {
         // load config from secure enclave
         guard let config = Config() else { return nil }
-        return E3db(config: config)
+        return Client(config: config)
     }()
 
     var latest: UUID?

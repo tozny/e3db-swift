@@ -109,7 +109,7 @@ public struct QueryResponse {
 
 // MARK: Search
 
-extension E3db {
+extension Client {
     private struct SearchRequest: Request {
         typealias ResponseObject = SearchResponse
         let api: Api

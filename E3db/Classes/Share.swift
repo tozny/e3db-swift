@@ -53,7 +53,7 @@ public struct IncomingSharingPolicy: Argo.Decodable {
 
 // MARK: Share and Unshare
 
-extension E3db {
+extension Client {
     private struct ShareRequest: Request {
         typealias ResponseObject = Void
         let api: Api
@@ -76,7 +76,7 @@ extension E3db {
         authedClient.performDefault(req, completion: completion)
     }
 
-    public func unshare(_ type: String, readerId: UUID, completion: @escaping E3dbCompletion<Void>) {
+    public func revoke(_ type: String, readerId: UUID, completion: @escaping E3dbCompletion<Void>) {
         let req = ShareRequest(api: api, policy: .deny, clientId: config.clientId, readerId: readerId, contentType: type)
         authedClient.performDefault(req, completion: completion)
     }
@@ -84,7 +84,7 @@ extension E3db {
 
 // MARK: Current Sharing Policies
 
-extension E3db {
+extension Client {
     private struct GetOutgoingRequest: Request {
         typealias ResponseObject = [OutgoingSharingPolicy]
         let api: Api

@@ -31,7 +31,7 @@ struct EAKResponse: Argo.Decodable {
 
 // MARK: Get Access Key
 
-extension E3db {
+extension Client {
     private struct GetEAKRequest: Request {
         typealias ResponseObject = EAKResponse
         let api: Api
@@ -55,7 +55,7 @@ extension E3db {
         let cacheKey = AkCacheKey(recordType: recordType, writerId: writerId, readerId: readerId)
 
         // Check for AK in local cache
-        if let ak = E3db.akCache[cacheKey] {
+        if let ak = Client.akCache[cacheKey] {
             return completion(Result(value: ak))
         }
 
@@ -68,7 +68,7 @@ extension E3db {
                 let akResult = self.decryptEak(eakResponse: akResponse, clientPrivateKey: self.config.privateKey)
 
                 // store in cache
-                E3db.akCache[cacheKey] = akResult.value
+                Client.akCache[cacheKey] = akResult.value
                 return completion(akResult)
             }
 
@@ -86,7 +86,7 @@ extension E3db {
 
 // MARK: Put Access Key
 
-extension E3db {
+extension Client {
     private struct PutEAKRequest: Request {
         typealias ResponseObject = EmptyResponse
         let api: Api
@@ -123,7 +123,7 @@ extension E3db {
                 self.putAccessKey(eak: eak, writerId: writerId, userId: userId, readerId: readerId, recordType: recordType) { (result) in
                     // update local cache
                     if case .success = result {
-                        E3db.akCache[cacheKey] = ak
+                        Client.akCache[cacheKey] = ak
                     }
                     completion(result.map { ak })
                 }

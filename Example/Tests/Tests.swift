@@ -4,20 +4,21 @@ import E3db
 
 class Tests: XCTestCase {
 
-    func testRegistration() {
+    func testRegistrationDefault() {
         let test = #function + UUID().uuidString
         asyncTest(test) { (expect) in
-            E3db.register(token: TestData.token, clientName: test, apiUrl: TestData.apiUrl) { (result) in
+            Client.register(token: TestData.token, clientName: test, apiUrl: TestData.apiUrl) { (result) in
                 XCTAssertNotNil(result.value)
                 expect.fulfill()
             }
         }
     }
-    
-    func testGetClientInfo() {
-        let e3db = client()
-        asyncTest(#function) { (expect) in
-            e3db.getClientInfo { (result) in
+
+    func testRegistrationCustom() {
+        let test = #function + UUID().uuidString
+        let keyPair = Client.generateKeyPair()!
+        asyncTest(test) { (expect) in
+            Client.register(token: TestData.token, clientName: test, publicKey: keyPair.publicKey, apiUrl: TestData.apiUrl) { (result) in
                 XCTAssertNotNil(result.value)
                 expect.fulfill()
             }
@@ -49,24 +50,6 @@ class Tests: XCTestCase {
 
         // clean up
         deleteRecord(record!, e3db: e3db)
-    }
-
-    func testReadRaw() {
-        let e3db   = client()
-        let data   = RecordData(clearText: ["test": "message"])
-        let record = writeTestRecord(e3db)
-
-        // read it back out raw
-        asyncTest(#function + "readRaw") { (expect) in
-            e3db.readRaw(recordId: record.meta.recordId) { (result) in
-                XCTAssertNotNil(result.value)
-                XCTAssertNotEqual(result.value!.cypherData, data.clearText)
-                expect.fulfill()
-            }
-        }
-
-        // clean up
-        deleteRecord(record, e3db: e3db)
     }
 
     func testDeleteRecord() {
@@ -222,7 +205,7 @@ class Tests: XCTestCase {
         deleteRecord(record, e3db: e3db)
     }
 
-    func testShareUnshare() {
+    func testShareRevoke() {
         let mainClient = client()
         let (shareClient, sharedId) = clientWithId()
         let record = writeTestRecord(mainClient)
@@ -256,8 +239,8 @@ class Tests: XCTestCase {
         }
 
         // unshare record type
-        asyncTest(#function + "unshare") { (expect) in
-            mainClient.unshare(record.meta.type, readerId: sharedId) { (result) in
+        asyncTest(#function + "revoke") { (expect) in
+            mainClient.revoke(record.meta.type, readerId: sharedId) { (result) in
                 XCTAssertNil(result.error)
                 expect.fulfill()
             }
@@ -349,8 +332,8 @@ class Tests: XCTestCase {
         }
 
         // reset share policy
-        asyncTest(#function + "unshare") { (expect) in
-            mainClient.unshare(#function, readerId: sharedId) { (result) in
+        asyncTest(#function + "revoke") { (expect) in
+            mainClient.revoke(#function, readerId: sharedId) { (result) in
                 XCTAssertNil(result.error)
                 expect.fulfill()
             }
@@ -366,32 +349,32 @@ extension Tests {
         waitForExpectations(timeout: 10, handler: { XCTAssertNil($0) })
     }
 
-    func clientWithId() -> (E3db, UUID) {
-        var e3db: E3db?
+    func clientWithId() -> (Client, UUID) {
+        var e3db: Client?
         var uuid: UUID?
         let newClient = #function + UUID().uuidString
         asyncTest(newClient) { (expect) in
-            E3db.register(token: TestData.token, clientName: newClient, apiUrl: TestData.apiUrl) { (result) in
+            Client.register(token: TestData.token, clientName: newClient, apiUrl: TestData.apiUrl) { (result) in
                 XCTAssertNotNil(result.value)
                 uuid = result.value!.clientId
-                e3db = E3db(config: result.value!)
+                e3db = Client(config: result.value!)
                 expect.fulfill()
             }
         }
         return (e3db!, uuid!)
     }
 
-    func client(useStaticClient: Bool = true) -> E3db {
-        let e3db: E3db
+    func client(useStaticClient: Bool = true) -> Client {
+        let e3db: Client
         if useStaticClient {
-            e3db = E3db(config: TestData.config)
+            e3db = Client(config: TestData.config)
         } else {
             (e3db, _) = clientWithId()
         }
         return e3db
     }
 
-    func writeTestRecord(_ e3db: E3db) -> Record {
+    func writeTestRecord(_ e3db: Client) -> Record {
         var record: Record?
         asyncTest(#function + "write") { (expect) in
             e3db.write("test-data", data: RecordData(clearText: ["test": "message"])) { (result) in
@@ -402,7 +385,7 @@ extension Tests {
         return record!
     }
 
-    func deleteRecord(_ record: Record, e3db: E3db) {
+    func deleteRecord(_ record: Record, e3db: Client) {
         asyncTest(#function + "delete") { (expect) in
             e3db.delete(record: record) { _ in expect.fulfill() }
         }

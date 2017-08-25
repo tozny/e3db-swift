@@ -100,7 +100,7 @@ public struct Record {
 
 // MARK: Write Record
 
-extension E3db {
+extension Client {
     private struct CreateRecordRequest: Request {
         typealias ResponseObject = RecordResponse
         let api: Api
@@ -159,7 +159,7 @@ extension E3db {
 
 // MARK: Read Record / Read Raw
 
-extension E3db {
+extension Client {
     private struct RecordRequest: Request {
         typealias ResponseObject = RecordResponse
         let api: Api
@@ -186,7 +186,7 @@ extension E3db {
         }
     }
 
-    public func readRaw(recordId: UUID, completion: @escaping E3dbCompletion<RecordResponse>) {
+    private func readRaw(recordId: UUID, completion: @escaping E3dbCompletion<RecordResponse>) {
         let req = RecordRequest(api: api, recordId: recordId)
         authedClient.performDefault(req, completion: completion)
     }
@@ -205,7 +205,7 @@ extension E3db {
 
 // MARK: Update Record
 
-extension E3db {
+extension Client {
     private struct RecordUpdateRequest: Request {
         typealias ResponseObject = RecordResponse
         let api: Api
@@ -260,7 +260,7 @@ extension E3db {
 
 // MARK: Delete Record
 
-extension E3db {
+extension Client {
     private struct DeleteRecordRequest: Request {
         typealias ResponseObject = Void
         let api: Api

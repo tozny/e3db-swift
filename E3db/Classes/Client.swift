@@ -1,5 +1,5 @@
 //
-//  E3db.swift
+//  Client.swift
 //  E3db
 //
 
@@ -19,7 +19,7 @@ import ResponseDetective
 public typealias E3dbResult<T>     = Result<T, E3dbError>
 public typealias E3dbCompletion<T> = (E3dbResult<T>) -> Void
 
-public class E3db {
+public final class Client {
     internal let api: Api
     internal let config: Config
     internal let authedClient: APIClient
@@ -31,8 +31,7 @@ public class E3db {
     }()
 
     internal static let staticClient: APIClient = {
-        let session   = E3db.debugSession
-        let performer = NetworkRequestPerformer(session: session)
+        let performer = NetworkRequestPerformer(session: Client.debugSession)
         return APIClient(requestPerformer: performer)
     }()
 
@@ -42,23 +41,39 @@ public class E3db {
         self.api    = Api(baseUrl: config.baseApiUrl)
         self.config = config
 
+        let httpClient    = HeimdallrHTTPClientURLSession(urlSession: Client.debugSession)
         let credentials   = OAuthClientCredentials(id: config.apiKeyId, secret: config.apiSecret)
         let tokenStore    = OAuthAccessTokenKeychainStore(service: config.clientId.uuidString)
-        let httpClient    = HeimdallrHTTPClientURLSession(urlSession: E3db.debugSession)
         let heimdallr     = Heimdallr(tokenURL: api.tokenUrl, credentials: credentials, accessTokenStore: tokenStore, httpClient: httpClient)
-        let reqPerformer  = AuthedRequestPerformer(authenticator: heimdallr, session: E3db.debugSession)
+        let reqPerformer  = AuthedRequestPerformer(authenticator: heimdallr, session: Client.debugSession)
         self.authedClient = APIClient(requestPerformer: reqPerformer)
+    }
+}
+
+// MARK: Key Generation
+
+public struct KeyPair {
+    public let publicKey: String
+    public let secretKey: String
+}
+
+extension Client {
+    public static func generateKeyPair() -> KeyPair? {
+        guard let keyPair = Crypto.generateKeyPair() else { return nil }
+        let pubKey  = keyPair.publicKey.base64URLEncodedString()
+        let privKey = keyPair.secretKey.base64URLEncodedString()
+        return KeyPair(publicKey: pubKey, secretKey: privKey)
     }
 }
 
 // MARK: Get Client Info
 
-public struct ClientInfo: Argo.Decodable {
+struct ClientInfo: Argo.Decodable {
     let clientId: UUID
     let publicKey: ClientKey
     let validated: Bool
 
-    public static func decode(_ j: JSON) -> Decoded<ClientInfo> {
+    static func decode(_ j: JSON) -> Decoded<ClientInfo> {
         return curry(ClientInfo.init)
             <^> j <| "client_id"
             <*> j <| "public_key"
@@ -66,7 +81,7 @@ public struct ClientInfo: Argo.Decodable {
     }
 }
 
-extension E3db {
+extension Client {
     private struct ClientInfoRequest: Request {
         typealias ResponseObject = ClientInfo
         let api: Api
@@ -78,7 +93,7 @@ extension E3db {
         }
     }
 
-    public func getClientInfo(clientId: UUID? = nil, completion: @escaping E3dbCompletion<ClientInfo>) {
+    func getClientInfo(clientId: UUID? = nil, completion: @escaping E3dbCompletion<ClientInfo>) {
         let req = ClientInfoRequest(api: api, clientId: clientId ?? config.clientId)
         authedClient.performDefault(req, completion: completion)
     }
