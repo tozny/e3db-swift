@@ -63,17 +63,18 @@ extension QueryParams {
 
 extension QueryParams: Ogra.Encodable {
     public func encode() -> JSON {
-        return JSON.object([
-            "count": count.encode(),
-            "include_data": includeData.encode(),
-            "writer_ids": writerIds.encode(),
-            "user_ids": userIds.encode(),
-            "record_ids": recordIds.encode(),
-            "content_types": contentTypes.encode(),
-            "after_index": after.encode(),
-            "plain": plain.encode(),
-            "include_all_writers": includeAllWriters.encode()
-        ])
+        // build json object incrementally to omit null fields
+        var encoded = [String: JSON]()
+        encoded["count"] = count?.encode()
+        encoded["include_data"] = includeData?.encode()
+        encoded["writer_ids"] = writerIds?.encode()
+        encoded["user_ids"] = userIds?.encode()
+        encoded["record_ids"] = recordIds?.encode()
+        encoded["content_types"] = contentTypes?.encode()
+        encoded["after_index"] = after?.encode()
+        encoded["plain"] = plain?.encode()
+        encoded["include_all_writers"] = includeAllWriters?.encode()
+        return JSON.object(encoded)
     }
 }
 
@@ -135,7 +136,7 @@ extension E3db {
     private func decryptResults(response: SearchResponse) -> E3dbResult<QueryResponse> {
         return response
             .results
-            .map(self.decryptSearchRecord)
+            .map(decryptSearchRecord)
             .sequence()
             .map { QueryResponse(records: $0, last: response.lastIndex) }
     }

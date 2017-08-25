@@ -222,6 +222,140 @@ class Tests: XCTestCase {
         deleteRecord(record, e3db: e3db)
     }
 
+    func testShareUnshare() {
+        let mainClient = client()
+        let (shareClient, sharedId) = clientWithId()
+        let record = writeTestRecord(mainClient)
+
+        // shared client should not see records initially
+        let query = QueryParams(includeAllWriters: true)
+        asyncTest(#function + "read first") { (expect) in
+            shareClient.query(params: query) { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.records.count == 0)
+                expect.fulfill()
+            }
+        }
+
+        // share record type
+        asyncTest(#function + "share") { (expect) in
+            mainClient.share(record.meta.type, readerId: sharedId) { (result) in
+                XCTAssertNil(result.error)
+                expect.fulfill()
+            }
+        }
+
+        // shared client should now see record
+        asyncTest(#function + "read again") { (expect) in
+            shareClient.query(params: query) { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.records.count == 1)
+                XCTAssert(result.value!.records[0].meta.recordId == record.meta.recordId)
+                expect.fulfill()
+            }
+        }
+
+        // unshare record type
+        asyncTest(#function + "unshare") { (expect) in
+            mainClient.unshare(record.meta.type, readerId: sharedId) { (result) in
+                XCTAssertNil(result.error)
+                expect.fulfill()
+            }
+        }
+
+        // shared client should no longer see record
+        asyncTest(#function + "read last") { (expect) in
+            shareClient.query(params: query) { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.records.count == 0)
+                expect.fulfill()
+            }
+        }
+
+        // clean up
+        deleteRecord(record, e3db: mainClient)
+    }
+
+    func testGetPolicies() {
+        let mainClient = client()
+        let (shareClient, sharedId) = clientWithId()
+
+        // current policies should be empty
+        asyncTest(#function + "main incoming policy check1") { (expect) in
+            mainClient.getIncomingSharing() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.count == 0)
+                expect.fulfill()
+            }
+        }
+        asyncTest(#function + "main outgoing policy check1") { (expect) in
+            mainClient.getOutgoingSharing() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.count == 0)
+                expect.fulfill()
+            }
+        }
+        asyncTest(#function + "shared incoming policy check1") { (expect) in
+            shareClient.getIncomingSharing() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.count == 0)
+                expect.fulfill()
+            }
+        }
+        asyncTest(#function + "shared outgoing policy check1") { (expect) in
+            shareClient.getOutgoingSharing() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.count == 0)
+                expect.fulfill()
+            }
+        }
+
+        // set share policy from main to shared
+        asyncTest(#function + "share") { (expect) in
+            mainClient.share(#function, readerId: sharedId) { (result) in
+                XCTAssertNil(result.error)
+                expect.fulfill()
+            }
+        }
+
+        // confirm the right policies have changed
+        asyncTest(#function + "main incoming policy check2") { (expect) in
+            mainClient.getIncomingSharing() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.count == 0)
+                expect.fulfill()
+            }
+        }
+        asyncTest(#function + "main outgoing policy check2") { (expect) in
+            mainClient.getOutgoingSharing() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.count > 0)
+                expect.fulfill()
+            }
+        }
+        asyncTest(#function + "shared incoming policy check3") { (expect) in
+            shareClient.getIncomingSharing() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.count > 0)
+                expect.fulfill()
+            }
+        }
+        asyncTest(#function + "shared outgoing policy check4") { (expect) in
+            shareClient.getOutgoingSharing() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.count == 0)
+                expect.fulfill()
+            }
+        }
+
+        // reset share policy
+        asyncTest(#function + "unshare") { (expect) in
+            mainClient.unshare(#function, readerId: sharedId) { (result) in
+                XCTAssertNil(result.error)
+                expect.fulfill()
+            }
+        }
+    }
 }
 
 extension Tests {
@@ -232,21 +366,29 @@ extension Tests {
         waitForExpectations(timeout: 10, handler: { XCTAssertNil($0) })
     }
 
-    func client(useStaticClient: Bool = true) -> E3db {
+    func clientWithId() -> (E3db, UUID) {
         var e3db: E3db?
+        var uuid: UUID?
+        let newClient = #function + UUID().uuidString
+        asyncTest(newClient) { (expect) in
+            E3db.register(token: TestData.token, clientName: newClient, apiUrl: TestData.apiUrl) { (result) in
+                XCTAssertNotNil(result.value)
+                uuid = result.value!.clientId
+                e3db = E3db(config: result.value!)
+                expect.fulfill()
+            }
+        }
+        return (e3db!, uuid!)
+    }
+
+    func client(useStaticClient: Bool = true) -> E3db {
+        let e3db: E3db
         if useStaticClient {
             e3db = E3db(config: TestData.config)
         } else {
-            let newClient = #function + UUID().uuidString
-            asyncTest(newClient) { (expect) in
-                E3db.register(token: TestData.token, clientName: newClient, apiUrl: TestData.apiUrl) { (result) in
-                    XCTAssertNotNil(result.value)
-                    e3db = E3db(config: result.value!)
-                    expect.fulfill()
-                }
-            }
+            (e3db, _) = clientWithId()
         }
-        return e3db!
+        return e3db
     }
 
     func writeTestRecord(_ e3db: E3db) -> Record {

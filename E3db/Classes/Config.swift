@@ -16,7 +16,7 @@ public struct Config {
     let baseApiUrl: URL
     let apiKeyId: String
     let apiSecret: String
-    let clientId: UUID
+    public let clientId: UUID
     let clientName: String
     let publicKey: String
     let privateKey: String

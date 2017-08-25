@@ -43,8 +43,9 @@ public class E3db {
         self.config = config
 
         let credentials   = OAuthClientCredentials(id: config.apiKeyId, secret: config.apiSecret)
+        let tokenStore    = OAuthAccessTokenKeychainStore(service: config.clientId.uuidString)
         let httpClient    = HeimdallrHTTPClientURLSession(urlSession: E3db.debugSession)
-        let heimdallr     = Heimdallr(tokenURL: api.tokenUrl(), credentials: credentials, httpClient: httpClient)
+        let heimdallr     = Heimdallr(tokenURL: api.tokenUrl(), credentials: credentials, accessTokenStore: tokenStore, httpClient: httpClient)
         let reqPerformer  = AuthedRequestPerformer(authenticator: heimdallr, session: E3db.debugSession)
         self.authedClient = APIClient(requestPerformer: reqPerformer)
     }
