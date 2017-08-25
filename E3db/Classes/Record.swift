@@ -166,8 +166,7 @@ extension E3db {
         let recordId: UUID
 
         func build() -> URLRequest {
-            let url = api.url(endpoint: .records)
-                .appendingPathComponent(recordId.uuidString)
+            let url = api.url(endpoint: .records) / recordId.uuidString
             let req = URLRequest(url: url)
             return req
         }
@@ -215,10 +214,7 @@ extension E3db {
         let record: RecordRequest
 
         func build() -> URLRequest {
-            let url = api.url(endpoint: .records)
-                .appendingPathComponent("safe")
-                .appendingPathComponent(recordId.uuidString)
-                .appendingPathComponent(version)
+            let url = api.url(endpoint: .records) / "safe" / recordId.uuidString / version
             var req = URLRequest(url: url)
             return req.asJsonRequest(.PUT, payload: record.encode())
         }
@@ -272,10 +268,7 @@ extension E3db {
         let version: String
 
         func build() -> URLRequest {
-            let url = api.url(endpoint: .records)
-                .appendingPathComponent("safe")
-                .appendingPathComponent(recordId.uuidString)
-                .appendingPathComponent(version)
+            let url = api.url(endpoint: .records) / "safe" / recordId.uuidString / version
             var req = URLRequest(url: url)
             req.httpMethod = RequestMethod.DELETE.rawValue
             return req

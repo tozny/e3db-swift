@@ -40,35 +40,24 @@ public enum E3dbError: Swift.Error {
 }
 
 struct Api {
-    static let defaultUrl = "https://api.e3db.com/"
-    let baseUrl: URL
-
+    static let defaultUrl   = "https://api.e3db.com/"
     private let version     = "v1"
     private let pdsService  = "storage"
     private let authService = "auth"
     private let acctService = "account"
 
+    let baseUrl: URL
+    let tokenUrl: URL
+    let registerUrl: URL
+
+    init(baseUrl: URL) {
+        self.baseUrl = baseUrl
+        self.tokenUrl = baseUrl / version / authService / "token"
+        self.registerUrl = baseUrl / version / acctService / "e3db" / "clients" / "register"
+    }
+
     func url(endpoint: Endpoint) -> URL {
-        return baseUrl
-            .appendingPathComponent(version)
-            .appendingPathComponent(pdsService)
-            .appendingPathComponent(endpoint.rawValue)
-    }
-
-    func tokenUrl() -> URL {
-        return baseUrl
-            .appendingPathComponent(version)
-            .appendingPathComponent(authService)
-            .appendingPathComponent("token")
-    }
-
-    func registerUrl() -> URL {
-        return baseUrl
-            .appendingPathComponent(version)
-            .appendingPathComponent(acctService)
-            .appendingPathComponent("e3db")
-            .appendingPathComponent("clients")
-            .appendingPathComponent("register")
+        return baseUrl / version / pdsService / endpoint.rawValue
     }
 }
 

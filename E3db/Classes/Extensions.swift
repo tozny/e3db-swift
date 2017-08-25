@@ -86,6 +86,12 @@ extension URLRequest {
     }
 }
 
+extension URL {
+    static func /(lhs: URL, rhs: String) -> URL {
+        return lhs.appendingPathComponent(rhs)
+    }
+}
+
 extension String {
     func capitalizedFirst() -> String {
         let firstIndex = self.index(startIndex, offsetBy: 1)

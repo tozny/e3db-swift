@@ -41,11 +41,8 @@ extension E3db {
         let recordType: String
 
         func build() -> URLRequest {
-            let url = api.url(endpoint: .accessKeys)
-                .appendingPathComponent(writerId.uuidString)
-                .appendingPathComponent(userId.uuidString)
-                .appendingPathComponent(readerId.uuidString)
-                .appendingPathComponent(recordType)
+            let base = api.url(endpoint: .accessKeys)
+            let url  = base / writerId.uuidString / userId.uuidString / readerId.uuidString / recordType
             return URLRequest(url: url)
         }
     }
@@ -100,12 +97,9 @@ extension E3db {
         let recordType: String
 
         func build() -> URLRequest {
-            let url = api.url(endpoint: .accessKeys)
-                .appendingPathComponent(writerId.uuidString)
-                .appendingPathComponent(userId.uuidString)
-                .appendingPathComponent(readerId.uuidString)
-                .appendingPathComponent(recordType)
-            var req = URLRequest(url: url)
+            let base = api.url(endpoint: .accessKeys)
+            let url  = base / writerId.uuidString / userId.uuidString / readerId.uuidString / recordType
+            var req  = URLRequest(url: url)
             return req.asJsonRequest(.PUT, payload: JSON.object(["eak": eak.encode()]))
         }
     }

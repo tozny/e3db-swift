@@ -64,12 +64,9 @@ extension E3db {
         let contentType: String
 
         func build() -> URLRequest {
-            let url = api.url(endpoint: .policy)
-                .appendingPathComponent(clientId.uuidString)
-                .appendingPathComponent(clientId.uuidString)
-                .appendingPathComponent(readerId.uuidString)
-                .appendingPathComponent(contentType)
-            var req = URLRequest(url: url)
+            let base = api.url(endpoint: .policy)
+            let url  = base / clientId.uuidString / clientId.uuidString / readerId.uuidString / contentType
+            var req  = URLRequest(url: url)
             return req.asJsonRequest(.PUT, payload: policy.encode())
         }
     }
@@ -93,8 +90,7 @@ extension E3db {
         let api: Api
 
         func build() -> URLRequest {
-            let url = api.url(endpoint: .policy)
-                .appendingPathComponent("outgoing")
+            let url = api.url(endpoint: .policy) / "outgoing"
             return URLRequest(url: url)
         }
     }
@@ -104,8 +100,7 @@ extension E3db {
         let api: Api
 
         func build() -> URLRequest {
-            let url = api.url(endpoint: .policy)
-                .appendingPathComponent("incoming")
+            let url = api.url(endpoint: .policy) / "incoming"
             return URLRequest(url: url)
         }
     }

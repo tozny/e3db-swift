@@ -45,7 +45,7 @@ public class E3db {
         let credentials   = OAuthClientCredentials(id: config.apiKeyId, secret: config.apiSecret)
         let tokenStore    = OAuthAccessTokenKeychainStore(service: config.clientId.uuidString)
         let httpClient    = HeimdallrHTTPClientURLSession(urlSession: E3db.debugSession)
-        let heimdallr     = Heimdallr(tokenURL: api.tokenUrl(), credentials: credentials, accessTokenStore: tokenStore, httpClient: httpClient)
+        let heimdallr     = Heimdallr(tokenURL: api.tokenUrl, credentials: credentials, accessTokenStore: tokenStore, httpClient: httpClient)
         let reqPerformer  = AuthedRequestPerformer(authenticator: heimdallr, session: E3db.debugSession)
         self.authedClient = APIClient(requestPerformer: reqPerformer)
     }
@@ -73,8 +73,7 @@ extension E3db {
         let clientId: UUID
 
         func build() -> URLRequest {
-            let url = api.url(endpoint: .clients)
-                .appendingPathComponent(clientId.uuidString)
+            let url = api.url(endpoint: .clients) / clientId.uuidString
             return URLRequest(url: url)
         }
     }

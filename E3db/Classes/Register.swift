@@ -76,7 +76,7 @@ extension E3db {
         }
 
         func build() -> URLRequest {
-            let url = api.registerUrl()
+            let url = api.registerUrl
             var req = URLRequest(url: url)
             return req.asJsonRequest(.POST, payload: encode())
         }
