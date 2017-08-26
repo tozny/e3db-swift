@@ -14,7 +14,9 @@ import Ogra
 import Curry
 import Runes
 
+#if DEBUG
 import ResponseDetective
+#endif
 
 public typealias E3dbResult<T>     = Result<T, E3dbError>
 public typealias E3dbCompletion<T> = (E3dbResult<T>) -> Void
@@ -24,14 +26,20 @@ public final class Client {
     internal let config: Config
     internal let authedClient: APIClient
 
+    #if DEBUG
     private static let debugSession: URLSession = {
         let configuration = URLSessionConfiguration.default
         ResponseDetective.enable(inConfiguration: configuration)
         return URLSession(configuration: configuration)
     }()
+    #endif
 
     internal static let staticClient: APIClient = {
+        #if DEBUG
         let performer = NetworkRequestPerformer(session: Client.debugSession)
+        #else
+        let performer = NetworkRequestPerformer()
+        #endif
         return APIClient(requestPerformer: performer)
     }()
 
@@ -41,7 +49,12 @@ public final class Client {
         self.api    = Api(baseUrl: config.baseApiUrl)
         self.config = config
 
-        let httpClient    = HeimdallrHTTPClientURLSession(urlSession: Client.debugSession)
+        #if DEBUG
+        let httpClient = HeimdallrHTTPClientURLSession(urlSession: Client.debugSession)
+        #else
+        let httpClient = HeimdallrHTTPClientURLSession()
+        #endif
+
         let credentials   = OAuthClientCredentials(id: config.apiKeyId, secret: config.apiSecret)
         let tokenStore    = OAuthAccessTokenKeychainStore(service: config.clientId.uuidString)
         let heimdallr     = Heimdallr(tokenURL: api.tokenUrl, credentials: credentials, accessTokenStore: tokenStore, httpClient: httpClient)
