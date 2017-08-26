@@ -144,7 +144,7 @@ extension Client {
         }
     }
 
-    public func write(_ type: String, data: RecordData, plain: PlainMeta? = nil, completion: @escaping E3dbCompletion<Record>) {
+    public func write(type: String, data: RecordData, plain: PlainMeta? = nil, completion: @escaping E3dbCompletion<Record>) {
         let clientId = config.clientId
         getAccessKey(writerId: clientId, userId: clientId, readerId: clientId, recordType: type) { (result) in
             switch result {

@@ -71,12 +71,12 @@ extension Client {
         }
     }
 
-    public func share(_ type: String, readerId: UUID, completion: @escaping E3dbCompletion<Void>) {
+    public func share(type: String, readerId: UUID, completion: @escaping E3dbCompletion<Void>) {
         let req = ShareRequest(api: api, policy: .allow, clientId: config.clientId, readerId: readerId, contentType: type)
         authedClient.performDefault(req, completion: completion)
     }
 
-    public func revoke(_ type: String, readerId: UUID, completion: @escaping E3dbCompletion<Void>) {
+    public func revoke(type: String, readerId: UUID, completion: @escaping E3dbCompletion<Void>) {
         let req = ShareRequest(api: api, policy: .deny, clientId: config.clientId, readerId: readerId, contentType: type)
         authedClient.performDefault(req, completion: completion)
     }

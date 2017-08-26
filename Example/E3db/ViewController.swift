@@ -48,7 +48,7 @@ class ViewController: UIViewController {
         }
 
         let recordData = RecordData(clearText: ["secret message": msg])
-        e3db?.write("sdk-test-2", data: recordData, plain: ["Sent from": "my iPhone"]) { (result) in
+        e3db?.write(type: "sdk-test-2", data: recordData, plain: ["Sent from": "my iPhone"]) { (result) in
             let text: String
             switch result {
             case .success(let record):

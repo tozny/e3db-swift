@@ -32,7 +32,7 @@ class Tests: XCTestCase {
 
         // write record
         asyncTest(#function + "write") { (expect) in
-            e3db.write("test-data", data: data) { (result) in
+            e3db.write(type: "test-data", data: data) { (result) in
                 XCTAssertNotNil(result.value)
                 record = result.value
                 expect.fulfill()
@@ -222,7 +222,7 @@ class Tests: XCTestCase {
 
         // share record type
         asyncTest(#function + "share") { (expect) in
-            mainClient.share(record.meta.type, readerId: sharedId) { (result) in
+            mainClient.share(type: record.meta.type, readerId: sharedId) { (result) in
                 XCTAssertNil(result.error)
                 expect.fulfill()
             }
@@ -240,7 +240,7 @@ class Tests: XCTestCase {
 
         // unshare record type
         asyncTest(#function + "revoke") { (expect) in
-            mainClient.revoke(record.meta.type, readerId: sharedId) { (result) in
+            mainClient.revoke(type: record.meta.type, readerId: sharedId) { (result) in
                 XCTAssertNil(result.error)
                 expect.fulfill()
             }
@@ -295,7 +295,7 @@ class Tests: XCTestCase {
 
         // set share policy from main to shared
         asyncTest(#function + "share") { (expect) in
-            mainClient.share(#function, readerId: sharedId) { (result) in
+            mainClient.share(type: #function, readerId: sharedId) { (result) in
                 XCTAssertNil(result.error)
                 expect.fulfill()
             }
@@ -333,7 +333,7 @@ class Tests: XCTestCase {
 
         // reset share policy
         asyncTest(#function + "revoke") { (expect) in
-            mainClient.revoke(#function, readerId: sharedId) { (result) in
+            mainClient.revoke(type: #function, readerId: sharedId) { (result) in
                 XCTAssertNil(result.error)
                 expect.fulfill()
             }
@@ -377,7 +377,7 @@ extension Tests {
     func writeTestRecord(_ e3db: Client) -> Record {
         var record: Record?
         asyncTest(#function + "write") { (expect) in
-            e3db.write("test-data", data: RecordData(clearText: ["test": "message"])) { (result) in
+            e3db.write(type: "test-data", data: RecordData(clearText: ["test": "message"])) { (result) in
                 record = result.value!
                 expect.fulfill()
             }
