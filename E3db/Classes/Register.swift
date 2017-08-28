@@ -47,6 +47,7 @@ public struct ClientCredentials: Argo.Decodable {
     public let publicKey: String
     public let enabled: Bool
 
+    /// :nodoc:
     public static func decode(_ j: JSON) -> Decoded<ClientCredentials> {
         return curry(ClientCredentials.init)
             <^> j <| "client_id"

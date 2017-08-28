@@ -1,0 +1,579 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Client.swift",
+      "line": null,
+      "symbol": "Client",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Client.swift",
+      "line": null,
+      "symbol": "Client",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Client.swift",
+      "line": null,
+      "symbol": "Client",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Client.swift",
+      "line": null,
+      "symbol": "Client",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Client.swift",
+      "line": null,
+      "symbol": "Client",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Client.swift",
+      "line": null,
+      "symbol": "Client",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Client.swift",
+      "line": null,
+      "symbol": "Client",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Client.swift",
+      "line": null,
+      "symbol": "Client",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Client.swift",
+      "line": null,
+      "symbol": "Client",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Client.swift",
+      "line": 24,
+      "symbol": "Client",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Client.swift",
+      "line": 41,
+      "symbol": "Client.init(config:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Client.swift",
+      "line": 56,
+      "symbol": "KeyPair",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Client.swift",
+      "line": 57,
+      "symbol": "KeyPair.publicKey",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Client.swift",
+      "line": 58,
+      "symbol": "KeyPair.secretKey",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Client.swift",
+      "line": 62,
+      "symbol": "Client.generateKeyPair()",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Config.swift",
+      "line": null,
+      "symbol": "Config",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Config.swift",
+      "line": 13,
+      "symbol": "Config",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Config.swift",
+      "line": 14,
+      "symbol": "Config.clientName",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Config.swift",
+      "line": 15,
+      "symbol": "Config.clientId",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Config.swift",
+      "line": 16,
+      "symbol": "Config.apiKeyId",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Config.swift",
+      "line": 17,
+      "symbol": "Config.apiSecret",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Config.swift",
+      "line": 18,
+      "symbol": "Config.publicKey",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Config.swift",
+      "line": 19,
+      "symbol": "Config.privateKey",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Config.swift",
+      "line": 20,
+      "symbol": "Config.baseApiUrl",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Config.swift",
+      "line": 22,
+      "symbol": "Config.init(clientName:clientId:apiKeyId:apiSecret:publicKey:privateKey:baseApiUrl:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Config.swift",
+      "line": 78,
+      "symbol": "Config.init(loadProfile:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Config.swift",
+      "line": 88,
+      "symbol": "Config.save(profile:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Query.swift",
+      "line": null,
+      "symbol": "QueryParams",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Query.swift",
+      "line": 14,
+      "symbol": "QueryParams",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Query.swift",
+      "line": 25,
+      "symbol": "QueryParams.init(count:includeData:writerIds:userIds:recordIds:contentTypes:after:plain:includeAllWriters:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Query.swift",
+      "line": 49,
+      "symbol": "QueryParams.next(after:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Query.swift",
+      "line": 106,
+      "symbol": "QueryResponse",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Query.swift",
+      "line": 107,
+      "symbol": "QueryResponse.records",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Query.swift",
+      "line": 108,
+      "symbol": "QueryResponse.last",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Query.swift",
+      "line": 145,
+      "symbol": "Client.query(params:completion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Record.swift",
+      "line": 17,
+      "symbol": "RecordData",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Record.swift",
+      "line": 18,
+      "symbol": "RecordData.cleartext",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Record.swift",
+      "line": 19,
+      "symbol": "RecordData.init(cleartext:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Record.swift",
+      "line": 40,
+      "symbol": "Meta",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Record.swift",
+      "line": 41,
+      "symbol": "Meta.recordId",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Record.swift",
+      "line": 42,
+      "symbol": "Meta.writerId",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Record.swift",
+      "line": 43,
+      "symbol": "Meta.userId",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Record.swift",
+      "line": 44,
+      "symbol": "Meta.type",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Record.swift",
+      "line": 45,
+      "symbol": "Meta.plain",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Record.swift",
+      "line": 46,
+      "symbol": "Meta.created",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Record.swift",
+      "line": 47,
+      "symbol": "Meta.lastModified",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Record.swift",
+      "line": 48,
+      "symbol": "Meta.version",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Record.swift",
+      "line": 93,
+      "symbol": "Record",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Record.swift",
+      "line": 94,
+      "symbol": "Record.meta",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Record.swift",
+      "line": 95,
+      "symbol": "Record.data",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Record.swift",
+      "line": 97,
+      "symbol": "Record.update(data:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Record.swift",
+      "line": 148,
+      "symbol": "Client.write(type:data:plain:completion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Record.swift",
+      "line": 195,
+      "symbol": "Client.read(recordId:completion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Record.swift",
+      "line": 248,
+      "symbol": "Client.update(record:completion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Record.swift",
+      "line": 279,
+      "symbol": "Client.delete(record:completion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Register.swift",
+      "line": 42,
+      "symbol": "ClientCredentials",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Register.swift",
+      "line": 43,
+      "symbol": "ClientCredentials.clientId",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Register.swift",
+      "line": 44,
+      "symbol": "ClientCredentials.apiKeyId",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Register.swift",
+      "line": 45,
+      "symbol": "ClientCredentials.apiSecret",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Register.swift",
+      "line": 46,
+      "symbol": "ClientCredentials.name",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Register.swift",
+      "line": 47,
+      "symbol": "ClientCredentials.publicKey",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Register.swift",
+      "line": 48,
+      "symbol": "ClientCredentials.enabled",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Register.swift",
+      "line": 86,
+      "symbol": "Client.register(token:clientName:apiUrl:completion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Register.swift",
+      "line": 121,
+      "symbol": "Client.register(token:clientName:publicKey:apiUrl:completion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Share.swift",
+      "line": 28,
+      "symbol": "OutgoingSharingPolicy",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Share.swift",
+      "line": 29,
+      "symbol": "OutgoingSharingPolicy.readerId",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Share.swift",
+      "line": 30,
+      "symbol": "OutgoingSharingPolicy.type",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Share.swift",
+      "line": 31,
+      "symbol": "OutgoingSharingPolicy.readerName",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Share.swift",
+      "line": 42,
+      "symbol": "IncomingSharingPolicy",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Share.swift",
+      "line": 43,
+      "symbol": "IncomingSharingPolicy.writerId",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Share.swift",
+      "line": 44,
+      "symbol": "IncomingSharingPolicy.type",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Share.swift",
+      "line": 45,
+      "symbol": "IncomingSharingPolicy.writerName",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Share.swift",
+      "line": 76,
+      "symbol": "Client.share(type:readerId:completion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Share.swift",
+      "line": 81,
+      "symbol": "Client.revoke(type:readerId:completion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Share.swift",
+      "line": 110,
+      "symbol": "Client.getOutgoingSharing(completion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Share.swift",
+      "line": 115,
+      "symbol": "Client.getIncomingSharing(completion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Utils.swift",
+      "line": 13,
+      "symbol": "E3dbError",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Utils.swift",
+      "line": 14,
+      "symbol": "E3dbError.cryptoError",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Utils.swift",
+      "line": 15,
+      "symbol": "E3dbError.configError",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Utils.swift",
+      "line": 16,
+      "symbol": "E3dbError.networkError",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Utils.swift",
+      "line": 17,
+      "symbol": "E3dbError.jsonError",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/gregtozny/tozny/e3db-swift/E3db/Classes/Utils.swift",
+      "line": 18,
+      "symbol": "E3dbError.apiError",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/gregtozny/tozny/e3db-swift"
+}

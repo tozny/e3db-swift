@@ -61,6 +61,7 @@ extension QueryParams {
     }
 }
 
+/// :nodoc:
 extension QueryParams: Ogra.Encodable {
     public func encode() -> JSON {
         // build json object incrementally to omit null fields

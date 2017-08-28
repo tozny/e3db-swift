@@ -47,6 +47,7 @@ public struct Meta: Argo.Decodable {
     public let lastModified: Date
     public let version: String?
 
+    /// :nodoc:
     public static func decode(_ j: JSON) -> Decoded<Meta> {
         let tmp = curry(Meta.init)
             <^> j <| "record_id"

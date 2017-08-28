@@ -40,6 +40,7 @@ public struct Config {
 
 // MARK: Json
 
+/// :nodoc:
 extension Config: Ogra.Encodable, Argo.Decodable {
 
     public func encode() -> JSON {

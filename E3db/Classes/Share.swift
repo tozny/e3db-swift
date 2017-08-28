@@ -30,6 +30,7 @@ public struct OutgoingSharingPolicy: Argo.Decodable {
     public let type: String
     public let readerName: String?
 
+    /// :nodoc:
     public static func decode(_ j: JSON) -> Decoded<OutgoingSharingPolicy> {
         return curry(OutgoingSharingPolicy.init)
             <^> j <|  "reader_id"
@@ -43,6 +44,7 @@ public struct IncomingSharingPolicy: Argo.Decodable {
     public let type: String
     public let writerName: String?
 
+    /// :nodoc:
     public static func decode(_ j: JSON) -> Decoded<IncomingSharingPolicy> {
         return curry(IncomingSharingPolicy.init)
             <^> j <|  "writer_id"
