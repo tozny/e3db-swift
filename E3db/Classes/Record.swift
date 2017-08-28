@@ -15,9 +15,9 @@ public typealias CypherData = [String: String]
 public typealias PlainMeta  = [String: String]
 
 public struct RecordData {
-    public let clearText: [String: String]
-    public init(clearText: [String: String]) {
-        self.clearText = clearText
+    public let cleartext: [String: String]
+    public init(cleartext: [String: String]) {
+        self.cleartext = cleartext
     }
 }
 
@@ -78,11 +78,11 @@ struct RecordRequest: Ogra.Encodable {
     }
 }
 
-public struct RecordResponse: Argo.Decodable {
-    public let meta: Meta
-    public let cypherData: CypherData
+struct RecordResponse: Argo.Decodable {
+    let meta: Meta
+    let cypherData: CypherData
 
-    public static func decode(_ j: JSON) -> Decoded<RecordResponse> {
+    static func decode(_ j: JSON) -> Decoded<RecordResponse> {
         return curry(RecordResponse.init)
             <^> j  <| "meta"
             <*> (j <| "data").flatMap(CypherData.decode)
@@ -93,7 +93,7 @@ public struct Record {
     public let meta: Meta
     public let data: RecordData
 
-    public func updated(data: RecordData) -> Record {
+    public func update(data: RecordData) -> Record {
         return Record(meta: self.meta, data: data)
     }
 }

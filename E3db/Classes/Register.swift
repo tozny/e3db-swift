@@ -82,16 +82,6 @@ extension Client {
         }
     }
 
-    /// Register a new client for E3db associated with the account used to create the token. This
-    /// method generates the cryptographic keypair and provides it in the resulting Config object.
-    ///
-    /// - SeeAlso: `generateKeyPair()`
-    ///
-    /// - Parameters:
-    ///   - token: An identifier string associated with an account generated from Tozny's Admin Console
-    ///   - clientName: The name to use for the new client
-    ///   - apiUrl: The base url used for api calls
-    ///   - completion: A completion handler supplying the new client configuration
     public static func register(token: String, clientName: String, apiUrl: String = Api.defaultUrl, completion: @escaping E3dbCompletion<Config>) {
         // ensure api url is valid
         guard let url = URL(string: apiUrl) else {
@@ -100,14 +90,16 @@ extension Client {
 
         // create key pair
         guard let keyPair = Client.generateKeyPair() else {
-            return completion(Result(error: .cryptoError("Could not create key pair.")))
+            return completion(Result(error: .cryptoError("Failed to create key pair.")))
         }
 
-        let api    = Api(baseUrl: url)
-        let pubK   = ClientKey(curve25519: keyPair.publicKey)
-        let client = ClientRequest(name: clientName, publicKey: pubK)
-        let req    = RegistrationRequest(api: api, token: token, client: client)
-        staticClient.perform(req) { (result) in
+        let api       = Api(baseUrl: url)
+        let pubKey    = ClientKey(curve25519: keyPair.publicKey)
+        let clientReq = ClientRequest(name: clientName, publicKey: pubKey)
+        let regReq    = RegistrationRequest(api: api, token: token, client: clientReq)
+        let performer = NetworkRequestPerformer(session: session)
+        let client    = APIClient(requestPerformer: performer)
+        client.perform(regReq) { (result) in
             let resp = result
                 .mapError(E3dbError.init)
                 .map { creds in
@@ -131,10 +123,12 @@ extension Client {
             return completion(Result(error: .configError("Invalid apiUrl: \(apiUrl)")))
         }
 
-        let api    = Api(baseUrl: url)
-        let pubK   = ClientKey(curve25519: publicKey)
-        let client = ClientRequest(name: clientName, publicKey: pubK)
-        let req    = RegistrationRequest(api: api, token: token, client: client)
-        staticClient.performDefault(req, completion: completion)
+        let api       = Api(baseUrl: url)
+        let pubKey    = ClientKey(curve25519: publicKey)
+        let clientReq = ClientRequest(name: clientName, publicKey: pubKey)
+        let regReq    = RegistrationRequest(api: api, token: token, client: clientReq)
+        let performer = NetworkRequestPerformer(session: session)
+        let client    = APIClient(requestPerformer: performer)
+        client.performDefault(regReq, completion: completion)
     }
 }

@@ -44,7 +44,7 @@ extension Crypto {
     }
 
     private static func b64Split(_ value: String) -> [Data] {
-        return value.split(separator: ".").flatMap { Data(base64URLEncoded: String($0)) }
+        return value.components(separatedBy: ".").flatMap { Data(base64URLEncoded: String($0)) }
     }
 }
 
@@ -64,8 +64,8 @@ extension Crypto {
         }
 
         guard let authorizerPubKey = Box.PublicKey(base64URLEncoded: eakResponse.authorizerPublicKey.curve25519),
-            let privKey = Box.SecretKey(base64URLEncoded: clientPrivateKey),
-            let ak = sodium.box.open(authenticatedCipherText: eak, senderPublicKey: authorizerPubKey, recipientSecretKey: privKey, nonce: eakN) else {
+              let privKey = Box.SecretKey(base64URLEncoded: clientPrivateKey),
+              let ak = sodium.box.open(authenticatedCipherText: eak, senderPublicKey: authorizerPubKey, recipientSecretKey: privKey, nonce: eakN) else {
             throw E3dbError.cryptoError("Failed to decrypt access key")
         }
 
@@ -95,7 +95,7 @@ extension Crypto {
     static func encrypt(recordData: RecordData, ak: AccessKey) throws -> CypherData {
         var encrypted = CypherData()
 
-        for (key, value) in recordData.clearText {
+        for (key, value) in recordData.cleartext {
             let bytes       = value.data(using: .utf8)
             let dk          = try generateSecretKey()
             let (ef, efN)   = try encrypt(value: bytes, key: dk)
@@ -107,7 +107,7 @@ extension Crypto {
 
     private static func decrypt(cyphertext: Data, nonce: SecretBox.Nonce, key: SecretBox.Key) throws -> Data {
         guard let plain = sodium.secretBox.open(authenticatedCipherText: cyphertext, secretKey: key, nonce: nonce) else {
-            throw E3dbError.cryptoError("Failed to encrypt value.")
+            throw E3dbError.cryptoError("Failed to decrypt value.")
         }
         return plain
     }
@@ -123,6 +123,6 @@ extension Crypto {
             let field = try decrypt(cyphertext: ef, nonce: efN, key: dk)
             decrypted[key] = String(data: field, encoding: .utf8)
         }
-        return RecordData(clearText: decrypted)
+        return RecordData(cleartext: decrypted)
     }
 }

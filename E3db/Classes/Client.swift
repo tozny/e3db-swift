@@ -26,21 +26,14 @@ public final class Client {
     internal let config: Config
     internal let authedClient: APIClient
 
-    #if DEBUG
-    private static let debugSession: URLSession = {
+    internal static let session: URLSession = {
+        #if DEBUG
         let configuration = URLSessionConfiguration.default
         ResponseDetective.enable(inConfiguration: configuration)
         return URLSession(configuration: configuration)
-    }()
-    #endif
-
-    internal static let staticClient: APIClient = {
-        #if DEBUG
-        let performer = NetworkRequestPerformer(session: Client.debugSession)
         #else
-        let performer = NetworkRequestPerformer()
+        return URLSession.shared
         #endif
-        return APIClient(requestPerformer: performer)
     }()
 
     internal static var akCache = [AkCacheKey: AccessKey]()
@@ -49,17 +42,12 @@ public final class Client {
         self.api    = Api(baseUrl: config.baseApiUrl)
         self.config = config
 
-        #if DEBUG
-        let httpClient = HeimdallrHTTPClientURLSession(urlSession: Client.debugSession)
-        #else
-        let httpClient = HeimdallrHTTPClientURLSession()
-        #endif
-
+        let httpClient    = HeimdallrHTTPClientURLSession(urlSession: Client.session)
         let credentials   = OAuthClientCredentials(id: config.apiKeyId, secret: config.apiSecret)
         let tokenStore    = OAuthAccessTokenKeychainStore(service: config.clientId.uuidString)
         let heimdallr     = Heimdallr(tokenURL: api.tokenUrl, credentials: credentials, accessTokenStore: tokenStore, httpClient: httpClient)
-        let reqPerformer  = AuthedRequestPerformer(authenticator: heimdallr, session: Client.debugSession)
-        self.authedClient = APIClient(requestPerformer: reqPerformer)
+        let authPerformer = AuthedRequestPerformer(authenticator: heimdallr, session: Client.session)
+        self.authedClient = APIClient(requestPerformer: authPerformer)
     }
 }
 

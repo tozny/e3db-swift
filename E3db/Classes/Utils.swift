@@ -89,8 +89,8 @@ struct AkCacheKey: Hashable {
 }
 
 struct AuthedRequestPerformer {
-    fileprivate let session: URLSession
-    fileprivate let authenticator: Heimdallr
+    let session: URLSession
+    let authenticator: Heimdallr
 
     init(authenticator: Heimdallr, session: URLSession = .shared) {
         self.session = session

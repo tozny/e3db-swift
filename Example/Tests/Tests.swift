@@ -2,7 +2,7 @@ import UIKit
 import XCTest
 import E3db
 
-class Tests: XCTestCase {
+class IntegrationTests: XCTestCase {
 
     func testRegistrationDefault() {
         let test = #function + UUID().uuidString
@@ -27,7 +27,7 @@ class Tests: XCTestCase {
 
     func testWriteReadRecord() {
         let e3db = client()
-        let data = RecordData(clearText: ["test": "message"])
+        let data = RecordData(cleartext: ["test": "message"])
         var record: Record?
 
         // write record
@@ -43,7 +43,7 @@ class Tests: XCTestCase {
         asyncTest(#function + "read") { (expect) in
             e3db.read(recordId: record!.meta.recordId) { (result) in
                 XCTAssertNotNil(result.value)
-                XCTAssertEqual(result.value!.data.clearText, data.clearText)
+                XCTAssertEqual(result.value!.data.cleartext, data.cleartext)
                 expect.fulfill()
             }
         }
@@ -54,7 +54,7 @@ class Tests: XCTestCase {
 
     func testDeleteRecord() {
         let e3db   = client()
-        let data   = RecordData(clearText: ["test": "message"])
+        let data   = RecordData(cleartext: ["test": "message"])
         let record = writeTestRecord(e3db)
 
         // delete record
@@ -82,13 +82,13 @@ class Tests: XCTestCase {
         var record = writeTestRecord(e3db)
 
         // update record
-        let newData = RecordData(clearText: ["test": "updated"])
-        let updated = record.updated(data: newData)
+        let newData = RecordData(cleartext: ["test": "updated"])
+        let updated = record.update(data: newData)
         asyncTest(#function + "update") { (expect) in
             e3db.update(record: updated) { (result) in
                 XCTAssertNotNil(result.value)
                 XCTAssertEqual(result.value!.meta.recordId, record.meta.recordId)
-                XCTAssertEqual(result.value!.data.clearText, newData.clearText)
+                XCTAssertEqual(result.value!.data.cleartext, newData.cleartext)
                 record = result.value!
                 expect.fulfill()
             }
@@ -98,7 +98,7 @@ class Tests: XCTestCase {
         asyncTest(#function + "read") { (expect) in
             e3db.read(recordId: record.meta.recordId) { (result) in
                 XCTAssertNotNil(result.value)
-                XCTAssertEqual(result.value!.data.clearText, newData.clearText)
+                XCTAssertEqual(result.value!.data.cleartext, newData.cleartext)
                 expect.fulfill()
             }
         }
@@ -196,7 +196,7 @@ class Tests: XCTestCase {
         asyncTest(#function) { (expect) in
             e3db.query(params: query) { (result) in
                 XCTAssertNotNil(result.value)
-                XCTAssert(result.value!.records.map { $0.data.clearText }.contains { $0 == record.data.clearText })
+                XCTAssert(result.value!.records.map { $0.data.cleartext }.contains { $0 == record.data.cleartext })
                 expect.fulfill()
             }
         }
@@ -341,7 +341,7 @@ class Tests: XCTestCase {
     }
 }
 
-extension Tests {
+extension IntegrationTests {
 
     func asyncTest(_ testName: String, test: @
         escaping (XCTestExpectation) -> Void) {
@@ -377,7 +377,7 @@ extension Tests {
     func writeTestRecord(_ e3db: Client) -> Record {
         var record: Record?
         asyncTest(#function + "write") { (expect) in
-            e3db.write(type: "test-data", data: RecordData(clearText: ["test": "message"])) { (result) in
+            e3db.write(type: "test-data", data: RecordData(cleartext: ["test": "message"])) { (result) in
                 record = result.value!
                 expect.fulfill()
             }

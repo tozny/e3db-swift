@@ -3,7 +3,6 @@
 //  E3db
 //
 
-
 import Foundation
 import Argo
 import Ogra
@@ -42,6 +41,7 @@ public struct Config {
 // MARK: Json
 
 extension Config: Ogra.Encodable, Argo.Decodable {
+
     public func encode() -> JSON {
         return JSON.object([
             "base_api_url": baseApiUrl.encode(),
@@ -86,7 +86,7 @@ extension Config {
 
     public func save(profile: String = defaultProfileName) -> Bool {
         guard let valet  = VALSecureEnclaveValet(identifier: profile, accessControl: .touchIDAnyFingerprint),
-            let config = try? JSONSerialization.data(withJSONObject: self.encode().JSONObject(), options: []) else {
+              let config = try? JSONSerialization.data(withJSONObject: self.encode().JSONObject(), options: []) else {
                 return false // Could not serialize json
         }
         return valet.setObject(config, forKey: profile)

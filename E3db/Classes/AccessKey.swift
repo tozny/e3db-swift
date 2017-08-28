@@ -115,7 +115,7 @@ extension Client {
             case .success(let client):
                 // encrypt ak
                 guard let authorizerPrivKey = Box.SecretKey(base64URLEncoded: self.config.privateKey),
-                    let eak = Crypto.encrypt(accessKey: ak, readerClientKey: client.publicKey, authorizerPrivKey: authorizerPrivKey) else {
+                      let eak = Crypto.encrypt(accessKey: ak, readerClientKey: client.publicKey, authorizerPrivKey: authorizerPrivKey) else {
                         return completion(Result(error: .cryptoError("Failed to encrypt access key")))
                 }
 
