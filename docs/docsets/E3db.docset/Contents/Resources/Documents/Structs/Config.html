@@ -14,7 +14,7 @@
     <a title="Config Struct Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">E3db Docs</a> (0% documented)</p>
+        <p><a href="../index.html">E3db Docs</a> (14% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -84,7 +84,13 @@
         <section>
           <section class="section">
             <h1>Config</h1>
-            <p>Undocumented</p>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Config</span></code></pre>
+
+                </div>
+              </div>
+            <p>Configuration for the E3DB Client</p>
 
           </section>
           <section class="section task-group-section">
@@ -103,8 +109,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The name for this client</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">clientName</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -122,8 +136,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The client identifier</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">clientId</span><span class="p">:</span> <span class="kt">UUID</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -141,8 +163,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The API key identifier</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">apiKeyId</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -160,8 +190,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The API secret for making authenticated calls</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">apiSecret</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -179,8 +217,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The client&rsquo;s public key</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">publicKey</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -198,8 +244,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The client&rsquo;s secret key</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">privateKey</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -217,8 +271,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The base URL for the E3DB service</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">baseApiUrl</span><span class="p">:</span> <span class="kt">URL</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -236,8 +298,119 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Initializer to customize the configuration of the client. Typically, library users will
+use the <code><a href="../Classes/Client.html#/s:ZFC4E3db6Client8registerFT5tokenSS10clientNameSS6apiUrlSS10completionFGO6Result6ResultVS_6ConfigOS_9E3dbError_T__T_">Client.register(token:clientName:apiUrl:completion:)</a></code> method which will supply
+an initialized <code>Config</code> object. Use this initializer if you register with the other
+registration method, <code><a href="../Classes/Client.html#/s:ZFC4E3db6Client8registerFT5tokenSS10clientNameSS9publicKeySS6apiUrlSS10completionFGO6Result6ResultVS_17ClientCredentialsOS_9E3dbError_T__T_">Client.register(token:clientName:publicKey:apiUrl:completion:)</a></code>.
+Pass this object to the <code><a href="../Classes/Client.html#/s:FC4E3db6ClientcFT6configVS_6Config_S0_">Client.init(config:)</a></code> initializer.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
+        <span class="nv">clientName</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+        <span class="nv">clientId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span>
+        <span class="nv">apiKeyId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+        <span class="nv">apiSecret</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+        <span class="nv">publicKey</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+        <span class="nv">privateKey</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+        <span class="nv">baseApiUrl</span><span class="p">:</span> <span class="kt">URL</span>
+    <span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>clientName</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The name for this client</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>clientId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client identifier</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>apiKeyId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The API key identifier</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>apiSecret</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The API secret for making authenticated calls</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>publicKey</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client&rsquo;s public key</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>privateKey</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client&rsquo;s secret key</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>baseApiUrl</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The base URL for the E3DB service</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -259,8 +432,52 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Loads a profile from the device&rsquo;s secure enclave if available.</p>
+<div class="aside aside-important">
+    <p class="aside-title">Important</p>
+    <p>Accessing this keychain data will require the user to confirm their presence
+via Touch ID or passcode entry. If no passcode is set on the device, this method will fail.
+Data is removed from the Secure Enclave when the user removes a passcode from the device.</p>
 
+</div>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <p><code><a href="../Structs/Config.html#/s:FV4E3db6Config4saveFT7profileSS_Sb">save(profile:)</a></code> for storing the <code>Config</code> object.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">?(</span><span class="n">loadProfile</span> <span class="nv">profile</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">defaultProfileName</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>loadProfile</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Name of the profile that was previously saved,
+uses internal default if unspecified.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A fully initialized <code>Config</code> object if successful, <code>nil</code> otherwise.</p>
                       </div>
                     </section>
                   </div>
@@ -278,8 +495,51 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Saves a profile to the device&rsquo;s secure enclave if available.</p>
+<div class="aside aside-important">
+    <p class="aside-title">Important</p>
+    <p>Accessing this keychain data will require the user to confirm their presence
+via Touch ID or passcode entry. If no passcode is set on the device, this method will fail.
+Data is removed from the Secure Enclave when the user removes a passcode from the device.</p>
 
+</div>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <p><code><a href="../Structs/Config.html#/s:FV4E3db6ConfigcFT11loadProfileSS_GSqS0__">init(loadProfile:)</a></code> for loading the <code>Config</code> object.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">save</span><span class="p">(</span><span class="nv">profile</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">defaultProfileName</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>profile</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Identifier for the profile for loading later.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A boolean value indicating if the config object was successfully saved.</p>
                       </div>
                     </section>
                   </div>
@@ -289,7 +549,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://github.com/gstro/E3db" target="_blank" rel="external">gstro</a>. All rights reserved. (Last updated: 2017-08-27)</p>
+          <p>&copy; 2017 <a class="link" href="https://github.com/gstro/E3db" target="_blank" rel="external">gstro</a>. All rights reserved. (Last updated: 2017-08-28)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

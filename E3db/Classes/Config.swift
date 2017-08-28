@@ -10,15 +10,44 @@ import Curry
 import Runes
 import Valet
 
+/// Configuration for the E3DB Client
 public struct Config {
+
+    /// The name for this client
     public let clientName: String
+
+    /// The client identifier
     public let clientId: UUID
+
+    /// The API key identifier
     public let apiKeyId: String
+
+    /// The API secret for making authenticated calls
     public let apiSecret: String
+
+    /// The client's public key
     public let publicKey: String
+
+    /// The client's secret key
     public let privateKey: String
+
+    /// The base URL for the E3DB service
     public let baseApiUrl: URL
 
+    /// Initializer to customize the configuration of the client. Typically, library users will
+    /// use the `Client.register(token:clientName:apiUrl:completion:)` method which will supply
+    /// an initialized `Config` object. Use this initializer if you register with the other
+    /// registration method, `Client.register(token:clientName:publicKey:apiUrl:completion:)`.
+    /// Pass this object to the `Client.init(config:)` initializer.
+    ///
+    /// - Parameters:
+    ///   - clientName: The name for this client
+    ///   - clientId: The client identifier
+    ///   - apiKeyId: The API key identifier
+    ///   - apiSecret: The API secret for making authenticated calls
+    ///   - publicKey: The client's public key
+    ///   - privateKey: The client's secret key
+    ///   - baseApiUrl: The base URL for the E3DB service
     public init(
         clientName: String,
         clientId: UUID,
@@ -69,12 +98,23 @@ extension Config: Ogra.Encodable, Argo.Decodable {
     }
 }
 
-private let defaultProfileName = "com.tozny.e3db.defaultProfile"
-
 // MARK: Storage in keychain / secure enclave
+
+private let defaultProfileName = "com.tozny.e3db.defaultProfile"
 
 extension Config {
 
+    /// Loads a profile from the device's secure enclave if available.
+    ///
+    /// - Important: Accessing this keychain data will require the user to confirm their presence
+    ///   via Touch ID or passcode entry. If no passcode is set on the device, this method will fail.
+    ///   Data is removed from the Secure Enclave when the user removes a passcode from the device.
+    ///
+    /// - SeeAlso: `save(profile:)` for storing the `Config` object.
+    ///
+    /// - Parameter loadProfile: Name of the profile that was previously saved,
+    ///   uses internal default if unspecified.
+    /// - Returns: A fully initialized `Config` object if successful, `nil` otherwise.
     public init?(loadProfile profile: String = defaultProfileName) {
         guard let valet = VALSecureEnclaveValet(identifier: profile, accessControl: .touchIDAnyFingerprint),
               let data  = valet.object(forKey: profile, userPrompt: "Unlock to load profile"),
@@ -85,6 +125,16 @@ extension Config {
         self = config
     }
 
+    /// Saves a profile to the device's secure enclave if available.
+    ///
+    /// - Important: Accessing this keychain data will require the user to confirm their presence
+    ///   via Touch ID or passcode entry. If no passcode is set on the device, this method will fail.
+    ///   Data is removed from the Secure Enclave when the user removes a passcode from the device.
+    ///
+    /// - SeeAlso: `init(loadProfile:)` for loading the `Config` object.
+    ///
+    /// - Parameter profile: Identifier for the profile for loading later.
+    /// - Returns: A boolean value indicating if the config object was successfully saved.
     public func save(profile: String = defaultProfileName) -> Bool {
         guard let valet  = VALSecureEnclaveValet(identifier: profile, accessControl: .touchIDAnyFingerprint),
               let config = try? JSONSerialization.data(withJSONObject: self.encode().JSONObject(), options: []) else {

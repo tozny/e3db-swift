@@ -18,9 +18,14 @@ import Runes
 import ResponseDetective
 #endif
 
+/// A type that contains either a value of type `T` or an `E3dbError`
 public typealias E3dbResult<T>     = Result<T, E3dbError>
+
+/// A completion handler that operates on an `E3dbResult<T>` type,
+/// used for async callbacks for E3db `Client` methods.
 public typealias E3dbCompletion<T> = (E3dbResult<T>) -> Void
 
+/// Main E3db class to handle data operations.
 public final class Client {
     internal let api: Api
     internal let config: Config
@@ -38,6 +43,14 @@ public final class Client {
 
     internal static var akCache = [AkCacheKey: AccessKey]()
 
+    /// Initializer for the E3db client class.
+    ///
+    /// - SeeAlso: `Client.register(token:clientName:apiUrl:completion:)` and
+    ///   `Client.register(token:clientName:publicKey:apiUrl:completion:)` to generate
+    ///   the required values.
+    ///
+    /// - Parameter config: A config object with values that have
+    ///   already been registered with the E3db service.
     public init(config: Config) {
         self.api    = Api(baseUrl: config.baseApiUrl)
         self.config = config
@@ -53,12 +66,30 @@ public final class Client {
 
 // MARK: Key Generation
 
+/// A data type holding the public and private keys as
+/// Base64URL encoded strings, used for encryption operations.
+/// Only the `publicKey` is sent to the E3db service.
 public struct KeyPair {
+
+    /// The public key from a generated keypair as a Base64URL encoded string.
     public let publicKey: String
+
+    /// The private key from a generated keypair as a Base64URL encoded string.
     public let secretKey: String
 }
 
 extension Client {
+
+    /// A helper function to create a compatible key pair for E3db operations.
+    ///
+    /// - Note: This method is not required for library use. A keypair is
+    ///   generated and stored in the `Config` object returned by the
+    ///   `Client.register(token:clientName:apiUrl:completion:)` method.
+    ///
+    /// - SeeAlso: `Client.register(token:clientName:publicKey:apiUrl:completion:)`
+    ///   for supplying your own key for registration.
+    ///
+    /// - Returns: A key pair containing Base64URL encoded public and private keys.
     public static func generateKeyPair() -> KeyPair? {
         guard let keyPair = Crypto.generateKeyPair() else { return nil }
         let pubKey  = keyPair.publicKey.base64URLEncodedString()

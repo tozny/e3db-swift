@@ -11,17 +11,45 @@ import Curry
 import Runes
 import Result
 
+/// Data type to specify filters for querying records
 public struct QueryParams {
+
+    /// Limit the number of records returned by the query beyond the E3db default
     let count: Int?
+
+    /// Supply the full decrypted record set in the results
     let includeData: Bool?
+
+    /// Filter to records written by these IDs
     let writerIds: [UUID]?
+
+    /// Filter to records with these user IDs
     let userIds: [UUID]?
+
+    /// Filter to only the records identified by these IDs
     let recordIds: [UUID]?
+
+    /// Filter to records that match the given types
     let contentTypes: [String]?
+
+    /// Number to facilitate paging the results -- used with the `last` property of the `QueryResponse`
     let after: Double?
-    let plain: [String: String]?
+
+    /// Set this flag to include records that have been shared with you, defaults to `false`
     let includeAllWriters: Bool?
 
+
+    /// Initializer to specify filters for querying records
+    ///
+    /// - Parameters:
+    ///   - count: Limit the number of records returned by the query beyond the E3db default
+    ///   - includeData: Supply the full decrypted record set in the results
+    ///   - writerIds: Filter to records written by these IDs
+    ///   - userIds: Filter to records with these user IDs
+    ///   - recordIds: Filter to only the records identified by these IDs
+    ///   - contentTypes: Filter to records that match the given types
+    ///   - after: Number to facilitate paging the results -- used with the `last` property of the `QueryResponse`
+    ///   - includeAllWriters: Set this flag to include records that have been shared with you, defaults to `false`
     public init(
         count: Int? = nil,
         includeData: Bool? = nil,
@@ -30,7 +58,6 @@ public struct QueryParams {
         recordIds: [UUID]? = nil,
         contentTypes: [String]? = nil,
         after: Double? = nil,
-        plain: [String: String]? = nil,
         includeAllWriters: Bool? = nil
     ) {
         self.count = count
@@ -40,12 +67,12 @@ public struct QueryParams {
         self.recordIds = recordIds
         self.contentTypes = contentTypes
         self.after = after
-        self.plain = plain
         self.includeAllWriters = includeAllWriters
     }
 }
 
 extension QueryParams {
+
     public func next(after: Double) -> QueryParams {
         return QueryParams(
             count: self.count,
@@ -55,7 +82,6 @@ extension QueryParams {
             recordIds: self.recordIds,
             contentTypes: self.contentTypes,
             after: after,
-            plain: self.plain,
             includeAllWriters: self.includeAllWriters
         )
     }
@@ -66,14 +92,13 @@ extension QueryParams: Ogra.Encodable {
     public func encode() -> JSON {
         // build json object incrementally to omit null fields
         var encoded = [String: JSON]()
-        encoded["count"] = count?.encode()
-        encoded["include_data"] = includeData?.encode()
-        encoded["writer_ids"] = writerIds?.encode()
-        encoded["user_ids"] = userIds?.encode()
-        encoded["record_ids"] = recordIds?.encode()
-        encoded["content_types"] = contentTypes?.encode()
-        encoded["after_index"] = after?.encode()
-        encoded["plain"] = plain?.encode()
+        encoded["count"]               = count?.encode()
+        encoded["include_data"]        = includeData?.encode()
+        encoded["writer_ids"]          = writerIds?.encode()
+        encoded["user_ids"]            = userIds?.encode()
+        encoded["record_ids"]          = recordIds?.encode()
+        encoded["content_types"]       = contentTypes?.encode()
+        encoded["after_index"]         = after?.encode()
         encoded["include_all_writers"] = includeAllWriters?.encode()
         return JSON.object(encoded)
     }
