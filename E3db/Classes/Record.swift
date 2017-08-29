@@ -11,7 +11,7 @@ import Curry
 import Runes
 import Result
 
-public typealias CypherData = [String: String]
+public typealias CipherData = [String: String]
 public typealias PlainMeta  = [String: String]
 
 public struct RecordData {
@@ -69,7 +69,7 @@ public struct Meta: Argo.Decodable {
 
 struct RecordRequest: Ogra.Encodable {
     let meta: MetaRequest
-    let data: CypherData
+    let data: CipherData
 
     public func encode() -> JSON {
         return JSON.object([
@@ -81,12 +81,12 @@ struct RecordRequest: Ogra.Encodable {
 
 struct RecordResponse: Argo.Decodable {
     let meta: Meta
-    let cypherData: CypherData
+    let cipherData: CipherData
 
     static func decode(_ j: JSON) -> Decoded<RecordResponse> {
         return curry(RecordResponse.init)
             <^> j  <| "meta"
-            <*> (j <| "data").flatMap(CypherData.decode)
+            <*> (j <| "data").flatMap(CipherData.decode)
     }
 }
 
@@ -114,16 +114,16 @@ extension Client {
         }
     }
 
-    internal func encrypt(_ data: RecordData, ak: AccessKey) -> E3dbResult<CypherData> {
+    func encrypt(_ data: RecordData, ak: AccessKey) -> E3dbResult<CipherData> {
         return Result(try Crypto.encrypt(recordData: data, ak: ak))
     }
 
     private func write(_ type: String, data: RecordData, plain: PlainMeta?, ak: AccessKey, completion: @escaping E3dbCompletion<Record>) {
 
-        let cypher: CypherData
+        let cipher: CipherData
         switch encrypt(data, ak: ak) {
         case .success(let c):
-            cypher = c
+            cipher = c
         case .failure(let err):
             return completion(Result(error: err))
         }
@@ -134,7 +134,7 @@ extension Client {
             type: type,
             plain: plain
         )
-        let record = RecordRequest(meta: meta, data: cypher)
+        let record = RecordRequest(meta: meta, data: cipher)
 
         let req = CreateRecordRequest(api: api, record: record)
         authedClient.perform(req) { result in
@@ -173,15 +173,15 @@ extension Client {
         }
     }
 
-    internal func decrypt(data: CypherData, accessKey: AccessKey) -> E3dbResult<RecordData> {
-        return Result(try Crypto.decrypt(cypherData: data, ak: accessKey))
+    internal func decrypt(data: CipherData, accessKey: AccessKey) -> E3dbResult<RecordData> {
+        return Result(try Crypto.decrypt(cipherData: data, ak: accessKey))
     }
 
     private func decryptRecord(record r: RecordResponse, completion: @escaping E3dbCompletion<Record>) {
         let clientId = config.clientId
         getAccessKey(writerId: r.meta.writerId, userId: r.meta.userId, readerId: clientId, recordType: r.meta.type) { (akResult) in
             let result = akResult
-                .flatMap { self.decrypt(data: r.cypherData, accessKey: $0) }
+                .flatMap { self.decrypt(data: r.cipherData, accessKey: $0) }
                 .map { Record(meta: r.meta, data: $0) }
             completion(result)
         }
@@ -222,10 +222,10 @@ extension Client {
     }
 
     private func update(meta: Meta, data: RecordData, ak: AccessKey, completion: @escaping E3dbCompletion<Record>) {
-        let cypher: CypherData
+        let cipher: CipherData
         switch self.encrypt(data, ak: ak) {
         case .success(let c):
-            cypher = c
+            cipher = c
         case .failure(let err):
             return completion(Result(error: err))
         }
@@ -235,7 +235,7 @@ extension Client {
             type: meta.type,
             plain: meta.plain
         )
-        let record = RecordRequest(meta: metaReq, data: cypher)
+        let record = RecordRequest(meta: metaReq, data: cipher)
         let req    = RecordUpdateRequest(api: api, recordId: meta.recordId, version: meta.version ?? "", record: record)
         authedClient.perform(req) { (result) in
             let resp = result

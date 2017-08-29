@@ -10,8 +10,8 @@ typealias AccessKey          = Box.SecretKey
 typealias EncryptedAccessKey = String
 
 struct Crypto {
-    typealias SecretBoxCypherNonce = (authenticatedCipherText: Data, nonce: SecretBox.Nonce)
-    typealias BoxCypherNonce       = (authenticatedCipherText: Data, nonce: Box.Nonce)
+    typealias SecretBoxCipherNonce = (authenticatedCipherText: Data, nonce: SecretBox.Nonce)
+    typealias BoxCipherNonce       = (authenticatedCipherText: Data, nonce: Box.Nonce)
 
     fileprivate static let sodium = Sodium()!
 }
@@ -27,8 +27,8 @@ extension Crypto {
         return sodium.randomBytes.buf(length: sodium.box.SecretKeyBytes)
     }
 
-    static func b64Join(_ cyphertexts: Data...) -> String {
-        return cyphertexts.map { $0.base64URLEncodedString() }.joined(separator: ".")
+    static func b64Join(_ ciphertexts: Data...) -> String {
+        return ciphertexts.map { $0.base64URLEncodedString() }.joined(separator: ".")
     }
 
     static func b64SplitData(_ value: String) -> (Data, Data, Data, Data)? {
@@ -55,7 +55,7 @@ extension Crypto {
     static func encrypt(accessKey: AccessKey, readerClientKey: ClientKey, authorizerPrivKey: Box.SecretKey) -> EncryptedAccessKey? {
         return Box.PublicKey(base64URLEncoded: readerClientKey.curve25519)
             .flatMap { sodium.box.seal(message: accessKey, recipientPublicKey: $0, senderSecretKey: authorizerPrivKey) }
-            .map { (eakData: BoxCypherNonce) in b64Join(eakData.authenticatedCipherText, eakData.nonce) }
+            .map { (eakData: BoxCipherNonce) in b64Join(eakData.authenticatedCipherText, eakData.nonce) }
     }
 
     static func decrypt(eakResponse: EAKResponse, clientPrivateKey: String) throws -> AccessKey {
@@ -84,16 +84,16 @@ extension Crypto {
         return secretKey
     }
 
-    private static func encrypt(value: Data?, key: SecretBox.Key) throws -> SecretBoxCypherNonce {
+    private static func encrypt(value: Data?, key: SecretBox.Key) throws -> SecretBoxCipherNonce {
         guard let data = value,
-              let cypher: SecretBoxCypherNonce = sodium.secretBox.seal(message: data, secretKey: key) else {
+              let cipher: SecretBoxCipherNonce = sodium.secretBox.seal(message: data, secretKey: key) else {
             throw E3dbError.cryptoError("Failed to encrypt value.")
         }
-        return cypher
+        return cipher
     }
 
-    static func encrypt(recordData: RecordData, ak: AccessKey) throws -> CypherData {
-        var encrypted = CypherData()
+    static func encrypt(recordData: RecordData, ak: AccessKey) throws -> CipherData {
+        var encrypted = CipherData()
 
         for (key, value) in recordData.cleartext {
             let bytes       = value.data(using: .utf8)
@@ -105,22 +105,22 @@ extension Crypto {
         return encrypted
     }
 
-    private static func decrypt(cyphertext: Data, nonce: SecretBox.Nonce, key: SecretBox.Key) throws -> Data {
-        guard let plain = sodium.secretBox.open(authenticatedCipherText: cyphertext, secretKey: key, nonce: nonce) else {
+    private static func decrypt(ciphertext: Data, nonce: SecretBox.Nonce, key: SecretBox.Key) throws -> Data {
+        guard let plain = sodium.secretBox.open(authenticatedCipherText: ciphertext, secretKey: key, nonce: nonce) else {
             throw E3dbError.cryptoError("Failed to decrypt value.")
         }
         return plain
     }
 
-    static func decrypt(cypherData: CypherData, ak: AccessKey) throws -> RecordData {
+    static func decrypt(cipherData: CipherData, ak: AccessKey) throws -> RecordData {
         var decrypted = [String: String]()
 
-        for (key, value) in cypherData {
+        for (key, value) in cipherData {
             guard let (edk, edkN, ef, efN) = b64SplitData(value) else {
                 throw E3dbError.cryptoError("Invalid data format")
             }
-            let dk    = try decrypt(cyphertext: edk, nonce: edkN, key: ak)
-            let field = try decrypt(cyphertext: ef, nonce: efN, key: dk)
+            let dk    = try decrypt(ciphertext: edk, nonce: edkN, key: ak)
+            let field = try decrypt(ciphertext: ef, nonce: efN, key: dk)
             decrypted[key] = String(data: field, encoding: .utf8)
         }
         return RecordData(cleartext: decrypted)

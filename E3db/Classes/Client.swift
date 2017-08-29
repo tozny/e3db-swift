@@ -47,7 +47,7 @@ public final class Client {
     ///
     /// - SeeAlso: `Client.register(token:clientName:apiUrl:completion:)` and
     ///   `Client.register(token:clientName:publicKey:apiUrl:completion:)` to generate
-    ///   the required values.
+    ///   the required Config values.
     ///
     /// - Parameter config: A config object with values that have
     ///   already been registered with the E3db service.
