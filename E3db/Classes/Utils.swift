@@ -36,8 +36,8 @@ public enum E3dbError: Swift.Error {
             self = .jsonError(key, "")
         case .argoError(let err):
             self = .jsonError("Failed to decode response", err.description)
-        case .serverError(code: 401, data: _):
-            self = .apiError(401, "Unauthorized")
+        case .serverError(let code, data: _) where code == 401 || code == 403:
+            self = .apiError(code, "Unauthorized")
         case .serverError(code: 404, data: _):
             self = .apiError(404, "Requested item not found")
         case .serverError(code: 409, data: _):

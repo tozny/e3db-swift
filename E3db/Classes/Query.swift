@@ -30,7 +30,7 @@ public struct QueryParams {
     let recordIds: [UUID]?
 
     /// Filter to records that match the given types
-    let contentTypes: [String]?
+    let types: [String]?
 
     /// Number to facilitate paging the results -- used with the `last` property of the `QueryResponse`
     let after: Double?
@@ -56,7 +56,7 @@ public struct QueryParams {
         writerIds: [UUID]? = nil,
         userIds: [UUID]? = nil,
         recordIds: [UUID]? = nil,
-        contentTypes: [String]? = nil,
+        types: [String]? = nil,
         after: Double? = nil,
         includeAllWriters: Bool? = nil
     ) {
@@ -65,7 +65,7 @@ public struct QueryParams {
         self.writerIds = writerIds
         self.userIds = userIds
         self.recordIds = recordIds
-        self.contentTypes = contentTypes
+        self.types = types
         self.after = after
         self.includeAllWriters = includeAllWriters
     }
@@ -82,7 +82,7 @@ public struct QueryParams {
             writerIds: self.writerIds,
             userIds: self.userIds,
             recordIds: self.recordIds,
-            contentTypes: self.contentTypes,
+            types: self.types,
             after: after,
             includeAllWriters: self.includeAllWriters
         )
@@ -99,7 +99,7 @@ extension QueryParams: Ogra.Encodable {
         encoded["writer_ids"]          = writerIds?.encode()
         encoded["user_ids"]            = userIds?.encode()
         encoded["record_ids"]          = recordIds?.encode()
-        encoded["content_types"]       = contentTypes?.encode()
+        encoded["content_types"]       = types?.encode()
         encoded["after_index"]         = after?.encode()
         encoded["include_all_writers"] = includeAllWriters?.encode()
         return JSON.object(encoded)

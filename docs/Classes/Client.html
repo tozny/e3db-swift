@@ -816,6 +816,11 @@ used to build a <code>Config</code> object for initializing an E3db <code>Client
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Allow another user to view and decrypt records of a given type.</p>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <p><code><a href="../Classes/Client.html#/s:FC4E3db6Client5shareFT4typeSS11readerEmailSS10completionFGO6Result6ResultT_OS_9E3dbError_T__T_">share(type:readerEmail:completion:)</a></code> for identifying a user by email to share access.</p>
+
+</div>
 
                       </div>
                       <div class="declaration">
@@ -875,6 +880,81 @@ used to build a <code>Config</code> object for initializing an E3db <code>Client
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:FC4E3db6Client5shareFT4typeSS11readerEmailSS10completionFGO6Result6ResultT_OS_9E3dbError_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/share(type:readerEmail:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC4E3db6Client5shareFT4typeSS11readerEmailSS10completionFGO6Result6ResultT_OS_9E3dbError_T__T_">share(type:readerEmail:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Allow another user to view and decrypt records of a given type.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <p>The user must have opted-in to email discovery for this operation to succeed.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">share</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">readerEmail</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db14E3dbCompletion">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>type</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The kind of records to allow a user to view and decrypt</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>readerEmail</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The email of the user to allow access</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:FC4E3db6Client6revokeFT4typeSS8readerIdV10Foundation4UUID10completionFGO6Result6ResultT_OS_9E3dbError_T__T_"></a>
                     <a name="//apple_ref/swift/Method/revoke(type:readerId:completion:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:FC4E3db6Client6revokeFT4typeSS8readerIdV10Foundation4UUID10completionFGO6Result6ResultT_OS_9E3dbError_T__T_">revoke(type:readerId:completion:)</a>
@@ -886,6 +966,11 @@ used to build a <code>Config</code> object for initializing an E3db <code>Client
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Remove a user&rsquo;s access to view and decrypt records of a given type.</p>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <p><code><a href="../Classes/Client.html#/s:FC4E3db6Client6revokeFT4typeSS11readerEmailSS10completionFGO6Result6ResultT_OS_9E3dbError_T__T_">revoke(type:readerEmail:completion:)</a></code> for identifying a user by email to revoke access.</p>
+
+</div>
 
                       </div>
                       <div class="declaration">
@@ -921,6 +1006,81 @@ used to build a <code>Config</code> object for initializing an E3db <code>Client
                               <td>
                                 <div>
                                   <p>The identifier of the user to remove access</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC4E3db6Client6revokeFT4typeSS11readerEmailSS10completionFGO6Result6ResultT_OS_9E3dbError_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/revoke(type:readerEmail:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC4E3db6Client6revokeFT4typeSS11readerEmailSS10completionFGO6Result6ResultT_OS_9E3dbError_T__T_">revoke(type:readerEmail:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Remove a user&rsquo;s access to view and decrypt records of a given type.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <p>The user must have opted-in to email discovery for this operation to succeed.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">revoke</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">readerEmail</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db14E3dbCompletion">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>type</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The kind of records to remove access</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>readerEmail</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The email of the user to remove access</p>
                                 </div>
                               </td>
                             </tr>

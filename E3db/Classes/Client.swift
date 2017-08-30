@@ -131,3 +131,21 @@ extension Client {
     }
 }
 
+extension Client {
+    private struct LookupRequest: Request {
+        typealias ResponseObject = ClientInfo
+        let api: Api
+        let email: String
+
+        func build() -> URLRequest {
+            let url = api.url(endpoint: .clients) / ("find" + "?email=" + email)
+            return URLRequest(url: url)
+        }
+    }
+
+    func getClientInfo(email: String, completion: @escaping E3dbCompletion<ClientInfo>) {
+        let req = LookupRequest(api: api, email: email)
+        authedClient.performDefault(req, completion: completion)
+    }
+}
+
