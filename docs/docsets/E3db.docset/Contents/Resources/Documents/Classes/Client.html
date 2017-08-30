@@ -14,7 +14,7 @@
     <a title="Client Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">E3db Docs</a> (14% documented)</p>
+        <p><a href="../index.html">E3db Docs</a> (100% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -78,13 +78,33 @@
               </li>
             </ul>
           </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Typealiases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4E3db14E3dbCompletion">E3dbCompletion</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4E3db10E3dbResult">E3dbResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4E3db9PlainMeta">PlainMeta</a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
       <article class="main-content">
         <section>
           <section class="section">
             <h1>Client</h1>
-            <p>Undocumented</p>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">Client</span></code></pre>
+
+                </div>
+              </div>
+            <p>Main E3db class to handle data operations.</p>
 
           </section>
           <section class="section task-group-section">
@@ -103,8 +123,43 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Initializer for the E3db client class.</p>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <p><code><a href="../Classes/Client.html#/s:ZFC4E3db6Client8registerFT5tokenSS10clientNameSS6apiUrlSS10completionFGO6Result6ResultVS_6ConfigOS_9E3dbError_T__T_">Client.register(token:clientName:apiUrl:completion:)</a></code> and
+<code><a href="../Classes/Client.html#/s:ZFC4E3db6Client8registerFT5tokenSS10clientNameSS9publicKeySS6apiUrlSS10completionFGO6Result6ResultVS_17ClientCredentialsOS_9E3dbError_T__T_">Client.register(token:clientName:publicKey:apiUrl:completion:)</a></code> to generate
+the required Config values.</p>
 
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">config</span><span class="p">:</span> <span class="kt"><a href="../Structs/Config.html">Config</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>config</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A config object with values that have
+already been registered with the E3db service.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -126,8 +181,33 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>A helper function to create a compatible key pair for E3db operations.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <p>This method is not required for library use. A key pair is
+generated and stored in the <code><a href="../Structs/Config.html">Config</a></code> object returned by the
+<code><a href="../Classes/Client.html#/s:ZFC4E3db6Client8registerFT5tokenSS10clientNameSS6apiUrlSS10completionFGO6Result6ResultVS_6ConfigOS_9E3dbError_T__T_">Client.register(token:clientName:apiUrl:completion:)</a></code> method.</p>
 
+</div>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <p><code><a href="../Classes/Client.html#/s:ZFC4E3db6Client8registerFT5tokenSS10clientNameSS9publicKeySS6apiUrlSS10completionFGO6Result6ResultVS_17ClientCredentialsOS_9E3dbError_T__T_">Client.register(token:clientName:publicKey:apiUrl:completion:)</a></code>
+for supplying your own key for registration.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">generateKeyPair</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/KeyPair.html">KeyPair</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A key pair containing Base64URL encoded public and private keys.</p>
                       </div>
                     </section>
                   </div>
@@ -149,8 +229,53 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Search for records that match a given set of filters.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <p>If the <code>include_data</code> flag is not set in the given <code><a href="../Structs/QueryParams.html">QueryParams</a></code>,
+the record results will contain empty <code><a href="../Structs/RecordData.html">RecordData</a></code> values.</p>
 
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">query</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Structs/QueryParams.html">QueryParams</a></span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db14E3dbCompletion">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/QueryResponse.html">QueryResponse</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>params</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A structure to specify a set of filters for matching records</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes to provide the results of the query</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -172,8 +297,73 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Write a record to the E3db service. This will encrypt the <code><a href="../Structs/RecordData.html">RecordData</a></code> fields (leaving the keys as plaintext)
+then send to E3db for storage. The <code><a href="../Structs/Record.html">Record</a></code> in the response will contain the unencrypted values and additional
+metadata associated with the record.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">write</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">data</span><span class="p">:</span> <span class="kt"><a href="../Structs/RecordData.html">RecordData</a></span><span class="p">,</span> <span class="nv">plain</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db9PlainMeta">PlainMeta</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db14E3dbCompletion">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/Record.html">Record</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>type</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The kind of data this record represents</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The unencrypted values for the record</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>plain</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A user-defined, key-value store associated with the record that remains as plaintext</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes to provide the record result</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -195,8 +385,47 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Request and decrypt a record from the E3db service.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">read</span><span class="p">(</span><span class="nv">recordId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db14E3dbCompletion">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/Record.html">Record</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>recordId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The identifier for the <code>Record</code> to read</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when the operation completes to provide the decrypted record</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -208,9 +437,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC4E3db6Client6updateFT6recordVS_6Record10completionFGO6Result6ResultS1_OS_9E3dbError_T__T_"></a>
-                    <a name="//apple_ref/swift/Method/update(record:completion:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC4E3db6Client6updateFT6recordVS_6Record10completionFGO6Result6ResultS1_OS_9E3dbError_T__T_">update(record:completion:)</a>
+                    <a name="/s:FC4E3db6Client6updateFT4metaVS_4Meta7newDataVS_10RecordData5plainGSqGVs10DictionarySSSS__10completionFGO6Result6ResultVS_6RecordOS_9E3dbError_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/update(meta:newData:plain:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC4E3db6Client6updateFT4metaVS_4Meta7newDataVS_10RecordData5plainGSqGVs10DictionarySSSS__10completionFGO6Result6ResultVS_6RecordOS_9E3dbError_T__T_">update(meta:newData:plain:completion:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -218,8 +447,72 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Replace the data and plain metadata for a record identified by its <code><a href="../Structs/Meta.html">Meta</a></code>. This will overwrite
+the existing data and metadata values.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">update</span><span class="p">(</span><span class="nv">meta</span><span class="p">:</span> <span class="kt"><a href="../Structs/Meta.html">Meta</a></span><span class="p">,</span> <span class="nv">newData</span><span class="p">:</span> <span class="kt"><a href="../Structs/RecordData.html">RecordData</a></span><span class="p">,</span> <span class="nv">plain</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db9PlainMeta">PlainMeta</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db14E3dbCompletion">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/Record.html">Record</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>meta</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code>Meta</code> information for the record to update</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>newData</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The unencrypted values to encrypt and replace for the record</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>plain</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The plaintext key-value store to replace for the record</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when the operation completes to provide the updated record</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -231,9 +524,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC4E3db6Client6deleteFT6recordVS_6Record10completionFGO6Result6ResultT_OS_9E3dbError_T__T_"></a>
-                    <a name="//apple_ref/swift/Method/delete(record:completion:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC4E3db6Client6deleteFT6recordVS_6Record10completionFGO6Result6ResultT_OS_9E3dbError_T__T_">delete(record:completion:)</a>
+                    <a name="/s:FC4E3db6Client6deleteFT8recordIdV10Foundation4UUID7versionSS10completionFGO6Result6ResultT_OS_9E3dbError_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/delete(recordId:version:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC4E3db6Client6deleteFT8recordIdV10Foundation4UUID7versionSS10completionFGO6Result6ResultT_OS_9E3dbError_T__T_">delete(recordId:version:completion:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -241,8 +534,59 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Remove the record from the E3db service.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">delete</span><span class="p">(</span><span class="nv">recordId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">version</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db14E3dbCompletion">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>recordId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The identifier for the <code>Record</code> to remove</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>version</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The version of the <code>Record</code> to delete</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when the operation completes</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -264,8 +608,84 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Provide registration information to the E3db service to create a new client
+associated with a particular account. The token provided must be generated from
+Tozny&rsquo;s <a href="https://console.tozny.com">InnoVault Console</a> to register successfully.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <p>This registration variant generates the keypair for the client.</p>
 
+</div>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <p>The <code><a href="../Classes/Client.html#/s:ZFC4E3db6Client8registerFT5tokenSS10clientNameSS9publicKeySS6apiUrlSS10completionFGO6Result6ResultVS_17ClientCredentialsOS_9E3dbError_T__T_">register(token:clientName:publicKey:apiUrl:completion:)</a></code> variant
+of this method allows the caller to provide their own public key.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">register</span><span class="p">(</span><span class="nv">token</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">clientName</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">apiUrl</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="kt">Api</span><span class="o">.</span><span class="n">defaultUrl</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db14E3dbCompletion">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/Config.html">Config</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>token</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An opaque value associated with an account and generated by the InnoVault Console</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>clientName</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A name to give this client for registration</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>apiUrl</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The base URL for the E3DB service</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes to provide a complete <code>Config</code></p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -283,8 +703,97 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Provide registration information to the E3db service to create a new client
+associated with a particular account. The token provided must be generated from
+Tozny&rsquo;s <a href="https://console.tozny.com">InnoVault Console</a> to register successfully.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <p>This registration variant does not generate the keypair for the client.</p>
 
+</div>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <p>The <code><a href="../Classes/Client.html#/s:ZFC4E3db6Client8registerFT5tokenSS10clientNameSS6apiUrlSS10completionFGO6Result6ResultVS_6ConfigOS_9E3dbError_T__T_">register(token:clientName:apiUrl:completion:)</a></code> variant
+of this method generates the keypair for the caller.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">register</span><span class="p">(</span><span class="nv">token</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">clientName</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">publicKey</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">apiUrl</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="kt">Api</span><span class="o">.</span><span class="n">defaultUrl</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db14E3dbCompletion">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/ClientCredentials.html">ClientCredentials</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>token</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An opaque value associated with an account and generated the InnoVault Console</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>clientName</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A name to give this client for registration</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>publicKey</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The public key to register with the E3db service and use for encryption operations</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>apiUrl</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The base URL for the E3DB service</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes to provide <code>ClientCredentials</code>
+used to build a <code>Config</code> object for initializing an E3db <code>Client</code></p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -306,8 +815,59 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Allow another user to view and decrypt records of a given type.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">share</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">readerId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db14E3dbCompletion">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>type</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The kind of records to allow a user to view and decrypt</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>readerId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The identifier of the user to allow access</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -325,8 +885,59 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Remove a user&rsquo;s access to view and decrypt records of a given type.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">revoke</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">readerId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db14E3dbCompletion">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>type</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The kind of records to remove access</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>readerId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The identifier of the user to remove access</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -348,8 +959,36 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Request the list of policies allowing other users to view and decrypt this client&rsquo;s records.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">getOutgoingSharing</span><span class="p">(</span><span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db14E3dbCompletion">E3dbCompletion</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt"><a href="../Structs/OutgoingSharingPolicy.html">OutgoingSharingPolicy</a></span><span class="p">]</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes to provide
+the list of <code>OutgoingSharingPolicy</code> objects</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -367,8 +1006,36 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Request the list of policies allowing this client to view and decrypt records written by other users.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">getIncomingSharing</span><span class="p">(</span><span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db14E3dbCompletion">E3dbCompletion</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt"><a href="../Structs/IncomingSharingPolicy.html">IncomingSharingPolicy</a></span><span class="p">]</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes to provide
+the list of <code>IncomingSharingPolicy</code> objects</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -378,7 +1045,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://github.com/gstro/E3db" target="_blank" rel="external">gstro</a>. All rights reserved. (Last updated: 2017-08-28)</p>
+          <p>&copy; 2017 <a class="link" href="https://github.com/gstro/E3db" target="_blank" rel="external">gstro</a>. All rights reserved. (Last updated: 2017-08-30)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

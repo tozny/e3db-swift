@@ -1,6 +1,8 @@
 
 # testing credentials -- not strictly confidential, but don't need them in repo
 TestData.swift
+dev/testlogs
+failed_platforms.txt
 
 # Created by https://www.gitignore.io/api/xcode,osx,swift,cocoapods
 

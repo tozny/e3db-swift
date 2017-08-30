@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Enums  Reference</title>
+    <title>Typealiases  Reference</title>
     <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,7 +10,7 @@
     
   </head>
   <body>
-    <a title="Enums  Reference"></a>
+    <a title="Typealiases  Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="index.html">E3db Docs</a> (100% documented)</p>
@@ -20,7 +20,7 @@
       <p id="breadcrumbs">
         <a href="index.html">E3db Reference</a>
         <img id="carat" src="img/carat.png" />
-        Enums  Reference
+        Typealiases  Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -96,8 +96,8 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>Enums</h1>
-            <p>The following enums are available globally.</p>
+            <h1>Typealiases</h1>
+            <p>The following typealiases are available globally.</p>
 
           </section>
           <section class="section task-group-section">
@@ -106,9 +106,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:O4E3db9E3dbError"></a>
-                    <a name="//apple_ref/swift/Enum/E3dbError" class="dashAnchor"></a>
-                    <a class="token" href="#/s:O4E3db9E3dbError">E3dbError</a>
+                    <a name="/s:4E3db10E3dbResult"></a>
+                    <a name="//apple_ref/swift/Alias/E3dbResult" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db10E3dbResult">E3dbResult</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -116,15 +116,73 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Possible errors encountered from E3db operations</p>
+                        <p>A type that contains either a value of type <code>T</code> or an <code><a href="Enums/E3dbError.html">E3dbError</a></code></p>
 
-                        <a href="Enums/E3dbError.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">E3dbError</span><span class="p">:</span> <span class="kt">Swift</span><span class="o">.</span><span class="kt">Error</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">E3dbResult</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span>     <span class="o">=</span> <span class="kt">Result</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt"><a href="Enums/E3dbError.html">E3dbError</a></span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db14E3dbCompletion"></a>
+                    <a name="//apple_ref/swift/Alias/E3dbCompletion" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db14E3dbCompletion">E3dbCompletion</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A completion handler that operates on an <code><a href="Typealiases.html#/s:4E3db10E3dbResult">E3dbResult&lt;T&gt;</a></code> type,
+used for async callbacks for E3db <code><a href="Classes/Client.html">Client</a></code> methods.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">E3dbCompletion</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">(</span><span class="kt"><a href="Typealiases.html#/s:4E3db10E3dbResult">E3dbResult</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db9PlainMeta"></a>
+                    <a name="//apple_ref/swift/Alias/PlainMeta" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db9PlainMeta">PlainMeta</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A type that holds arbitrary metadata for a record in cleartext</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">PlainMeta</span> <span class="o">=</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">String</span><span class="p">]</span></code></pre>
 
                         </div>
                       </div>

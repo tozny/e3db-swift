@@ -59,7 +59,7 @@ class IntegrationTests: XCTestCase {
 
         // delete record
         asyncTest(#function + "delete") { (expect) in
-            e3db.delete(record: record) { (result) in
+            e3db.delete(recordId: record.meta.recordId, version: record.meta.version) { (result) in
                 XCTAssertNil(result.error)
                 expect.fulfill()
             }
@@ -83,9 +83,8 @@ class IntegrationTests: XCTestCase {
 
         // update record
         let newData = RecordData(cleartext: ["test": "updated"])
-        let updated = record.update(data: newData)
         asyncTest(#function + "update") { (expect) in
-            e3db.update(record: updated) { (result) in
+            e3db.update(meta: record.meta, newData: newData) { (result) in
                 XCTAssertNotNil(result.value)
                 XCTAssertEqual(result.value!.meta.recordId, record.meta.recordId)
                 XCTAssertEqual(result.value!.data.cleartext, newData.cleartext)
@@ -387,7 +386,21 @@ extension IntegrationTests {
 
     func deleteRecord(_ record: Record, e3db: Client) {
         asyncTest(#function + "delete") { (expect) in
-            e3db.delete(record: record) { _ in expect.fulfill() }
+            e3db.delete(recordId: record.meta.recordId, version: record.meta.version) { _ in expect.fulfill() }
+        }
+    }
+
+    func deleteAllRecords(_ e3db: Client) {
+        let test = #function + "delete all"
+        var records = [Record]()
+        asyncTest(test) { (expect) in
+            e3db.query(params: QueryParams()) { (result) in
+                records = result.value!.records
+                expect.fulfill()
+            }
+        }
+        records.forEach { (record) in
+            deleteRecord(record, e3db: e3db)
         }
     }
 }
