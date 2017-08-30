@@ -25,12 +25,22 @@ enum Policy: Ogra.Encodable {
     }
 }
 
-public struct OutgoingSharingPolicy: Argo.Decodable {
-    public let readerId: UUID
-    public let type: String
-    public let readerName: String?
+/// A type to describe an existing policy for records
+/// written by the client to share with a given user
+public struct OutgoingSharingPolicy {
 
-    /// :nodoc:
+    /// An identifier for a user with whom to share
+    public let readerId: UUID
+
+    /// The type of record to share
+    public let type: String
+
+    /// A name for the given user
+    public let readerName: String?
+}
+
+/// :nodoc:
+extension OutgoingSharingPolicy: Argo.Decodable {
     public static func decode(_ j: JSON) -> Decoded<OutgoingSharingPolicy> {
         return curry(OutgoingSharingPolicy.init)
             <^> j <|  "reader_id"
@@ -39,12 +49,22 @@ public struct OutgoingSharingPolicy: Argo.Decodable {
     }
 }
 
-public struct IncomingSharingPolicy: Argo.Decodable {
-    public let writerId: UUID
-    public let type: String
-    public let writerName: String?
+/// A type to describe an existing policy for records
+/// written by others and shared with the client
+public struct IncomingSharingPolicy {
 
-    /// :nodoc:
+    /// The identifier for the user sharing with the client
+    public let writerId: UUID
+
+    /// The type of record shared
+    public let type: String
+
+    /// A name for the given user
+    public let writerName: String?
+}
+
+/// :nodoc:
+extension IncomingSharingPolicy: Argo.Decodable {
     public static func decode(_ j: JSON) -> Decoded<IncomingSharingPolicy> {
         return curry(IncomingSharingPolicy.init)
             <^> j <|  "writer_id"
@@ -73,11 +93,23 @@ extension Client {
         }
     }
 
+    /// Allow another user to view and decrypt records of a given type.
+    ///
+    /// - Parameters:
+    ///   - type: The kind of records to allow a user to view and decrypt
+    ///   - readerId: The identifier of the user to allow access
+    ///   - completion: A handler to call when this operation completes
     public func share(type: String, readerId: UUID, completion: @escaping E3dbCompletion<Void>) {
         let req = ShareRequest(api: api, policy: .allow, clientId: config.clientId, readerId: readerId, contentType: type)
         authedClient.performDefault(req, completion: completion)
     }
 
+    /// Remove a user's access to view and decrypt records of a given type.
+    ///
+    /// - Parameters:
+    ///   - type: The kind of records to remove access
+    ///   - readerId: The identifier of the user to remove access
+    ///   - completion: A handler to call when this operation completes
     public func revoke(type: String, readerId: UUID, completion: @escaping E3dbCompletion<Void>) {
         let req = ShareRequest(api: api, policy: .deny, clientId: config.clientId, readerId: readerId, contentType: type)
         authedClient.performDefault(req, completion: completion)
@@ -107,11 +139,19 @@ extension Client {
         }
     }
 
+    /// Request the list of policies allowing other users to view and decrypt this client's records.
+    ///
+    /// - Parameter completion: A handler to call when this operation completes to provide
+    ///   the list of `OutgoingSharingPolicy` objects
     public func getOutgoingSharing(completion: @escaping E3dbCompletion<[OutgoingSharingPolicy]>) {
         let req = GetOutgoingRequest(api: api)
         authedClient.performDefault(req, completion: completion)
     }
 
+    /// Request the list of policies allowing this client to view and decrypt records written by other users.
+    ///
+    /// - Parameter completion: A handler to call when this operation completes to provide
+    ///   the list of `IncomingSharingPolicy` objects
     public func getIncomingSharing(completion: @escaping E3dbCompletion<[IncomingSharingPolicy]>) {
         let req = GetIncomingRequest(api: api)
         authedClient.performDefault(req, completion: completion)

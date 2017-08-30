@@ -11,11 +11,23 @@ import Curry
 import Runes
 import Result
 
-public typealias CipherData = [String: String]
-public typealias PlainMeta  = [String: String]
+/// A type that holds arbitrary metadata for a record in cleartext
+public typealias PlainMeta = [String: String]
+typealias CipherData       = [String: String]
 
+/// A wrapper to hold unencrypted values
 public struct RecordData {
+
+    /// A key-value store of unencrypted data
     public let cleartext: [String: String]
+
+    /// Initializer to create a structure to hold unencrypted data.
+    /// The keys from the provided dictionary remain as unencrypted plaintext.
+    /// The values are encrypted before transit to the E3db service,
+    /// and decrypted after read back out from the service to support
+    /// full end-to-end encryption.
+    ///
+    /// - Parameter cleartext: Unencrypted data
     public init(cleartext: [String: String]) {
         self.cleartext = cleartext
     }
@@ -37,17 +49,37 @@ struct MetaRequest: Ogra.Encodable {
     }
 }
 
-public struct Meta: Argo.Decodable {
-    public let recordId: UUID
-    public let writerId: UUID
-    public let userId: UUID
-    public let type: String
-    public let plain: PlainMeta
-    public let created: Date
-    public let lastModified: Date
-    public let version: String?
+/// A type to hold metadata information about a given record
+public struct Meta {
 
-    /// :nodoc:
+    /// An identifier for the record
+    public let recordId: UUID
+
+    /// An identifier for the writer of the record
+    public let writerId: UUID
+
+    /// An identifier for the user of the record
+    public let userId: UUID
+
+    /// The kind of data this record represents
+    public let type: String
+
+    /// A user-defined, key-value store of metadata
+    /// associated with the record that remains as plaintext
+    public let plain: PlainMeta?
+
+    /// The timestamp marking the record's creation date, in ISO 8601 format
+    public let created: Date
+
+    /// The timestamp marking the record's most recent change, in ISO 8601 format
+    public let lastModified: Date
+
+    /// An identifier for the current version of the record
+    public let version: String
+}
+
+/// :nodoc:
+extension Meta: Argo.Decodable {
     public static func decode(_ j: JSON) -> Decoded<Meta> {
         let tmp = curry(Meta.init)
             <^> j <| "record_id"
@@ -57,13 +89,11 @@ public struct Meta: Argo.Decodable {
 
         // split decode fixes: "expression was too complex
         // to be solved in reasonable time."
-        //
-        // the <|> provides a default empty value
         return tmp
-            <*> ((j <| "plain").flatMap(PlainMeta.decode) <|> .success(PlainMeta()))
-            <*> j <|  "created"
-            <*> j <|  "last_modified"
-            <*> j <|? "version"
+            <*> .optional((j <| "plain").flatMap(PlainMeta.decode))
+            <*> j <| "created"
+            <*> j <| "last_modified"
+            <*> j <| "version"
     }
 }
 
@@ -90,13 +120,14 @@ struct RecordResponse: Argo.Decodable {
     }
 }
 
+/// A type that holds unencrypted values and associated metadata
 public struct Record {
-    public let meta: Meta
-    public let data: RecordData
 
-    public func update(data: RecordData) -> Record {
-        return Record(meta: self.meta, data: data)
-    }
+    /// Metadata about the record, such as record ID, creation date, etc.
+    public let meta: Meta
+
+    /// The unencrypted values for the record
+    public let data: RecordData
 }
 
 // MARK: Write Record
@@ -145,6 +176,15 @@ extension Client {
         }
     }
 
+    /// Write a record to the E3db service. This will encrypt the `RecordData` fields (leaving the keys as plaintext)
+    /// then send to E3db for storage. The `Record` in the response will contain the unencrypted values and additional
+    /// metadata associated with the record.
+    ///
+    /// - Parameters:
+    ///   - type: The kind of data this record represents
+    ///   - data: The unencrypted values for the record
+    ///   - plain: A user-defined, key-value store associated with the record that remains as plaintext
+    ///   - completion: A handler to call when this operation completes to provide the record result
     public func write(type: String, data: RecordData, plain: PlainMeta? = nil, completion: @escaping E3dbCompletion<Record>) {
         let clientId = config.clientId
         getAccessKey(writerId: clientId, userId: clientId, readerId: clientId, recordType: type) { (result) in
@@ -173,7 +213,7 @@ extension Client {
         }
     }
 
-    internal func decrypt(data: CipherData, accessKey: AccessKey) -> E3dbResult<RecordData> {
+    func decrypt(data: CipherData, accessKey: AccessKey) -> E3dbResult<RecordData> {
         return Result(try Crypto.decrypt(cipherData: data, ak: accessKey))
     }
 
@@ -192,6 +232,11 @@ extension Client {
         authedClient.performDefault(req, completion: completion)
     }
 
+    /// Request and decrypt a record from the E3db service.
+    ///
+    /// - Parameters:
+    ///   - recordId: The identifier for the `Record` to read
+    ///   - completion: A handler to call when the operation completes to provide the decrypted record
     public func read(recordId: UUID, completion: @escaping E3dbCompletion<Record>) {
         readRaw(recordId: recordId) { (result) in
             switch result {
@@ -221,7 +266,7 @@ extension Client {
         }
     }
 
-    private func update(meta: Meta, data: RecordData, ak: AccessKey, completion: @escaping E3dbCompletion<Record>) {
+    private func update(_ recordId: UUID, version: String, metaReq: MetaRequest, data: RecordData, ak: AccessKey, completion: @escaping E3dbCompletion<Record>) {
         let cipher: CipherData
         switch self.encrypt(data, ak: ak) {
         case .success(let c):
@@ -229,14 +274,8 @@ extension Client {
         case .failure(let err):
             return completion(Result(error: err))
         }
-        let metaReq = MetaRequest(
-            writerId: meta.writerId,
-            userId: meta.userId,
-            type: meta.type,
-            plain: meta.plain
-        )
         let record = RecordRequest(meta: metaReq, data: cipher)
-        let req    = RecordUpdateRequest(api: api, recordId: meta.recordId, version: meta.version ?? "", record: record)
+        let req    = RecordUpdateRequest(api: api, recordId: recordId, version: version, record: record)
         authedClient.perform(req) { (result) in
             let resp = result
                 .map { Record(meta: $0.meta, data: data) }
@@ -245,13 +284,25 @@ extension Client {
         }
     }
 
-    public func update(record: Record, completion: @escaping E3dbCompletion<Record>) {
-        let clientId = config.clientId
-        let meta     = record.meta
-        getAccessKey(writerId: meta.writerId, userId: meta.userId, readerId: clientId, recordType: meta.type) { (result) in
+    /// Replace the data and plain metadata for a record identified by its `Meta`. This will overwrite
+    /// the existing data and metadata values.
+    ///
+    /// - Parameters:
+    ///   - meta: The `Meta` information for the record to update
+    ///   - newData: The unencrypted values to encrypt and replace for the record
+    ///   - plain: The plaintext key-value store to replace for the record
+    ///   - completion: A handler to call when the operation completes to provide the updated record
+    public func update(meta: Meta, newData: RecordData, plain: PlainMeta? = nil, completion: @escaping E3dbCompletion<Record>) {
+        getAccessKey(writerId: meta.writerId, userId: meta.userId, readerId: config.clientId, recordType: meta.type) { (result) in
             switch result {
             case .success(let ak):
-                self.update(meta: meta, data: record.data, ak: ak, completion: completion)
+                let metaReq = MetaRequest(
+                    writerId: meta.writerId,
+                    userId: meta.userId,
+                    type: meta.type,
+                    plain: plain != nil ? plain : meta.plain
+                )
+                self.update(meta.recordId, version: meta.version, metaReq: metaReq, data: newData, ak: ak, completion: completion)
             case .failure(let err):
                 completion(Result(error: err))
             }
@@ -276,8 +327,14 @@ extension Client {
         }
     }
 
-    public func delete(record: Record, completion: @escaping E3dbCompletion<Void>) {
-        let req = DeleteRecordRequest(api: api, recordId: record.meta.recordId, version: record.meta.version ?? "")
+    /// Remove the record from the E3db service.
+    ///
+    /// - Parameters:
+    ///   - recordId: The identifier for the `Record` to remove
+    ///   - version: The version of the `Record` to delete
+    ///   - completion: A handler to call when the operation completes
+    public func delete(recordId: UUID, version: String, completion: @escaping E3dbCompletion<Void>) {
+        let req = DeleteRecordRequest(api: api, recordId: recordId, version: version)
         authedClient.performDefault(req, completion: completion)
     }
 }

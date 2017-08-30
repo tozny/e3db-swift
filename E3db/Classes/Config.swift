@@ -38,7 +38,7 @@ public struct Config {
     /// use the `Client.register(token:clientName:apiUrl:completion:)` method which will supply
     /// an initialized `Config` object. Use this initializer if you register with the other
     /// registration method, `Client.register(token:clientName:publicKey:apiUrl:completion:)`.
-    /// Pass this object to the `Client.init(config:)` initializer.
+    /// Pass this object to the `Client.init(config:)` initializer to create a new `Client`.
     ///
     /// - Parameters:
     ///   - clientName: The name for this client
@@ -104,7 +104,7 @@ private let defaultProfileName = "com.tozny.e3db.defaultProfile"
 
 extension Config {
 
-    /// Loads a profile from the device's secure enclave if available.
+    /// Load a profile from the device's secure enclave if available.
     ///
     /// - Important: Accessing this keychain data will require the user to confirm their presence
     ///   via Touch ID or passcode entry. If no passcode is set on the device, this method will fail.
@@ -125,7 +125,7 @@ extension Config {
         self = config
     }
 
-    /// Saves a profile to the device's secure enclave if available.
+    /// Save a profile to the device's secure enclave if available.
     ///
     /// - Important: Accessing this keychain data will require the user to confirm their presence
     ///   via Touch ID or passcode entry. If no passcode is set on the device, this method will fail.
@@ -134,7 +134,7 @@ extension Config {
     /// - SeeAlso: `init(loadProfile:)` for loading the `Config` object.
     ///
     /// - Parameter profile: Identifier for the profile for loading later.
-    /// - Returns: A boolean value indicating if the config object was successfully saved.
+    /// - Returns: A boolean value indicating whether the config object was successfully saved.
     public func save(profile: String = defaultProfileName) -> Bool {
         guard let valet  = VALSecureEnclaveValet(identifier: profile, accessControl: .touchIDAnyFingerprint),
               let config = try? JSONSerialization.data(withJSONObject: self.encode().JSONObject(), options: []) else {

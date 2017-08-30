@@ -82,7 +82,7 @@ extension Client {
 
     /// A helper function to create a compatible key pair for E3db operations.
     ///
-    /// - Note: This method is not required for library use. A keypair is
+    /// - Note: This method is not required for library use. A key pair is
     ///   generated and stored in the `Config` object returned by the
     ///   `Client.register(token:clientName:apiUrl:completion:)` method.
     ///

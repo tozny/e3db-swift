@@ -10,12 +10,23 @@ import Argo
 import Swish
 import Heimdallr
 
+/// Possible errors encountered from E3db operations
 public enum E3dbError: Swift.Error {
-    case cryptoError(String)        // Message
-    case configError(String)        // Message
-    case networkError(String)       // Message
-    case jsonError(String, String)  // (Expected, Actual)
-    case apiError(Int, String)      // (StatusCode, Message)
+
+    /// A crypto operation failed (`message`)
+    case cryptoError(String)
+
+    /// Configuration failed (`message`)
+    case configError(String)
+
+    /// A network operation failed (`message`)
+    case networkError(String)
+
+    /// JSON parsing failed (`expected`, `actual`)
+    case jsonError(String, String)
+
+    /// An API request encountered an error (`statusCode`, `message`)
+    case apiError(Int, String)
 
     init(swishError: SwishError) {
         switch swishError {

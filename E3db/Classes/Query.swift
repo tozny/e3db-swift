@@ -17,7 +17,7 @@ public struct QueryParams {
     /// Limit the number of records returned by the query beyond the E3db default
     let count: Int?
 
-    /// Supply the full decrypted record set in the results
+    /// Supply the full decrypted record data in the result records
     let includeData: Bool?
 
     /// Filter to records written by these IDs
@@ -69,10 +69,12 @@ public struct QueryParams {
         self.after = after
         self.includeAllWriters = includeAllWriters
     }
-}
 
-extension QueryParams {
-
+    /// Advance the query beyond the given value, leaving other parameters unchanged.
+    ///
+    /// - Parameter after: The value to start the results query
+    /// - Returns: A new `QueryParams` object initialized with existing parameters
+    ///   and a new starting value
     public func next(after: Double) -> QueryParams {
         return QueryParams(
             count: self.count,
@@ -128,8 +130,20 @@ struct SearchResponse: Argo.Decodable {
     }
 }
 
+/// A structure to hold a response from a query operation
 public struct QueryResponse {
+
+    /// A list of records matching the provided query.
+    /// If the `includeData` flag was not set in the query,
+    /// these records will contain empty `RecordData` values.
     public let records: [Record]
+
+    /// An identifier for the final result of the query.
+    /// Use this value in a subsequent query by setting the
+    /// `after` property of a `QueryParams` object.
+    ///
+    /// - SeeAlso: `next(after:)` for a convenient way to query
+    ///   for the next result set.
     public let last: Double
 }
 
@@ -167,6 +181,14 @@ extension Client {
             .map { QueryResponse(records: $0, last: response.lastIndex) }
     }
 
+    /// Search for records that match a given set of filters.
+    ///
+    /// - Note: If the `include_data` flag is not set in the given `QueryParams`,
+    ///   the record results will contain empty `RecordData` values.
+    ///
+    /// - Parameters:
+    ///   - params: A structure to specify a set of filters for matching records
+    ///   - completion: A handler to call when this operation completes to provide the results of the query
     public func query(params: QueryParams, completion: @escaping E3dbCompletion<QueryResponse>) {
         let req = SearchRequest(api: api, q: params)
         authedClient.perform(req) { (result) in
