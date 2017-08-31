@@ -165,12 +165,12 @@ extension Client {
     private func decryptSearchRecord(_ searchRecord: SearchRecord) -> E3dbResult<Record> {
         guard let cipherData = searchRecord.data,
               let eakResp    = searchRecord.eakResponse else {
-                return Result(value: Record(meta: searchRecord.meta, data: RecordData(cleartext: [:])))
+                return Result(value: Record(meta: searchRecord.meta, data: Cleartext()))
         }
 
         return decryptEak(eakResponse: eakResp, clientPrivateKey: self.config.privateKey)
             .flatMap { decrypt(data: cipherData, accessKey: $0) }
-            .map { Record(meta: searchRecord.meta, data: $0) }
+            .map { Record(meta: searchRecord.meta, data: $0.cleartext) }
     }
 
     private func decryptResults(response: SearchResponse) -> E3dbResult<QueryResponse> {

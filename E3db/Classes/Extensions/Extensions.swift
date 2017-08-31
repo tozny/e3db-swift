@@ -92,13 +92,6 @@ extension URL {
     }
 }
 
-extension String {
-    func capitalizedFirst() -> String {
-        let firstIndex = self.index(startIndex, offsetBy: 1)
-        return self[..<firstIndex].uppercased() + self[firstIndex..<self.endIndex]
-    }
-}
-
 extension Array where Element: ResultProtocol {
     public func sequence<T, E>() -> Result<[T], E> {
         var accum: [T] = []

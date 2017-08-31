@@ -168,7 +168,7 @@ extension AuthedRequestPerformer: RequestPerformer {
         // is capitalized, https://tools.ietf.org/html/rfc6750#section-2.1
         // ¯\_(ツ)_/¯
         var req  = authedRequest
-        let auth = req.allHTTPHeaderFields?["Authorization"]?.capitalizedFirst()
+        let auth = req.allHTTPHeaderFields?["Authorization"]?.replacingOccurrences(of: "bearer", with: "Bearer")
         req.setValue(auth, forHTTPHeaderField: "Authorization")
 
         let task = self.session.dataTask(with: req) { data, response, error in

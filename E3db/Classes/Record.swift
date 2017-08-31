@@ -13,13 +13,18 @@ import Result
 
 /// A type that holds arbitrary metadata for a record in cleartext
 public typealias PlainMeta = [String: String]
+
+/// A key-value store of unencrypted data
+public typealias Cleartext = [String: String]
+
+/// The cleartext from a record after it has been encrypted
 typealias CipherData       = [String: String]
 
 /// A wrapper to hold unencrypted values
 public struct RecordData {
 
     /// A key-value store of unencrypted data
-    public let cleartext: [String: String]
+    public let cleartext: Cleartext
 
     /// Initializer to create a structure to hold unencrypted data.
     /// The keys from the provided dictionary remain as unencrypted plaintext.
@@ -127,7 +132,7 @@ public struct Record {
     public let meta: Meta
 
     /// The unencrypted values for the record
-    public let data: RecordData
+    public let data: Cleartext
 }
 
 // MARK: Write Record
@@ -170,7 +175,7 @@ extension Client {
         let req = CreateRecordRequest(api: api, recordInfo: record)
         authedClient.perform(req) { result in
             let resp = result
-                .map { Record(meta: $0.meta, data: data) }
+                .map { Record(meta: $0.meta, data: data.cleartext) }
                 .mapError(E3dbError.init)
             completion(resp)
         }
@@ -222,7 +227,7 @@ extension Client {
         getAccessKey(writerId: r.meta.writerId, userId: r.meta.userId, readerId: clientId, recordType: r.meta.type) { (akResult) in
             let result = akResult
                 .flatMap { self.decrypt(data: r.cipherData, accessKey: $0) }
-                .map { Record(meta: r.meta, data: $0) }
+                .map { Record(meta: r.meta, data: $0.cleartext) }
             completion(result)
         }
     }
@@ -278,7 +283,7 @@ extension Client {
         let req    = RecordUpdateRequest(api: api, recordId: recordId, version: version, recordInfo: record)
         authedClient.perform(req) { (result) in
             let resp = result
-                .map { Record(meta: $0.meta, data: data) }
+                .map { Record(meta: $0.meta, data: data.cleartext) }
                 .mapError(E3dbError.init)
             completion(resp)
         }
