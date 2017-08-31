@@ -95,7 +95,7 @@ extension URL {
 extension String {
     func capitalizedFirst() -> String {
         let firstIndex = self.index(startIndex, offsetBy: 1)
-        return self.substring(to: firstIndex).capitalized + self.substring(from: firstIndex)
+        return self[..<firstIndex].uppercased() + self[firstIndex..<self.endIndex]
     }
 }
 

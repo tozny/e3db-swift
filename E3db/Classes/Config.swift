@@ -115,7 +115,8 @@ extension Config {
     /// - Parameter loadProfile: Name of the profile that was previously saved,
     ///   uses internal default if unspecified.
     /// - Returns: A fully initialized `Config` object if successful, `nil` otherwise.
-    public init?(loadProfile profile: String = defaultProfileName) {
+    public init?(loadProfile: String? = nil) {
+        let profile = loadProfile ?? defaultProfileName
         guard let valet = VALSecureEnclaveValet(identifier: profile, accessControl: .touchIDAnyFingerprint),
               let data  = valet.object(forKey: profile, userPrompt: "Unlock to load profile"),
               let json  = try? JSONSerialization.jsonObject(with: data, options: []),
@@ -133,9 +134,11 @@ extension Config {
     ///
     /// - SeeAlso: `init(loadProfile:)` for loading the `Config` object.
     ///
-    /// - Parameter profile: Identifier for the profile for loading later.
+    /// - Parameter profile: Identifier for the profile for loading later,
+    ///   uses internal default if unspecified.
     /// - Returns: A boolean value indicating whether the config object was successfully saved.
-    public func save(profile: String = defaultProfileName) -> Bool {
+    public func save(profile named: String? = nil) -> Bool {
+        let profile = named ?? defaultProfileName
         guard let valet  = VALSecureEnclaveValet(identifier: profile, accessControl: .touchIDAnyFingerprint),
               let config = try? JSONSerialization.data(withJSONObject: self.encode().JSONObject(), options: []) else {
                 return false // Could not serialize json

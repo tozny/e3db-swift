@@ -33,7 +33,7 @@ public struct RecordData {
     }
 }
 
-struct MetaRequest: Ogra.Encodable {
+struct MetaRequestInfo: Ogra.Encodable {
     let writerId: UUID
     let userId: UUID
     let type: String
@@ -97,8 +97,8 @@ extension Meta: Argo.Decodable {
     }
 }
 
-struct RecordRequest: Ogra.Encodable {
-    let meta: MetaRequest
+struct RecordRequestInfo: Ogra.Encodable {
+    let meta: MetaRequestInfo
     let data: CipherData
 
     public func encode() -> JSON {
@@ -136,12 +136,12 @@ extension Client {
     private struct CreateRecordRequest: Request {
         typealias ResponseObject = RecordResponse
         let api: Api
-        let record: RecordRequest
+        let recordInfo: RecordRequestInfo
 
         func build() -> URLRequest {
             let url = api.url(endpoint: .records)
             var req = URLRequest(url: url)
-            return req.asJsonRequest(.POST, payload: record.encode())
+            return req.asJsonRequest(.POST, payload: recordInfo.encode())
         }
     }
 
@@ -159,15 +159,15 @@ extension Client {
             return completion(Result(error: err))
         }
 
-        let meta = MetaRequest(
+        let meta = MetaRequestInfo(
             writerId: config.clientId,
             userId: config.clientId,    // for now
             type: type,
             plain: plain
         )
-        let record = RecordRequest(meta: meta, data: cipher)
+        let record = RecordRequestInfo(meta: meta, data: cipher)
 
-        let req = CreateRecordRequest(api: api, record: record)
+        let req = CreateRecordRequest(api: api, recordInfo: record)
         authedClient.perform(req) { result in
             let resp = result
                 .map { Record(meta: $0.meta, data: data) }
@@ -257,16 +257,16 @@ extension Client {
         let api: Api
         let recordId: UUID
         let version: String
-        let record: RecordRequest
+        let recordInfo: RecordRequestInfo
 
         func build() -> URLRequest {
             let url = api.url(endpoint: .records) / "safe" / recordId.uuidString / version
             var req = URLRequest(url: url)
-            return req.asJsonRequest(.PUT, payload: record.encode())
+            return req.asJsonRequest(.PUT, payload: recordInfo.encode())
         }
     }
 
-    private func update(_ recordId: UUID, version: String, metaReq: MetaRequest, data: RecordData, ak: AccessKey, completion: @escaping E3dbCompletion<Record>) {
+    private func update(_ recordId: UUID, version: String, metaReq: MetaRequestInfo, data: RecordData, ak: AccessKey, completion: @escaping E3dbCompletion<Record>) {
         let cipher: CipherData
         switch self.encrypt(data, ak: ak) {
         case .success(let c):
@@ -274,8 +274,8 @@ extension Client {
         case .failure(let err):
             return completion(Result(error: err))
         }
-        let record = RecordRequest(meta: metaReq, data: cipher)
-        let req    = RecordUpdateRequest(api: api, recordId: recordId, version: version, record: record)
+        let record = RecordRequestInfo(meta: metaReq, data: cipher)
+        let req    = RecordUpdateRequest(api: api, recordId: recordId, version: version, recordInfo: record)
         authedClient.perform(req) { (result) in
             let resp = result
                 .map { Record(meta: $0.meta, data: data) }
@@ -296,7 +296,7 @@ extension Client {
         getAccessKey(writerId: meta.writerId, userId: meta.userId, readerId: config.clientId, recordType: meta.type) { (result) in
             switch result {
             case .success(let ak):
-                let metaReq = MetaRequest(
+                let metaReq = MetaRequestInfo(
                     writerId: meta.writerId,
                     userId: meta.userId,
                     type: meta.type,
