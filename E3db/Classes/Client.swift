@@ -66,15 +66,15 @@ public final class Client {
 
 // MARK: Key Generation
 
-/// A data type holding the public and private keys as
+/// A data type holding the public and private Curve25519 keys as
 /// Base64URL encoded strings, used for encryption operations.
 /// Only the `publicKey` is sent to the E3db service.
 public struct KeyPair {
 
-    /// The public key from a generated keypair as a Base64URL encoded string.
+    /// The public Curve25519 key from a generated keypair as a Base64URL encoded string.
     public let publicKey: String
 
-    /// The private key from a generated keypair as a Base64URL encoded string.
+    /// The private Curve25519 key from a generated keypair as a Base64URL encoded string.
     public let secretKey: String
 }
 
