@@ -43,7 +43,7 @@ class IntegrationTests: XCTestCase {
         asyncTest(#function + "read") { (expect) in
             e3db.read(recordId: record!.meta.recordId) { (result) in
                 XCTAssertNotNil(result.value)
-                XCTAssertEqual(result.value!.data.cleartext, data.cleartext)
+                XCTAssertEqual(result.value!.data, data.cleartext)
                 expect.fulfill()
             }
         }
@@ -87,7 +87,7 @@ class IntegrationTests: XCTestCase {
             e3db.update(meta: record.meta, newData: newData) { (result) in
                 XCTAssertNotNil(result.value)
                 XCTAssertEqual(result.value!.meta.recordId, record.meta.recordId)
-                XCTAssertEqual(result.value!.data.cleartext, newData.cleartext)
+                XCTAssertEqual(result.value!.data, newData.cleartext)
                 record = result.value!
                 expect.fulfill()
             }
@@ -97,7 +97,7 @@ class IntegrationTests: XCTestCase {
         asyncTest(#function + "read") { (expect) in
             e3db.read(recordId: record.meta.recordId) { (result) in
                 XCTAssertNotNil(result.value)
-                XCTAssertEqual(result.value!.data.cleartext, newData.cleartext)
+                XCTAssertEqual(result.value!.data, newData.cleartext)
                 expect.fulfill()
             }
         }
@@ -195,7 +195,7 @@ class IntegrationTests: XCTestCase {
         asyncTest(#function) { (expect) in
             e3db.query(params: query) { (result) in
                 XCTAssertNotNil(result.value)
-                XCTAssert(result.value!.records.map { $0.data.cleartext }.contains { $0 == record.data.cleartext })
+                XCTAssert(result.value!.records.map { $0.data }.contains { $0 == record.data })
                 expect.fulfill()
             }
         }

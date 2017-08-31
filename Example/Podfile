@@ -3,10 +3,12 @@ use_frameworks!
 platform :ios, 9.0
 target 'E3db_Example' do
   pod 'E3db', :path => '../'
+  pod 'E3db/Logging', :path => '../'
 
   target 'E3db_Tests' do
     inherit! :search_paths
     pod 'E3db', :path => '../'
+    pod 'E3db/Logging', :path => '../'
     
   end
 end

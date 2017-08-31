@@ -18,11 +18,19 @@ protecting your users’ sensitive data as easy as a few lines of code.
   s.ios.deployment_target = '9.0'
   s.source_files = 'E3db/Classes/**/*'
 
-  s.dependency 'Swish', '~> 2.0'
-  s.dependency 'Curry', '~> 3.0'
-  s.dependency 'ResponseDetective', '~> 1.1'
-  s.dependency 'Sodium', '~> 0.3'
-  s.dependency 'Valet', '~> 2.4'
-  s.dependency 'Ogra', '~> 4.1'
-  s.dependency 'Heimdallr', '~> 3.6'
+  s.subspec 'Core' do |core|
+    core.dependency 'Swish', '~> 2.0'
+    core.dependency 'Curry', '~> 3.0'
+    core.dependency 'Sodium', '~> 0.3'
+    core.dependency 'Valet', '~> 2.4'
+    core.dependency 'Ogra', '~> 4.1'
+    core.dependency 'Heimdallr', '~> 3.6'
+  end
+
+  s.subspec 'Logging' do |l|
+    l.dependency 'ResponseDetective', '~> 1.1'
+    l.pod_target_xcconfig = { 'OTHER_SWIFT_FLAGS' => '-dE3DB_LOGGING'}
+  end
+
+  s.default_subspec = 'Core'
 end
