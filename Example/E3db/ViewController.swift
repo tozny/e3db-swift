@@ -6,115 +6,127 @@
 import UIKit
 import E3db
 
+// Create an account and generate
+// a client token from https://console.tozny.com
+private let E3dbToken = ""
+
 class ViewController: UIViewController {
 
-    @IBOutlet weak var messageField: UITextField!
+    @IBOutlet weak var messageView: UITextView!
     @IBOutlet weak var responseLabel: UILabel!
 
-//    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return 1
-//    }
-//
-//    var lastIndex: Int = 0
-//
-//    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        if records.count >= indexPath.row {
-//            let q = QueryParams(includeData: false, contentTypes: ["example"], afterIndex:lastIndex)
-//            e3db.query(q) { (result) in
-//                switch result {
-//                case .success(let records):
-//                    records.forEach { print("Record: \($0)") }
-//                    self.records += records
-//                case .failure(let err):
-//                    print("Error: \(err)")
-//                }
-//            }
-//        }
-//
-//        return UITableViewCell()
-//    }
+    /// This is the main client performing E3db operations
+    var e3db: Client?
 
-    lazy var e3db: Client? = {
-        // load config from secure enclave
-        guard let config = Config() else { return nil }
-        return Client(config: config)
-    }()
+    /// We'll use this to identify the most recently written record
+    var latestRecordId: UUID?
 
-    var latest: UUID?
 
-    @IBAction func write() {
-        guard let msg = messageField.text else {
-            return print("TextField contains no text")
+    /// Demonstrates client registration,
+    /// and storing and loading client configuration
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        // load E3db configuration under default profile name from keychain
+        if let config = Config() {
+            e3db = Client(config: config)
+            return
         }
 
+        // No client previously registered on this device,
+        // use the client token to register.
+        Client.register(token: E3dbToken, clientName: "ExampleApp") { (result) in
+            switch result {
+
+            // The operation was successful, here's the configuration
+            case .success(let config):
+                // create main E3db client with config
+                self.e3db = Client(config: config)
+
+                // save test config under default profile name, protects it in secure enclave w/ TouchID
+                guard config.save() else {
+                    return print("Could not save config")
+                }
+
+            case .failure(let error):
+                print("An error occurred attempting registration: \(error).")
+            }
+        }
+    }
+
+
+
+
+    /// Demonstrates writing data securely to E3db.
+    /// The `write` operation will encrypt the secret message
+    /// before it leaves the device, ensuring End-to-End Encryption
+    @IBAction func write() {
+        guard let msg = messageView.text else {
+            return print("Text field contains no text")
+        }
+
+        // Wrap message in RecordData type to designate
+        // it as sensitive information for encryption
         let recordData = RecordData(cleartext: ["secret message": msg])
-        e3db?.write(type: "sdk-test-2", data: recordData, plain: ["Sent from": "my iPhone"]) { (result) in
+
+        // Perform write operation, providing a user-defined type,
+        // the message, and any other non-sensitive information to associate with the data
+        e3db?.write(type: "my secret message", data: recordData, plain: ["Sent from": "my iPhone"]) { (result) in
             let text: String
             switch result {
+
+            // The operation was successful, here's the record
             case .success(let record):
-                self.latest = record.meta.recordId
+
+                // `record.meta` holds metadata assoociated
+                // with the record, such as type. We'll use
+                // the `recordId` to help identify it later
+                self.latestRecordId = record.meta.recordId
                 text = "Wrote record! \(record.meta.recordId)"
+
             case .failure(let error):
-                text = "Failed to write record! \(error)"
+                text = "An error occurred attempting to write the data: \(error)"
             }
+
+            // Present response
             print(text)
             self.responseLabel.text = text
         }
     }
 
-//    let tableView: UITableView = {
-//        let tableView = UITableView()
-//        tableView.dataSource =
-//        return tableView
-//    }()
 
-//    // TableView UI Element set from Story Board
-//    @IBOutlet var tableView: UITableView!
-//
-//    // TableViewDataSource
-//    var records: [Record] = [] {
-//        didSet {
-//            DispatchQueue.main.async {
-//                self.tableView.reloadData()
-//            }
-//        }
-//    }
-
+    /// Demonstrates reading data securely from E3db.
+    /// The `read` operation will decrypt the secret message
+    /// using the user's key, ensuring End-to-End Encryption
     @IBAction func read() {
-//        let q = QueryParams(includeData: true, contentTypes: ["example"])
-//        e3db.query(q) { (result) in
-//            switch result {
-//            case .success(let records):
-//                records.forEach { print("Record: \($0)") }
-//                self.records = records
-//            case .failure(let err):
-//                print("Error: \(err)")
-//            }
-//        }
-//        let q = QueryParams(count: 2, includeData: true)
-//        var recs = [Record]()
-//        e3db?.queryB(params: q, onRecord: { (r) in
-//            print("Record!")
-//            recs.append(r)
-//        }, done: { (err) in
-//            if let e = err {
-//                print("error: \(e)")
-//            }
-//            print("Done! Records: \n\(recs)")
-//        })
+        guard let recordId = latestRecordId else {
+            return print("No records have been written yet.")
+        }
+
+        // Perform read operation with the recordId of the
+        // written record, decrypting it after getting the
+        // encrypted data from the server.
+        e3db?.read(recordId: recordId) { (result) in
+            let text: String
+            switch result {
+
+            // The operation was successful, here's the record
+            case .success(let record):
+
+                // The record returned contains the same dictionary
+                // supplied to the `RecordData` struct during the write
+                text = "Record data: \(record.data)"
+
+            case .failure(let error):
+                text = "An error occurred attempting to read the record: \(error)"
+            }
+
+            // Present response
+            print(text)
+            let alert = UIAlertController(title: "Decrypted Record", message: text, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .default))
+            self.present(alert, animated: true)
+        }
     }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // save test config under default profile name, protects it in secure enclave w/ TouchID
-        guard TestData.config.save() else { return print("Could not save config") }
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
 }
 

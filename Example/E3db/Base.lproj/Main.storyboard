@@ -42,20 +42,20 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IKW-a9-3bw">
                                 <rect key="frame" x="16" y="154" width="343" height="103"/>
                                 <subviews>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9ik-jx-xfb">
-                                        <rect key="frame" x="8" y="53" width="327" height="30"/>
-                                        <nil key="textColor"/>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="gaZ-12-jU2">
+                                        <rect key="frame" x="8" y="50" width="327" height="45"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                    </textField>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
                                 </subviews>
                                 <color key="backgroundColor" red="0.10980392156862745" green="0.14509803921568626" blue="0.25490196078431371" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="tintColor" red="0.94901960784313721" green="0.72156862745098038" blue="0.50196078431372548" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstItem="9ik-jx-xfb" firstAttribute="top" secondItem="IKW-a9-3bw" secondAttribute="top" constant="53" id="H8e-mw-iRd"/>
-                                    <constraint firstAttribute="bottom" secondItem="9ik-jx-xfb" secondAttribute="bottom" constant="20" id="MB2-Qe-8Jv"/>
-                                    <constraint firstItem="9ik-jx-xfb" firstAttribute="leading" secondItem="IKW-a9-3bw" secondAttribute="leadingMargin" id="Y4b-dY-JLo"/>
-                                    <constraint firstItem="9ik-jx-xfb" firstAttribute="trailing" secondItem="IKW-a9-3bw" secondAttribute="trailingMargin" id="bEE-C9-vRS"/>
+                                    <constraint firstItem="gaZ-12-jU2" firstAttribute="leading" secondItem="IKW-a9-3bw" secondAttribute="leadingMargin" id="4mh-aD-GB5"/>
+                                    <constraint firstItem="gaZ-12-jU2" firstAttribute="bottom" secondItem="IKW-a9-3bw" secondAttribute="bottomMargin" id="VSN-dh-o03"/>
+                                    <constraint firstItem="gaZ-12-jU2" firstAttribute="trailing" secondItem="IKW-a9-3bw" secondAttribute="trailingMargin" id="oqK-3g-I6M"/>
+                                    <constraint firstItem="gaZ-12-jU2" firstAttribute="top" secondItem="IKW-a9-3bw" secondAttribute="top" constant="50" id="utf-6R-LsE"/>
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter a Secret Message..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7s0-Fl-g2C">
@@ -109,7 +109,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="messageField" destination="9ik-jx-xfb" id="Cgw-rJ-eoU"/>
+                        <outlet property="messageView" destination="gaZ-12-jU2" id="BIQ-HI-uSr"/>
                         <outlet property="responseLabel" destination="mNV-Jk-14s" id="FOq-JJ-s7n"/>
                     </connections>
                 </viewController>
