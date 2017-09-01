@@ -29,7 +29,7 @@ protecting your users’ sensitive data as easy as a few lines of code.
 
   s.subspec 'Logging' do |l|
     l.dependency 'ResponseDetective', '~> 1.1'
-    l.pod_target_xcconfig = { 'OTHER_SWIFT_FLAGS' => '-dE3DB_LOGGING'}
+    l.pod_target_xcconfig = { 'OTHER_SWIFT_FLAGS' => '-DE3DB_LOGGING' }
   end
 
   s.default_subspec = 'Core'

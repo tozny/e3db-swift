@@ -28,24 +28,38 @@ public enum E3dbError: Swift.Error {
     /// An API request encountered an error (`statusCode`, `message`)
     case apiError(Int, String)
 
-    init(swishError: SwishError) {
+    internal init(swishError: SwishError) {
         switch swishError {
         case .argoError(.typeMismatch(let exp, let act)):
-            self = .jsonError(exp, act)
+            self = .jsonError("Expected: \(exp). ", "Actual: \(act).")
         case .argoError(.missingKey(let key)):
-            self = .jsonError(key, "")
+            self = .jsonError("Expected: \(key). ", "Actual: (key not found).")
         case .argoError(let err):
-            self = .jsonError("Failed to decode response", err.description)
+            self = .jsonError("", err.description)
         case .serverError(let code, data: _) where code == 401 || code == 403:
             self = .apiError(code, "Unauthorized")
         case .serverError(code: 404, data: _):
             self = .apiError(404, "Requested item not found")
         case .serverError(code: 409, data: _):
-            self = .apiError(409, "Requested item cannot be updated")
+            self = .apiError(409, "Existing item cannot be modified")
         case .serverError(code: let code, data: _):
             self = .apiError(code, swishError.errorDescription ?? "Failed request")
         case .deserializationError, .parseError, .urlSessionError:
             self = .networkError(swishError.errorDescription ?? "Failed request")
+        }
+    }
+
+    /// Get a readable context for the error.
+    ///
+    /// - Returns: A human-readable description for the error
+    public func description() -> String {
+        switch self {
+        case .cryptoError(let msg), .configError(let msg), .networkError(let msg):
+            return msg
+        case let .jsonError(exp, act):
+            return "Failed to decode response. \(exp + act)"
+        case let .apiError(code, msg):
+            return "API Error (\(code)): \(msg)"
         }
     }
 }
