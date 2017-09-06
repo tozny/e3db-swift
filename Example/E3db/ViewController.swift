@@ -8,7 +8,7 @@ import E3db
 
 // Create an account and generate
 // a client token from https://console.tozny.com
-private let E3dbToken = ""
+private let e3dbToken = ""
 
 class ViewController: UIViewController {
 
@@ -35,7 +35,7 @@ class ViewController: UIViewController {
 
         // No client previously registered on this device,
         // use the client token to register.
-        Client.register(token: E3dbToken, clientName: "ExampleApp") { (result) in
+        Client.register(token: e3dbToken, clientName: "ExampleApp") { (result) in
             switch result {
 
             // The operation was successful, here's the configuration
@@ -78,7 +78,7 @@ class ViewController: UIViewController {
             // The operation was successful, here's the record
             case .success(let record):
 
-                // `record.meta` holds metadata assoociated
+                // `record.meta` holds metadata associated
                 // with the record, such as type. We'll use
                 // the `recordId` to help identify it later
                 self.latestRecordId = record.meta.recordId
