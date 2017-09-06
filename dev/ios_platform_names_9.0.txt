@@ -1,0 +1,42 @@
+platform=iOS Simulator,OS=10.3.1,name=iPad (5th generation)
+platform=iOS Simulator,OS=10.3.1,name=iPad (5th generation)
+platform=iOS Simulator,OS=9.0,name=iPad 2
+platform=iOS Simulator,OS=9.1,name=iPad 2
+platform=iOS Simulator,OS=9.0,name=iPad Air
+platform=iOS Simulator,OS=9.1,name=iPad Air
+platform=iOS Simulator,OS=10.3.1,name=iPad Air
+platform=iOS Simulator,OS=9.0,name=iPad Air 2
+platform=iOS Simulator,OS=9.1,name=iPad Air 2
+platform=iOS Simulator,OS=10.3.1,name=iPad Air 2
+platform=iOS Simulator,OS=9.1,name=iPad Pro
+platform=iOS Simulator,OS=10.3.1,name=iPad Pro (9.7 inch)
+platform=iOS Simulator,OS=10.3.1,name=iPad Pro (10.5-inch)
+platform=iOS Simulator,OS=10.3.1,name=iPad Pro (10.5-inch)
+platform=iOS Simulator,OS=10.3.1,name=iPad Pro (12.9 inch)
+platform=iOS Simulator,OS=10.3.1,name=iPad Pro (12.9-inch) (2nd generation)
+platform=iOS Simulator,OS=10.3.1,name=iPad Pro (12.9-inch) (2nd generation)
+platform=iOS Simulator,OS=9.0,name=iPad Retina
+platform=iOS Simulator,OS=9.1,name=iPad Retina
+platform=iOS Simulator,OS=9.0,name=iPhone 4s
+platform=iOS Simulator,OS=9.1,name=iPhone 4s
+platform=iOS Simulator,OS=9.0,name=iPhone 5
+platform=iOS Simulator,OS=9.1,name=iPhone 5
+platform=iOS Simulator,OS=10.3.1,name=iPhone 5
+platform=iOS Simulator,OS=9.0,name=iPhone 5s
+platform=iOS Simulator,OS=9.1,name=iPhone 5s
+platform=iOS Simulator,OS=10.3.1,name=iPhone 5s
+platform=iOS Simulator,OS=9.0,name=iPhone 6
+platform=iOS Simulator,OS=9.1,name=iPhone 6
+platform=iOS Simulator,OS=10.3.1,name=iPhone 6
+platform=iOS Simulator,OS=9.0,name=iPhone 6 Plus
+platform=iOS Simulator,OS=9.1,name=iPhone 6 Plus
+platform=iOS Simulator,OS=10.3.1,name=iPhone 6 Plus
+platform=iOS Simulator,OS=9.0,name=iPhone 6s
+platform=iOS Simulator,OS=9.1,name=iPhone 6s
+platform=iOS Simulator,OS=10.3.1,name=iPhone 6s
+platform=iOS Simulator,OS=9.0,name=iPhone 6s Plus
+platform=iOS Simulator,OS=9.1,name=iPhone 6s Plus
+platform=iOS Simulator,OS=10.3.1,name=iPhone 6s Plus
+platform=iOS Simulator,OS=10.3.1,name=iPhone 7
+platform=iOS Simulator,OS=10.3.1,name=iPhone 7 Plus
+platform=iOS Simulator,OS=10.3.1,name=iPhone SE
