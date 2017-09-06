@@ -2,6 +2,13 @@ import UIKit
 import XCTest
 import E3db
 
+// non-sensitive test data
+// for running integration tests
+struct TestData {
+    static let apiUrl = ""
+    static let token  = ""
+}
+
 class IntegrationTests: XCTestCase {
 
     func testRegistrationDefault() {
@@ -363,13 +370,8 @@ extension IntegrationTests {
         return (e3db!, uuid!)
     }
 
-    func client(useStaticClient: Bool = true) -> Client {
-        let e3db: Client
-        if useStaticClient {
-            e3db = Client(config: TestData.config)
-        } else {
-            (e3db, _) = clientWithId()
-        }
+    func client() -> Client {
+        let (e3db, _) = clientWithId()
         return e3db
     }
 
