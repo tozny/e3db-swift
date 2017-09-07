@@ -2,6 +2,13 @@ import UIKit
 import XCTest
 import E3db
 
+// non-sensitive test data
+// for running integration tests
+struct TestData {
+    static let apiUrl = ""
+    static let token  = ""
+}
+
 class IntegrationTests: XCTestCase {
 
     func testRegistrationDefault() {
@@ -15,12 +22,27 @@ class IntegrationTests: XCTestCase {
     }
 
     func testRegistrationCustom() {
-        let test = #function + UUID().uuidString
+        let test    = #function + UUID().uuidString
         let keyPair = Client.generateKeyPair()!
         asyncTest(test) { (expect) in
             Client.register(token: TestData.token, clientName: test, publicKey: keyPair.publicKey, apiUrl: TestData.apiUrl) { (result) in
                 XCTAssertNotNil(result.value)
                 expect.fulfill()
+            }
+        }
+    }
+
+    func testRegisterFailsWithInvalidKey() {
+        let test    = #function + UUID().uuidString
+        let keyPair = Client.generateKeyPair()!
+        let badKey  = String(keyPair.publicKey.dropFirst(5))
+        asyncTest(test) { (expect) in
+            Client.register(token: TestData.token, clientName: test, publicKey: badKey, apiUrl: TestData.apiUrl) { (result) in
+                defer { expect.fulfill() }
+                guard case .failure(.apiError) = result else {
+                    return XCTFail("Should not accept invalid key for registration")
+                }
+                XCTAssert(true)
             }
         }
     }
@@ -52,6 +74,22 @@ class IntegrationTests: XCTestCase {
         deleteRecord(record!, e3db: e3db)
     }
 
+    func testWriteFailsWithEmptyData() {
+        let e3db = client()
+        let data = RecordData(cleartext: [:])
+
+        // attempt to write record
+        asyncTest(#function + "write") { (expect) in
+            e3db.write(type: "test-data", data: data) { (result) in
+                defer { expect.fulfill() }
+                guard case .failure(.apiError(400, _)) = result else {
+                    return XCTFail("Should not accept empty record data")
+                }
+                XCTAssert(true)
+            }
+        }
+    }
+
     func testDeleteRecord() {
         let e3db   = client()
         let data   = RecordData(cleartext: ["test": "message"])
@@ -68,11 +106,26 @@ class IntegrationTests: XCTestCase {
         // read to confirm it is no longer present
         asyncTest(#function + "read") { (expect) in
             e3db.read(recordId: record.meta.recordId) { (result) in
-                XCTAssertNotNil(result.error)
                 defer { expect.fulfill() }
                 guard case .failure(.apiError(404, _)) = result else {
                     return XCTFail("Should have deleted record")
                 }
+                XCTAssert(true)
+            }
+        }
+    }
+
+    func testDeleteFailsForUnknownRecordId() {
+        let e3db = client()
+
+        // delete record
+        asyncTest(#function + "delete") { (expect) in
+            e3db.delete(recordId: UUID(), version: UUID().uuidString) { (result) in
+                defer { expect.fulfill() }
+                guard case .failure(.apiError(403, _)) = result else {
+                    return XCTFail("Should not find record")
+                }
+                XCTAssert(true)
             }
         }
     }
@@ -80,6 +133,7 @@ class IntegrationTests: XCTestCase {
     func testUpdateRecord() {
         let e3db   = client()
         var record = writeTestRecord(e3db)
+        defer { deleteRecord(record, e3db: e3db) }
 
         // update record
         let newData = RecordData(cleartext: ["test": "updated"])
@@ -101,14 +155,41 @@ class IntegrationTests: XCTestCase {
                 expect.fulfill()
             }
         }
+    }
 
-        // clean up
-        deleteRecord(record, e3db: e3db)
+    func testUpdateFailsForConflictingVersions() {
+        let e3db   = client()
+        let record = writeTestRecord(e3db)
+        defer { deleteRecord(record, e3db: e3db) }
+
+        // first update should succeed
+        let newData = RecordData(cleartext: ["test": "updated"])
+        asyncTest(#function + "update1") { (expect) in
+            e3db.update(meta: record.meta, newData: newData) { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssertEqual(result.value!.meta.recordId, record.meta.recordId)
+                XCTAssertEqual(result.value!.data, newData.cleartext)
+                expect.fulfill()
+            }
+        }
+
+        // second update (with initial record meta version) should fail
+        let moreNewData = RecordData(cleartext: ["test": "should fail"])
+        asyncTest(#function + "update1") { (expect) in
+            e3db.update(meta: record.meta, newData: moreNewData) { (result) in
+                defer { expect.fulfill() }
+                guard case .failure(.apiError(409, _)) = result else {
+                    return XCTFail("Should not update on version conflict")
+                }
+                XCTAssert(true)
+            }
+        }
     }
 
     func testQueryNoParams() {
         let e3db   = client()
         let record = writeTestRecord(e3db)
+        defer { deleteRecord(record, e3db: e3db) }
 
         // query for record
         let query = QueryParams()
@@ -120,9 +201,6 @@ class IntegrationTests: XCTestCase {
                 expect.fulfill()
             }
         }
-
-        // clean up
-        deleteRecord(record, e3db: e3db)
     }
 
     func testQueryNext() {
@@ -130,6 +208,7 @@ class IntegrationTests: XCTestCase {
         let rec1 = writeTestRecord(e3db)
         let rec2 = writeTestRecord(e3db)
         var last: Double?
+        defer { [rec1, rec2].forEach { deleteRecord($0, e3db: e3db) } }
 
         let tests = { (result: E3dbResult<QueryResponse>) in
             XCTAssertNotNil(result.value)
@@ -159,9 +238,6 @@ class IntegrationTests: XCTestCase {
                 expect.fulfill()
             }
         }
-
-        // clean up
-        [rec1, rec2].forEach { deleteRecord($0, e3db: e3db) }
     }
 
     func testQueryCount() {
@@ -170,6 +246,7 @@ class IntegrationTests: XCTestCase {
         let rec2 = writeTestRecord(e3db)
         let rec3 = writeTestRecord(e3db)
         let rec4 = writeTestRecord(e3db)
+        defer { [rec1, rec2, rec3, rec4].forEach { deleteRecord($0, e3db: e3db) } }
 
         // query for record
         let limit = 2
@@ -181,14 +258,12 @@ class IntegrationTests: XCTestCase {
                 expect.fulfill()
             }
         }
-
-        // clean up
-        [rec1, rec2, rec3, rec4].forEach { deleteRecord($0, e3db: e3db) }
     }
 
     func testQueryIncludeData() {
         let e3db   = client()
         let record = writeTestRecord(e3db)
+        defer { deleteRecord(record, e3db: e3db) }
 
         // query for record
         let query = QueryParams(includeData: true)
@@ -199,18 +274,87 @@ class IntegrationTests: XCTestCase {
                 expect.fulfill()
             }
         }
+    }
 
-        // clean up
-        deleteRecord(record, e3db: e3db)
+    func testQueryByType() {
+        let e3db = client()
+        let type = "other-type"
+        let rec1 = writeTestRecord(e3db)
+        let rec2 = writeTestRecord(e3db)
+        let rec3 = writeTestRecord(e3db, type)
+        let rec4 = writeTestRecord(e3db, type)
+        defer { [rec1, rec2, rec3, rec4].forEach { deleteRecord($0, e3db: e3db) } }
+
+        // query for records filtered on custom type
+        let query = QueryParams(types: [type])
+        asyncTest(#function) { (expect) in
+            e3db.query(params: query) { (result) in
+                XCTAssertNotNil(result.value)
+                result.value!.records.forEach { XCTAssert($0.meta.type == type) }
+                expect.fulfill()
+            }
+        }
+    }
+
+    func testQueryByRecordId() {
+        let e3db = client()
+        let rec1 = writeTestRecord(e3db)
+        let rec2 = writeTestRecord(e3db)
+        let rec3 = writeTestRecord(e3db)
+        let rec4 = writeTestRecord(e3db)
+        defer { [rec1, rec2, rec3, rec4].forEach { deleteRecord($0, e3db: e3db) } }
+
+        // query for records filtered on record IDs
+        let query = QueryParams(recordIds: [rec2.meta.recordId, rec4.meta.recordId])
+        asyncTest(#function) { (expect) in
+            e3db.query(params: query) { (result) in
+                XCTAssertNotNil(result.value)
+                result.value!.records.forEach {
+                    XCTAssert($0.meta.recordId == rec2.meta.recordId || $0.meta.recordId == rec4.meta.recordId)
+                }
+                expect.fulfill()
+            }
+        }
+    }
+
+    func testQueryByWriterId() {
+        let mainClient = client()
+        let (shareClient, sharedId) = clientWithId()
+        let record = writeTestRecord(mainClient)
+        let unused = writeTestRecord(shareClient)
+        defer {
+            deleteRecord(record, e3db: mainClient)
+            deleteRecord(unused, e3db: shareClient)
+        }
+
+        // share record type
+        asyncTest(#function + "share") { (expect) in
+            mainClient.share(type: record.meta.type, readerId: sharedId) { (result) in
+                XCTAssertNil(result.error)
+                expect.fulfill()
+            }
+        }
+
+        // query for records filtered on writer ID
+        let query = QueryParams(writerIds: [record.meta.writerId])
+        asyncTest(#function + "query by writer") { (expect) in
+            shareClient.query(params: query) { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.records.count == 1)
+                XCTAssert(result.value!.records[0].meta.writerId == record.meta.writerId)
+                expect.fulfill()
+            }
+        }
     }
 
     func testShareRevoke() {
         let mainClient = client()
         let (shareClient, sharedId) = clientWithId()
         let record = writeTestRecord(mainClient)
+        defer { deleteRecord(record, e3db: mainClient) }
 
         // shared client should not see records initially
-        let query = QueryParams(includeAllWriters: true)
+        let query = QueryParams(includeData: true, includeAllWriters: true)
         asyncTest(#function + "read first") { (expect) in
             shareClient.query(params: query) { (result) in
                 XCTAssertNotNil(result.value)
@@ -227,12 +371,13 @@ class IntegrationTests: XCTestCase {
             }
         }
 
-        // shared client should now see record
+        // shared client should now see full record
         asyncTest(#function + "read again") { (expect) in
             shareClient.query(params: query) { (result) in
                 XCTAssertNotNil(result.value)
                 XCTAssert(result.value!.records.count == 1)
                 XCTAssert(result.value!.records[0].meta.recordId == record.meta.recordId)
+                XCTAssert(result.value!.records[0].data == record.data)
                 expect.fulfill()
             }
         }
@@ -253,9 +398,6 @@ class IntegrationTests: XCTestCase {
                 expect.fulfill()
             }
         }
-
-        // clean up
-        deleteRecord(record, e3db: mainClient)
     }
 
     func testGetPolicies() {
@@ -342,8 +484,7 @@ class IntegrationTests: XCTestCase {
 
 extension IntegrationTests {
 
-    func asyncTest(_ testName: String, test: @
-        escaping (XCTestExpectation) -> Void) {
+    func asyncTest(_ testName: String, test: @escaping (XCTestExpectation) -> Void) {
         test(expectation(description: testName))
         waitForExpectations(timeout: 10, handler: { XCTAssertNil($0) })
     }
@@ -363,20 +504,15 @@ extension IntegrationTests {
         return (e3db!, uuid!)
     }
 
-    func client(useStaticClient: Bool = true) -> Client {
-        let e3db: Client
-        if useStaticClient {
-            e3db = Client(config: TestData.config)
-        } else {
-            (e3db, _) = clientWithId()
-        }
+    func client() -> Client {
+        let (e3db, _) = clientWithId()
         return e3db
     }
 
-    func writeTestRecord(_ e3db: Client) -> Record {
+    func writeTestRecord(_ e3db: Client, _ contentType: String = "test-data") -> Record {
         var record: Record?
         asyncTest(#function + "write") { (expect) in
-            e3db.write(type: "test-data", data: RecordData(cleartext: ["test": "message"])) { (result) in
+            e3db.write(type: contentType, data: RecordData(cleartext: ["test": "message"])) { (result) in
                 record = result.value!
                 expect.fulfill()
             }

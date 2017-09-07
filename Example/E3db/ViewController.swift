@@ -8,7 +8,7 @@ import E3db
 
 // Create an account and generate
 // a client token from https://console.tozny.com
-private let E3dbToken = ""
+private let e3dbToken = ""
 
 class ViewController: UIViewController {
 
@@ -33,9 +33,14 @@ class ViewController: UIViewController {
             return
         }
 
+        // make sure a client token exists
+        guard e3dbToken.count > 0 else {
+            return print("Please register an account at https://console.tozny.com/ and generate a client token!")
+        }
+
         // No client previously registered on this device,
         // use the client token to register.
-        Client.register(token: E3dbToken, clientName: "ExampleApp") { (result) in
+        Client.register(token: e3dbToken, clientName: "ExampleApp") { (result) in
             switch result {
 
             // The operation was successful, here's the configuration
