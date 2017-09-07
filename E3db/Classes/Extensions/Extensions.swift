@@ -80,7 +80,7 @@ extension URLRequest {
     mutating func asJsonRequest(_ method: RequestMethod, payload: JSON) -> URLRequest {
         self.httpMethod  = method.rawValue
         self.jsonPayload = payload.JSONObject()
-        self.setValue("appication/json", forHTTPHeaderField: "Accept")
+        self.setValue("application/json", forHTTPHeaderField: "Accept")
         self.setValue("application/json", forHTTPHeaderField: "Content-Type")
         return self
     }
