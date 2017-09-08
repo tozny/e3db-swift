@@ -38,7 +38,6 @@ public struct QueryParams {
     /// Set this flag to include records that have been shared with you, defaults to `false`
     let includeAllWriters: Bool?
 
-
     /// Initializer to specify filters for querying records
     ///
     /// - Parameters:
@@ -153,12 +152,12 @@ extension Client {
     private struct SearchRequest: Request {
         typealias ResponseObject = SearchResponse
         let api: Api
-        let q: QueryParams
+        let params: QueryParams
 
         func build() -> URLRequest {
             let url = api.url(endpoint: .search)
             var req = URLRequest(url: url)
-            return req.asJsonRequest(.POST, payload: q.encode())
+            return req.asJsonRequest(.POST, payload: params.encode())
         }
     }
 
@@ -190,8 +189,8 @@ extension Client {
     ///   - params: A structure to specify a set of filters for matching records
     ///   - completion: A handler to call when this operation completes to provide the results of the query
     public func query(params: QueryParams, completion: @escaping E3dbCompletion<QueryResponse>) {
-        let req = SearchRequest(api: api, q: params)
-        authedClient.perform(req) { (result) in
+        let req = SearchRequest(api: api, params: params)
+        authedClient.perform(req) { result in
             let resp = result
                 .mapError(E3dbError.init)
                 .flatMap(self.decryptResults)

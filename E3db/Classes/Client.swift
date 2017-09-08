@@ -148,4 +148,3 @@ extension Client {
         authedClient.performDefault(req, completion: completion)
     }
 }
-

@@ -86,7 +86,16 @@ root (uses the `.jazzy.yaml` config file):
 jazzy
 ```
 
-### Linting The SDK
+### Linting the SDK
+
+Requires [swiftlint](https://github.com/realm/SwiftLint). Run `swiftlint` from
+the repo root (uses the `.swiftlint.yml` config file):
+
+```bash
+swiftlint --config $(pwd)/.swiftlint.yml --path E3db/Classes/
+```
+
+### Linting the Podspec (for CocoaPods Distribution)
 
 Requires [CocoaPods](http://cocoapods.org). Run the following command
 from the repo root:

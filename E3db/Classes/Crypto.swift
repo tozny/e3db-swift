@@ -13,6 +13,8 @@ struct Crypto {
     typealias SecretBoxCipherNonce = (authenticatedCipherText: Data, nonce: SecretBox.Nonce)
     typealias BoxCipherNonce       = (authenticatedCipherText: Data, nonce: Box.Nonce)
 
+    // If this fails, then _everything_ is broken.
+    // swiftlint:disable force_unwrapping
     fileprivate static let sodium = Sodium()!
 }
 

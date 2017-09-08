@@ -1,0 +1,31 @@
+disabled_rules: # rule identifiers to exclude from running
+  - large_tuple
+  - line_length
+  - function_parameter_count
+
+identifier_name:
+  excluded:
+    - j         # JSON identifier
+    - ak        # Access Key
+
+opt_in_rules:   # some rules are only opt-in
+  - force_unwrapping
+  - closure_end_indentation
+  - empty_count
+  - explicit_init
+  - fatal_error_message
+  - first_where
+  - implicit_return
+  - implicitly_unwrapped_optional
+  - joined_default_parameter
+  - multiline_parameters
+  - no_extension_access_modifier
+  - number_separator
+  - overridden_super_call
+  - pattern_matching_keywords
+  - prohibited_super_call
+  - redundant_nil_coalescing
+  - switch_case_on_newline
+  - trailing_closure
+  - unneeded_parentheses_in_closure_argument
+  - vertical_parameter_alignment_on_call

@@ -30,7 +30,7 @@ public enum E3dbError: Swift.Error {
 
     internal init(swishError: SwishError) {
         switch swishError {
-        case .argoError(.typeMismatch(let exp, let act)):
+        case let .argoError(.typeMismatch(exp, act)):
             self = .jsonError("Expected: \(exp). ", "Actual: \(act).")
         case .argoError(.missingKey(let key)):
             self = .jsonError("Expected: \(key). ", "Actual: (key not found).")
@@ -129,7 +129,7 @@ extension AuthedRequestPerformer: RequestPerformer {
     @discardableResult
     internal func perform(_ request: URLRequest, completionHandler: @escaping ResponseHandler) -> URLSessionDataTask {
         if authenticator.hasAccessToken {
-            authenticator.authenticateRequest(request) { (result) in
+            authenticator.authenticateRequest(request) { result in
                 if case .success(let req) = result {
                     self.perform(authedRequest: req, completionHandler: completionHandler)
                 } else {
@@ -148,7 +148,7 @@ extension AuthedRequestPerformer: RequestPerformer {
     }
 
     private func requestAccessToken(_ request: URLRequest, completionHandler: @escaping ResponseHandler) {
-        authenticator.requestAccessToken(grantType: "client_credentials", parameters: ["grant_type": "client_credentials"]) { (result) in
+        authenticator.requestAccessToken(grantType: "client_credentials", parameters: ["grant_type": "client_credentials"]) { result in
             guard case .success = result else {
                 // Failed to request token
                 return completionHandler(.failure(.serverError(code: 401, data: nil)))
@@ -160,7 +160,7 @@ extension AuthedRequestPerformer: RequestPerformer {
     }
 
     private func authenticateRequest(_ request: URLRequest, completionHandler: @escaping ResponseHandler) {
-        authenticator.authenticateRequest(request) { (result) in
+        authenticator.authenticateRequest(request) { result in
             guard case .success(let req) = result else {
                 // Failed to authenticate request
                 return completionHandler(.failure(.serverError(code: 422, data: nil)))

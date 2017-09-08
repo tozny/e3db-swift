@@ -96,7 +96,7 @@ extension Client {
 
     private func addSharePolicy(ak: AccessKey, type: String, writerId: UUID, readerId: UUID, completion: @escaping E3dbCompletion<Void>) {
         let cacheKey = AkCacheKey(recordType: type, writerId: writerId, readerId: readerId)
-        putAccessKey(ak: ak, cacheKey: cacheKey, writerId: writerId, userId: writerId, readerId: readerId, recordType: type) { (result) in
+        putAccessKey(ak: ak, cacheKey: cacheKey, writerId: writerId, userId: writerId, readerId: readerId, recordType: type) { result in
             switch result {
             case .success:
                 let req = ShareRequest(api: self.api, policy: .allow, clientId: writerId, readerId: readerId, contentType: type)
@@ -117,7 +117,7 @@ extension Client {
     ///   - completion: A handler to call when this operation completes
     public func share(type: String, readerId: UUID, completion: @escaping E3dbCompletion<Void>) {
         let clientId = config.clientId
-        getAccessKey(writerId: clientId, userId: clientId, readerId: clientId, recordType: type) { (result) in
+        getAccessKey(writerId: clientId, userId: clientId, readerId: clientId, recordType: type) { result in
             switch result {
             case .success(let ak):
                 self.addSharePolicy(ak: ak, type: type, writerId: clientId, readerId: readerId, completion: completion)
@@ -136,7 +136,7 @@ extension Client {
     ///   - readerEmail: The email of the user to allow access
     ///   - completion: A handler to call when this operation completes
     public func share(type: String, readerEmail: String, completion: @escaping E3dbCompletion<Void>) {
-        getClientInfo(email: readerEmail) { (result) in
+        getClientInfo(email: readerEmail) { result in
             switch result {
             case .success(let clientInfo):
                 self.share(type: type, readerId: clientInfo.clientId, completion: completion)
@@ -156,7 +156,7 @@ extension Client {
     ///   - completion: A handler to call when this operation completes
     public func revoke(type: String, readerId: UUID, completion: @escaping E3dbCompletion<Void>) {
         let clientId = config.clientId
-        deleteAccessKey(writerId: clientId, userId: clientId, readerId: readerId, recordType: type) { (result) in
+        deleteAccessKey(writerId: clientId, userId: clientId, readerId: readerId, recordType: type) { result in
             switch result {
             case .success:
                 let req = ShareRequest(api: self.api, policy: .deny, clientId: clientId, readerId: readerId, contentType: type)
@@ -176,7 +176,7 @@ extension Client {
     ///   - readerEmail: The email of the user to remove access
     ///   - completion: A handler to call when this operation completes
     public func revoke(type: String, readerEmail: String, completion: @escaping E3dbCompletion<Void>) {
-        getClientInfo(email: readerEmail) { (result) in
+        getClientInfo(email: readerEmail) { result in
             switch result {
             case .success(let clientInfo):
                 self.revoke(type: type, readerId: clientInfo.clientId, completion: completion)

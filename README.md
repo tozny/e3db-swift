@@ -52,7 +52,7 @@ import E3db
 /// This is the main client performing E3db operations
 var e3db: Client?
 
-Client.register(token: e3dbToken, clientName: "ExampleApp") { (result) in
+Client.register(token: e3dbToken, clientName: "ExampleApp") { result in
     switch result {
 
         // The operation was successful, here's the configuration
@@ -78,7 +78,7 @@ before ever leaving the device.
 // it as sensitive information for encryption
 let recordData = RecordData(cleartext: ["SSN": "123-45-6789"])
 
-e3db?.write(type: "UserInfo", data: recordData, plain: ["Sent from": "my iPhone"]) { (result) in
+e3db?.write(type: "UserInfo", data: recordData, plain: ["Sent from": "my iPhone"]) { result in
     switch result {
 
         // The operation was successful, here's the record
@@ -105,7 +105,7 @@ directly.
 // Perform read operation with the recordId of the
 // written record, decrypting it after getting the
 // encrypted data from the server.
-e3db?.read(recordId: recordId) { (result) in
+e3db?.read(recordId: recordId) { result in
     switch result {
 
     // The operation was successful, here's the record
@@ -136,7 +136,7 @@ var lastRead: Double?
 // - including records written by others
 //   that have been shared with this client
 let q1 = QueryParams(count: 5, types: ["UserInfo"], includeAllWriters: true)
-e3db?.query(params: q1) { (result) in
+e3db?.query(params: q1) { result in
     switch result {
 
     // The operation was successful, here's the `QueryResponse`,
@@ -152,7 +152,7 @@ e3db?.query(params: q1) { (result) in
 
 // Query for next batch using `next`
 let q2 = q1.next(after: lastRead!)
-e3db?.query(params: q2) { (result) in
+e3db?.query(params: q2) { result in
     // ...
 }
 ```
@@ -180,7 +180,7 @@ can be removed with the `revoke` method.
 let otherClient: UUID = ???
 
 // Share records of type "UserInfo" with another client
-e3db?.share(type: "UserInfo", readerId: otherClient) { (result) in
+e3db?.share(type: "UserInfo", readerId: otherClient) { result in
     guard case .success = result else {
         return print("An error occurred attempting to grant access to records: \(result.error)")
     }
@@ -188,7 +188,7 @@ e3db?.share(type: "UserInfo", readerId: otherClient) { (result) in
 }
 
 // Remove access to "UserInfo" records from the given client
-e3db?.revoke(type: "UserInfo", readerId: otherClient) { (result) in
+e3db?.revoke(type: "UserInfo", readerId: otherClient) { result in
     guard case .success = result else {
         return print("An error occurred attempting to revoke access to records: \(result.error)")
     }
