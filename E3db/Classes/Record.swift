@@ -17,7 +17,8 @@ public typealias PlainMeta = [String: String]
 /// A key-value store of unencrypted data
 public typealias Cleartext = [String: String]
 
-/// The cleartext from a record after it has been encrypted
+/// The ciphertext from a record after it has been encrypted
+/// :nodoc:
 typealias CipherData       = [String: String]
 
 /// A wrapper to hold unencrypted values

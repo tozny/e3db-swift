@@ -14,7 +14,7 @@ import Ogra
 import Curry
 import Runes
 
-#if E3DB_LOGGING
+#if E3DB_LOGGING && DEBUG
 import ResponseDetective
 #endif
 
@@ -32,7 +32,7 @@ public final class Client {
     internal let authedClient: APIClient
 
     internal static let session: URLSession = {
-        #if E3DB_LOGGING
+        #if E3DB_LOGGING && DEBUG
         let configuration = URLSessionConfiguration.default
         ResponseDetective.enable(inConfiguration: configuration)
         return URLSession(configuration: configuration)
