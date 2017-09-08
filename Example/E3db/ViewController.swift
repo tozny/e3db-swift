@@ -33,6 +33,11 @@ class ViewController: UIViewController {
             return
         }
 
+        // make sure a client token exists
+        guard e3dbToken.count > 0 else {
+            return print("Please register an account at https://console.tozny.com/ and generate a client token!")
+        }
+
         // No client previously registered on this device,
         // use the client token to register.
         Client.register(token: e3dbToken, clientName: "ExampleApp") { (result) in
