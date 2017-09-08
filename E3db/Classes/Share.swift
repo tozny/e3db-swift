@@ -74,7 +74,7 @@ extension IncomingSharingPolicy: Argo.Decodable {
     }
 }
 
-// MARK: Share and Unshare
+// MARK: Share and Revoke
 
 extension Client {
     private struct ShareRequest: Request {
@@ -94,6 +94,19 @@ extension Client {
         }
     }
 
+    private func addSharePolicy(ak: AccessKey, type: String, writerId: UUID, readerId: UUID, completion: @escaping E3dbCompletion<Void>) {
+        let cacheKey = AkCacheKey(recordType: type, writerId: writerId, readerId: readerId)
+        putAccessKey(ak: ak, cacheKey: cacheKey, writerId: writerId, userId: writerId, readerId: readerId, recordType: type) { (result) in
+            switch result {
+            case .success:
+                let req = ShareRequest(api: self.api, policy: .allow, clientId: writerId, readerId: readerId, contentType: type)
+                self.authedClient.performDefault(req, completion: completion)
+            case .failure(let err):
+                completion(Result(error: err))
+            }
+        }
+    }
+
     /// Allow another user to view and decrypt records of a given type.
     ///
     /// - SeeAlso: `share(type:readerEmail:completion:)` for identifying a user by email to share access.
@@ -103,8 +116,15 @@ extension Client {
     ///   - readerId: The identifier of the user to allow access
     ///   - completion: A handler to call when this operation completes
     public func share(type: String, readerId: UUID, completion: @escaping E3dbCompletion<Void>) {
-        let req = ShareRequest(api: api, policy: .allow, clientId: config.clientId, readerId: readerId, contentType: type)
-        authedClient.performDefault(req, completion: completion)
+        let clientId = config.clientId
+        getAccessKey(writerId: clientId, userId: clientId, readerId: clientId, recordType: type) { (result) in
+            switch result {
+            case .success(let ak):
+                self.addSharePolicy(ak: ak, type: type, writerId: clientId, readerId: readerId, completion: completion)
+            case .failure:
+                completion(Result(error: .apiError(404, "No applicable records exist to share")))
+            }
+        }
     }
 
     /// Allow another user to view and decrypt records of a given type.
@@ -135,8 +155,16 @@ extension Client {
     ///   - readerId: The identifier of the user to remove access
     ///   - completion: A handler to call when this operation completes
     public func revoke(type: String, readerId: UUID, completion: @escaping E3dbCompletion<Void>) {
-        let req = ShareRequest(api: api, policy: .deny, clientId: config.clientId, readerId: readerId, contentType: type)
-        authedClient.performDefault(req, completion: completion)
+        let clientId = config.clientId
+        deleteAccessKey(writerId: clientId, userId: clientId, readerId: readerId, recordType: type) { (result) in
+            switch result {
+            case .success:
+                let req = ShareRequest(api: self.api, policy: .deny, clientId: clientId, readerId: readerId, contentType: type)
+                self.authedClient.performDefault(req, completion: completion)
+            case .failure(let err):
+                completion(Result(error: err))
+            }
+        }
     }
 
     /// Remove a user's access to view and decrypt records of a given type.

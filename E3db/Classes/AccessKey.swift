@@ -133,3 +133,34 @@ extension Client {
         }
     }
 }
+
+// MARK: Delete Access Key
+
+extension Client {
+    private struct DeleteEAKRequest: Request {
+        typealias ResponseObject = Void
+        let api: Api
+        let writerId: UUID
+        let userId: UUID
+        let readerId: UUID
+        let recordType: String
+
+        func build() -> URLRequest {
+            let base = api.url(endpoint: .accessKeys)
+            let url  = base / writerId.uuidString / userId.uuidString / readerId.uuidString / recordType
+            var req  = URLRequest(url: url)
+            req.httpMethod = RequestMethod.DELETE.rawValue
+            return req
+        }
+    }
+
+    func deleteAccessKey(writerId: UUID, userId: UUID, readerId: UUID, recordType: String, completion: @escaping E3dbCompletion<Void>) {
+        // remove from cache
+        let cacheKey = AkCacheKey(recordType: recordType, writerId: writerId, readerId: readerId)
+        Client.akCache[cacheKey] = nil
+
+        // remove from server
+        let req = DeleteEAKRequest(api: api, writerId: writerId, userId: userId, readerId: readerId, recordType: recordType)
+        authedClient.performDefault(req, completion: completion)
+    }
+}
