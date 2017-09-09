@@ -109,8 +109,6 @@ extension Client {
 
     /// Allow another user to view and decrypt records of a given type.
     ///
-    /// - SeeAlso: `share(type:readerEmail:completion:)` for identifying a user by email to share access.
-    ///
     /// - Parameters:
     ///   - type: The kind of records to allow a user to view and decrypt
     ///   - readerId: The identifier of the user to allow access
@@ -127,28 +125,7 @@ extension Client {
         }
     }
 
-    /// Allow another user to view and decrypt records of a given type.
-    ///
-    /// - Note: The user must have opted-in to email discovery for this operation to succeed.
-    ///
-    /// - Parameters:
-    ///   - type: The kind of records to allow a user to view and decrypt
-    ///   - readerEmail: The email of the user to allow access
-    ///   - completion: A handler to call when this operation completes
-    public func share(type: String, readerEmail: String, completion: @escaping E3dbCompletion<Void>) {
-        getClientInfo(email: readerEmail) { result in
-            switch result {
-            case .success(let clientInfo):
-                self.share(type: type, readerId: clientInfo.clientId, completion: completion)
-            case .failure(let err):
-                completion(Result(error: err))
-            }
-        }
-    }
-
     /// Remove a user's access to view and decrypt records of a given type.
-    ///
-    /// - SeeAlso: `revoke(type:readerEmail:completion:)` for identifying a user by email to revoke access.
     ///
     /// - Parameters:
     ///   - type: The kind of records to remove access
@@ -161,25 +138,6 @@ extension Client {
             case .success:
                 let req = ShareRequest(api: self.api, policy: .deny, clientId: clientId, readerId: readerId, contentType: type)
                 self.authedClient.performDefault(req, completion: completion)
-            case .failure(let err):
-                completion(Result(error: err))
-            }
-        }
-    }
-
-    /// Remove a user's access to view and decrypt records of a given type.
-    ///
-    /// - Note: The user must have opted-in to email discovery for this operation to succeed.
-    ///
-    /// - Parameters:
-    ///   - type: The kind of records to remove access
-    ///   - readerEmail: The email of the user to remove access
-    ///   - completion: A handler to call when this operation completes
-    public func revoke(type: String, readerEmail: String, completion: @escaping E3dbCompletion<Void>) {
-        getClientInfo(email: readerEmail) { result in
-            switch result {
-            case .success(let clientInfo):
-                self.revoke(type: type, readerId: clientInfo.clientId, completion: completion)
             case .failure(let err):
                 completion(Result(error: err))
             }

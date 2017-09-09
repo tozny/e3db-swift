@@ -78,6 +78,8 @@ before ever leaving the device.
 // it as sensitive information for encryption
 let recordData = RecordData(cleartext: ["SSN": "123-45-6789"])
 
+// Can optionally include arbitrary metadata as `plain`
+// where neither keys nor values are encrypted
 e3db?.write(type: "UserInfo", data: recordData, plain: ["Sent from": "my iPhone"]) { result in
     switch result {
 
@@ -195,12 +197,6 @@ e3db?.revoke(type: "UserInfo", readerId: otherClient) { result in
     // Revoking was successful!
 }
 ```
-
-If the other client has opted-in to discovery-by-email with E3db, variants exist
-for sharing and revoking access that use their email address instead of their
-client ID:
-- `share(type:readerEmail:completion:)` for granting access via email
-- `revoke(type:readerEmail:completion:)` for removing access via email
 
 ## Development
 

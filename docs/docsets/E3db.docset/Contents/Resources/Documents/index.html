@@ -82,16 +82,16 @@
             <a href="Typealiases.html">Typealiases</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Typealiases.html#/s:4E3db9Cleartexta">Cleartext</a>
+                <a href="Typealiases.html#/s:4E3db9Cleartext">Cleartext</a>
               </li>
               <li class="nav-group-task">
-                <a href="Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a>
+                <a href="Typealiases.html#/s:4E3db14E3dbCompletion">E3dbCompletion</a>
               </li>
               <li class="nav-group-task">
-                <a href="Typealiases.html#/s:4E3db0A6Resulta">E3dbResult</a>
+                <a href="Typealiases.html#/s:4E3db10E3dbResult">E3dbResult</a>
               </li>
               <li class="nav-group-task">
-                <a href="Typealiases.html#/s:4E3db9PlainMetaa">PlainMeta</a>
+                <a href="Typealiases.html#/s:4E3db9PlainMeta">PlainMeta</a>
               </li>
             </ul>
           </li>
@@ -121,7 +121,7 @@ Example directory first.</p>
 
 <p>Finally, paste the token value into the <code>ViewController.swift</code> source for the
 line:</p>
-<pre class="highlight swift"><code><span class="kd">private</span> <span class="k">let</span> <span class="nv">E3dbToken</span> <span class="o">=</span> <span class="s">"&lt;PASTE_CLIENT_TOKEN_HERE&gt;"</span>
+<pre class="highlight swift"><code><span class="kd">private</span> <span class="k">let</span> <span class="nv">e3dbToken</span> <span class="o">=</span> <span class="s">"&lt;PASTE_CLIENT_TOKEN_HERE&gt;"</span>
 </code></pre>
 <h2 id='requirements' class='heading'>Requirements</h2>
 
@@ -134,6 +134,157 @@ line:</p>
 simply add the following line to your Podfile:</p>
 <pre class="highlight ruby"><code><span class="n">pod</span> <span class="s2">"E3db"</span><span class="p">,</span> <span class="ss">:git</span> <span class="o">=&gt;</span> <span class="s1">'https://github.com/tozny/e3db-swift'</span>
 </code></pre>
+<h2 id='documentation' class='heading'>Documentation</h2>
+
+<p>Full API documentation can be found <a href="https://tozny.github.io/e3db-swift">here</a>.
+Code examples for the most common operations can be found below.</p>
+<h4 id='register-a-new-client' class='heading'>Register a New Client</h4>
+
+<p>Use the client token generated from the Tozny Console to register a new client:</p>
+<pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">E3db</span>
+
+<span class="c1">/// This is the main client performing E3db operations</span>
+<span class="k">var</span> <span class="nv">e3db</span><span class="p">:</span> <span class="kt">Client</span><span class="p">?</span>
+
+<span class="kt">Client</span><span class="o">.</span><span class="nf">register</span><span class="p">(</span><span class="nv">token</span><span class="p">:</span> <span class="n">e3dbToken</span><span class="p">,</span> <span class="nv">clientName</span><span class="p">:</span> <span class="s">"ExampleApp"</span><span class="p">)</span> <span class="p">{</span> <span class="n">result</span> <span class="k">in</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+
+        <span class="c1">// The operation was successful, here's the configuration</span>
+        <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">config</span><span class="p">):</span>
+            <span class="c1">// create main E3db client with config</span>
+            <span class="k">self</span><span class="o">.</span><span class="n">e3db</span> <span class="o">=</span> <span class="kt">Client</span><span class="p">(</span><span class="nv">config</span><span class="p">:</span> <span class="n">config</span><span class="p">)</span>
+
+        <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">"An error occurred attempting registration: </span><span class="se">\(</span><span class="n">error</span><span class="se">)</span><span class="s">."</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+<h4 id='write-a-record' class='heading'>Write a Record</h4>
+
+<p>Create a dictionary of <code>String</code> key-value pairs to store a record in E3db. The
+keys of the dictionary will remain unencrypted, but the values will be encrypted
+before ever leaving the device.</p>
+<pre class="highlight swift"><code><span class="c1">// Wrap message in RecordData type to designate</span>
+<span class="c1">// it as sensitive information for encryption</span>
+<span class="k">let</span> <span class="nv">recordData</span> <span class="o">=</span> <span class="kt">RecordData</span><span class="p">(</span><span class="nv">cleartext</span><span class="p">:</span> <span class="p">[</span><span class="s">"SSN"</span><span class="p">:</span> <span class="s">"123-45-6789"</span><span class="p">])</span>
+
+<span class="c1">// Can optionally include arbitrary metadata as `plain`</span>
+<span class="c1">// where neither keys nor values are encrypted</span>
+<span class="n">e3db</span><span class="p">?</span><span class="o">.</span><span class="nf">write</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="s">"UserInfo"</span><span class="p">,</span> <span class="nv">data</span><span class="p">:</span> <span class="n">recordData</span><span class="p">,</span> <span class="nv">plain</span><span class="p">:</span> <span class="p">[</span><span class="s">"Sent from"</span><span class="p">:</span> <span class="s">"my iPhone"</span><span class="p">])</span> <span class="p">{</span> <span class="n">result</span> <span class="k">in</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+
+        <span class="c1">// The operation was successful, here's the record</span>
+        <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">record</span><span class="p">):</span>
+
+            <span class="c1">// `record.meta` holds metadata associated</span>
+            <span class="c1">// with the record, such as type.</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">"Wrote record! </span><span class="se">\(</span><span class="n">record</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">recordId</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+
+        <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">"An error occurred attempting to write the data: </span><span class="se">\(</span><span class="n">error</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+<h4 id='read-a-record' class='heading'>Read a Record</h4>
+
+<p>You can request several records at once by specifying <code>QueryParams</code>, but if you
+already have the <code>recordId</code> of the record you want to read, you can request it
+directly.</p>
+<pre class="highlight swift"><code><span class="c1">// Perform read operation with the recordId of the</span>
+<span class="c1">// written record, decrypting it after getting the</span>
+<span class="c1">// encrypted data from the server.</span>
+<span class="n">e3db</span><span class="p">?</span><span class="o">.</span><span class="nf">read</span><span class="p">(</span><span class="nv">recordId</span><span class="p">:</span> <span class="n">recordId</span><span class="p">)</span> <span class="p">{</span> <span class="n">result</span> <span class="k">in</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+
+    <span class="c1">// The operation was successful, here's the record</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">record</span><span class="p">):</span>
+
+        <span class="c1">// The record returned contains the same dictionary</span>
+        <span class="c1">// supplied to the `RecordData` struct during the write</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Record data: </span><span class="se">\(</span><span class="n">record</span><span class="o">.</span><span class="n">data</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+
+    <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"An error occurred attempting to read the record: </span><span class="se">\(</span><span class="n">error</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+<h4 id='query-for-records' class='heading'>Query for Records</h4>
+
+<p>To request several records, and even filter on a set of optional parameters,
+pass a <code>QueryParams</code> instance to the <code>query</code> method.</p>
+<pre class="highlight swift"><code><span class="c1">// Keep track of queried batches</span>
+<span class="k">var</span> <span class="nv">lastRead</span><span class="p">:</span> <span class="kt">Double</span><span class="p">?</span>
+
+<span class="c1">// Construct query, filtering to:</span>
+<span class="c1">// - return only 5 records at a time,</span>
+<span class="c1">// - only "UserInfo" type records,</span>
+<span class="c1">// - including records written by others</span>
+<span class="c1">//   that have been shared with this client</span>
+<span class="k">let</span> <span class="nv">q1</span> <span class="o">=</span> <span class="kt">QueryParams</span><span class="p">(</span><span class="nv">count</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="nv">types</span><span class="p">:</span> <span class="p">[</span><span class="s">"UserInfo"</span><span class="p">],</span> <span class="nv">includeAllWriters</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
+<span class="n">e3db</span><span class="p">?</span><span class="o">.</span><span class="nf">query</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="n">q1</span><span class="p">)</span> <span class="p">{</span> <span class="n">result</span> <span class="k">in</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+
+    <span class="c1">// The operation was successful, here's the `QueryResponse`,</span>
+    <span class="c1">// which has the resulting records and an index for last record</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">resp</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Records: </span><span class="se">\(</span><span class="n">resp</span><span class="o">.</span><span class="n">records</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+        <span class="n">lastRead</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">last</span>
+
+    <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"An error occurred attempting to query records: </span><span class="se">\(</span><span class="n">error</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Query for next batch using `next`</span>
+<span class="k">let</span> <span class="nv">q2</span> <span class="o">=</span> <span class="n">q1</span><span class="o">.</span><span class="nf">next</span><span class="p">(</span><span class="nv">after</span><span class="p">:</span> <span class="n">lastRead</span><span class="o">!</span><span class="p">)</span>
+<span class="n">e3db</span><span class="p">?</span><span class="o">.</span><span class="nf">query</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="n">q2</span><span class="p">)</span> <span class="p">{</span> <span class="n">result</span> <span class="k">in</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>Possible filters include:</p>
+
+<ul>
+<li><code>count</code>: Limit the number of records returned by the query beyond the default</li>
+<li><code>includeData</code>: Supply the full decrypted record data in the result records</li>
+<li><code>writerIds</code>: Filter to records written by these IDs</li>
+<li><code>userIds</code>: Filter to records with these user IDs</li>
+<li><code>recordIds</code>: Filter to only the records identified by these IDs</li>
+<li><code>types</code>: Filter to records that match the given types</li>
+<li><code>after</code>: Number to facilitate paging the results &ndash; used with the <code>last</code>
+property of the resulting <code>QueryResponse</code></li>
+<li><code>includeAllWriters</code>: Set this flag to include records that have been shared
+with you, defaults to <code>false</code></li>
+</ul>
+<h4 id='sharing' class='heading'>Sharing</h4>
+
+<p>Records can be shared to allow other clients access. Grant clients read access
+by specifying which client and which type of record <code>share</code>. Inversely, access
+can be removed with the <code>revoke</code> method.</p>
+<pre class="highlight swift"><code><span class="c1">// Get the recipient client ID externally</span>
+<span class="k">let</span> <span class="nv">otherClient</span><span class="p">:</span> <span class="kt">UUID</span> <span class="o">=</span> <span class="p">???</span>
+
+<span class="c1">// Share records of type "UserInfo" with another client</span>
+<span class="n">e3db</span><span class="p">?</span><span class="o">.</span><span class="nf">share</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="s">"UserInfo"</span><span class="p">,</span> <span class="nv">readerId</span><span class="p">:</span> <span class="n">otherClient</span><span class="p">)</span> <span class="p">{</span> <span class="n">result</span> <span class="k">in</span>
+    <span class="k">guard</span> <span class="k">case</span> <span class="o">.</span><span class="n">success</span> <span class="o">=</span> <span class="n">result</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nf">print</span><span class="p">(</span><span class="s">"An error occurred attempting to grant access to records: </span><span class="se">\(</span><span class="n">result</span><span class="o">.</span><span class="n">error</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="c1">// Sharing was successful!</span>
+<span class="p">}</span>
+
+<span class="c1">// Remove access to "UserInfo" records from the given client</span>
+<span class="n">e3db</span><span class="p">?</span><span class="o">.</span><span class="nf">revoke</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="s">"UserInfo"</span><span class="p">,</span> <span class="nv">readerId</span><span class="p">:</span> <span class="n">otherClient</span><span class="p">)</span> <span class="p">{</span> <span class="n">result</span> <span class="k">in</span>
+    <span class="k">guard</span> <span class="k">case</span> <span class="o">.</span><span class="n">success</span> <span class="o">=</span> <span class="n">result</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nf">print</span><span class="p">(</span><span class="s">"An error occurred attempting to revoke access to records: </span><span class="se">\(</span><span class="n">result</span><span class="o">.</span><span class="n">error</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="c1">// Revoking was successful!</span>
+<span class="p">}</span>
+</code></pre>
+<h2 id='development' class='heading'>Development</h2>
+
+<p>See the <a href="dev/Development.md">Development Guide</a> for details on development.</p>
 <h2 id='author' class='heading'>Author</h2>
 
 <p>Tozny</p>
