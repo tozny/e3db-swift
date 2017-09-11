@@ -28,7 +28,7 @@ xcodebuild test \
   -workspace $WORKSPACE \
   -configuration $CONFIG \
   -scheme $SCHEME \
-  -destination "$1" |
+  -destination "id=$1" |
     tee testlogs/test-$2.log |
       xcpretty --test \
       --report html \

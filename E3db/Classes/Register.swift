@@ -129,7 +129,7 @@ extension Client {
         let regReq    = RegistrationRequest(api: api, token: token, client: clientReq)
         let performer = NetworkRequestPerformer(session: session)
         let client    = APIClient(requestPerformer: performer)
-        client.perform(regReq) { (result) in
+        client.perform(regReq) { result in
             let resp = result
                 .mapError(E3dbError.init)
                 .map { creds in
@@ -142,7 +142,7 @@ extension Client {
                         privateKey: keyPair.secretKey,
                         baseApiUrl: api.baseUrl
                     )
-            }
+                }
             completion(resp)
         }
     }

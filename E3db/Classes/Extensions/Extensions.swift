@@ -87,7 +87,7 @@ extension URLRequest {
 }
 
 extension URL {
-    static func /(lhs: URL, rhs: String) -> URL {
+    static func / (lhs: URL, rhs: String) -> URL {
         return lhs.appendingPathComponent(rhs)
     }
 }
@@ -99,8 +99,10 @@ extension Array where Element: ResultProtocol {
 
         for case let result as Result<T, E> in self {
             switch result {
-            case let .success(value): accum.append(value)
-            case let .failure(error): return .failure(error)
+            case let .success(value):
+                accum.append(value)
+            case let .failure(error):
+                return .failure(error)
             }
         }
 
@@ -110,6 +112,6 @@ extension Array where Element: ResultProtocol {
 
 extension APIClient {
     func performDefault<T: Request>(_ request: T, completion: @escaping (Result<T.ResponseObject, E3dbError>) -> Void) {
-        perform(request, completionHandler: { completion($0.mapError(E3dbError.init)) })
+        perform(request) { completion($0.mapError(E3dbError.init)) }
     }
 }

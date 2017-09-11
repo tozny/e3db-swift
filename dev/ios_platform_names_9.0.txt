@@ -1,42 +1,42 @@
-platform=iOS Simulator,OS=10.3.1,name=iPad (5th generation)
-platform=iOS Simulator,OS=10.3.1,name=iPad (5th generation)
-platform=iOS Simulator,OS=9.0,name=iPad 2
-platform=iOS Simulator,OS=9.1,name=iPad 2
-platform=iOS Simulator,OS=9.0,name=iPad Air
-platform=iOS Simulator,OS=9.1,name=iPad Air
-platform=iOS Simulator,OS=10.3.1,name=iPad Air
-platform=iOS Simulator,OS=9.0,name=iPad Air 2
-platform=iOS Simulator,OS=9.1,name=iPad Air 2
-platform=iOS Simulator,OS=10.3.1,name=iPad Air 2
-platform=iOS Simulator,OS=9.1,name=iPad Pro
-platform=iOS Simulator,OS=10.3.1,name=iPad Pro (9.7 inch)
-platform=iOS Simulator,OS=10.3.1,name=iPad Pro (10.5-inch)
-platform=iOS Simulator,OS=10.3.1,name=iPad Pro (10.5-inch)
-platform=iOS Simulator,OS=10.3.1,name=iPad Pro (12.9 inch)
-platform=iOS Simulator,OS=10.3.1,name=iPad Pro (12.9-inch) (2nd generation)
-platform=iOS Simulator,OS=10.3.1,name=iPad Pro (12.9-inch) (2nd generation)
-platform=iOS Simulator,OS=9.0,name=iPad Retina
-platform=iOS Simulator,OS=9.1,name=iPad Retina
-platform=iOS Simulator,OS=9.0,name=iPhone 4s
-platform=iOS Simulator,OS=9.1,name=iPhone 4s
-platform=iOS Simulator,OS=9.0,name=iPhone 5
-platform=iOS Simulator,OS=9.1,name=iPhone 5
-platform=iOS Simulator,OS=10.3.1,name=iPhone 5
-platform=iOS Simulator,OS=9.0,name=iPhone 5s
-platform=iOS Simulator,OS=9.1,name=iPhone 5s
-platform=iOS Simulator,OS=10.3.1,name=iPhone 5s
-platform=iOS Simulator,OS=9.0,name=iPhone 6
-platform=iOS Simulator,OS=9.1,name=iPhone 6
-platform=iOS Simulator,OS=10.3.1,name=iPhone 6
-platform=iOS Simulator,OS=9.0,name=iPhone 6 Plus
-platform=iOS Simulator,OS=9.1,name=iPhone 6 Plus
-platform=iOS Simulator,OS=10.3.1,name=iPhone 6 Plus
-platform=iOS Simulator,OS=9.0,name=iPhone 6s
-platform=iOS Simulator,OS=9.1,name=iPhone 6s
-platform=iOS Simulator,OS=10.3.1,name=iPhone 6s
-platform=iOS Simulator,OS=9.0,name=iPhone 6s Plus
-platform=iOS Simulator,OS=9.1,name=iPhone 6s Plus
-platform=iOS Simulator,OS=10.3.1,name=iPhone 6s Plus
-platform=iOS Simulator,OS=10.3.1,name=iPhone 7
-platform=iOS Simulator,OS=10.3.1,name=iPhone 7 Plus
-platform=iOS Simulator,OS=10.3.1,name=iPhone SE
+399B2DF5-E016-468C-8860-916C8BCB42A4
+A283CF80-0108-4189-848C-DEA45CFC8B8B
+1F3A4B57-6957-4863-91EA-DF344CE80E9B
+1D41884C-F4E9-4314-A9FD-528FA10AAA45
+53BFCF71-1F4E-4DC5-8221-448954AD2363
+4CE00AA6-7C00-438E-A7C3-DF155B8D8476
+826A9665-6E6F-441E-91CE-D19E8CAECC71
+78D26CF6-5C03-48A3-8B5A-9521B6B908DF
+C2329ABA-E6E1-4FF9-9198-F8D73BA00357
+CE7F3FB0-65F6-4CEA-B7B7-49DC8C2942F3
+376CCEE3-71FF-4FDD-95D6-2CD47FA684AC
+514328C3-FD33-4A37-B7F9-7A1A5E882303
+4EA93ED4-98DC-43C5-BF52-854463CE2EE7
+B5A9B6BB-4CF1-425B-9E36-7ABD8CAA8582
+D9647A21-1FDA-454E-BED2-369FCC06AA20
+A20F5EB5-B0CE-4EE6-8DB1-A6B727346913
+B319CC05-EBAB-4D20-AABD-AD73F19470BA
+F7430F75-7688-49F9-B71E-C097B22BE706
+50C1EBF5-B3A2-4143-8BEA-ECC737249DEA
+2D54BF54-58D5-49C7-9B3A-101AB5BCB116
+B7D3FB11-9F31-42AC-8AC2-C76663083A7E
+89C04970-7691-4C98-A134-4F51D612BF97
+8DB96515-E0FA-4370-9CD6-FD7765972A3B
+50B484D7-3B30-4273-8AA7-D9CA6751A691
+91DA7F36-14CE-484F-A4FD-A30BD660A109
+1EB64263-4857-4FA7-9E72-357F9B20B914
+8C47C3CB-325D-4519-AB7D-0D9476FE58A6
+22BE7D29-8CD0-4937-A786-53A395645FBA
+BF4891B4-5D62-4C2F-A3AB-C0B50D8E5453
+39A7B1CC-742D-45D1-B4FD-B9A82E637D40
+7EE611D7-DB35-4988-B68C-EFE25DB85DE7
+87949B7A-1E28-4737-A460-00EC771A5AA4
+8A50DF74-1F59-49BA-B314-A5414673E2FB
+36D409F1-AF95-4E02-A0B6-57465BA9F205
+75405208-FDFD-48C3-9042-A28E9B8905F1
+9F2E04BC-E258-4778-A362-B79F6DFD6AA0
+7CC0EF8D-4487-4565-A37D-7F50DF3BBDD9
+8F624206-0A4E-4348-87E9-803DA2F23279
+F0057343-9A4B-45D3-8A2B-663F97D9BC62
+D5A00BA1-E53A-48BC-AB46-C58476F54431
+A8E97841-CC92-4BF7-9D45-C53FBF15B9CD
+CEA376D0-1F36-4B28-B31C-642B1BF8DBF0

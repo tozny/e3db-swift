@@ -34,13 +34,13 @@ class ViewController: UIViewController {
         }
 
         // make sure a client token exists
-        guard e3dbToken.count > 0 else {
+        guard e3dbToken.characters.count > 0 else {
             return print("Please register an account at https://console.tozny.com/ and generate a client token!")
         }
 
         // No client previously registered on this device,
         // use the client token to register.
-        Client.register(token: e3dbToken, clientName: "ExampleApp") { (result) in
+        Client.register(token: e3dbToken, clientName: "ExampleApp") { result in
             switch result {
 
             // The operation was successful, here's the configuration
@@ -76,7 +76,7 @@ class ViewController: UIViewController {
 
         // Perform write operation, providing a user-defined type,
         // the message, and any other non-sensitive information to associate with the data
-        e3db?.write(type: "my secret message", data: recordData, plain: ["Sent from": "my iPhone"]) { (result) in
+        e3db?.write(type: "my secret message", data: recordData, plain: ["Sent from": "my iPhone"]) { result in
             let text: String
             switch result {
 
@@ -111,7 +111,7 @@ class ViewController: UIViewController {
         // Perform read operation with the recordId of the
         // written record, decrypting it after getting the
         // encrypted data from the server.
-        e3db?.read(recordId: recordId) { (result) in
+        e3db?.read(recordId: recordId) { result in
             let text: String
             switch result {
 
@@ -134,4 +134,3 @@ class ViewController: UIViewController {
         }
     }
 }
-

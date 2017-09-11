@@ -61,7 +61,7 @@ extension Client {
 
         // Get AK from server
         let req = GetEAKRequest(api: api, writerId: writerId, userId: userId, readerId: readerId, recordType: recordType)
-        authedClient.perform(req) { (result) in
+        authedClient.perform(req) { result in
 
             // Server had EAK entry
             if case .success(let akResponse) = result {
@@ -110,7 +110,7 @@ extension Client {
     }
 
     func putAccessKey(ak: AccessKey, cacheKey: AkCacheKey, writerId: UUID, userId: UUID, readerId: UUID, recordType: String, completion: @escaping E3dbCompletion<AccessKey>) {
-        getClientInfo(clientId: readerId) { (result) in
+        getClientInfo(clientId: readerId) { result in
             switch result {
             case .success(let client):
                 // encrypt ak
@@ -120,7 +120,7 @@ extension Client {
                 }
 
                 // update server
-                self.putAccessKey(eak: eak, writerId: writerId, userId: userId, readerId: readerId, recordType: recordType) { (result) in
+                self.putAccessKey(eak: eak, writerId: writerId, userId: userId, readerId: readerId, recordType: recordType) { result in
                     // update local cache
                     if case .success = result {
                         Client.akCache[cacheKey] = ak

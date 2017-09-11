@@ -35,7 +35,7 @@ class IntegrationTests: XCTestCase {
     func testRegisterFailsWithInvalidKey() {
         let test    = #function + UUID().uuidString
         let keyPair = Client.generateKeyPair()!
-        let badKey  = String(keyPair.publicKey.dropFirst(5))
+        let badKey  = String(keyPair.publicKey.characters.dropFirst(5))
         asyncTest(test) { (expect) in
             Client.register(token: TestData.token, clientName: test, publicKey: badKey, apiUrl: TestData.apiUrl) { (result) in
                 defer { expect.fulfill() }

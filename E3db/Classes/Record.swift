@@ -50,7 +50,7 @@ struct MetaRequestInfo: Ogra.Encodable {
             "writer_id": writerId.encode(),
             "user_id": userId.encode(),
             "type": type.encode(),
-            "plain": plain.encode(),
+            "plain": plain.encode()
         ])
     }
 }
@@ -193,7 +193,7 @@ extension Client {
     ///   - completion: A handler to call when this operation completes to provide the record result
     public func write(type: String, data: RecordData, plain: PlainMeta? = nil, completion: @escaping E3dbCompletion<Record>) {
         let clientId = config.clientId
-        getAccessKey(writerId: clientId, userId: clientId, readerId: clientId, recordType: type) { (result) in
+        getAccessKey(writerId: clientId, userId: clientId, readerId: clientId, recordType: type) { result in
             switch result {
             case .success(let ak):
                 self.write(type, data: data, plain: plain, ak: ak, completion: completion)
@@ -223,12 +223,12 @@ extension Client {
         return Result(try Crypto.decrypt(cipherData: data, ak: accessKey))
     }
 
-    private func decryptRecord(record r: RecordResponse, completion: @escaping E3dbCompletion<Record>) {
+    private func decryptRecord(record rec: RecordResponse, completion: @escaping E3dbCompletion<Record>) {
         let clientId = config.clientId
-        getAccessKey(writerId: r.meta.writerId, userId: r.meta.userId, readerId: clientId, recordType: r.meta.type) { (akResult) in
+        getAccessKey(writerId: rec.meta.writerId, userId: rec.meta.userId, readerId: clientId, recordType: rec.meta.type) { akResult in
             let result = akResult
-                .flatMap { self.decrypt(data: r.cipherData, accessKey: $0) }
-                .map { Record(meta: r.meta, data: $0.cleartext) }
+                .flatMap { self.decrypt(data: rec.cipherData, accessKey: $0) }
+                .map { Record(meta: rec.meta, data: $0.cleartext) }
             completion(result)
         }
     }
@@ -244,7 +244,7 @@ extension Client {
     ///   - recordId: The identifier for the `Record` to read
     ///   - completion: A handler to call when the operation completes to provide the decrypted record
     public func read(recordId: UUID, completion: @escaping E3dbCompletion<Record>) {
-        readRaw(recordId: recordId) { (result) in
+        readRaw(recordId: recordId) { result in
             switch result {
             case .success(let r):
                 self.decryptRecord(record: r, completion: completion)
@@ -282,7 +282,7 @@ extension Client {
         }
         let record = RecordRequestInfo(meta: metaReq, data: cipher)
         let req    = RecordUpdateRequest(api: api, recordId: recordId, version: version, recordInfo: record)
-        authedClient.perform(req) { (result) in
+        authedClient.perform(req) { result in
             let resp = result
                 .map { Record(meta: $0.meta, data: data.cleartext) }
                 .mapError(E3dbError.init)
@@ -299,7 +299,7 @@ extension Client {
     ///   - plain: The plaintext key-value store to replace for the record
     ///   - completion: A handler to call when the operation completes to provide the updated record
     public func update(meta: Meta, newData: RecordData, plain: PlainMeta? = nil, completion: @escaping E3dbCompletion<Record>) {
-        getAccessKey(writerId: meta.writerId, userId: meta.userId, readerId: config.clientId, recordType: meta.type) { (result) in
+        getAccessKey(writerId: meta.writerId, userId: meta.userId, readerId: config.clientId, recordType: meta.type) { result in
             switch result {
             case .success(let ak):
                 let metaReq = MetaRequestInfo(
