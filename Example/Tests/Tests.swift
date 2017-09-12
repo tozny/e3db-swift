@@ -15,8 +15,17 @@ class IntegrationTests: XCTestCase {
         let test = #function + UUID().uuidString
         asyncTest(test) { (expect) in
             Client.register(token: TestData.token, clientName: test, apiUrl: TestData.apiUrl) { (result) in
-                XCTAssertNotNil(result.value)
-                expect.fulfill()
+                defer { expect.fulfill() }
+                switch result {
+                case .success(let config):
+                    // also test config save and load
+                    XCTAssert(config.save(profile: test))
+                    let loaded = Config(loadProfile: test)
+                    XCTAssertNotNil(loaded)
+                    XCTAssertEqual(config.clientId, loaded!.clientId)
+                case .failure(let error):
+                    XCTFail("Could not register: \(error.description)")
+                }
             }
         }
     }

@@ -74,27 +74,27 @@ extension Config: Ogra.Encodable, Argo.Decodable {
 
     public func encode() -> JSON {
         return JSON.object([
-            "base_api_url": baseApiUrl.encode(),
+            "client_name": clientName.encode(),
+            "client_id": clientId.encode(),
             "api_key_id": apiKeyId.encode(),
             "api_secret": apiSecret.encode(),
-            "client_id": clientId.encode(),
-            "client_name": clientName.encode(),
             "public_key": publicKey.encode(),
-            "private_key": privateKey.encode()
+            "private_key": privateKey.encode(),
+            "base_api_url": baseApiUrl.encode()
         ])
     }
 
     public static func decode(_ j: JSON) -> Decoded<Config> {
         let tmp = curry(Config.init)
-            <^> j <| "base_api_url"
+            <^> j <| "client_name"
+            <*> j <| "client_id"
             <*> j <| "api_key_id"
             <*> j <| "api_secret"
 
         return tmp
-            <*> j <| "client_id"
-            <*> j <| "client_name"
             <*> j <| "public_key"
             <*> j <| "private_key"
+            <*> j <| "base_api_url"
     }
 }
 
