@@ -49,10 +49,8 @@ public enum E3dbError: Swift.Error {
         }
     }
 
-    /// Get a readable context for the error.
-    ///
-    /// - Returns: A human-readable description for the error
-    public func description() -> String {
+    /// Get a human-readable context for the error.
+    public var description: String {
         switch self {
         case .cryptoError(let msg), .configError(let msg), .networkError(let msg):
             return msg
