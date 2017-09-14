@@ -46,12 +46,13 @@ struct MetaRequestInfo: Ogra.Encodable {
     let plain: PlainMeta?
 
     public func encode() -> JSON {
-        return JSON.object([
+        var encoded = [
             "writer_id": writerId.encode(),
             "user_id": userId.encode(),
-            "type": type.encode(),
-            "plain": plain.encode()
-        ])
+            "type": type.encode()
+        ]
+        encoded["plain"] = plain?.encode()
+        return JSON.object(encoded)
     }
 }
 
@@ -87,6 +88,7 @@ public struct Meta {
 /// :nodoc:
 extension Meta: Argo.Decodable {
     public static func decode(_ j: JSON) -> Decoded<Meta> {
+
         let tmp = curry(Meta.init)
             <^> j <| "record_id"
             <*> j <| "writer_id"
@@ -95,8 +97,10 @@ extension Meta: Argo.Decodable {
 
         // split decode fixes: "expression was too complex
         // to be solved in reasonable time."
+        // `<|>` provides a default empty value,
+        // response from API may change to allow for `nil` values
         return tmp
-            <*> .optional((j <| "plain").flatMap(PlainMeta.decode))
+            <*> .optional((j <| "plain").flatMap(PlainMeta.decode) <|> .success(PlainMeta()))
             <*> j <| "created"
             <*> j <| "last_modified"
             <*> j <| "version"
@@ -296,9 +300,9 @@ extension Client {
     /// - Parameters:
     ///   - meta: The `Meta` information for the record to update
     ///   - newData: The unencrypted values to encrypt and replace for the record
-    ///   - plain: The plaintext key-value store to replace for the record
+    ///   - plain: The plaintext key-value store to replace for the record, pass in the existing plain for no changes
     ///   - completion: A handler to call when the operation completes to provide the updated record
-    public func update(meta: Meta, newData: RecordData, plain: PlainMeta? = nil, completion: @escaping E3dbCompletion<Record>) {
+    public func update(meta: Meta, newData: RecordData, plain: PlainMeta?, completion: @escaping E3dbCompletion<Record>) {
         getAccessKey(writerId: meta.writerId, userId: meta.userId, readerId: config.clientId, recordType: meta.type) { result in
             switch result {
             case .success(let ak):
@@ -306,7 +310,7 @@ extension Client {
                     writerId: meta.writerId,
                     userId: meta.userId,
                     type: meta.type,
-                    plain: plain ?? meta.plain
+                    plain: plain
                 )
                 self.update(meta.recordId, version: meta.version, metaReq: metaReq, data: newData, ak: ak, completion: completion)
             case .failure(let err):

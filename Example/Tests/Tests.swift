@@ -147,7 +147,7 @@ class IntegrationTests: XCTestCase {
         // update record
         let newData = RecordData(cleartext: ["test": "updated"])
         asyncTest(#function + "update") { (expect) in
-            e3db.update(meta: record.meta, newData: newData) { (result) in
+            e3db.update(meta: record.meta, newData: newData, plain: nil) { (result) in
                 XCTAssertNotNil(result.value)
                 XCTAssertEqual(result.value!.meta.recordId, record.meta.recordId)
                 XCTAssertEqual(result.value!.data, newData.cleartext)
@@ -166,6 +166,70 @@ class IntegrationTests: XCTestCase {
         }
     }
 
+    func testUpdatePlain() {
+        let e3db   = client()
+        var record = writeTestRecord(e3db)
+        defer { deleteRecord(record, e3db: e3db) }
+
+        // update record with new plain
+        let newData = RecordData(cleartext: ["test": "updated"])
+        asyncTest(#function + "update") { (expect) in
+            e3db.update(meta: record.meta, newData: newData, plain: ["new": "plain"]) { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssertEqual(result.value!.meta.recordId, record.meta.recordId)
+                XCTAssertEqual(result.value!.data, newData.cleartext)
+
+                // plain defaults to empty map (for now)
+                XCTAssertNotNil(record.meta.plain)
+                XCTAssert(record.meta.plain!.isEmpty)
+                XCTAssertNotNil(result.value!.meta.plain)
+                XCTAssertNotEqual(record.meta.plain!, result.value!.meta.plain!)
+
+                record = result.value!
+                expect.fulfill()
+            }
+        }
+
+        // read to confirm data and meta have changed
+        asyncTest(#function + "read") { (expect) in
+            e3db.read(recordId: record.meta.recordId) { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssertEqual(result.value!.data, newData.cleartext)
+                XCTAssertNotNil(result.value!.meta.plain)
+                XCTAssertFalse(result.value!.meta.plain!.isEmpty)
+                expect.fulfill()
+            }
+        }
+
+        // update record with nil plain to clear it
+        asyncTest(#function + "update") { (expect) in
+            e3db.update(meta: record.meta, newData: newData, plain: nil) { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssertEqual(result.value!.meta.recordId, record.meta.recordId)
+                XCTAssertEqual(result.value!.data, newData.cleartext)
+
+                // plain defaults to empty map (for now)
+                XCTAssertNotNil(record.meta.plain)
+                XCTAssertNotNil(result.value!.meta.plain)
+                XCTAssertNotEqual(record.meta.plain!, result.value!.meta.plain!)
+
+                record = result.value!
+                expect.fulfill()
+            }
+        }
+
+        // read to confirm data and meta have changed
+        asyncTest(#function + "read") { (expect) in
+            e3db.read(recordId: record.meta.recordId) { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssertEqual(result.value!.data, newData.cleartext)
+                XCTAssertNotNil(result.value!.meta.plain)
+                XCTAssert(result.value!.meta.plain!.isEmpty)
+                expect.fulfill()
+            }
+        }
+    }
+
     func testUpdateFailsForConflictingVersions() {
         let e3db   = client()
         let record = writeTestRecord(e3db)
@@ -174,7 +238,7 @@ class IntegrationTests: XCTestCase {
         // first update should succeed
         let newData = RecordData(cleartext: ["test": "updated"])
         asyncTest(#function + "update1") { (expect) in
-            e3db.update(meta: record.meta, newData: newData) { (result) in
+            e3db.update(meta: record.meta, newData: newData, plain: record.meta.plain) { (result) in
                 XCTAssertNotNil(result.value)
                 XCTAssertEqual(result.value!.meta.recordId, record.meta.recordId)
                 XCTAssertEqual(result.value!.data, newData.cleartext)
@@ -185,7 +249,7 @@ class IntegrationTests: XCTestCase {
         // second update (with initial record meta version) should fail
         let moreNewData = RecordData(cleartext: ["test": "should fail"])
         asyncTest(#function + "update1") { (expect) in
-            e3db.update(meta: record.meta, newData: moreNewData) { (result) in
+            e3db.update(meta: record.meta, newData: moreNewData, plain: record.meta.plain) { (result) in
                 defer { expect.fulfill() }
                 guard case .failure(.apiError(409, _)) = result else {
                     return XCTFail("Should not update on version conflict")

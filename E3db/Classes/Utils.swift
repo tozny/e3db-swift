@@ -63,6 +63,14 @@ public enum E3dbError: Swift.Error {
 }
 
 struct Api {
+    enum Endpoint: String {
+        case records
+        case clients
+        case accessKeys = "access_keys"
+        case search
+        case policy
+    }
+
     static let defaultUrl   = "https://api.e3db.com/"
     private let version     = "v1"
     private let pdsService  = "storage"
@@ -82,14 +90,6 @@ struct Api {
     func url(endpoint: Endpoint) -> URL {
         return baseUrl / version / pdsService / endpoint.rawValue
     }
-}
-
-enum Endpoint: String {
-    case records
-    case clients
-    case accessKeys = "access_keys"
-    case search
-    case policy
 }
 
 struct AkCacheKey: Hashable {
