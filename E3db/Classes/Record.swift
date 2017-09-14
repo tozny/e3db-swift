@@ -306,7 +306,7 @@ extension Client {
                     writerId: meta.writerId,
                     userId: meta.userId,
                     type: meta.type,
-                    plain: plain != nil ? plain : meta.plain
+                    plain: plain ?? meta.plain
                 )
                 self.update(meta.recordId, version: meta.version, metaReq: metaReq, data: newData, ak: ak, completion: completion)
             case .failure(let err):

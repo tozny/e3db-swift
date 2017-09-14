@@ -13,37 +13,37 @@ import Heimdallr
 /// Possible errors encountered from E3db operations
 public enum E3dbError: Swift.Error {
 
-    /// A crypto operation failed (`message`)
+    /// A crypto operation failed
     case cryptoError(String)
 
-    /// Configuration failed (`message`)
+    /// Configuration failed
     case configError(String)
 
-    /// A network operation failed (`message`)
+    /// A network operation failed
     case networkError(String)
 
-    /// JSON parsing failed (`expected`, `actual`)
-    case jsonError(String, String)
+    /// JSON parsing failed
+    case jsonError(expected: String, actual: String)
 
-    /// An API request encountered an error (`statusCode`, `message`)
-    case apiError(Int, String)
+    /// An API request encountered an error
+    case apiError(code: Int, message: String)
 
     internal init(swishError: SwishError) {
         switch swishError {
         case let .argoError(.typeMismatch(exp, act)):
-            self = .jsonError("Expected: \(exp). ", "Actual: \(act).")
+            self = .jsonError(expected: "Expected: \(exp). ", actual: "Actual: \(act).")
         case .argoError(.missingKey(let key)):
-            self = .jsonError("Expected: \(key). ", "Actual: (key not found).")
+            self = .jsonError(expected: "Expected: \(key). ", actual: "Actual: (key not found).")
         case .argoError(let err):
-            self = .jsonError("", err.description)
+            self = .jsonError(expected: "", actual: err.description)
         case .serverError(let code, data: _) where code == 401 || code == 403:
-            self = .apiError(code, "Unauthorized")
+            self = .apiError(code: code, message: "Unauthorized")
         case .serverError(code: 404, data: _):
-            self = .apiError(404, "Requested item not found")
+            self = .apiError(code: 404, message: "Requested item not found")
         case .serverError(code: 409, data: _):
-            self = .apiError(409, "Existing item cannot be modified")
+            self = .apiError(code: 409, message: "Existing item cannot be modified")
         case .serverError(code: let code, data: _):
-            self = .apiError(code, swishError.errorDescription ?? "Failed request")
+            self = .apiError(code: code, message: swishError.errorDescription ?? "Failed request")
         case .deserializationError, .parseError, .urlSessionError:
             self = .networkError(swishError.errorDescription ?? "Failed request")
         }

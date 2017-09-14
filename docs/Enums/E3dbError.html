@@ -127,7 +127,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A crypto operation failed (<code>message</code>)</p>
+                        <p>A crypto operation failed</p>
 
                       </div>
                       <div class="declaration">
@@ -158,7 +158,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Configuration failed (<code>message</code>)</p>
+                        <p>Configuration failed</p>
 
                       </div>
                       <div class="declaration">
@@ -189,7 +189,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A network operation failed (<code>message</code>)</p>
+                        <p>A network operation failed</p>
 
                       </div>
                       <div class="declaration">
@@ -210,9 +210,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO4E3db9E3dbError9jsonErrorFMS0_FTSSSS_S0_"></a>
+                    <a name="/s:FO4E3db9E3dbError9jsonErrorFMS0_FT8expectedSS6actualSS_S0_"></a>
                     <a name="//apple_ref/swift/Element/jsonError" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO4E3db9E3dbError9jsonErrorFMS0_FTSSSS_S0_">jsonError</a>
+                    <a class="token" href="#/s:FO4E3db9E3dbError9jsonErrorFMS0_FT8expectedSS6actualSS_S0_">jsonError</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -220,14 +220,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>JSON parsing failed (<code>expected</code>, <code>actual</code>)</p>
+                        <p>JSON parsing failed</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="nf">jsonError</span><span class="p">(</span><span class="kt">String</span><span class="p">,</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="nf">jsonError</span><span class="p">(</span><span class="nv">expected</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">actual</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -241,9 +241,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO4E3db9E3dbError8apiErrorFMS0_FTSiSS_S0_"></a>
+                    <a name="/s:FO4E3db9E3dbError8apiErrorFMS0_FT4codeSi7messageSS_S0_"></a>
                     <a name="//apple_ref/swift/Element/apiError" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO4E3db9E3dbError8apiErrorFMS0_FTSiSS_S0_">apiError</a>
+                    <a class="token" href="#/s:FO4E3db9E3dbError8apiErrorFMS0_FT4codeSi7messageSS_S0_">apiError</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -251,14 +251,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>An API request encountered an error (<code>statusCode</code>, <code>message</code>)</p>
+                        <p>An API request encountered an error</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="nf">apiError</span><span class="p">(</span><span class="kt">Int</span><span class="p">,</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="nf">apiError</span><span class="p">(</span><span class="nv">code</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">message</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>

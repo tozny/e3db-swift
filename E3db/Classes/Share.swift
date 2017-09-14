@@ -120,7 +120,7 @@ extension Client {
             case .success(let ak):
                 self.addSharePolicy(ak: ak, type: type, writerId: clientId, readerId: readerId, completion: completion)
             case .failure:
-                completion(Result(error: .apiError(404, "No applicable records exist to share")))
+                completion(Result(error: .apiError(code: 404, message: "No applicable records exist to share")))
             }
         }
     }
