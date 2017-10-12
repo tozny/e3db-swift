@@ -93,21 +93,21 @@ struct Api {
 }
 
 struct AkCacheKey: Hashable {
-    let recordType: String
     let writerId: UUID
-    let readerId: UUID
+    let userId: UUID
+    let recordType: String
 
     var hashValue: Int {
-        return [writerId, readerId]
+        return [writerId, userId]
             .map { $0.uuidString }
             .reduce(recordType, +)
             .hashValue
     }
 
     static func == (lhs: AkCacheKey, rhs: AkCacheKey) -> Bool {
-        return lhs.recordType == rhs.recordType &&
-            lhs.writerId == rhs.writerId &&
-            lhs.readerId == rhs.readerId
+        return lhs.writerId == rhs.writerId &&
+            lhs.userId == rhs.userId &&
+            lhs.recordType == rhs.recordType
     }
 }
 
@@ -183,7 +183,7 @@ extension AuthedRequestPerformer: RequestPerformer {
         let auth = req.allHTTPHeaderFields?["Authorization"]?.replacingOccurrences(of: "bearer", with: "Bearer")
         req.setValue(auth, forHTTPHeaderField: "Authorization")
 
-        let task = self.session.dataTask(with: req) { data, response, error in
+        let task = session.dataTask(with: req) { data, response, error in
             if let error = error {
                 completionHandler(.failure(.urlSessionError(error)))
             } else {

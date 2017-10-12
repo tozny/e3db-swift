@@ -138,7 +138,7 @@ extension Client {
         let email: String
 
         func build() -> URLRequest {
-            let url = api.url(endpoint: .clients) / ("find" + "?email=" + email)
+            let url = api.url(endpoint: .clients) / "find?email=\(email)"
             return URLRequest(url: url)
         }
     }

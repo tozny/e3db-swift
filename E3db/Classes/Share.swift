@@ -94,12 +94,12 @@ extension Client {
         }
     }
 
-    private func addSharePolicy(ak: AccessKey, type: String, writerId: UUID, readerId: UUID, completion: @escaping E3dbCompletion<Void>) {
-        let cacheKey = AkCacheKey(recordType: type, writerId: writerId, readerId: readerId)
-        putAccessKey(ak: ak, cacheKey: cacheKey, writerId: writerId, userId: writerId, readerId: readerId, recordType: type) { result in
+    private func addSharePolicy(ak: AccessKey, type: String, clientId: UUID, readerId: UUID, completion: @escaping E3dbCompletion<Void>) {
+        let cacheKey = AkCacheKey(writerId: clientId, userId: clientId, recordType: type)
+        putAccessKey(ak: ak, cacheKey: cacheKey, writerId: clientId, userId: clientId, readerId: readerId, recordType: type) { result in
             switch result {
             case .success:
-                let req = ShareRequest(api: self.api, policy: .allow, clientId: writerId, readerId: readerId, contentType: type)
+                let req = ShareRequest(api: self.api, policy: .allow, clientId: clientId, readerId: readerId, contentType: type)
                 self.authedClient.performDefault(req, completion: completion)
             case .failure(let err):
                 completion(Result(error: err))
@@ -118,7 +118,7 @@ extension Client {
         getAccessKey(writerId: clientId, userId: clientId, readerId: clientId, recordType: type) { result in
             switch result {
             case .success(let ak):
-                self.addSharePolicy(ak: ak, type: type, writerId: clientId, readerId: readerId, completion: completion)
+                self.addSharePolicy(ak: ak, type: type, clientId: clientId, readerId: readerId, completion: completion)
             case .failure:
                 completion(Result(error: .apiError(code: 404, message: "No applicable records exist to share")))
             }

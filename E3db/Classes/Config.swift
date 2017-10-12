@@ -38,7 +38,7 @@ public struct Config {
     /// use the `Client.register(token:clientName:apiUrl:completion:)` method which will supply
     /// an initialized `Config` object. Use this initializer if you register with the other
     /// registration method, `Client.register(token:clientName:publicKey:apiUrl:completion:)`.
-    /// Pass this object to the `Client.init(config:)` initializer to create a new `Client`.
+    /// Pass this object to the `Client(config:)` initializer to create a new `Client`.
     ///
     /// - Parameters:
     ///   - clientName: The name for this client
@@ -100,7 +100,9 @@ extension Config: Ogra.Encodable, Argo.Decodable {
 
 // MARK: Storage in keychain / secure enclave
 
-private let defaultProfileName = "com.tozny.e3db.defaultProfile"
+private let defaultProfileName   = "com.tozny.e3db.defaultProfile"
+private let defaultUserPrompt    = "Unlock to load profile"
+private let defaultAccessControl = VALAccessControl.touchIDAnyFingerprint
 
 extension Config {
 
@@ -114,11 +116,13 @@ extension Config {
     ///
     /// - Parameter loadProfile: Name of the profile that was previously saved,
     ///   uses internal default if unspecified.
+    /// - Parameter userPrompt: A message used to inform the user about unlocking the profile.
     /// - Returns: A fully initialized `Config` object if successful, `nil` otherwise.
-    public init?(loadProfile: String? = nil) {
+    public init?(loadProfile: String? = nil, userPrompt: String? = nil) {
         let profile = loadProfile ?? defaultProfileName
-        guard let valet = VALSecureEnclaveValet(identifier: profile, accessControl: .touchIDAnyFingerprint),
-              let data  = valet.object(forKey: profile, userPrompt: "Unlock to load profile"),
+        let prompt  = userPrompt ?? defaultUserPrompt
+        guard let valet = VALSecureEnclaveValet(identifier: profile, accessControl: defaultAccessControl),
+              let data  = valet.object(forKey: profile, userPrompt: prompt),
               let json  = try? JSONSerialization.jsonObject(with: data, options: []),
             case .success(let config) = Config.decode(JSON(json)) else {
             return nil // Could not create config from json
@@ -132,15 +136,15 @@ extension Config {
     ///   via Touch ID or passcode entry. If no passcode is set on the device, this method will fail.
     ///   Data is removed from the Secure Enclave when the user removes a passcode from the device.
     ///
-    /// - SeeAlso: `init(loadProfile:)` for loading the `Config` object.
+    /// - SeeAlso: `init(loadProfile:userPrompt:)` for loading the `Config` object.
     ///
     /// - Parameter profile: Identifier for the profile for loading later,
     ///   uses internal default if unspecified.
     /// - Returns: A boolean value indicating whether the config object was successfully saved.
     public func save(profile named: String? = nil) -> Bool {
         let profile = named ?? defaultProfileName
-        guard let valet  = VALSecureEnclaveValet(identifier: profile, accessControl: .touchIDAnyFingerprint),
-              let config = try? JSONSerialization.data(withJSONObject: self.encode().JSONObject(), options: []) else {
+        guard let valet  = VALSecureEnclaveValet(identifier: profile, accessControl: defaultAccessControl),
+              let config = try? JSONSerialization.data(withJSONObject: encode().JSONObject(), options: []) else {
                 return false // Could not serialize json
         }
         return valet.setObject(config, forKey: profile)
