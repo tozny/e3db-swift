@@ -52,7 +52,7 @@ extension Client {
     }
 
     func getAccessKey(writerId: UUID, userId: UUID, readerId: UUID, recordType: String, completion: @escaping E3dbCompletion<AccessKey>) {
-        let cacheKey = AkCacheKey(recordType: recordType, writerId: writerId, readerId: readerId)
+        let cacheKey = AkCacheKey(writerId: writerId, userId: userId, recordType: recordType)
 
         // Check for AK in local cache
         if let ak = Client.akCache[cacheKey] {
@@ -156,7 +156,7 @@ extension Client {
 
     func deleteAccessKey(writerId: UUID, userId: UUID, readerId: UUID, recordType: String, completion: @escaping E3dbCompletion<Void>) {
         // remove from cache
-        let cacheKey = AkCacheKey(recordType: recordType, writerId: writerId, readerId: readerId)
+        let cacheKey = AkCacheKey(writerId: writerId, userId: userId, recordType: recordType)
         Client.akCache[cacheKey] = nil
 
         // remove from server

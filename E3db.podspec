@@ -4,9 +4,8 @@ Pod::Spec.new do |s|
   s.summary          = 'Super Easy End-to-End Encryption'
 
   s.description      = <<-DESC
-Protect your users’ data at the code level.
-From the very first line to your final release, Tozny's E3db makes
-protecting your users’ sensitive data as easy as a few lines of code.
+The Tozny End-to-End Encrypted Database (E3DB) is a storage platform with powerful sharing and consent management features.
+E3DB provides a familiar JSON-based NoSQL-style API for reading, writing, and querying data stored securely in the cloud.
                        DESC
 
   s.homepage         = 'https://tozny.com/'
@@ -21,14 +20,14 @@ protecting your users’ sensitive data as easy as a few lines of code.
   s.subspec 'Core' do |core|
     core.dependency 'Swish', '~> 2.0'
     core.dependency 'Curry', '~> 3.0'
-    core.dependency 'Sodium', '~> 0.3'
+    core.dependency 'Sodium', '~> 0.5'
     core.dependency 'Valet', '~> 2.4'
     core.dependency 'Ogra', '~> 4.1'
     core.dependency 'Heimdallr', '~> 3.6'
   end
 
   s.subspec 'Logging' do |l|
-    l.dependency 'ResponseDetective', '~> 1.1'
+    l.dependency 'ResponseDetective', '~> 1.2'
     l.pod_target_xcconfig = { 'OTHER_SWIFT_FLAGS' => '-DE3DB_LOGGING' }
   end
 

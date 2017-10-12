@@ -12,10 +12,7 @@ typealias EncryptedAccessKey = String
 struct Crypto {
     typealias SecretBoxCipherNonce = (authenticatedCipherText: Data, nonce: SecretBox.Nonce)
     typealias BoxCipherNonce       = (authenticatedCipherText: Data, nonce: Box.Nonce)
-
-    // If this fails, then _everything_ is broken.
-    // swiftlint:disable force_unwrapping
-    fileprivate static let sodium = Sodium()!
+    fileprivate static let sodium  = Sodium()
 }
 
 // MARK: Utilities
@@ -115,7 +112,7 @@ extension Crypto {
     }
 
     static func decrypt(cipherData: CipherData, ak: AccessKey) throws -> RecordData {
-        var decrypted = [String: String]()
+        var decrypted = Cleartext()
 
         for (key, value) in cipherData {
             guard let (edk, edkN, ef, efN) = b64SplitData(value) else {

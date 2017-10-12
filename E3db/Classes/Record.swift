@@ -208,7 +208,7 @@ extension Client {
     }
 }
 
-// MARK: Read Record / Read Raw
+// MARK: Read Record
 
 extension Client {
     private struct RecordRequest: Request {
