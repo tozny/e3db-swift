@@ -215,10 +215,17 @@ extension Client {
         typealias ResponseObject = RecordResponse
         let api: Api
         let recordId: UUID
+        let fields: [String]
+
+        private func constructUrl(base: URL) -> URL {
+            var comp = URLComponents(url: base, resolvingAgainstBaseURL: false)
+            comp?.queryItems = fields.map { URLQueryItem(name: "field", value: $0) }
+            return comp?.url ?? base
+        }
 
         func build() -> URLRequest {
             let url = api.url(endpoint: .records) / recordId.uuidString
-            let req = URLRequest(url: url)
+            let req = URLRequest(url: constructUrl(base: url))
             return req
         }
     }
@@ -237,8 +244,8 @@ extension Client {
         }
     }
 
-    private func readRaw(recordId: UUID, completion: @escaping E3dbCompletion<RecordResponse>) {
-        let req = RecordRequest(api: api, recordId: recordId)
+    private func readRaw(recordId: UUID, fields: [String]? = nil, completion: @escaping E3dbCompletion<RecordResponse>) {
+        let req = RecordRequest(api: api, recordId: recordId, fields: fields ?? [])
         authedClient.performDefault(req, completion: completion)
     }
 
@@ -246,9 +253,10 @@ extension Client {
     ///
     /// - Parameters:
     ///   - recordId: The identifier for the `Record` to read
+    ///   - fields: A list of fields to select from the data, instead of the full record data
     ///   - completion: A handler to call when the operation completes to provide the decrypted record
-    public func read(recordId: UUID, completion: @escaping E3dbCompletion<Record>) {
-        readRaw(recordId: recordId) { result in
+    public func read(recordId: UUID, fields: [String]? = nil, completion: @escaping E3dbCompletion<Record>) {
+        readRaw(recordId: recordId, fields: fields) { result in
             switch result {
             case .success(let r):
                 self.decryptRecord(record: r, completion: completion)

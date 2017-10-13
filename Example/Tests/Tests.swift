@@ -83,6 +83,36 @@ class IntegrationTests: XCTestCase {
         deleteRecord(record!, e3db: e3db)
     }
 
+    func testReadFields() {
+        let e3db = client()
+        let filered = ["test": "message", "other": "hi"]
+        let full = filered.merging(["hidden": "not shown"], uniquingKeysWith:{ a,_ in a })
+        let data = RecordData(cleartext: full)
+        var record: Record?
+
+        // write record
+        asyncTest(#function + "write") { (expect) in
+            e3db.write(type: "test-data", data: data) { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssertEqual(result.value!.data, full)
+                record = result.value
+                expect.fulfill()
+            }
+        }
+
+        // read it back out, only two fields specified
+        asyncTest(#function + "read") { (expect) in
+            e3db.read(recordId: record!.meta.recordId, fields: Array(filered.keys)) { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssertEqual(result.value!.data, filered)
+                expect.fulfill()
+            }
+        }
+
+        // clean up
+        deleteRecord(record!, e3db: e3db)
+    }
+
     func testWriteFailsWithEmptyData() {
         let e3db = client()
         let data = RecordData(cleartext: [:])
