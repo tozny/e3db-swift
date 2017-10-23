@@ -96,6 +96,19 @@ extension Client {
         return KeyPair(publicKey: pubKey, secretKey: privKey)
     }
 
+    /// A helper function to create a compatible key pair for E3db signature operations.
+    ///
+    /// - Note: This method is not required for library use. A key pair is
+    ///   generated and stored in the `Config` object returned by the
+    ///   `Client.register(token:clientName:apiUrl:completion:)` method.
+    ///
+    /// - Returns: A key pair containing Base64URL encoded Ed25519 public and private keys.
+    public static func generateSigningKeyPair() -> KeyPair? {
+        guard let keyPair = Crypto.generateSigningKeyPair() else { return nil }
+        let pubKey  = keyPair.publicKey.base64URLEncodedString()
+        let privKey = keyPair.secretKey.base64URLEncodedString()
+        return KeyPair(publicKey: pubKey, secretKey: privKey)
+    }
 }
 
 // MARK: Get Client Info
