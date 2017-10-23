@@ -92,33 +92,9 @@ struct Api {
     }
 }
 
-struct AkCacheKey: Hashable {
-    let writerId: UUID
-    let userId: UUID
-    let recordType: String
-
-    var hashValue: Int {
-        return [writerId, userId]
-            .map { $0.uuidString }
-            .reduce(recordType, +)
-            .hashValue
-    }
-
-    static func == (lhs: AkCacheKey, rhs: AkCacheKey) -> Bool {
-        return lhs.writerId == rhs.writerId &&
-            lhs.userId == rhs.userId &&
-            lhs.recordType == rhs.recordType
-    }
-}
-
 struct AuthedRequestPerformer {
-    let session: URLSession
     let authenticator: Heimdallr
-
-    init(authenticator: Heimdallr, session: URLSession = .shared) {
-        self.session = session
-        self.authenticator = authenticator
-    }
+    let session: URLSession
 }
 
 extension AuthedRequestPerformer: RequestPerformer {
