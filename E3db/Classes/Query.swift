@@ -108,7 +108,7 @@ extension QueryParams: Ogra.Encodable {
 struct SearchRecord: Argo.Decodable {
     let meta: Meta
     let data: CipherData?
-    let eakResponse: EAKResponse?
+    let eakInfo: EAKInfo?
 
     static func decode(_ j: JSON) -> Decoded<SearchRecord> {
         return curry(SearchRecord.init)
@@ -163,11 +163,11 @@ extension Client {
 
     private func decryptSearchRecord(_ searchRecord: SearchRecord) -> E3dbResult<Record> {
         guard let cipherData = searchRecord.data,
-              let eakResp    = searchRecord.eakResponse else {
+              let eakInfo    = searchRecord.eakInfo else {
                 return Result(value: Record(meta: searchRecord.meta, data: Cleartext()))
         }
 
-        return decryptEak(eakResponse: eakResp, clientPrivateKey: self.config.privateKey)
+        return decryptEak(eakInfo: eakInfo, clientPrivateKey: self.config.privateKey)
             .flatMap { decrypt(data: cipherData, accessKey: $0) }
             .map { Record(meta: searchRecord.meta, data: $0.cleartext) }
     }
