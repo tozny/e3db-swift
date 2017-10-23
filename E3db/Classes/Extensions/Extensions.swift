@@ -14,9 +14,9 @@ import Result
 extension Formatter {
     static let iso8601: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.calendar = Calendar(identifier: .iso8601)
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.calendar   = Calendar(identifier: .iso8601)
+        formatter.locale     = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone   = TimeZone(secondsFromGMT: 0)
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXXXX"
         return formatter
     }()
@@ -64,7 +64,7 @@ extension URL: Ogra.Encodable, Argo.Decodable {
 
 extension UUID: Ogra.Encodable, Argo.Decodable {
     public func encode() -> JSON {
-        return self.uuidString.encode()
+        return self.uuidString.lowercased().encode()
     }
 
     public static func decode(_ json: JSON) -> Decoded<UUID> {
@@ -115,3 +115,28 @@ extension APIClient {
         perform(request) { completion($0.mapError(E3dbError.init)) }
     }
 }
+
+extension JSON: Signable {
+    func serialize() -> String {
+        switch self {
+        case .null:                 return "null"
+        case .bool(let b):          return b ? "true" : "false"
+        case .number(let num):      return "\(num)"
+        case .string(let string):   return "\"\(string)\""
+        case .array(let array):     return "[\(array.map { $0.serialize() }.joined(separator: ","))]"
+        case .object(let object):
+            let inner = object
+                .sorted { $0.key.compare($1.key, options: [.literal]) == .orderedAscending }
+                .map { elem in "\"\(elem.key)\":\(elem.value.serialize())" }
+                .joined(separator: ",")
+            return "{\(inner)}"
+        }
+    }
+}
+
+extension Dictionary where Key == String, Value == String {
+    func serialized() -> String {
+        return JSON.object(mapValues(JSON.string)).serialize()
+    }
+}
+

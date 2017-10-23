@@ -129,3 +129,20 @@ extension Crypto {
         return RecordData(cleartext: decrypted)
     }
 }
+
+// MARK: Document Crypto
+
+extension Crypto {
+
+    static func signature(doc: Signable, signingKey: Sign.SecretKey) -> String? {
+        let message = Data(doc.serialized().utf8)
+        return sodium.sign.signature(message: message, secretKey: signingKey)?.base64URLEncodedString()
+    }
+
+    static func verify(doc: Signable, encodedSig: String, verifyingKey: Sign.PublicKey) -> Bool? {
+        let message = Data(doc.serialized().utf8)
+        return Data(base64URLEncoded: encodedSig)
+            .map { sodium.sign.verify(message: message, publicKey: verifyingKey, signature: $0) }
+    }
+
+}

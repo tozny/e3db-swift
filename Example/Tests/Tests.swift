@@ -11,6 +11,83 @@ struct TestData {
 
 class IntegrationTests: XCTestCase {
 
+    func testIntermediaryUseCase() {
+        let (e3db, config) = clientWithConfig()
+        let id   = config.clientId
+        let test = #function + UUID().uuidString
+        let type = "ticket"
+
+        // register mock server client
+        let (serverClient, serverConfig) = clientWithConfig()
+        let signatureOfClientKey = try? serverClient.sign(document: config.publicSigKey)
+        XCTAssertNotNil(signatureOfClientKey)
+        let header = [
+            "client_pub_sig_key": config.publicSigKey,
+            "server_sig_of_client_sig_key": signatureOfClientKey!.signature
+        ]
+
+        // pre-share document type to ensure EAK is available (`createWriterKey` and `share` can happen in either order)
+        var eakInfo1: EAKInfo?
+        asyncTest(test + "createWriterKey") { (expect) in
+            // online operation
+            e3db.createWriterKey(type: type) { (result) in
+                defer { expect.fulfill() }
+                guard case .success(let eak1) = result else {
+                    return XCTFail()
+                }
+                eakInfo1 = eak1
+            }
+        }
+        XCTAssertNotNil(eakInfo1)
+        asyncTest(test + "share") { (expect) in
+            e3db.share(type: type, readerId: serverConfig.clientId) { (result) in
+                defer { expect.fulfill() }
+                guard case .success = result else {
+                    return XCTFail()
+                }
+            }
+        }
+
+        // offline operations
+        let data   = RecordData(cleartext: ["test_field": "test_value"])
+        let encDoc = try? e3db.encrypt(type: type, data: data, eakInfo: eakInfo1!, plain: header)
+        XCTAssertNotNil(encDoc)
+
+        let signed = try? e3db.sign(document: encDoc!)
+        XCTAssertNotNil(signed)
+
+        print("signed: \(signed!.serialized())")
+
+        // emulates intermediary operations
+
+        // 1. verify server sig of client key
+        let signedKeyDocument = SignedDocument(document: signed!.document.clientMeta.plain!["client_pub_sig_key"]!, signature: signed!.document.clientMeta.plain!["server_sig_of_client_sig_key"]!)
+        let keyVerification   = try? e3db.verify(signed: signedKeyDocument, pubSigKey: serverConfig.publicSigKey)
+        XCTAssertNotNil(keyVerification)
+        XCTAssert(keyVerification!)
+
+        // 2. verify signed document
+        let docVerification = try? e3db.verify(signed: signed!, pubSigKey: config.publicSigKey)
+        XCTAssertNotNil(docVerification)
+        XCTAssert(docVerification!)
+
+        // emulates server operations (i.e. document arrived at destination)
+        asyncTest(test + "getReaderKey") { (expect) in
+            serverClient.getReaderKey(writerId: id, userId: id, type: type) { (result) in
+                defer { expect.fulfill() }
+                guard case .success(let eakInfo2) = result else {
+                    return XCTFail()
+                }
+
+                let decDoc = try? serverClient.decrypt(encryptedDoc: encDoc!, eakInfo: eakInfo2, writerPubSigKey: config.publicSigKey)
+                XCTAssertNotNil(decDoc)
+                XCTAssertEqual(decDoc!.data, data.cleartext)
+                XCTAssert(decDoc!.verified)
+            }
+        }
+
+    }
+
     func testRegistrationDefault() {
         let test = #function + UUID().uuidString
         asyncTest(test) { (expect) in
@@ -592,23 +669,28 @@ extension IntegrationTests {
         waitForExpectations(timeout: 10, handler: { XCTAssertNil($0) })
     }
 
-    func clientWithId() -> (Client, UUID) {
+    func clientWithConfig() -> (Client, Config) {
         var e3db: Client?
-        var uuid: UUID?
+        var conf: Config?
         let newClient = #function + UUID().uuidString
         asyncTest(newClient) { (expect) in
             Client.register(token: TestData.token, clientName: newClient, apiUrl: TestData.apiUrl) { (result) in
                 XCTAssertNotNil(result.value)
-                uuid = result.value!.clientId
-                e3db = Client(config: result.value!)
+                conf = result.value
+                e3db = Client(config: conf!)
                 expect.fulfill()
             }
         }
-        return (e3db!, uuid!)
+        return (e3db!, conf!)
+    }
+
+    func clientWithId() -> (Client, UUID) {
+        let (e3db, conf) = clientWithConfig()
+        return (e3db, conf.clientId)
     }
 
     func client() -> Client {
-        let (e3db, _) = clientWithId()
+        let (e3db, _) = clientWithConfig()
         return e3db
     }
 
