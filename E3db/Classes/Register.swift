@@ -123,6 +123,11 @@ extension Client {
             return completion(Result(error: .cryptoError("Failed to create key pair.")))
         }
 
+        // create signing key pair
+        guard let signingKeyPair = Client.generateSigningKeyPair() else {
+            return completion(Result(error: .cryptoError("Failed to create signing key pair.")))
+        }
+
         let api       = Api(baseUrl: url)
         let pubKey    = ClientKey(curve25519: keyPair.publicKey)
         let clientReq = ClientRequest(name: clientName, publicKey: pubKey)
@@ -140,7 +145,9 @@ extension Client {
                         apiSecret: creds.apiSecret,
                         publicKey: keyPair.publicKey,
                         privateKey: keyPair.secretKey,
-                        baseApiUrl: api.baseUrl
+                        baseApiUrl: api.baseUrl,
+                        publicSigKey: signingKeyPair.publicKey,
+                        privateSigKey: signingKeyPair.secretKey
                     )
                 }
             completion(resp)
