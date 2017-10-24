@@ -36,7 +36,7 @@ extension String {
 
 extension Date: Ogra.Encodable, Argo.Decodable {
     public func encode() -> JSON {
-        return self.iso8601.encode()
+        return iso8601.encode()
     }
 
     public static func decode(_ json: JSON) -> Decoded<Date> {
@@ -50,7 +50,7 @@ extension Date: Ogra.Encodable, Argo.Decodable {
 
 extension URL: Ogra.Encodable, Argo.Decodable {
     public func encode() -> JSON {
-        return self.absoluteString.encode()
+        return absoluteString.encode()
     }
 
     public static func decode(_ json: JSON) -> Decoded<URL> {
@@ -64,7 +64,7 @@ extension URL: Ogra.Encodable, Argo.Decodable {
 
 extension UUID: Ogra.Encodable, Argo.Decodable {
     public func encode() -> JSON {
-        return self.uuidString.lowercased().encode()
+        return uuidString.lowercased().encode()
     }
 
     public static func decode(_ json: JSON) -> Decoded<UUID> {
@@ -95,7 +95,7 @@ extension URL {
 extension Array where Element: ResultProtocol {
     public func sequence<T, E>() -> Result<[T], E> {
         var accum: [T] = []
-        accum.reserveCapacity(self.count)
+        accum.reserveCapacity(count)
 
         for case let result as Result<T, E> in self {
             switch result {
@@ -117,6 +117,7 @@ extension APIClient {
 }
 
 extension JSON: Signable {
+    // swiftlint:disable switch_case_on_newline
     func serialize() -> String {
         switch self {
         case .null:                 return "null"
@@ -139,4 +140,3 @@ extension Dictionary where Key == String, Value == String {
         return JSON.object(mapValues(JSON.string)).serialize()
     }
 }
-
