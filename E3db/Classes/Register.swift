@@ -118,14 +118,14 @@ extension Client {
             return completion(Result(error: .configError("Invalid apiUrl: \(apiUrl ?? "")")))
         }
 
-        // create key pair
+        // create encryption key pair
         guard let keyPair = Client.generateKeyPair() else {
-            return completion(Result(error: .cryptoError("Failed to create key pair.")))
+            return completion(Result(error: .cryptoError("Failed to create encryption key pair")))
         }
 
         // create signing key pair
         guard let signingKeyPair = Client.generateSigningKeyPair() else {
-            return completion(Result(error: .cryptoError("Failed to create signing key pair.")))
+            return completion(Result(error: .cryptoError("Failed to create signing key pair")))
         }
 
         let api       = Api(baseUrl: url)

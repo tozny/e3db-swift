@@ -82,7 +82,7 @@ extension Crypto {
 
     private static func generateDataKey() throws -> SecretBox.Key {
         guard let secretKey = sodium.secretBox.key() else {
-            throw E3dbError.cryptoError("Failed to generate data key.")
+            throw E3dbError.cryptoError("Failed to generate data key")
         }
         return secretKey
     }
@@ -90,7 +90,7 @@ extension Crypto {
     private static func encrypt(value: Data?, key: SecretBox.Key) throws -> SecretBoxCipherNonce {
         guard let data = value,
               let cipher: SecretBoxCipherNonce = sodium.secretBox.seal(message: data, secretKey: key) else {
-            throw E3dbError.cryptoError("Failed to encrypt value.")
+            throw E3dbError.cryptoError("Failed to encrypt value")
         }
         return cipher
     }
@@ -110,7 +110,7 @@ extension Crypto {
 
     private static func decrypt(ciphertext: Data, nonce: SecretBox.Nonce, key: SecretBox.Key) throws -> Data {
         guard let plain = sodium.secretBox.open(authenticatedCipherText: ciphertext, secretKey: key, nonce: nonce) else {
-            throw E3dbError.cryptoError("Failed to decrypt value.")
+            throw E3dbError.cryptoError("Failed to decrypt value")
         }
         return plain
     }

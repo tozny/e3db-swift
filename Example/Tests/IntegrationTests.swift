@@ -73,7 +73,6 @@ class IntegrationTests: XCTestCase, TestUtils {
                 let decDoc = try? serverClient.decrypt(encryptedDoc: encDoc!, eakInfo: eakInfo2, writerPubSigKey: config.publicSigKey)
                 XCTAssertNotNil(decDoc)
                 XCTAssertEqual(decDoc!.data, data.cleartext)
-                XCTAssert(decDoc!.verified)
             }
         }
 
