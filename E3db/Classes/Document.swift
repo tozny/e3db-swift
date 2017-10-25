@@ -108,15 +108,20 @@ extension SignedDocument: Ogra.Encodable {
     }
 }
 
-extension Client {
-    private struct DocInfo: Signable {
-        let meta: ClientMeta
-        let data: RecordData
+// Container for signing and
+// verification operations
+struct DocInfo: Signable {
+    let meta: ClientMeta
+    let data: RecordData
 
-        func serialized() -> String {
-            return meta.serialized() + data.serialized()
-        }
+    // convention for serializing document is
+    // `serialized(ClientMeta) || serialized(CleartextData)`
+    func serialized() -> String {
+        return meta.serialized() + data.serialized()
     }
+}
+
+extension Client {
 
     // Check for AK in local cache or decrypt the given EAK
     private func getLocalAk(clientId: UUID, recordType: String, eakInfo: EAKInfo) throws -> RawAccessKey {
