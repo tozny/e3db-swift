@@ -140,3 +140,9 @@ extension Dictionary where Key == String, Value == String {
         return JSON.object(mapValues(JSON.string)).serialize()
     }
 }
+
+extension String: Signable {
+    public func serialized() -> String {
+        return self
+    }
+}
