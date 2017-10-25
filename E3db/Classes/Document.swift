@@ -44,7 +44,7 @@ public struct EncryptedDocument: Signable {
     public let recordSignature: String
 }
 
-/// Data type to hold the unencrypted data and related info
+/// Data type to hold the verified, unencrypted data and related info
 public struct DecryptedDocument {
 
     /// Metadata produced by this client about this document
@@ -53,10 +53,6 @@ public struct DecryptedDocument {
     /// The plaintext information where both keys and values
     /// are unencrypted
     public let data: Cleartext
-
-    /// Whether this document's data and cleartext matched the signature
-    /// provided when verified against a given signing public key
-    public let verified: Bool
 }
 
 /// A wrapper object around a given data type and its
@@ -187,22 +183,24 @@ extension Client {
     /// Create a document to hold the original plaintext data from the given encrypted format.
     /// The resulting document also holds info related to the author, type of data, and any additional
     /// metadata kept in cleartext. The input document is also verified for authenticity with the given
-    /// public signing key.
+    /// public signing key, and throws an error if verification fails.
     ///
     /// - Parameters:
     ///   - encryptedDoc: Data type to hold encrypted data and related info
     ///   - eakInfo: The encrypted access key information used for the decryption operation
     ///   - writerPubSigKey: The public portion of the key used to create the signature for the `encryptedDoc`
     /// - Returns: Data type to hold the unencrypted data and related info
-    /// - Throws: `E3dbError.cryptoError` if the operation failed
+    /// - Throws: `E3dbError.cryptoError` if the decrypt operation fails, or if the document fails verification
     public func decrypt(encryptedDoc: EncryptedDocument, eakInfo: EAKInfo, writerPubSigKey: String) throws -> DecryptedDocument {
         let meta      = encryptedDoc.clientMeta
         let localAk   = try getLocalAk(clientId: eakInfo.authorizerId, recordType: meta.type, eakInfo: eakInfo)
         let decrypted = try Crypto.decrypt(cipherData: encryptedDoc.encryptedData, ak: localAk)
         let recInfo   = DocInfo(meta: meta, data: decrypted)
         let signed    = SignedDocument(document: recInfo, signature: encryptedDoc.recordSignature)
-        let verified  = try verify(signed: signed, pubSigKey: writerPubSigKey)
-        return DecryptedDocument(clientMeta: meta, data: decrypted.cleartext, verified: verified)
+        guard try verify(signed: signed, pubSigKey: writerPubSigKey) else {
+            throw E3dbError.cryptoError("Document failed verification")
+        }
+        return DecryptedDocument(clientMeta: meta, data: decrypted.cleartext)
     }
 
 }

@@ -82,7 +82,6 @@ class DocumentTests: XCTestCase, TestUtils {
 
             let decrypted = try client1!.decrypt(encryptedDoc: encrypted, eakInfo: eakInfo, writerPubSigKey: config1!.publicSigKey)
             XCTAssert(decrypted.clientMeta.writerId == config1!.clientId)
-            XCTAssert(decrypted.verified)
             XCTAssertEqual(decrypted.data, testData)
         } catch {
             XCTFail(error.localizedDescription)
@@ -119,7 +118,6 @@ class DocumentTests: XCTestCase, TestUtils {
             let decrypted = try client2!.decrypt(encryptedDoc: encrypted, eakInfo: eakInfo2!, writerPubSigKey: config1!.publicSigKey)
             XCTAssert(decrypted.clientMeta.writerId == config1!.clientId)
             XCTAssertEqual(decrypted.data, testData)
-            XCTAssert(decrypted.verified)
         } catch {
             XCTFail(error.localizedDescription)
         }
@@ -147,8 +145,7 @@ class DocumentTests: XCTestCase, TestUtils {
             let decrypted = try client1!.decrypt(encryptedDoc: encrypted, eakInfo: eakInfo2, writerPubSigKey: config1!.publicSigKey)
             XCTFail("Decryption should not have succeeded: \(decrypted)")
         } catch E3dbError.cryptoError(let msg) {
-            print(msg)
-            XCTAssert(msg.count > 0)
+            XCTAssert(msg == "Failed to decrypt value")
         } catch {
             XCTFail("Threw other error: \(error.localizedDescription)")
         }
@@ -163,11 +160,11 @@ class DocumentTests: XCTestCase, TestUtils {
 
             // wrong public sig key, should decrypt but fail verification step
             let decrypted = try client1!.decrypt(encryptedDoc: encrypted, eakInfo: eakInfo, writerPubSigKey: config2!.publicSigKey)
-            XCTAssert(decrypted.clientMeta.writerId == config1!.clientId)
-            XCTAssertEqual(decrypted.data, testData)
-            XCTAssertFalse(decrypted.verified)
+            XCTFail("Verification should not have succeeded: \(decrypted)")
+        } catch E3dbError.cryptoError(let msg) {
+            XCTAssert(msg == "Document failed verification")
         } catch {
-            XCTFail("Threw error: \(error.localizedDescription)")
+            XCTFail("Threw other error: \(error.localizedDescription)")
         }
     }
 

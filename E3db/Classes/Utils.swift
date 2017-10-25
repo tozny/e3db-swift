@@ -31,9 +31,9 @@ public enum E3dbError: Swift.Error {
     internal init(swishError: SwishError) {
         switch swishError {
         case let .argoError(.typeMismatch(exp, act)):
-            self = .jsonError(expected: "Expected: \(exp). ", actual: "Actual: \(act).")
+            self = .jsonError(expected: "Expected: \(exp). ", actual: "Actual: \(act)")
         case .argoError(.missingKey(let key)):
-            self = .jsonError(expected: "Expected: \(key). ", actual: "Actual: (key not found).")
+            self = .jsonError(expected: "Expected: \(key). ", actual: "Actual: (key not found)")
         case .argoError(let err):
             self = .jsonError(expected: "", actual: err.description)
         case .serverError(let code, data: _) where code == 401 || code == 403:
