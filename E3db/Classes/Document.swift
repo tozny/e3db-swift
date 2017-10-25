@@ -89,6 +89,7 @@ extension Signable where Self: Ogra.Encodable {
     }
 }
 
+/// :nodoc:
 extension EncryptedDocument: Ogra.Encodable {
     public func encode() -> JSON {
         return JSON.object([
@@ -99,6 +100,7 @@ extension EncryptedDocument: Ogra.Encodable {
     }
 }
 
+/// :nodoc:
 extension SignedDocument: Ogra.Encodable {
     public func encode() -> JSON {
         let encoded = document.serialized()
@@ -107,12 +109,6 @@ extension SignedDocument: Ogra.Encodable {
             "doc": JSON(jsonObj ?? encoded),
             "sig": signature.encode()
         ])
-    }
-}
-
-extension String: Signable {
-    public func serialized() -> String {
-        return self
     }
 }
 
