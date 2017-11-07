@@ -205,7 +205,3 @@ See the [Development Guide](dev/Development.md) for details on development.
 ## Author
 
 Tozny
-
-## License
-
-Copyright © Tozny, LLC 2017. All rights reserved.
