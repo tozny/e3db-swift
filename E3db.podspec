@@ -9,7 +9,7 @@ E3DB provides a familiar JSON-based NoSQL-style API for reading, writing, and qu
                        DESC
 
   s.homepage         = 'https://tozny.com/'
-  s.license          = { :type => 'MIT', :file => 'LICENSE' }
+  s.license          = { :file => 'LICENSE.md' }
   s.author           = { 'Tozny' => 'info@tozny.com' }
   s.source           = { :git => 'https://github.com/tozny/e3db-swift.git', :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/@tozny'
