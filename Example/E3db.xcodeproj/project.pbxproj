@@ -435,7 +435,6 @@
 		73B667B85D4EC4F5EA104FFF /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		9025A04C575EF94CB47E7F0B /* Pods-E3db_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-E3db_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-E3db_Tests/Pods-E3db_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		B2035BA32F943572DF40F62C /* Pods-E3db_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-E3db_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-E3db_Tests/Pods-E3db_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		CC1D56A881AB2B831410809E /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		F54402557D4DA409D0EEF5DB /* Pods-E3db_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-E3db_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-E3db_Example/Pods-E3db_Example.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1301,7 +1300,6 @@
 			children = (
 				6E610191BA1C8B6D3B859B1B /* E3db.podspec */,
 				73B667B85D4EC4F5EA104FFF /* README.md */,
-				CC1D56A881AB2B831410809E /* LICENSE */,
 			);
 			name = "Podspec Metadata";
 			sourceTree = "<group>";

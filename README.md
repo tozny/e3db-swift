@@ -197,11 +197,3 @@ e3db?.revoke(type: "UserInfo", readerId: otherClient) { result in
     // Revoking was successful!
 }
 ```
-
-## Development
-
-See the [Development Guide](dev/Development.md) for details on development.
-
-## Author
-
-Tozny
