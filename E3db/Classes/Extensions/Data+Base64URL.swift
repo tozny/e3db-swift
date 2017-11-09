@@ -29,7 +29,12 @@ extension Data {
             .replacingOccurrences(of: "_", with: "/")
             .replacingOccurrences(of: "-", with: "+")
         // iOS can't handle base64 encoding without padding. Add manually
-        let padLength = (4 - (base64Encoded.characters.count % 4)) % 4
+        #if swift(>=3.2)
+            let charCount = base64Encoded.count
+        #else
+            let charCount = base64Encoded.characters.count
+        #endif
+        let padLength = (4 - (charCount % 4)) % 4
         let base64EncodedWithPadding = base64Encoded + String(repeating: "=", count: padLength)
         self.init(base64Encoded: base64EncodedWithPadding)
     }
