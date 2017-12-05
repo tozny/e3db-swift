@@ -300,8 +300,8 @@ confident in:
   * Proof-of-authorship - The author of the document held the private signing
     key associated with the given public key when the document was created.
 
-To create a signature, use the `sign` method (assumes an encrypted document as
-shown above):
+To create a signature, use the `sign` method. (This example assumes an encrypted
+document as shown above):
 
 ```swift
 let encrypted = // get encrypted document (e.g. read from local storage)
@@ -315,7 +315,7 @@ instance as above. `config` holds the private & public keys for the client.
 that wrote the record):
 
 ```swift
-guard try! e3db?.verify(signed: signed, pubSigKey: config1!.publicSigKey)) else {
+guard try! e3db?.verify(signed: signed, pubSigKey: config!.publicSigKey)) else {
     return print("Document failed verification")
 }
 // Document verified!
