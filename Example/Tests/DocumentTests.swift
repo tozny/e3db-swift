@@ -80,7 +80,7 @@ class DocumentTests: XCTestCase, TestUtils {
             let encrypted = try client1!.encrypt(type: type1, data: RecordData(cleartext: testData), eakInfo: eakInfo)
             XCTAssert(encrypted.clientMeta.writerId == config1!.clientId)
 
-            let decrypted = try client1!.decrypt(encryptedDoc: encrypted, eakInfo: eakInfo, writerPubSigKey: config1!.publicSigKey)
+            let decrypted = try client1!.decrypt(encryptedDoc: encrypted, eakInfo: eakInfo)
             XCTAssert(decrypted.clientMeta.writerId == config1!.clientId)
             XCTAssertEqual(decrypted.data, testData)
         } catch {
@@ -115,7 +115,7 @@ class DocumentTests: XCTestCase, TestUtils {
             let encrypted = try client1!.encrypt(type: type1, data: RecordData(cleartext: testData), eakInfo: eakInfo1)
             XCTAssert(encrypted.clientMeta.writerId == config1!.clientId)
 
-            let decrypted = try client2!.decrypt(encryptedDoc: encrypted, eakInfo: eakInfo2!, writerPubSigKey: config1!.publicSigKey)
+            let decrypted = try client2!.decrypt(encryptedDoc: encrypted, eakInfo: eakInfo2!)
             XCTAssert(decrypted.clientMeta.writerId == config1!.clientId)
             XCTAssertEqual(decrypted.data, testData)
         } catch {
@@ -142,27 +142,10 @@ class DocumentTests: XCTestCase, TestUtils {
             XCTAssert(encrypted.clientMeta.writerId == config1!.clientId)
 
             // wrong eakInfo
-            let decrypted = try client1!.decrypt(encryptedDoc: encrypted, eakInfo: eakInfo2, writerPubSigKey: config1!.publicSigKey)
+            let decrypted = try client1!.decrypt(encryptedDoc: encrypted, eakInfo: eakInfo2)
             XCTFail("Decryption should not have succeeded: \(decrypted)")
         } catch E3dbError.cryptoError(let msg) {
             XCTAssert(msg == "Failed to decrypt value")
-        } catch {
-            XCTFail("Threw other error: \(error.localizedDescription)")
-        }
-    }
-
-    func testDecryptVerificationFailure() {
-        let eakInfo = createWriterKey(client: client1!, type: type1)
-        do {
-            let testData = ["test": "data"]
-            let encrypted = try client1!.encrypt(type: type1, data: RecordData(cleartext: testData), eakInfo: eakInfo)
-            XCTAssert(encrypted.clientMeta.writerId == config1!.clientId)
-
-            // wrong public sig key, should decrypt but fail verification step
-            let decrypted = try client1!.decrypt(encryptedDoc: encrypted, eakInfo: eakInfo, writerPubSigKey: config2!.publicSigKey)
-            XCTFail("Verification should not have succeeded: \(decrypted)")
-        } catch E3dbError.cryptoError(let msg) {
-            XCTAssert(msg == "Document failed verification")
         } catch {
             XCTFail("Threw other error: \(error.localizedDescription)")
         }

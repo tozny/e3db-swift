@@ -70,7 +70,7 @@ class IntegrationTests: XCTestCase, TestUtils {
                     return XCTFail()
                 }
 
-                let decDoc = try? serverClient.decrypt(encryptedDoc: encDoc!, eakInfo: eakInfo2, writerPubSigKey: config.publicSigKey)
+                let decDoc = try? serverClient.decrypt(encryptedDoc: encDoc!, eakInfo: eakInfo2)
                 XCTAssertNotNil(decDoc)
                 XCTAssertEqual(decDoc!.data, data.cleartext)
             }
@@ -100,9 +100,12 @@ class IntegrationTests: XCTestCase, TestUtils {
     func testRegistrationCustom() {
         let test    = #function + UUID().uuidString
         let keyPair = Client.generateKeyPair()!
+        let sigPair = Client.generateSigningKeyPair()!
         asyncTest(test) { (expect) in
-            Client.register(token: TestData.token, clientName: test, publicKey: keyPair.publicKey, apiUrl: TestData.apiUrl) { (result) in
+            Client.register(token: TestData.token, clientName: test, publicKey: keyPair.publicKey, signingKey: sigPair.publicKey, apiUrl: TestData.apiUrl) { (result) in
                 XCTAssertNotNil(result.value)
+                XCTAssertEqual(result.value!.publicKey, keyPair.publicKey)
+                XCTAssertEqual(result.value!.signingKey, sigPair.publicKey)
                 expect.fulfill()
             }
         }
@@ -111,9 +114,21 @@ class IntegrationTests: XCTestCase, TestUtils {
     func testRegisterFailsWithInvalidKey() {
         let test    = #function + UUID().uuidString
         let keyPair = Client.generateKeyPair()!
+        let sigPair = Client.generateSigningKeyPair()!
         let badKey  = String(keyPair.publicKey.dropFirst(5))
         asyncTest(test) { (expect) in
-            Client.register(token: TestData.token, clientName: test, publicKey: badKey, apiUrl: TestData.apiUrl) { (result) in
+            Client.register(token: TestData.token, clientName: test, publicKey: badKey, signingKey: sigPair.publicKey, apiUrl: TestData.apiUrl) { (result) in
+                defer { expect.fulfill() }
+                guard case .failure(.apiError) = result else {
+                    return XCTFail("Should not accept invalid key for registration")
+                }
+                XCTAssert(true)
+            }
+        }
+
+        let badSigK = String(sigPair.publicKey + "badness")!
+        asyncTest(test) { (expect) in
+            Client.register(token: TestData.token, clientName: test, publicKey: keyPair.publicKey, signingKey: badSigK, apiUrl: TestData.apiUrl) { (result) in
                 defer { expect.fulfill() }
                 guard case .failure(.apiError) = result else {
                     return XCTFail("Should not accept invalid key for registration")
