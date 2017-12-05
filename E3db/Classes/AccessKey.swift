@@ -49,15 +49,23 @@ public struct EAKInfo {
 
     /// public key of the authorizer
     let authorizerPublicKey: ClientKey
+
+    /// client ID of user performing the signature (typically the writer)
+    let signerId: UUID?
+
+    /// public signing key of the signer
+    let signerSigningKey: SigningKey?
 }
 
 /// :nodoc:
 extension EAKInfo: Argo.Decodable {
     public static func decode(_ j: JSON) -> Decoded<EAKInfo> {
         return curry(EAKInfo.init)
-            <^> j <| "eak"
-            <*> j <| "authorizer_id"
-            <*> j <| "authorizer_public_key"
+            <^> j <|  "eak"
+            <*> j <|  "authorizer_id"
+            <*> j <|  "authorizer_public_key"
+            <*> j <|? "signer_id"
+            <*> j <|? "signer_signing_key"
     }
 }
 
@@ -165,7 +173,7 @@ extension Client {
 
                 // update server
                 self.putAccessKey(eak: eak, writerId: writerId, userId: userId, readerId: readerId, recordType: recordType) { result in
-                    let response  = EAKInfo(eak: eak, authorizerId: self.config.clientId, authorizerPublicKey: client.publicKey)
+                    let response  = EAKInfo(eak: eak, authorizerId: self.config.clientId, authorizerPublicKey: client.publicKey, signerId: self.config.clientId, signerSigningKey:client.signingKey)
                     let accessKey = AccessKey(rawAk: ak, eakInfo: response)
 
                     // update local cache

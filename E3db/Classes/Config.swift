@@ -62,10 +62,8 @@ public struct Config {
         publicKey: String,
         privateKey: String,
         baseApiUrl: URL,
-        // TODO: remove blank defaults when
-        // service is updated to support signing keys
-        publicSigKey: String = "",
-        privateSigKey: String = ""
+        publicSigKey: String,
+        privateSigKey: String
     ) {
         self.clientName = clientName
         self.clientId = clientId

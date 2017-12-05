@@ -19,7 +19,7 @@ import ResponseDetective
 #endif
 
 /// A type that contains either a value of type `T` or an `E3dbError`
-public typealias E3dbResult<T>     = Result<T, E3dbError>
+public typealias E3dbResult<T> = Result<T, E3dbError>
 
 /// A completion handler that operates on an `E3dbResult<T>` type,
 /// used for async callbacks for E3db `Client` methods.
@@ -116,13 +116,15 @@ extension Client {
 struct ClientInfo: Argo.Decodable {
     let clientId: UUID
     let publicKey: ClientKey
+    let signingKey: SigningKey?
     let validated: Bool
 
     static func decode(_ j: JSON) -> Decoded<ClientInfo> {
         return curry(ClientInfo.init)
-            <^> j <| "client_id"
-            <*> j <| "public_key"
-            <*> j <| "validated"
+            <^> j <|  "client_id"
+            <*> j <|  "public_key"
+            <*> j <|? "signing_key"
+            <*> j <|  "validated"
     }
 }
 
