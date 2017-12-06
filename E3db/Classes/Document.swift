@@ -38,10 +38,6 @@ public struct EncryptedDocument: Signable {
     /// The ciphertext after it has been encrypted,
     /// the keys remain unencrypted
     public let encryptedData: CipherData
-
-    /// A cryptographic signature of the `clientMeta`
-    /// and the cleartext data before it was encrypted
-    public let recordSignature: String
 }
 
 /// Data type to hold the verified, unencrypted data and related info
@@ -90,8 +86,7 @@ extension EncryptedDocument: Ogra.Encodable {
     public func encode() -> JSON {
         return JSON.object([
             "meta": clientMeta.encode(),
-            "data": encryptedData.encode(),
-            "rec_sig": recordSignature.encode()
+            "data": encryptedData.encode()
         ])
     }
 }
@@ -164,7 +159,7 @@ extension Client {
         return verification
     }
 
-    /// Create a document to hold data signed for authenticity and encrypted for confidentiality.
+    /// Create a document to hold data encrypted for confidentiality.
     /// The resulting document also holds info related to the author, type of data, and any additional
     /// metadata kept in cleartext.
     ///
@@ -178,36 +173,24 @@ extension Client {
     public func encrypt(type: String, data: RecordData, eakInfo: EAKInfo, plain: PlainMeta? = nil) throws -> EncryptedDocument {
         let clientId  = config.clientId
         let meta      = ClientMeta(writerId: clientId, userId: clientId, type: type, plain: plain)
-        let recInfo   = DocInfo(meta: meta, data: data)
         let localAk   = try getLocalAk(clientId: clientId, recordType: type, eakInfo: eakInfo)
-        let signed    = try sign(document: recInfo)
-        let encrypted = try Crypto.encrypt(recordData: recInfo.data, ak: localAk)
-        return EncryptedDocument(clientMeta: meta, encryptedData: encrypted, recordSignature: signed.signature)
+        let encrypted = try Crypto.encrypt(recordData: data, ak: localAk)
+        return EncryptedDocument(clientMeta: meta, encryptedData: encrypted)
     }
 
     /// Create a document to hold the original plaintext data from the given encrypted format.
     /// The resulting document also holds info related to the author, type of data, and any additional
-    /// metadata kept in cleartext. The input document is also verified for authenticity with the given
-    /// public signing key, and throws an error if verification fails.
+    /// metadata kept in cleartext.
     ///
     /// - Parameters:
     ///   - encryptedDoc: Data type to hold encrypted data and related info
     ///   - eakInfo: The encrypted access key information used for the decryption operation
     /// - Returns: Data type to hold the unencrypted data and related info
-    /// - Throws: `E3dbError.cryptoError` if the decrypt operation fails, or if the document fails verification
+    /// - Throws: `E3dbError.cryptoError` if the decrypt operation fails
     public func decrypt(encryptedDoc: EncryptedDocument, eakInfo: EAKInfo) throws -> DecryptedDocument {
         let meta      = encryptedDoc.clientMeta
         let localAk   = try getLocalAk(clientId: eakInfo.authorizerId, recordType: meta.type, eakInfo: eakInfo)
         let decrypted = try Crypto.decrypt(cipherData: encryptedDoc.encryptedData, ak: localAk)
-
-        // attempt to verify if a signing key is present in the EAKInfo instance
-        if let sigKey = eakInfo.signerSigningKey?.ed25519 {
-            let recInfo = DocInfo(meta: meta, data: decrypted)
-            let signed  = SignedDocument(document: recInfo, signature: encryptedDoc.recordSignature)
-            guard try verify(signed: signed, pubSigKey: sigKey) else {
-                throw E3dbError.cryptoError("Document failed verification")
-            }
-        }
         return DecryptedDocument(clientMeta: meta, data: decrypted.cleartext)
     }
 
