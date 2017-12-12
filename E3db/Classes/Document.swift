@@ -196,17 +196,17 @@ extension Client {
     /// - Returns: Data type to hold the unencrypted data and related info
     /// - Throws: `E3dbError.cryptoError` if the decrypt operation fails, or if the document fails verification
     public func decrypt(encryptedDoc: EncryptedDocument, eakInfo: EAKInfo) throws -> DecryptedDocument {
+        guard let sigKey = eakInfo.signerSigningKey?.ed25519 else {
+            throw E3dbError.cryptoError("EAKInfo has no signing key")
+        }
+
         let meta      = encryptedDoc.clientMeta
         let localAk   = try getLocalAk(clientId: eakInfo.authorizerId, recordType: meta.type, eakInfo: eakInfo)
-        let decrypted = try Crypto.decrypt(cipherData: encryptedDoc.encryptedData, ak: localAk)
-        
-        // attempt to verify if a signing key is present in the EAKInfo instance
-        if let sigKey = eakInfo.signerSigningKey?.ed25519 {
-            let recInfo = DocInfo(meta: meta, data: decrypted)
-            let signed = SignedDocument(document: recInfo, signature: encryptedDoc.recordSignature)
-            guard try verify(signed: signed, pubSigKey: sigKey) else {
-                throw E3dbError.cryptoError("Document failed verification")
-            }
+        let decrypted = try Crypto.decrypt(cipherData: encryptedDoc.encryptedData, ak: localAk)        
+        let recInfo = DocInfo(meta: meta, data: decrypted)
+        let signed = SignedDocument(document: recInfo, signature: encryptedDoc.recordSignature)
+        guard try verify(signed: signed, pubSigKey: sigKey) else {
+            throw E3dbError.cryptoError("Document failed verification")
         }
         
         return DecryptedDocument(clientMeta: meta, data: decrypted.cleartext)
