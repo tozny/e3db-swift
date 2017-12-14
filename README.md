@@ -49,7 +49,8 @@ Use the client token generated from the Tozny Console to register a new client:
 ```swift
 import E3db
 
-/// This is the main client performing E3db operations
+// This is the main client performing E3db operations
+// (for the remaining examples, we'll assume a non-optional client instance)
 var e3db: Client?
 
 Client.register(token: e3dbToken, clientName: "ExampleApp") { result in
@@ -80,7 +81,7 @@ let recordData = RecordData(cleartext: ["SSN": "123-45-6789"])
 
 // Can optionally include arbitrary metadata as `plain`
 // where neither keys nor values are encrypted
-e3db?.write(type: "UserInfo", data: recordData, plain: ["Sent from": "my iPhone"]) { result in
+e3db.write(type: "UserInfo", data: recordData, plain: ["Sent from": "my iPhone"]) { result in
     switch result {
 
         // The operation was successful, here's the record
@@ -107,7 +108,7 @@ directly.
 // Perform read operation with the recordId of the
 // written record, decrypting it after getting the
 // encrypted data from the server.
-e3db?.read(recordId: recordId) { result in
+e3db.read(recordId: recordId) { result in
     switch result {
 
     // The operation was successful, here's the record
@@ -138,7 +139,7 @@ var lastRead: Double?
 // - including records written by others
 //   that have been shared with this client
 let q1 = QueryParams(count: 5, types: ["UserInfo"], includeAllWriters: true)
-e3db?.query(params: q1) { result in
+e3db.query(params: q1) { result in
     switch result {
 
     // The operation was successful, here's the `QueryResponse`,
@@ -154,7 +155,7 @@ e3db?.query(params: q1) { result in
 
 // Query for next batch using `next`
 let q2 = q1.next(after: lastRead!)
-e3db?.query(params: q2) { result in
+e3db.query(params: q2) { result in
     // ...
 }
 ```
@@ -182,7 +183,7 @@ can be removed with the `revoke` method.
 let otherClient: UUID = ???
 
 // Share records of type "UserInfo" with another client
-e3db?.share(type: "UserInfo", readerId: otherClient) { result in
+e3db.share(type: "UserInfo", readerId: otherClient) { result in
     guard case .success = result else {
         return print("An error occurred attempting to grant access to records: \(result.error)")
     }
@@ -190,10 +191,156 @@ e3db?.share(type: "UserInfo", readerId: otherClient) { result in
 }
 
 // Remove access to "UserInfo" records from the given client
-e3db?.revoke(type: "UserInfo", readerId: otherClient) { result in
+e3db.revoke(type: "UserInfo", readerId: otherClient) { result in
     guard case .success = result else {
         return print("An error occurred attempting to revoke access to records: \(result.error)")
     }
     // Revoking was successful!
 }
+```
+
+#### Local Encryption & Decryption
+
+The E3DB SDK allows you to encrypt documents for local storage, which can
+be decrypted later, by the client that created the document or any client with
+which the document has been `shared`. Note that locally encrypted documents
+_cannot_ be written directly to E3DB -- they must be decrypted locally and
+written using the `write` or `update` methods.
+
+Local encryption (and decryption) requires two steps:
+
+1. Create a 'writer key' (for encryption) or obtain a 'reader key' (for
+  decryption).
+2. Call `encrypt` to encrypt a new document. For decryption, call `decrypt`.
+
+The 'writer key' and 'reader key' are both `EAKInfo` objects. An `EAKInfo`
+object holds an encrypted key that can be used by the intended client to encrypt
+or decrypt associated documents. A writer key can be created by calling
+`createWriterKey`; a 'reader key' can be obtained by calling `getReaderKey`.
+(Note that the client calling `getReaderKey` will only receive a key if the
+writer of those records has given access to the calling client through the
+`share` operation.)
+
+The `createWriterKey` and `getReaderKey` are networked operations, (which means
+they are asynchronous operations as well), but can be performed once ahead of
+time. The `EAKInfo` instances returned from those operations are safe to store
+locally, and can be used in the non-networked operations of `encrypt` and
+`decrypt`.
+
+Here is an example of encrypting a document locally:
+
+```swift
+let recordData = RecordData(cleartext: ["SSN": "123-45-6789"])
+let recordType = "UserInfo"
+
+e3db.createWriterKey(type: type) { result in
+    switch result {
+    // The operation was successful, here's the `EAKInfo` instance,
+    // you can think of this as the "encryption key", but it's also encrypted,
+    // so you don't have to worry about storing it in plaintext or exposing it.
+    case .success(let eak):
+        // attempt to create an encrypted document with the EAKInfo
+        let encrypted = try? self.e3db.encrypt(type: recordType, data: recordData, eakInfo: eak)
+        print("Encrypted document: \(encrypted!)")
+
+    case .failure(let error):
+        print("An error occurred attempting to create writer key: \(error)")
+    }
+}
+```
+
+(Note that the `EAKInfo` instance is safe to store with the encrypted data, as
+it is also encrypted). The client can decrypt the given record as follows:
+
+```swift
+let encrypted = // get encrypted document (e.g. read from local storage)
+let writerKey = // get stored EAKInfo instance (e.g. from local storage)
+
+// attempt to decrypt an encrypted document with the EAKInfo instance
+let decrypted = try? e3db.decrypt(encryptedDoc: encrypted, eakInfo: writerKey)
+print("Decrypted document: \(decrypted!)")  
+```
+
+##### Local Decryption of Shared Records
+
+When two clients have a sharing relationship, the 'reader' can locally decrypt
+any documents encrypted by the 'writer,' without using E3DB for storage.
+
+* The 'writer' must first share records with a 'reader', using the `share`
+method.
+* The 'reader' must then obtain a reader key using `getReaderKey`.
+
+Note that these are networked operations. However, the `EAKInfo` instance can be
+saved for later use.
+
+After obtaining a reader key, the 'reader' can then decrypt any
+records encrypted by the writer as follows:
+
+```swift
+let encrypted  = // get encrypted document (e.g. read from local storage)
+let writerID   = // ID of writer that produced record
+let recordType = "UserInfo"
+var eakInfo: EAKInfo?
+
+e3db.getReaderKey(writerId: writerID, userId: writerID, type: recordType) { result in
+    switch result {
+    // The operation was successful, here's the `EAKInfo` instance,
+    // you can think of this as the "encryption key", but it's also encrypted,
+    // so you don't have to worry about storing it in plaintext or exposing it.
+    case .success(let eak):
+      self.eakInfo = eak
+
+    case .failure(let error):
+        print("An error occurred attempting to get reader key: \(error)")
+    }
+}
+
+// attempt to decrypt an encrypted document with the EAKInfo instance
+let decrypted = try? e3db.decrypt(encryptedDoc: encrypted, eakInfo: eakInfo!)
+print("Decrypted document: \(decrypted!)")  
+```
+
+#### Document Signing & Verification
+
+Every E3DB client created with this SDK is capable of signing documents and
+verifying the signature associated with a document. By attaching signatures to
+documents, clients can be confident in:
+
+  * Document integrity - the document's contents have not been altered (because
+    the signature will not match).
+  * Proof-of-authorship - The author of the document held the private signing
+    key associated with the given public key when the document was created.
+
+Signatures require the target type to conform to the `Signable` protocol. This
+protocol requires one method to be implemented:
+```swift
+func serialized() -> String
+```
+
+This method must provide a reproducible string representation of the data to
+sign and verify. This requires the serialization to be deterministic -- i.e.
+types such as `Dictionary` and `Set` must be serialized in a reproducible order.
+
+The E3db types of `EncryptedDocument` and `SignedDocument` conform to the
+`Signable` protocol.
+
+To create a signature, use the `sign` method. (This example assumes an encrypted
+document as create above):
+
+```swift
+let encrypted = // get encrypted document (or anything that conforms to `Signable`)
+let signedDoc = try? e3db.sign(document: encrypted)
+print("Signed Document: \(signedDoc!)")
+```
+
+To verify a document, use the `verify` method. Here, we use the same `signedDoc`
+instance as above. `config` holds the private & public keys for the client.
+(Note that, in general, `verify` requires the public signing key of the client
+that wrote the record):
+
+```swift
+guard try e3db.verify(signed: signed, pubSigKey: config.publicSigKey)) else {
+    return print("Document failed verification")
+}
+// Document verified!
 ```

@@ -15,11 +15,13 @@ import Sodium
 struct ClientRequest: Ogra.Encodable {
     let name: String
     let publicKey: ClientKey
+    let signingKey: SigningKey
 
     func encode() -> JSON {
         return JSON.object([
             "name": name.encode(),
-            "public_key": publicKey.encode()
+            "public_key": publicKey.encode(),
+            "signing_key": signingKey.encode()
         ])
     }
 }
@@ -36,6 +38,21 @@ struct ClientKey: Ogra.Encodable, Argo.Decodable {
     static func decode(_ j: JSON) -> Decoded<ClientKey> {
         return curry(ClientKey.init)
             <^> j <| "curve25519"
+    }
+}
+
+struct SigningKey: Ogra.Encodable, Argo.Decodable {
+    let ed25519: String
+
+    func encode() -> JSON {
+        return JSON.object([
+            "ed25519": ed25519.encode()
+        ])
+    }
+
+    static func decode(_ j: JSON) -> Decoded<SigningKey> {
+        return curry(SigningKey.init)
+            <^> j <| "ed25519"
     }
 }
 
@@ -57,6 +74,9 @@ public struct ClientCredentials {
     /// The public key registered with the E3db service and used for encryption
     public let publicKey: String
 
+    /// The signing public key registered with the E3db service and used for signature operations
+    public let signingKey: String
+
     /// A flag indicating whether this client is active
     public let enabled: Bool
 }
@@ -70,6 +90,7 @@ extension ClientCredentials: Argo.Decodable {
             <*> j <| "api_secret"
             <*> j <| "name"
             <*> j <| ["public_key", "curve25519"]
+            <*> j <| ["signing_key", "ed25519"]
             <*> j <| "enabled"
     }
 }
@@ -118,14 +139,20 @@ extension Client {
             return completion(Result(error: .configError("Invalid apiUrl: \(apiUrl ?? "")")))
         }
 
-        // create key pair
+        // create encryption key pair
         guard let keyPair = Client.generateKeyPair() else {
-            return completion(Result(error: .cryptoError("Failed to create key pair.")))
+            return completion(Result(error: .cryptoError("Failed to create encryption key pair")))
+        }
+
+        // create signing key pair
+        guard let signingKeyPair = Client.generateSigningKeyPair() else {
+            return completion(Result(error: .cryptoError("Failed to create signing key pair")))
         }
 
         let api       = Api(baseUrl: url)
         let pubKey    = ClientKey(curve25519: keyPair.publicKey)
-        let clientReq = ClientRequest(name: clientName, publicKey: pubKey)
+        let sigKey    = SigningKey(ed25519: signingKeyPair.publicKey)
+        let clientReq = ClientRequest(name: clientName, publicKey: pubKey, signingKey: sigKey)
         let regReq    = RegistrationRequest(api: api, token: token, client: clientReq)
         let performer = NetworkRequestPerformer(session: session)
         let client    = APIClient(requestPerformer: performer)
@@ -140,7 +167,9 @@ extension Client {
                         apiSecret: creds.apiSecret,
                         publicKey: keyPair.publicKey,
                         privateKey: keyPair.secretKey,
-                        baseApiUrl: api.baseUrl
+                        baseApiUrl: api.baseUrl,
+                        publicSigKey: signingKeyPair.publicKey,
+                        privateSigKey: signingKeyPair.secretKey
                     )
                 }
             completion(resp)
@@ -160,10 +189,11 @@ extension Client {
     ///   - token: An opaque value associated with an account and generated the InnoVault Console
     ///   - clientName: A name to give this client for registration
     ///   - publicKey: The public key to register with the E3db service and use for encryption operations
+    ///   - signingKey: The public key to register with the E3db service and use for signing operations
     ///   - apiUrl: The base URL for the E3DB service, uses production API URL if none provided here
     ///   - completion: A handler to call when this operation completes to provide `ClientCredentials`
     ///     used to build a `Config` object for initializing an E3db `Client`
-    public static func register(token: String, clientName: String, publicKey: String, apiUrl: String? = nil, completion: @escaping E3dbCompletion<ClientCredentials>) {
+    public static func register(token: String, clientName: String, publicKey: String, signingKey: String, apiUrl: String? = nil, completion: @escaping E3dbCompletion<ClientCredentials>) {
         // ensure api url is valid
         guard let url = URL(string: apiUrl ?? Api.defaultUrl) else {
             return completion(Result(error: .configError("Invalid apiUrl: \(apiUrl ?? "")")))
@@ -171,7 +201,8 @@ extension Client {
 
         let api       = Api(baseUrl: url)
         let pubKey    = ClientKey(curve25519: publicKey)
-        let clientReq = ClientRequest(name: clientName, publicKey: pubKey)
+        let sigKey    = SigningKey(ed25519: signingKey)
+        let clientReq = ClientRequest(name: clientName, publicKey: pubKey, signingKey: sigKey)
         let regReq    = RegistrationRequest(api: api, token: token, client: clientReq)
         let performer = NetworkRequestPerformer(session: session)
         let client    = APIClient(requestPerformer: performer)

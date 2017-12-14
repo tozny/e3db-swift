@@ -6,7 +6,7 @@
 import Foundation
 import Sodium
 
-typealias AccessKey          = Box.SecretKey
+typealias RawAccessKey       = SecretBox.Key
 typealias EncryptedAccessKey = String
 
 struct Crypto {
@@ -22,8 +22,12 @@ extension Crypto {
         return sodium.box.keyPair()
     }
 
-    static func generateAccessKey() -> AccessKey? {
-        return sodium.randomBytes.buf(length: sodium.box.SecretKeyBytes)
+    static func generateSigningKeyPair() -> Sign.KeyPair? {
+        return sodium.sign.keyPair()
+    }
+
+    static func generateAccessKey() -> RawAccessKey? {
+        return sodium.secretBox.key()
     }
 
     static func b64Join(_ ciphertexts: Data...) -> String {
@@ -51,18 +55,18 @@ extension Crypto {
 
 extension Crypto {
 
-    static func encrypt(accessKey: AccessKey, readerClientKey: ClientKey, authorizerPrivKey: Box.SecretKey) -> EncryptedAccessKey? {
+    static func encrypt(accessKey: RawAccessKey, readerClientKey: ClientKey, authorizerPrivKey: Box.SecretKey) -> EncryptedAccessKey? {
         return Box.PublicKey(base64URLEncoded: readerClientKey.curve25519)
             .flatMap { sodium.box.seal(message: accessKey, recipientPublicKey: $0, senderSecretKey: authorizerPrivKey) }
             .map { (eakData: BoxCipherNonce) in b64Join(eakData.authenticatedCipherText, eakData.nonce) }
     }
 
-    static func decrypt(eakResponse: EAKResponse, clientPrivateKey: String) throws -> AccessKey {
-        guard let (eak, eakN) = b64SplitEak(eakResponse.eak) else {
+    static func decrypt(eakInfo: EAKInfo, clientPrivateKey: String) throws -> RawAccessKey {
+        guard let (eak, eakN) = b64SplitEak(eakInfo.eak) else {
             throw E3dbError.cryptoError("Invalid access key format")
         }
 
-        guard let authorizerPubKey = Box.PublicKey(base64URLEncoded: eakResponse.authorizerPublicKey.curve25519),
+        guard let authorizerPubKey = Box.PublicKey(base64URLEncoded: eakInfo.authorizerPublicKey.curve25519),
               let privKey = Box.SecretKey(base64URLEncoded: clientPrivateKey),
               let ak = sodium.box.open(authenticatedCipherText: eak, senderPublicKey: authorizerPubKey, recipientSecretKey: privKey, nonce: eakN) else {
             throw E3dbError.cryptoError("Failed to decrypt access key")
@@ -76,9 +80,9 @@ extension Crypto {
 
 extension Crypto {
 
-    private static func generateSecretKey() throws -> SecretBox.Key {
+    private static func generateDataKey() throws -> SecretBox.Key {
         guard let secretKey = sodium.secretBox.key() else {
-            throw E3dbError.cryptoError("Failed to generate secret box key.")
+            throw E3dbError.cryptoError("Failed to generate data key")
         }
         return secretKey
     }
@@ -86,17 +90,17 @@ extension Crypto {
     private static func encrypt(value: Data?, key: SecretBox.Key) throws -> SecretBoxCipherNonce {
         guard let data = value,
               let cipher: SecretBoxCipherNonce = sodium.secretBox.seal(message: data, secretKey: key) else {
-            throw E3dbError.cryptoError("Failed to encrypt value.")
+            throw E3dbError.cryptoError("Failed to encrypt value")
         }
         return cipher
     }
 
-    static func encrypt(recordData: RecordData, ak: AccessKey) throws -> CipherData {
+    static func encrypt(recordData: RecordData, ak: RawAccessKey) throws -> CipherData {
         var encrypted = CipherData()
 
         for (key, value) in recordData.cleartext {
             let bytes       = value.data(using: .utf8)
-            let dk          = try generateSecretKey()
+            let dk          = try generateDataKey()
             let (ef, efN)   = try encrypt(value: bytes, key: dk)
             let (edk, edkN) = try encrypt(value: dk, key: ak)
             encrypted[key]  = b64Join(edk, edkN, ef, efN)
@@ -106,12 +110,12 @@ extension Crypto {
 
     private static func decrypt(ciphertext: Data, nonce: SecretBox.Nonce, key: SecretBox.Key) throws -> Data {
         guard let plain = sodium.secretBox.open(authenticatedCipherText: ciphertext, secretKey: key, nonce: nonce) else {
-            throw E3dbError.cryptoError("Failed to decrypt value.")
+            throw E3dbError.cryptoError("Failed to decrypt value")
         }
         return plain
     }
 
-    static func decrypt(cipherData: CipherData, ak: AccessKey) throws -> RecordData {
+    static func decrypt(cipherData: CipherData, ak: RawAccessKey) throws -> RecordData {
         var decrypted = Cleartext()
 
         for (key, value) in cipherData {
@@ -124,4 +128,21 @@ extension Crypto {
         }
         return RecordData(cleartext: decrypted)
     }
+}
+
+// MARK: Document Crypto
+
+extension Crypto {
+
+    static func signature(doc: Signable, signingKey: Sign.SecretKey) -> String? {
+        let message = Data(doc.serialized().utf8)
+        return sodium.sign.signature(message: message, secretKey: signingKey)?.base64URLEncodedString()
+    }
+
+    static func verify(doc: Signable, encodedSig: String, verifyingKey: Sign.PublicKey) -> Bool? {
+        let message = Data(doc.serialized().utf8)
+        return Data(base64URLEncoded: encodedSig)
+            .map { sodium.sign.verify(message: message, publicKey: verifyingKey, signature: $0) }
+    }
+
 }

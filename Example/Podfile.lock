@@ -19,7 +19,7 @@ PODS:
     - Result (~> 3.0)
   - Ogra (4.1.2):
     - Argo (= 4.1.2)
-  - ResponseDetective (1.2.0)
+  - ResponseDetective (1.2.2)
   - Result (3.2.4)
   - Runes (4.1.0)
   - Sodium (0.5)
@@ -39,10 +39,10 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Argo: 5db06502fc1222d83011f574243089dab25202ff
   Curry: eb3d2c75aec678b3cc7fb2729d2ad6dd121531d1
-  E3db: 4c98a22c2d5846992f4f3a5f81bf9b13409f9168
+  E3db: 13634a1e85136ba9903c552959b05f0edb82243d
   Heimdallr: d2a8b1dc3ecc7ad249c9ffd20c990e2248fcd599
   Ogra: fc959d1038250a83e4ffa11ece1a6bbd3a1e547f
-  ResponseDetective: c05479b4ab72659bdb20d8a6e2c5cd828ac22f26
+  ResponseDetective: 2a1ddb19b895677d418cd1a83c9595a405012b57
   Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
   Runes: 72a67a5bbbe1b5fdae08b5a01b10c60d83fc69aa
   Sodium: a3a17f2ba2dc1b83547e13db0075e7c5d426fc55

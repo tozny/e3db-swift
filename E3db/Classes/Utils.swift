@@ -31,9 +31,9 @@ public enum E3dbError: Swift.Error {
     internal init(swishError: SwishError) {
         switch swishError {
         case let .argoError(.typeMismatch(exp, act)):
-            self = .jsonError(expected: "Expected: \(exp). ", actual: "Actual: \(act).")
+            self = .jsonError(expected: "Expected: \(exp). ", actual: "Actual: \(act)")
         case .argoError(.missingKey(let key)):
-            self = .jsonError(expected: "Expected: \(key). ", actual: "Actual: (key not found).")
+            self = .jsonError(expected: "Expected: \(key). ", actual: "Actual: (key not found)")
         case .argoError(let err):
             self = .jsonError(expected: "", actual: err.description)
         case .serverError(let code, data: _) where code == 401 || code == 403:
@@ -92,33 +92,9 @@ struct Api {
     }
 }
 
-struct AkCacheKey: Hashable {
-    let writerId: UUID
-    let userId: UUID
-    let recordType: String
-
-    var hashValue: Int {
-        return [writerId, userId]
-            .map { $0.uuidString }
-            .reduce(recordType, +)
-            .hashValue
-    }
-
-    static func == (lhs: AkCacheKey, rhs: AkCacheKey) -> Bool {
-        return lhs.writerId == rhs.writerId &&
-            lhs.userId == rhs.userId &&
-            lhs.recordType == rhs.recordType
-    }
-}
-
 struct AuthedRequestPerformer {
-    let session: URLSession
     let authenticator: Heimdallr
-
-    init(authenticator: Heimdallr, session: URLSession = .shared) {
-        self.session = session
-        self.authenticator = authenticator
-    }
+    let session: URLSession
 }
 
 extension AuthedRequestPerformer: RequestPerformer {

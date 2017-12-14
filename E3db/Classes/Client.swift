@@ -19,7 +19,7 @@ import ResponseDetective
 #endif
 
 /// A type that contains either a value of type `T` or an `E3dbError`
-public typealias E3dbResult<T>     = Result<T, E3dbError>
+public typealias E3dbResult<T> = Result<T, E3dbError>
 
 /// A completion handler that operates on an `E3dbResult<T>` type,
 /// used for async callbacks for E3db `Client` methods.
@@ -30,6 +30,7 @@ public final class Client {
     internal let api: Api
     internal let config: Config
     internal let authedClient: APIClient
+    internal let akCache = NSCache<AkCacheKey, AccessKey>()
 
     internal static let session: URLSession = {
         #if E3DB_LOGGING && DEBUG
@@ -40,8 +41,6 @@ public final class Client {
         return URLSession.shared
         #endif
     }()
-
-    internal static var akCache = [AkCacheKey: AccessKey]()
 
     /// Initializer for the E3db client class.
     ///
@@ -66,21 +65,21 @@ public final class Client {
 
 // MARK: Key Generation
 
-/// A data type holding the public and private Curve25519 keys as
-/// Base64URL encoded strings, used for encryption operations.
+/// A data type holding the public and private keys as
+/// Base64URL encoded strings, used for encryption and signing operations.
 /// Only the `publicKey` is sent to the E3db service.
 public struct KeyPair {
 
-    /// The public Curve25519 key from a generated keypair as a Base64URL encoded string.
+    /// The public key from a generated keypair as a Base64URL encoded string.
     public let publicKey: String
 
-    /// The private Curve25519 key from a generated keypair as a Base64URL encoded string.
+    /// The private key from a generated keypair as a Base64URL encoded string.
     public let secretKey: String
 }
 
 extension Client {
 
-    /// A helper function to create a compatible key pair for E3db operations.
+    /// A helper function to create a compatible key pair for E3db encryption operations.
     ///
     /// - Note: This method is not required for library use. A key pair is
     ///   generated and stored in the `Config` object returned by the
@@ -89,9 +88,23 @@ extension Client {
     /// - SeeAlso: `Client.register(token:clientName:publicKey:apiUrl:completion:)`
     ///   for supplying your own key for registration.
     ///
-    /// - Returns: A key pair containing Base64URL encoded public and private keys.
+    /// - Returns: A key pair containing Base64URL encoded Curve25519 public and private keys.
     public static func generateKeyPair() -> KeyPair? {
         guard let keyPair = Crypto.generateKeyPair() else { return nil }
+        let pubKey  = keyPair.publicKey.base64URLEncodedString()
+        let privKey = keyPair.secretKey.base64URLEncodedString()
+        return KeyPair(publicKey: pubKey, secretKey: privKey)
+    }
+
+    /// A helper function to create a compatible key pair for E3db signature operations.
+    ///
+    /// - Note: This method is not required for library use. A key pair is
+    ///   generated and stored in the `Config` object returned by the
+    ///   `Client.register(token:clientName:apiUrl:completion:)` method.
+    ///
+    /// - Returns: A key pair containing Base64URL encoded Ed25519 public and private keys.
+    public static func generateSigningKeyPair() -> KeyPair? {
+        guard let keyPair = Crypto.generateSigningKeyPair() else { return nil }
         let pubKey  = keyPair.publicKey.base64URLEncodedString()
         let privKey = keyPair.secretKey.base64URLEncodedString()
         return KeyPair(publicKey: pubKey, secretKey: privKey)
@@ -103,13 +116,15 @@ extension Client {
 struct ClientInfo: Argo.Decodable {
     let clientId: UUID
     let publicKey: ClientKey
+    let signingKey: SigningKey?
     let validated: Bool
 
     static func decode(_ j: JSON) -> Decoded<ClientInfo> {
         return curry(ClientInfo.init)
-            <^> j <| "client_id"
-            <*> j <| "public_key"
-            <*> j <| "validated"
+            <^> j <|  "client_id"
+            <*> j <|  "public_key"
+            <*> j <|? "signing_key"
+            <*> j <|  "validated"
     }
 }
 
@@ -127,24 +142,6 @@ extension Client {
 
     func getClientInfo(clientId: UUID? = nil, completion: @escaping E3dbCompletion<ClientInfo>) {
         let req = ClientInfoRequest(api: api, clientId: clientId ?? config.clientId)
-        authedClient.performDefault(req, completion: completion)
-    }
-}
-
-extension Client {
-    private struct LookupRequest: Request {
-        typealias ResponseObject = ClientInfo
-        let api: Api
-        let email: String
-
-        func build() -> URLRequest {
-            let url = api.url(endpoint: .clients) / "find?email=\(email)"
-            return URLRequest(url: url)
-        }
-    }
-
-    func getClientInfo(email: String, completion: @escaping E3dbCompletion<ClientInfo>) {
-        let req = LookupRequest(api: api, email: email)
         authedClient.performDefault(req, completion: completion)
     }
 }

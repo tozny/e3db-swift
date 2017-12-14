@@ -25,14 +25,20 @@ public struct Config {
     /// The API secret for making authenticated calls
     public let apiSecret: String
 
-    /// The client's public key
+    /// The client's public encryption key
     public let publicKey: String
 
-    /// The client's secret key
+    /// The client's secret encryption key
     public let privateKey: String
 
     /// The base URL for the E3DB service
     public let baseApiUrl: URL
+
+    /// The client's public signing key
+    public let publicSigKey: String
+
+    /// The client's secret signing key
+    public let privateSigKey: String
 
     /// Initializer to customize the configuration of the client. Typically, library users will
     /// use the `Client.register(token:clientName:apiUrl:completion:)` method which will supply
@@ -55,7 +61,9 @@ public struct Config {
         apiSecret: String,
         publicKey: String,
         privateKey: String,
-        baseApiUrl: URL
+        baseApiUrl: URL,
+        publicSigKey: String,
+        privateSigKey: String
     ) {
         self.clientName = clientName
         self.clientId = clientId
@@ -64,6 +72,8 @@ public struct Config {
         self.publicKey = publicKey
         self.privateKey = privateKey
         self.baseApiUrl = baseApiUrl
+        self.publicSigKey = publicSigKey
+        self.privateSigKey = privateSigKey
     }
 }
 
@@ -80,7 +90,9 @@ extension Config: Ogra.Encodable, Argo.Decodable {
             "api_secret": apiSecret.encode(),
             "public_key": publicKey.encode(),
             "private_key": privateKey.encode(),
-            "base_api_url": baseApiUrl.encode()
+            "base_api_url": baseApiUrl.encode(),
+            "public_sig_key": publicSigKey.encode(),
+            "private_sig_key": privateSigKey.encode()
         ])
     }
 
@@ -95,6 +107,8 @@ extension Config: Ogra.Encodable, Argo.Decodable {
             <*> j <| "public_key"
             <*> j <| "private_key"
             <*> j <| "base_api_url"
+            <*> j <| "public_sig_key"
+            <*> j <| "private_sig_key"
     }
 }
 

@@ -2,14 +2,81 @@ import UIKit
 import XCTest
 import E3db
 
-// non-sensitive test data
-// for running integration tests
-struct TestData {
-    static let apiUrl = ""
-    static let token  = ""
-}
+class IntegrationTests: XCTestCase, TestUtils {
 
-class IntegrationTests: XCTestCase {
+    func testIntermediaryUseCase() {
+        let (e3db, config) = clientWithConfig()
+        let id   = config.clientId
+        let test = #function + UUID().uuidString
+        let type = "ticket"
+
+        // register mock server client
+        let (serverClient, serverConfig) = clientWithConfig()
+        let signatureOfClientKey = try? serverClient.sign(document: config.publicSigKey)
+        XCTAssertNotNil(signatureOfClientKey)
+        let header = [
+            "client_pub_sig_key": config.publicSigKey,
+            "server_sig_of_client_sig_key": signatureOfClientKey!.signature
+        ]
+
+        // pre-share document type to ensure EAK is available (`createWriterKey` and `share` can happen in either order)
+        var eakInfo1: EAKInfo?
+        asyncTest(test + "createWriterKey") { (expect) in
+            // online operation
+            e3db.createWriterKey(type: type) { (result) in
+                defer { expect.fulfill() }
+                guard case .success(let eak1) = result else {
+                    return XCTFail()
+                }
+                eakInfo1 = eak1
+            }
+        }
+        XCTAssertNotNil(eakInfo1)
+        asyncTest(test + "share") { (expect) in
+            e3db.share(type: type, readerId: serverConfig.clientId) { (result) in
+                defer { expect.fulfill() }
+                guard case .success = result else {
+                    return XCTFail()
+                }
+            }
+        }
+
+        // offline operations
+        let data   = RecordData(cleartext: ["test_field": "test_value"])
+        let encDoc = try? e3db.encrypt(type: type, data: data, eakInfo: eakInfo1!, plain: header)
+        XCTAssertNotNil(encDoc)
+
+        let signed = try? e3db.sign(document: encDoc!)
+        XCTAssertNotNil(signed)
+
+        // emulates intermediary operations
+
+        // 1. verify server sig of client key
+        let signedKeyDocument = SignedDocument(document: signed!.document.clientMeta.plain!["client_pub_sig_key"]!, signature: signed!.document.clientMeta.plain!["server_sig_of_client_sig_key"]!)
+        let keyVerification   = try? e3db.verify(signed: signedKeyDocument, pubSigKey: serverConfig.publicSigKey)
+        XCTAssertNotNil(keyVerification)
+        XCTAssert(keyVerification!)
+
+        // 2. verify signed document
+        let docVerification = try? e3db.verify(signed: signed!, pubSigKey: config.publicSigKey)
+        XCTAssertNotNil(docVerification)
+        XCTAssert(docVerification!)
+
+        // emulates server operations (i.e. document arrived at destination)
+        asyncTest(test + "getReaderKey") { (expect) in
+            serverClient.getReaderKey(writerId: id, userId: id, type: type) { (result) in
+                defer { expect.fulfill() }
+                guard case .success(let eakInfo2) = result else {
+                    return XCTFail()
+                }
+
+                let decDoc = try? serverClient.decrypt(encryptedDoc: encDoc!, eakInfo: eakInfo2)
+                XCTAssertNotNil(decDoc)
+                XCTAssertEqual(decDoc!.data, data.cleartext)
+            }
+        }
+
+    }
 
     func testRegistrationDefault() {
         let test = #function + UUID().uuidString
@@ -33,9 +100,12 @@ class IntegrationTests: XCTestCase {
     func testRegistrationCustom() {
         let test    = #function + UUID().uuidString
         let keyPair = Client.generateKeyPair()!
+        let sigPair = Client.generateSigningKeyPair()!
         asyncTest(test) { (expect) in
-            Client.register(token: TestData.token, clientName: test, publicKey: keyPair.publicKey, apiUrl: TestData.apiUrl) { (result) in
+            Client.register(token: TestData.token, clientName: test, publicKey: keyPair.publicKey, signingKey: sigPair.publicKey, apiUrl: TestData.apiUrl) { (result) in
                 XCTAssertNotNil(result.value)
+                XCTAssertEqual(result.value!.publicKey, keyPair.publicKey)
+                XCTAssertEqual(result.value!.signingKey, sigPair.publicKey)
                 expect.fulfill()
             }
         }
@@ -44,9 +114,21 @@ class IntegrationTests: XCTestCase {
     func testRegisterFailsWithInvalidKey() {
         let test    = #function + UUID().uuidString
         let keyPair = Client.generateKeyPair()!
+        let sigPair = Client.generateSigningKeyPair()!
         let badKey  = String(keyPair.publicKey.dropFirst(5))
         asyncTest(test) { (expect) in
-            Client.register(token: TestData.token, clientName: test, publicKey: badKey, apiUrl: TestData.apiUrl) { (result) in
+            Client.register(token: TestData.token, clientName: test, publicKey: badKey, signingKey: sigPair.publicKey, apiUrl: TestData.apiUrl) { (result) in
+                defer { expect.fulfill() }
+                guard case .failure(.apiError) = result else {
+                    return XCTFail("Should not accept invalid key for registration")
+                }
+                XCTAssert(true)
+            }
+        }
+
+        let badSigK = String(sigPair.publicKey + "badness")!
+        asyncTest(test) { (expect) in
+            Client.register(token: TestData.token, clientName: test, publicKey: keyPair.publicKey, signingKey: badSigK, apiUrl: TestData.apiUrl) { (result) in
                 defer { expect.fulfill() }
                 guard case .failure(.apiError) = result else {
                     return XCTFail("Should not accept invalid key for registration")
@@ -581,65 +663,6 @@ class IntegrationTests: XCTestCase {
                 XCTAssertNil(result.error)
                 expect.fulfill()
             }
-        }
-    }
-}
-
-extension IntegrationTests {
-
-    func asyncTest(_ testName: String, test: @escaping (XCTestExpectation) -> Void) {
-        test(expectation(description: testName))
-        waitForExpectations(timeout: 10, handler: { XCTAssertNil($0) })
-    }
-
-    func clientWithId() -> (Client, UUID) {
-        var e3db: Client?
-        var uuid: UUID?
-        let newClient = #function + UUID().uuidString
-        asyncTest(newClient) { (expect) in
-            Client.register(token: TestData.token, clientName: newClient, apiUrl: TestData.apiUrl) { (result) in
-                XCTAssertNotNil(result.value)
-                uuid = result.value!.clientId
-                e3db = Client(config: result.value!)
-                expect.fulfill()
-            }
-        }
-        return (e3db!, uuid!)
-    }
-
-    func client() -> Client {
-        let (e3db, _) = clientWithId()
-        return e3db
-    }
-
-    func writeTestRecord(_ e3db: Client, _ contentType: String = "test-data") -> Record {
-        var record: Record?
-        asyncTest(#function + "write") { (expect) in
-            e3db.write(type: contentType, data: RecordData(cleartext: ["test": "message"])) { (result) in
-                record = result.value!
-                expect.fulfill()
-            }
-        }
-        return record!
-    }
-
-    func deleteRecord(_ record: Record, e3db: Client) {
-        asyncTest(#function + "delete") { (expect) in
-            e3db.delete(recordId: record.meta.recordId, version: record.meta.version) { _ in expect.fulfill() }
-        }
-    }
-
-    func deleteAllRecords(_ e3db: Client) {
-        let test = #function + "delete all"
-        var records = [Record]()
-        asyncTest(test) { (expect) in
-            e3db.query(params: QueryParams()) { (result) in
-                records = result.value!.records
-                expect.fulfill()
-            }
-        }
-        records.forEach { (record) in
-            deleteRecord(record, e3db: e3db)
         }
     }
 }

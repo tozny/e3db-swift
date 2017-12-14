@@ -16,16 +16,56 @@ import Runes
 
 // MARK: Access Key Management
 
-struct EAKResponse: Argo.Decodable {
+class AkCacheKey: NSObject {
+    let writerId: UUID
+    let userId: UUID
+    let recordType: String
+
+    init(writerId: UUID, userId: UUID, recordType: String) {
+        self.writerId   = writerId
+        self.userId     = userId
+        self.recordType = recordType
+    }
+}
+
+class AccessKey: NSObject {
+    let rawAk: RawAccessKey
+    let eakInfo: EAKInfo
+
+    init(rawAk: RawAccessKey, eakInfo: EAKInfo) {
+        self.rawAk   = rawAk
+        self.eakInfo = eakInfo
+    }
+}
+
+/// Opaque Encrypted Access Key type to facilitate offline crypto
+public struct EAKInfo {
+
+    /// encrypted key used for encryption operations
     let eak: String
+
+    /// client ID of user authorizing access (typically the writer)
     let authorizerId: UUID
+
+    /// public key of the authorizer
     let authorizerPublicKey: ClientKey
 
-    static func decode(_ j: JSON) -> Decoded<EAKResponse> {
-        return curry(EAKResponse.init)
-            <^> j <| "eak"
-            <*> j <| "authorizer_id"
-            <*> j <| "authorizer_public_key"
+    /// client ID of user performing the signature (typically the writer)
+    let signerId: UUID?
+
+    /// public signing key of the signer
+    let signerSigningKey: SigningKey?
+}
+
+/// :nodoc:
+extension EAKInfo: Argo.Decodable {
+    public static func decode(_ j: JSON) -> Decoded<EAKInfo> {
+        return curry(EAKInfo.init)
+            <^> j <|  "eak"
+            <*> j <|  "authorizer_id"
+            <*> j <|  "authorizer_public_key"
+            <*> j <|? "signer_id"
+            <*> j <|? "signer_signing_key"
     }
 }
 
@@ -33,7 +73,7 @@ struct EAKResponse: Argo.Decodable {
 
 extension Client {
     private struct GetEAKRequest: Request {
-        typealias ResponseObject = EAKResponse
+        typealias ResponseObject = EAKInfo
         let api: Api
         let writerId: UUID
         let userId: UUID
@@ -47,38 +87,50 @@ extension Client {
         }
     }
 
-    func decryptEak(eakResponse: EAKResponse, clientPrivateKey: String) -> E3dbResult<AccessKey> {
-        return Result(try Crypto.decrypt(eakResponse: eakResponse, clientPrivateKey: clientPrivateKey))
+    func decryptEak(eakInfo: EAKInfo, clientPrivateKey: String) -> E3dbResult<RawAccessKey> {
+        return Result(try Crypto.decrypt(eakInfo: eakInfo, clientPrivateKey: clientPrivateKey))
     }
 
-    func getAccessKey(writerId: UUID, userId: UUID, readerId: UUID, recordType: String, completion: @escaping E3dbCompletion<AccessKey>) {
+    // checks cache and server for access key, returning error if not found
+    func getStoredAccessKey(writerId: UUID, userId: UUID, readerId: UUID, recordType: String, completion: @escaping E3dbCompletion<AccessKey>) {
         let cacheKey = AkCacheKey(writerId: writerId, userId: userId, recordType: recordType)
 
-        // Check for AK in local cache
-        if let ak = Client.akCache[cacheKey] {
-            return completion(Result(value: ak))
+        // Check for EAKInfo in local cache
+        if let storedAk = akCache.object(forKey: cacheKey) {
+            return completion(Result(value: storedAk))
         }
 
         // Get AK from server
         let req = GetEAKRequest(api: api, writerId: writerId, userId: userId, readerId: readerId, recordType: recordType)
         authedClient.perform(req) { result in
-
             // Server had EAK entry
-            if case .success(let akResponse) = result {
-                let akResult = self.decryptEak(eakResponse: akResponse, clientPrivateKey: self.config.privateKey)
+            switch result {
+            case .success(let eakInfo):
+                let res = self.decryptEak(eakInfo: eakInfo, clientPrivateKey: self.config.privateKey)
+                    .map { AccessKey(rawAk: $0, eakInfo: eakInfo) }
+                completion(res)
+            case .failure(let err):
+                completion(Result(error: E3dbError(swishError: err)))
+            }
+        }
+    }
 
-                // store in cache
-                Client.akCache[cacheKey] = akResult.value
-                return completion(akResult)
+    // checks cache and server for access key, generating one if not found
+    func getAccessKey(writerId: UUID, userId: UUID, readerId: UUID, recordType: String, completion: @escaping E3dbCompletion<AccessKey>) {
+        let cacheKey = AkCacheKey(writerId: writerId, userId: userId, recordType: recordType)
+        getStoredAccessKey(writerId: writerId, userId: userId, readerId: readerId, recordType: recordType) { result in
+            // found access key, return it immediately
+            guard case .failure(let error) = result else {
+                return completion(result)
             }
 
-            // EAK not found on server, generate one
-            guard case .failure(.serverError(404, _)) = result,
+            // access key not found in cache and eak not found on server, generate raw ak
+            guard case .apiError(code: 404, message: _) = error,
                 let ak = Crypto.generateAccessKey() else {
-                return completion(Result(error: .cryptoError("Could not create access key")))
+                    return completion(Result(error: .cryptoError("Could not create access key")))
             }
 
-            // stores AK on server and local cache before returning it to caller
+            // encrypts and stores AK on server and local cache before returning it to caller
             self.putAccessKey(ak: ak, cacheKey: cacheKey, writerId: writerId, userId: userId, readerId: readerId, recordType: recordType, completion: completion)
         }
     }
@@ -109,7 +161,7 @@ extension Client {
         authedClient.performDefault(req, completion: completion)
     }
 
-    func putAccessKey(ak: AccessKey, cacheKey: AkCacheKey, writerId: UUID, userId: UUID, readerId: UUID, recordType: String, completion: @escaping E3dbCompletion<AccessKey>) {
+    func putAccessKey(ak: RawAccessKey, cacheKey: AkCacheKey, writerId: UUID, userId: UUID, readerId: UUID, recordType: String, completion: @escaping E3dbCompletion<AccessKey>) {
         getClientInfo(clientId: readerId) { result in
             switch result {
             case .success(let client):
@@ -121,11 +173,15 @@ extension Client {
 
                 // update server
                 self.putAccessKey(eak: eak, writerId: writerId, userId: userId, readerId: readerId, recordType: recordType) { result in
+                    let response  = EAKInfo(eak: eak, authorizerId: self.config.clientId, authorizerPublicKey: client.publicKey, signerId: self.config.clientId, signerSigningKey:client.signingKey)
+                    let accessKey = AccessKey(rawAk: ak, eakInfo: response)
+
                     // update local cache
                     if case .success = result {
-                        Client.akCache[cacheKey] = ak
+                        self.akCache.setObject(accessKey, forKey: cacheKey)
                     }
-                    completion(result.map { ak })
+
+                    completion(result.map { accessKey })
                 }
             case .failure(let error):
                 completion(Result(error: error))
@@ -157,10 +213,47 @@ extension Client {
     func deleteAccessKey(writerId: UUID, userId: UUID, readerId: UUID, recordType: String, completion: @escaping E3dbCompletion<Void>) {
         // remove from cache
         let cacheKey = AkCacheKey(writerId: writerId, userId: userId, recordType: recordType)
-        Client.akCache[cacheKey] = nil
+        akCache.removeObject(forKey: cacheKey)
 
         // remove from server
         let req = DeleteEAKRequest(api: api, writerId: writerId, userId: userId, readerId: readerId, recordType: recordType)
         authedClient.performDefault(req, completion: completion)
+    }
+}
+
+// MARK: EAK Management
+
+extension Client {
+
+    /// Generate encrypted access key for offline encryption operations. `EAKInfo` objects are
+    /// safe to store in insecure storage as they are encrypted with the current client's private key.
+    /// This method will store the key with E3db for later access.
+    ///
+    /// - SeeAlso: `getReaderKey(writerId:userId:type:completion:)` for geting keys from E3db.
+    ///
+    /// - Parameters:
+    ///   - type: The kind of data that will be encrypted with this key
+    ///   - completion: A handler to call when this operation completes to provide the EAKInfo result
+    public func createWriterKey(type: String, completion: @escaping E3dbCompletion<EAKInfo>) {
+        let id = config.clientId
+        getAccessKey(writerId: id, userId: id, readerId: id, recordType: type) { result in
+            completion(result.map { $0.eakInfo })
+        }
+    }
+
+    /// Get the encrypted access key for offline encryption operations. The EAKInfo object must have
+    /// been created beforehand, and shared with this client.
+    ///
+    /// - SeeAlso: `createWriterKey(type:completion:)` for sending keys to E3db.
+    ///
+    /// - Parameters:
+    ///   - writerId: The client ID of the writer of an encrypted document.
+    ///   - userId: The client ID of the user for which an encrypted document was created.
+    ///   - type: The kind of data that will be encrypted with this key
+    ///   - completion: A handler to call when this operation completes to provide the EAKInfo result, or error if not found.
+    public func getReaderKey(writerId: UUID, userId: UUID, type: String, completion: @escaping E3dbCompletion<EAKInfo>) {
+        getStoredAccessKey(writerId: writerId, userId: userId, readerId: config.clientId, recordType: type) { result in
+            completion(result.map { $0.eakInfo })
+        }
     }
 }
