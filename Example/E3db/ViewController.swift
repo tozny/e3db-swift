@@ -34,7 +34,7 @@ class ViewController: UIViewController {
         }
 
         // make sure a client token exists
-        guard e3dbToken.isEmpty else {
+        guard !e3dbToken.isEmpty else {
             return print("Please register an account at https://console.tozny.com/ and generate a client token!")
         }
 
