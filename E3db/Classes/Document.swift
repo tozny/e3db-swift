@@ -178,10 +178,10 @@ extension Client {
     public func encrypt(type: String, data: RecordData, eakInfo: EAKInfo, plain: PlainMeta? = nil) throws -> EncryptedDocument {
         let clientId  = config.clientId
         let meta      = ClientMeta(writerId: clientId, userId: clientId, type: type, plain: plain)
-        let recInfo   = DocInfo(meta: meta, data: data)
+        let docInfo   = DocInfo(meta: meta, data: data)
+        let signed    = try sign(document: docInfo)
         let localAk   = try getLocalAk(clientId: clientId, recordType: type, eakInfo: eakInfo)
-        let signed    = try sign(document: recInfo)
-        let encrypted = try Crypto.encrypt(recordData: recInfo.data, ak: localAk)
+        let encrypted = try Crypto.encrypt(recordData: docInfo.data, ak: localAk)
         return EncryptedDocument(clientMeta: meta, encryptedData: encrypted, recordSignature: signed.signature)
     }
 
@@ -199,16 +199,14 @@ extension Client {
         guard let sigKey = eakInfo.signerSigningKey?.ed25519 else {
             throw E3dbError.cryptoError("EAKInfo has no signing key")
         }
-
         let meta      = encryptedDoc.clientMeta
         let localAk   = try getLocalAk(clientId: eakInfo.authorizerId, recordType: meta.type, eakInfo: eakInfo)
         let decrypted = try Crypto.decrypt(cipherData: encryptedDoc.encryptedData, ak: localAk)        
-        let recInfo = DocInfo(meta: meta, data: decrypted)
-        let signed = SignedDocument(document: recInfo, signature: encryptedDoc.recordSignature)
+        let docInfo   = DocInfo(meta: meta, data: decrypted)
+        let signed    = SignedDocument(document: docInfo, signature: encryptedDoc.recordSignature)
         guard try verify(signed: signed, pubSigKey: sigKey) else {
             throw E3dbError.cryptoError("Document failed verification")
         }
-        
         return DecryptedDocument(clientMeta: meta, data: decrypted.cleartext)
     }
 
