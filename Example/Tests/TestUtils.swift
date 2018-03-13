@@ -1,6 +1,8 @@
 import UIKit
 import XCTest
-import E3db
+@testable import E3db
+
+import let Swish.immediateScheduler
 
 // non-sensitive test data
 // for running integration tests
@@ -17,6 +19,8 @@ protocol TestUtils {
     func writeTestRecord(_ e3db: Client, _ contentType: String) -> Record
     func deleteRecord(_ record: Record, e3db: Client)
     func deleteAllRecords(_ e3db: Client)
+    static func createClientSync() -> Client
+    static func createKeySync(client: Client, recordType: String) -> EAKInfo
 }
 
 extension TestUtils where Self: XCTestCase {
@@ -80,5 +84,97 @@ extension TestUtils where Self: XCTestCase {
         records.forEach { (record) in
             deleteRecord(record, e3db: e3db)
         }
+    }
+
+    static func createClientSync() -> Client {
+        var e3db: Client?
+        let newClient = #function + UUID().uuidString
+        let group = DispatchGroup()
+        group.enter()
+        DispatchQueue.global(qos: .background).async {
+            Client.register(token: TestData.token, clientName: newClient, apiUrl: TestData.apiUrl, scheduler: immediateScheduler) { (result) in
+                XCTAssertNotNil(result.value)
+                e3db = Client(config: result.value!, scheduler: immediateScheduler)
+                group.leave()
+            }
+        }
+        guard group.wait(timeout: .now() + 20) == .success else {
+            fatalError("Timed out")
+        }
+        return e3db!
+    }
+
+    static func createKeySync(client: Client, recordType: String) -> EAKInfo {
+        var eakInfo: EAKInfo?
+        let group = DispatchGroup()
+        group.enter()
+        DispatchQueue.global(qos: .background).async {
+            client.createWriterKey(type: recordType) { result in
+                guard case .success(let eak) = result else {
+                    return XCTFail("Failed to get eak")
+                }
+                eakInfo = eak
+                group.leave()
+            }
+        }
+        guard group.wait(timeout: .now() + 20) == .success else {
+            fatalError("Timed out")
+        }
+        return eakInfo!
+    }
+}
+
+// MARK: - Collect the memory sizes from different types
+
+protocol MemoryReportable {
+    var byteCount: Int { get }
+}
+
+extension String: MemoryReportable {
+    var byteCount: Int {
+        return [UInt8](self.utf8).count
+    }
+}
+
+extension UUID: MemoryReportable {
+    var byteCount: Int {
+        return MemoryLayout.size(ofValue: self)
+    }
+}
+
+extension Dictionary where Key == String, Value == String {
+    var byteCount: Int {
+        return self.reduce(0) { $0 + $1.key.byteCount + $1.value.byteCount }
+    }
+}
+
+extension RecordData: MemoryReportable {
+    var byteCount: Int {
+        return cleartext.byteCount
+    }
+}
+
+extension ClientMeta: MemoryReportable {
+    var byteCount: Int {
+        return writerId.byteCount + userId.byteCount + type.byteCount + (plain?.byteCount ?? 0)
+    }
+}
+
+extension EncryptedDocument: MemoryReportable {
+    var byteCount: Int {
+        return clientMeta.byteCount + encryptedData.byteCount + recordSignature.byteCount
+    }
+}
+
+extension SignedDocument: MemoryReportable {
+    var byteCount: Int {
+        return document.serialized().byteCount + signature.byteCount
+    }
+}
+
+extension Data {
+    func asciiMasked() -> Data {
+        let maskedBytes = [UInt8](self).map { $0 & 127 }
+        return Data(bytes: maskedBytes)
     }
 }
