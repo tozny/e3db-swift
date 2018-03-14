@@ -1,16 +1,16 @@
 PODS:
   - Argo (4.1.2):
     - Runes (>= 4.0.0)
-  - Curry (3.0.0)
+  - Curry (4.0.0)
   - E3db (1.0.0):
     - E3db/Core (= 1.0.0)
   - E3db/Core (1.0.0):
-    - Curry (~> 3.0)
+    - Curry (~> 4.0)
     - Heimdallr (~> 3.6)
     - Ogra (~> 4.1)
-    - Sodium (~> 0.5)
+    - Sodium (~> 0.6)
     - Swish (~> 2.0)
-    - Valet (~> 2.4)
+    - Valet (~> 3.0)
   - E3db/Logging (1.0.0):
     - ResponseDetective (~> 1.2)
   - Heimdallr (3.6.1):
@@ -27,7 +27,7 @@ PODS:
   - Swish (2.0.3):
     - Argo (~> 4.0)
     - Result (~> 3.1)
-  - Valet (2.4.2)
+  - Valet (3.0.0)
 
 DEPENDENCIES:
   - E3db (from `../`)
@@ -40,8 +40,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Argo: 5db06502fc1222d83011f574243089dab25202ff
-  Curry: eb3d2c75aec678b3cc7fb2729d2ad6dd121531d1
-  E3db: 0ec998d764839825e8357584050336534a69d283
+  Curry: 887c0b9de9a9947820a59557459c7895e76d7b90
+  E3db: f67e6be29a84e1f9da5ee17e973844e7a4954844
   Heimdallr: d2a8b1dc3ecc7ad249c9ffd20c990e2248fcd599
   Ogra: fc959d1038250a83e4ffa11ece1a6bbd3a1e547f
   ResponseDetective: 2a1ddb19b895677d418cd1a83c9595a405012b57
@@ -50,7 +50,7 @@ SPEC CHECKSUMS:
   Sodium: bf524b0a3d5ad6870dcf343205cca7e659c15ad5
   SwiftCheck: 533279411be74b15d5cb519b4df7fea3e441979e
   Swish: c6d30b86eb5bdcab7b79081afcb254105bb526d6
-  Valet: 14463ef24fab8fd5809044ecedb61484b799fdd6
+  Valet: a0955a655898afbf12c7cb25ccb72283743b17bd
 
 PODFILE CHECKSUM: ebe90902c9ca3fcce8d7c5b6b0a8ca013da1a090
 

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0DEF64116C09D7CB217CDB1F /* Pods_E3db_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55EFD65963D3932BE626A0EE /* Pods_E3db_Tests.framework */; };
 		2C18845C1F3D0DAA00C8CDC2 /* E3db.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C1884431F3D0BDA00C8CDC2 /* E3db.framework */; };
 		2C4687BF1F4B58E300B4362B /* E3db.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C1884431F3D0BDA00C8CDC2 /* E3db.framework */; };
 		2C94EE822059A1D50041B55F /* PropertyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C94EE7A2059A1AF0041B55F /* PropertyTests.swift */; };
@@ -21,7 +20,8 @@
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
-		A2C67530806EF512542BE478 /* Pods_E3db_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36F59951ED0709118BDE4254 /* Pods_E3db_Example.framework */; };
+		88D987BF2B13F0FDBA772630 /* Pods_E3db_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDE833641B42680EE4A5C644 /* Pods_E3db_Example.framework */; };
+		88F855FA82A72C11DA458427 /* Pods_E3db_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEABA632B3DBFB3FF65FDC26 /* Pods_E3db_Tests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -436,9 +436,7 @@
 		2CB7EF961FD5B6D90008D83C /* DocumentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocumentTests.swift; sourceTree = "<group>"; };
 		2CB7EF971FD5B6DA0008D83C /* IntegrationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntegrationTests.swift; sourceTree = "<group>"; };
 		2CB7EF981FD5B6DA0008D83C /* TestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUtils.swift; sourceTree = "<group>"; };
-		36F59951ED0709118BDE4254 /* Pods_E3db_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_E3db_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4F455C54A50FCC502926EE9B /* Pods-E3db_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-E3db_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-E3db_Example/Pods-E3db_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		55EFD65963D3932BE626A0EE /* Pods_E3db_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_E3db_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D458DE6E5DB90CE2E2757B4 /* Pods-E3db_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-E3db_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-E3db_Example/Pods-E3db_Example.release.xcconfig"; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* E3db_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = E3db_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -448,11 +446,13 @@
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		607FACE51AFB9204008FA782 /* E3db_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = E3db_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		60FE7A3E190FA02CE2E42C25 /* Pods-E3db_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-E3db_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-E3db_Example/Pods-E3db_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		6E610191BA1C8B6D3B859B1B /* E3db.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = E3db.podspec; path = ../E3db.podspec; sourceTree = "<group>"; };
 		73B667B85D4EC4F5EA104FFF /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		9025A04C575EF94CB47E7F0B /* Pods-E3db_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-E3db_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-E3db_Tests/Pods-E3db_Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		B2035BA32F943572DF40F62C /* Pods-E3db_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-E3db_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-E3db_Tests/Pods-E3db_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		F54402557D4DA409D0EEF5DB /* Pods-E3db_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-E3db_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-E3db_Example/Pods-E3db_Example.release.xcconfig"; sourceTree = "<group>"; };
+		A8E2E2799620D1DB5381A7A3 /* Pods-E3db_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-E3db_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-E3db_Tests/Pods-E3db_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		BDE833641B42680EE4A5C644 /* Pods_E3db_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_E3db_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E92D7D8157686F4C601EFEAC /* Pods-E3db_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-E3db_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-E3db_Tests/Pods-E3db_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		EEABA632B3DBFB3FF65FDC26 /* Pods_E3db_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_E3db_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -461,7 +461,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2C18845C1F3D0DAA00C8CDC2 /* E3db.framework in Frameworks */,
-				A2C67530806EF512542BE478 /* Pods_E3db_Example.framework in Frameworks */,
+				88D987BF2B13F0FDBA772630 /* Pods_E3db_Example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -470,7 +470,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2C4687BF1F4B58E300B4362B /* E3db.framework in Frameworks */,
-				0DEF64116C09D7CB217CDB1F /* Pods_E3db_Tests.framework in Frameworks */,
+				88F855FA82A72C11DA458427 /* Pods_E3db_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1247,10 +1247,21 @@
 			isa = PBXGroup;
 			children = (
 				2C1882D71F3D0BDA00C8CDC2 /* Example */,
-				36F59951ED0709118BDE4254 /* Pods_E3db_Example.framework */,
-				55EFD65963D3932BE626A0EE /* Pods_E3db_Tests.framework */,
+				BDE833641B42680EE4A5C644 /* Pods_E3db_Example.framework */,
+				EEABA632B3DBFB3FF65FDC26 /* Pods_E3db_Tests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5E481524AB01F1B81DF62A5D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				60FE7A3E190FA02CE2E42C25 /* Pods-E3db_Example.debug.xcconfig */,
+				3D458DE6E5DB90CE2E2757B4 /* Pods-E3db_Example.release.xcconfig */,
+				E92D7D8157686F4C601EFEAC /* Pods-E3db_Tests.debug.xcconfig */,
+				A8E2E2799620D1DB5381A7A3 /* Pods-E3db_Tests.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 		607FACC71AFB9204008FA782 = {
@@ -1261,7 +1272,7 @@
 				607FACE81AFB9204008FA782 /* Tests */,
 				607FACD11AFB9204008FA782 /* Products */,
 				38E4965FD4A1FE80A0BFD57F /* Frameworks */,
-				CBD619C167412DE7C7D3D831 /* Pods */,
+				5E481524AB01F1B81DF62A5D /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1327,17 +1338,6 @@
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
 		};
-		CBD619C167412DE7C7D3D831 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				4F455C54A50FCC502926EE9B /* Pods-E3db_Example.debug.xcconfig */,
-				F54402557D4DA409D0EEF5DB /* Pods-E3db_Example.release.xcconfig */,
-				9025A04C575EF94CB47E7F0B /* Pods-E3db_Tests.debug.xcconfig */,
-				B2035BA32F943572DF40F62C /* Pods-E3db_Tests.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1345,12 +1345,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "E3db_Example" */;
 			buildPhases = (
-				75E04A2B67E05584CD39E496 /* [CP] Check Pods Manifest.lock */,
+				CF109259AA4BE8C00E7CB76A /* [CP] Check Pods Manifest.lock */,
 				607FACCC1AFB9204008FA782 /* Sources */,
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
-				45AD40D34CAAA5DCBACC85D1 /* [CP] Embed Pods Frameworks */,
-				F884F67F3B76034D738061C9 /* [CP] Copy Pods Resources */,
+				1A42901516D66DC894D5968A /* [CP] Embed Pods Frameworks */,
+				9CDBFDE365A2EEE4D5F7C429 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1366,12 +1366,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "E3db_Tests" */;
 			buildPhases = (
-				D651C248127DD3770658BC15 /* [CP] Check Pods Manifest.lock */,
+				15EE3CDEDC06EBA4B5B5B3F3 /* [CP] Check Pods Manifest.lock */,
 				607FACE11AFB9204008FA782 /* Sources */,
 				607FACE21AFB9204008FA782 /* Frameworks */,
 				607FACE31AFB9204008FA782 /* Resources */,
-				EC1BC1BCF0A48A5FA3516C0F /* [CP] Embed Pods Frameworks */,
-				ED74F7C1E3C1F81923287949 /* [CP] Copy Pods Resources */,
+				C76AD8FC50C76F20A294A17A /* [CP] Embed Pods Frameworks */,
+				42C0DC6286FF2AA767CCE8A1 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1558,7 +1558,25 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		45AD40D34CAAA5DCBACC85D1 /* [CP] Embed Pods Frameworks */ = {
+		15EE3CDEDC06EBA4B5B5B3F3 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-E3db_Tests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1A42901516D66DC894D5968A /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1596,43 +1614,37 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-E3db_Example/Pods-E3db_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		75E04A2B67E05584CD39E496 /* [CP] Check Pods Manifest.lock */ = {
+		42C0DC6286FF2AA767CCE8A1 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
 			);
-			name = "[CP] Check Pods Manifest.lock";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-E3db_Example-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-E3db_Tests/Pods-E3db_Tests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D651C248127DD3770658BC15 /* [CP] Check Pods Manifest.lock */ = {
+		9CDBFDE365A2EEE4D5F7C429 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
 			);
-			name = "[CP] Check Pods Manifest.lock";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-E3db_Tests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-E3db_Example/Pods-E3db_Example-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		EC1BC1BCF0A48A5FA3516C0F /* [CP] Embed Pods Frameworks */ = {
+		C76AD8FC50C76F20A294A17A /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1672,34 +1684,22 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-E3db_Tests/Pods-E3db_Tests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		ED74F7C1E3C1F81923287949 /* [CP] Copy Pods Resources */ = {
+		CF109259AA4BE8C00E7CB76A /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
-			name = "[CP] Copy Pods Resources";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-E3db_Example-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-E3db_Tests/Pods-E3db_Tests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F884F67F3B76034D738061C9 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-E3db_Example/Pods-E3db_Example-resources.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1886,7 +1886,7 @@
 		};
 		607FACF01AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4F455C54A50FCC502926EE9B /* Pods-E3db_Example.debug.xcconfig */;
+			baseConfigurationReference = 60FE7A3E190FA02CE2E42C25 /* Pods-E3db_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 97LZRZ7U3B;
@@ -1902,7 +1902,7 @@
 		};
 		607FACF11AFB9204008FA782 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F54402557D4DA409D0EEF5DB /* Pods-E3db_Example.release.xcconfig */;
+			baseConfigurationReference = 3D458DE6E5DB90CE2E2757B4 /* Pods-E3db_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 97LZRZ7U3B;
@@ -1918,7 +1918,7 @@
 		};
 		607FACF31AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9025A04C575EF94CB47E7F0B /* Pods-E3db_Tests.debug.xcconfig */;
+			baseConfigurationReference = E92D7D8157686F4C601EFEAC /* Pods-E3db_Tests.debug.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = 97LZRZ7U3B;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
@@ -1938,7 +1938,7 @@
 		};
 		607FACF41AFB9204008FA782 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B2035BA32F943572DF40F62C /* Pods-E3db_Tests.release.xcconfig */;
+			baseConfigurationReference = A8E2E2799620D1DB5381A7A3 /* Pods-E3db_Tests.release.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = 97LZRZ7U3B;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
