@@ -42,15 +42,7 @@ public final class Client {
         #endif
     }()
 
-    /// Initializer for the E3db client class.
-    ///
-    /// - SeeAlso: `Client.register(token:clientName:apiUrl:completion:)` and
-    ///   `Client.register(token:clientName:publicKey:apiUrl:completion:)` to generate
-    ///   the required Config values.
-    ///
-    /// - Parameter config: A config object with values that have
-    ///   already been registered with the E3db service.
-    public init(config: Config) {
+    internal init(config: Config, scheduler: @escaping Scheduler) {
         self.api    = Api(baseUrl: config.baseApiUrl)
         self.config = config
 
@@ -59,7 +51,19 @@ public final class Client {
         let tokenStore    = OAuthAccessTokenKeychainStore(service: config.clientId.uuidString)
         let heimdallr     = Heimdallr(tokenURL: api.tokenUrl, credentials: credentials, accessTokenStore: tokenStore, httpClient: httpClient)
         let authPerformer = AuthedRequestPerformer(authenticator: heimdallr, session: Client.session)
-        self.authedClient = APIClient(requestPerformer: authPerformer)
+        self.authedClient = APIClient(requestPerformer: authPerformer, scheduler: scheduler)
+    }
+
+    /// Initializer for the E3db client class.
+    ///
+    /// - SeeAlso: `Client.register(token:clientName:apiUrl:completion:)` and
+    ///   `Client.register(token:clientName:publicKey:apiUrl:completion:)` to generate
+    ///   the required Config values.
+    ///
+    /// - Parameter config: A config object with values that have
+    ///   already been registered with the E3db service.
+    public convenience init(config: Config) {
+        self.init(config: config, scheduler: mainQueueScheduler)
     }
 }
 
