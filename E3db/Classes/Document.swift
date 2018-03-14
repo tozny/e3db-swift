@@ -141,7 +141,7 @@ extension Client {
     /// - Returns: A wrapper object around a given data type and its cryptographic signature
     /// - Throws: `E3dbError.cryptoError` if the operation failed
     public func sign<T: Signable>(document: T) throws -> SignedDocument<T> {
-        guard let privSigKey = Sign.SecretKey(base64URLEncoded: config.privateSigKey),
+        guard let privSigKey = Sign.SecretKey(base64UrlEncoded: config.privateSigKey),
               let signature  = Crypto.signature(doc: document, signingKey: privSigKey) else {
             throw E3dbError.cryptoError("Failed to sign document")
         }
@@ -157,7 +157,7 @@ extension Client {
     /// - Returns: Whether the document was signed by the creator of the given public key
     /// - Throws: `E3dbError.cryptoError` if the operation failed
     public func verify<T>(signed: SignedDocument<T>, pubSigKey: String) throws -> Bool {
-        guard let pubSigKey    = Sign.PublicKey(base64URLEncoded: pubSigKey),
+        guard let pubSigKey    = Sign.PublicKey(base64UrlEncoded: pubSigKey),
               let verification = Crypto.verify(doc: signed.document, encodedSig: signed.signature, verifyingKey: pubSigKey) else {
             throw E3dbError.cryptoError("Failed to verify document")
         }

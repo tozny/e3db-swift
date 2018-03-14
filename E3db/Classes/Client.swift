@@ -94,9 +94,10 @@ extension Client {
     ///
     /// - Returns: A key pair containing Base64URL encoded Curve25519 public and private keys.
     public static func generateKeyPair() -> KeyPair? {
-        guard let keyPair = Crypto.generateKeyPair() else { return nil }
-        let pubKey  = keyPair.publicKey.base64URLEncodedString()
-        let privKey = keyPair.secretKey.base64URLEncodedString()
+        guard let keyPair = Crypto.generateKeyPair(),
+              let pubKey  = keyPair.publicKey.base64UrlEncodedString(),
+              let privKey = keyPair.secretKey.base64UrlEncodedString()
+            else { return nil }
         return KeyPair(publicKey: pubKey, secretKey: privKey)
     }
 
@@ -108,9 +109,10 @@ extension Client {
     ///
     /// - Returns: A key pair containing Base64URL encoded Ed25519 public and private keys.
     public static func generateSigningKeyPair() -> KeyPair? {
-        guard let keyPair = Crypto.generateSigningKeyPair() else { return nil }
-        let pubKey  = keyPair.publicKey.base64URLEncodedString()
-        let privKey = keyPair.secretKey.base64URLEncodedString()
+        guard let keyPair = Crypto.generateSigningKeyPair(),
+              let pubKey  = keyPair.publicKey.base64UrlEncodedString(),
+              let privKey = keyPair.secretKey.base64UrlEncodedString()
+            else { return nil }
         return KeyPair(publicKey: pubKey, secretKey: privKey)
     }
 }

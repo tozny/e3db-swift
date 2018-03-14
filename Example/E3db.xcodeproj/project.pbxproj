@@ -10,9 +10,12 @@
 		0DEF64116C09D7CB217CDB1F /* Pods_E3db_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55EFD65963D3932BE626A0EE /* Pods_E3db_Tests.framework */; };
 		2C18845C1F3D0DAA00C8CDC2 /* E3db.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C1884431F3D0BDA00C8CDC2 /* E3db.framework */; };
 		2C4687BF1F4B58E300B4362B /* E3db.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C1884431F3D0BDA00C8CDC2 /* E3db.framework */; };
+		2C94EE822059A1D50041B55F /* PropertyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C94EE7A2059A1AF0041B55F /* PropertyTests.swift */; };
+		2C94EE832059A1D50041B55F /* TestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB7EF981FD5B6DA0008D83C /* TestUtils.swift */; };
+		2C94EE842059A1D50041B55F /* Data+Base64URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C94EE7B2059A1AF0041B55F /* Data+Base64URL.swift */; };
+		2C94EE872059A29E0041B55F /* BenchmarkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C94EE6A2059A1AF0041B55F /* BenchmarkTests.swift */; };
 		2CB7EF9C1FD5B6FB0008D83C /* DocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB7EF961FD5B6D90008D83C /* DocumentTests.swift */; };
 		2CB7EF9D1FD5B6FB0008D83C /* IntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB7EF971FD5B6DA0008D83C /* IntegrationTests.swift */; };
-		2CB7EF9E1FD5B6FB0008D83C /* TestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB7EF981FD5B6DA0008D83C /* TestUtils.swift */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
@@ -117,15 +120,22 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 2C1883271F3D0BDA00C8CDC2 /* Pods.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 67504C8DF4BF4A64F1CAA2C7FB487B06;
+			remoteGlobalIDString = 062F49122969DBC80F5C0601874D8A54;
 			remoteInfo = E3db;
 		};
 		2C4687B11F4B58C400B4362B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2C1883271F3D0BDA00C8CDC2 /* Pods.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 67504C8DF4BF4A64F1CAA2C7FB487B06;
+			remoteGlobalIDString = 062F49122969DBC80F5C0601874D8A54;
 			remoteInfo = E3db;
+		};
+		2C94EE782059A1AF0041B55F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2C1883271F3D0BDA00C8CDC2 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 292C81F7C8B3D73F19AA9685B0252059;
+			remoteInfo = SwiftCheck;
 		};
 		607FACE61AFB9204008FA782 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -420,6 +430,9 @@
 		2C18842D1F3D0BDA00C8CDC2 /* VALValet_Protected.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VALValet_Protected.h; sourceTree = "<group>"; };
 		2C18842F1F3D0BDA00C8CDC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2C1884301F3D0BDA00C8CDC2 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
+		2C94EE6A2059A1AF0041B55F /* BenchmarkTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BenchmarkTests.swift; sourceTree = "<group>"; };
+		2C94EE7A2059A1AF0041B55F /* PropertyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PropertyTests.swift; sourceTree = "<group>"; };
+		2C94EE7B2059A1AF0041B55F /* Data+Base64URL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+Base64URL.swift"; sourceTree = "<group>"; };
 		2CB7EF961FD5B6D90008D83C /* DocumentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocumentTests.swift; sourceTree = "<group>"; };
 		2CB7EF971FD5B6DA0008D83C /* IntegrationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntegrationTests.swift; sourceTree = "<group>"; };
 		2CB7EF981FD5B6DA0008D83C /* TestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUtils.swift; sourceTree = "<group>"; };
@@ -709,6 +722,7 @@
 				2C18844F1F3D0BDA00C8CDC2 /* Result.framework */,
 				2C1884511F3D0BDA00C8CDC2 /* Runes.framework */,
 				2C1884531F3D0BDA00C8CDC2 /* Sodium.framework */,
+				2C94EE792059A1AF0041B55F /* SwiftCheck.framework */,
 				2C1884551F3D0BDA00C8CDC2 /* Swish.framework */,
 				2C1884571F3D0BDA00C8CDC2 /* Valet.framework */,
 			);
@@ -1287,7 +1301,10 @@
 			children = (
 				2CB7EF961FD5B6D90008D83C /* DocumentTests.swift */,
 				2CB7EF971FD5B6DA0008D83C /* IntegrationTests.swift */,
+				2C94EE6A2059A1AF0041B55F /* BenchmarkTests.swift */,
+				2C94EE7A2059A1AF0041B55F /* PropertyTests.swift */,
 				2CB7EF981FD5B6DA0008D83C /* TestUtils.swift */,
+				2C94EE7B2059A1AF0041B55F /* Data+Base64URL.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
 			path = Tests;
@@ -1511,6 +1528,13 @@
 			remoteRef = 2C1884561F3D0BDA00C8CDC2 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		2C94EE792059A1AF0041B55F /* SwiftCheck.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = SwiftCheck.framework;
+			remoteRef = 2C94EE782059A1AF0041B55F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -1626,6 +1650,7 @@
 				"${BUILT_PRODUCTS_DIR}/Sodium/Sodium.framework",
 				"${BUILT_PRODUCTS_DIR}/Swish/Swish.framework",
 				"${BUILT_PRODUCTS_DIR}/Valet/Valet.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftCheck/SwiftCheck.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -1640,6 +1665,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Sodium.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swish.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Valet.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftCheck.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1693,8 +1719,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				2CB7EF9D1FD5B6FB0008D83C /* IntegrationTests.swift in Sources */,
-				2CB7EF9E1FD5B6FB0008D83C /* TestUtils.swift in Sources */,
+				2C94EE842059A1D50041B55F /* Data+Base64URL.swift in Sources */,
 				2CB7EF9C1FD5B6FB0008D83C /* DocumentTests.swift in Sources */,
+				2C94EE872059A29E0041B55F /* BenchmarkTests.swift in Sources */,
+				2C94EE822059A1D50041B55F /* PropertyTests.swift in Sources */,
+				2C94EE832059A1D50041B55F /* TestUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
