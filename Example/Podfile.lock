@@ -22,7 +22,8 @@ PODS:
   - ResponseDetective (1.2.2)
   - Result (3.2.4)
   - Runes (4.1.0)
-  - Sodium (0.5)
+  - Sodium (0.6)
+  - SwiftCheck (0.9.1)
   - Swish (2.0.3):
     - Argo (~> 4.0)
     - Result (~> 3.1)
@@ -31,6 +32,7 @@ PODS:
 DEPENDENCIES:
   - E3db (from `../`)
   - E3db/Logging (from `../`)
+  - SwiftCheck (~> 0.9)
 
 EXTERNAL SOURCES:
   E3db:
@@ -39,16 +41,17 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Argo: 5db06502fc1222d83011f574243089dab25202ff
   Curry: eb3d2c75aec678b3cc7fb2729d2ad6dd121531d1
-  E3db: 13634a1e85136ba9903c552959b05f0edb82243d
+  E3db: 0ec998d764839825e8357584050336534a69d283
   Heimdallr: d2a8b1dc3ecc7ad249c9ffd20c990e2248fcd599
   Ogra: fc959d1038250a83e4ffa11ece1a6bbd3a1e547f
   ResponseDetective: 2a1ddb19b895677d418cd1a83c9595a405012b57
   Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
   Runes: 72a67a5bbbe1b5fdae08b5a01b10c60d83fc69aa
-  Sodium: a3a17f2ba2dc1b83547e13db0075e7c5d426fc55
+  Sodium: bf524b0a3d5ad6870dcf343205cca7e659c15ad5
+  SwiftCheck: 533279411be74b15d5cb519b4df7fea3e441979e
   Swish: c6d30b86eb5bdcab7b79081afcb254105bb526d6
   Valet: 14463ef24fab8fd5809044ecedb61484b799fdd6
 
-PODFILE CHECKSUM: db2602657a3cd462317facb97578d2121992da59
+PODFILE CHECKSUM: ebe90902c9ca3fcce8d7c5b6b0a8ca013da1a090
 
-COCOAPODS: 1.3.1
+COCOAPODS: 1.4.0
