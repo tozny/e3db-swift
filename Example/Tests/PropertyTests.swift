@@ -1,6 +1,6 @@
 import XCTest
-import Sodium
 import SwiftCheck
+@testable import E3db
 
 extension Data: Arbitrary {
     public static var arbitrary: Gen<Data> {
@@ -14,20 +14,18 @@ struct Base64UrlEncodedString: Arbitrary {
     let value: String
 
     static var arbitrary: Gen<Base64UrlEncodedString> {
-        return [UInt8].arbitrary.flatMap { bytes in
-            let encoded = Data(bytes: bytes)
-            let manual  = encoded.base64URLEncodedString()
+        return Data.arbitrary.flatMap { data in
+            let manual = data.base64URLEncodedString()
             return Gen<Base64UrlEncodedString>.pure(Base64UrlEncodedString(value: manual))
         }
     }
 }
 
 class PropertyTests: XCTestCase, TestUtils {
-    private let sodium = Sodium()
-
+    
     func testBase64urlEncoding() {
         property("Base64url encoding for sodium should match manual") <- forAll { (data: Data) in
-            let sodiumEncoded = self.sodium.utils.bin2base64(data, variant: .URLSAFE_NO_PADDING)
+            let sodiumEncoded = try? Crypto.base64UrlEncoded(data: data)
             let manualEncoded = data.base64URLEncodedString()
             return sodiumEncoded != nil && sodiumEncoded! == manualEncoded
         }
@@ -35,7 +33,7 @@ class PropertyTests: XCTestCase, TestUtils {
 
     func testBase64urlDecoding() {
         property("Base64url decoding for sodium should match manual") <- forAll { (encoded: Base64UrlEncodedString) in
-            let sodiumDecoded = self.sodium.utils.base642bin(encoded.value, variant: .URLSAFE_NO_PADDING)
+            let sodiumDecoded = try? Crypto.base64UrlDecoded(string: encoded.value)
             let manualDecoded = Data(base64URLEncoded: encoded.value)
             return sodiumDecoded != nil && manualDecoded != nil && sodiumDecoded! == manualDecoded!
         }
