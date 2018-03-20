@@ -257,7 +257,7 @@ let encrypted = // get encrypted document (e.g. read from local storage)
 let writerKey = // get stored EAKInfo instance (e.g. from local storage)
 
 // attempt to decrypt an encrypted document with the EAKInfo instance
-let decrypted = try? e3db.decrypt(encryptedDoc: encrypted, eakInfo: writerKey)
+let decrypted = try e3db.decrypt(encryptedDoc: encrypted, eakInfo: writerKey)
 print("Decrypted document: \(decrypted!)")  
 ```
 
@@ -272,9 +272,6 @@ method.
 
 Note that these are networked operations. However, the `EAKInfo` instance can be
 saved for later use.
-
-After obtaining a reader key, the 'reader' can then decrypt any
-records encrypted by the writer as follows:
 
 ```swift
 let encrypted  = // get encrypted document (e.g. read from local storage)
@@ -294,10 +291,34 @@ e3db.getReaderKey(writerId: writerID, userId: writerID, type: recordType) { resu
         print("An error occurred attempting to get reader key: \(error)")
     }
 }
+```
 
+The `EAKInfo` type conforms to Swift's `Codable` protocol for easy
+serialization, e.g. for saving to `UserDefaults`:
+
+```swift
+// store in UserDefaults
+// assumes eakInfo is a non-optional `EAKInfo` instance
+let eakData = try JSONEncoder().encode(eakInfo)
+UserDefaults.standard.set(eakData, forKey: "myReaderKey")
+```
+```swift
+// retrieve from UserDefaults
+guard let eakData = (UserDefaults.standard.value(forKey: "myReaderKey") as? Data) else {
+    return print("Could not retrieve eak data from defaults")
+}
+
+// deserialize into eakInfo
+let eakInfo = try JSONDecoder().decode(EAKInfo.self, from: eakData)
+```
+
+After obtaining a reader key, the 'reader' can then decrypt any
+records encrypted by the writer as follows:
+
+```swift
 // attempt to decrypt an encrypted document with the EAKInfo instance
-let decrypted = try? e3db.decrypt(encryptedDoc: encrypted, eakInfo: eakInfo!)
-print("Decrypted document: \(decrypted!)")  
+let decrypted = try e3db.decrypt(encryptedDoc: encrypted, eakInfo: eakInfo)
+print("Decrypted document: \(decrypted)")  
 ```
 
 #### Document Signing & Verification
@@ -329,8 +350,8 @@ document as create above):
 
 ```swift
 let encrypted = // get encrypted document (or anything that conforms to `Signable`)
-let signedDoc = try? e3db.sign(document: encrypted)
-print("Signed Document: \(signedDoc!)")
+let signedDoc = try e3db.sign(document: encrypted)
+print("Signed Document: \(signedDoc)")
 ```
 
 To verify a document, use the `verify` method. Here, we use the same `signedDoc`

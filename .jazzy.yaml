@@ -3,12 +3,11 @@ readme: 'README.md'
 author: 'Tozny, LLC'
 author_url: https://tozny.com
 github_url: https://github.com/tozny/e3db-swift
-copyright: '© 2017 [Tozny, LLC](https://tozny.com).'
+copyright: '© 2018 [Tozny, LLC](https://tozny.com).'
 clean: true
 sdk: iphonesimulator
 exclude:
-  - 'E3db/Classes/Extensions/Data+Base64URL.swift'
-  - 'E3db/Classes/Extensions/Extensions.swift'
+  - 'E3db/Classes/Extensions.swift'
 xcodebuild_arguments: [
   '-workspace', 'Example/E3db.xcworkspace',
   '-scheme',    'E3db-Example'
