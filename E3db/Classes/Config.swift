@@ -116,7 +116,7 @@ extension Config: Ogra.Encodable, Argo.Decodable {
 
 private let defaultProfileName   = "com.tozny.e3db.defaultProfile"
 private let defaultUserPrompt    = "Unlock to load profile"
-private let defaultAccessControl = VALAccessControl.touchIDAnyFingerprint
+private let defaultAccessControl = SecureEnclaveAccessControl.biometricAny
 
 extension Config {
 
@@ -135,10 +135,12 @@ extension Config {
     public init?(loadProfile: String? = nil, userPrompt: String? = nil) {
         let profile = loadProfile ?? defaultProfileName
         let prompt  = userPrompt ?? defaultUserPrompt
-        guard let valet = VALSecureEnclaveValet(identifier: profile, accessControl: defaultAccessControl),
-              let data  = valet.object(forKey: profile, userPrompt: prompt),
-              let json  = try? JSONSerialization.jsonObject(with: data, options: []),
-            case .success(let config) = Config.decode(JSON(json)) else {
+        guard let identifier = Identifier(nonEmpty: profile) else { return nil }
+
+        let valet = SecureEnclaveValet.valet(with: identifier, accessControl: defaultAccessControl)
+        guard case .success(let data) = valet.object(forKey: profile, withPrompt: prompt),
+              let json = try? JSONSerialization.jsonObject(with: data, options: []),
+              case .success(let config) = Config.decode(JSON(json)) else {
             return nil // Could not create config from json
         }
         self = config
@@ -157,10 +159,12 @@ extension Config {
     /// - Returns: A boolean value indicating whether the config object was successfully saved.
     public func save(profile named: String? = nil) -> Bool {
         let profile = named ?? defaultProfileName
-        guard let valet  = VALSecureEnclaveValet(identifier: profile, accessControl: defaultAccessControl),
-              let config = try? JSONSerialization.data(withJSONObject: encode().JSONObject(), options: []) else {
-                return false // Could not serialize json
+        guard let identifier = Identifier(nonEmpty: profile) else { return false }
+
+        let valet = SecureEnclaveValet.valet(with: identifier, accessControl: defaultAccessControl)
+        guard let config = try? JSONSerialization.data(withJSONObject: encode().JSONObject(), options: []) else {
+            return false // Could not serialize json
         }
-        return valet.setObject(config, forKey: profile)
+        return valet.set(object: config, forKey: profile)
     }
 }

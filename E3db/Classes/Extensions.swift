@@ -146,3 +146,16 @@ extension String: Signable {
         return self
     }
 }
+
+extension Data {
+    public init?(base64UrlEncoded string: String) {
+        guard let data = try? Crypto.base64UrlDecoded(string: string) else {
+            return nil
+        }
+        self = data
+    }
+
+    public func base64UrlEncodedString() -> String? {
+        return try? Crypto.base64UrlEncoded(data: self)
+    }
+}
