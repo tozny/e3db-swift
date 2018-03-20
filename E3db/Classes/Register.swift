@@ -26,31 +26,43 @@ struct ClientRequest: Ogra.Encodable {
     }
 }
 
-struct ClientKey: Ogra.Encodable, Argo.Decodable {
-    let curve25519: String
+/// A type that holds a public encryption key
+public struct ClientKey: Swift.Codable {
 
-    func encode() -> JSON {
+    /// The Base64URL encoded value for the public encryption key
+    let curve25519: String
+}
+
+/// :nodoc:
+extension ClientKey: Ogra.Encodable, Argo.Decodable {
+    public func encode() -> JSON {
         return JSON.object([
             "curve25519": curve25519.encode()
         ])
     }
 
-    static func decode(_ j: JSON) -> Decoded<ClientKey> {
+    static public func decode(_ j: JSON) -> Decoded<ClientKey> {
         return curry(ClientKey.init)
             <^> j <| "curve25519"
     }
 }
 
-struct SigningKey: Ogra.Encodable, Argo.Decodable {
-    let ed25519: String
+/// A type that holds a public signing key
+public struct SigningKey: Swift.Codable {
 
-    func encode() -> JSON {
+    /// The Base64URL encoded value for the public signing key
+    let ed25519: String
+}
+
+/// :nodoc:
+extension SigningKey: Ogra.Encodable, Argo.Decodable {
+    public func encode() -> JSON {
         return JSON.object([
             "ed25519": ed25519.encode()
         ])
     }
 
-    static func decode(_ j: JSON) -> Decoded<SigningKey> {
+    static public func decode(_ j: JSON) -> Decoded<SigningKey> {
         return curry(SigningKey.init)
             <^> j <| "ed25519"
     }

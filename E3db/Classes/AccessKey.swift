@@ -38,23 +38,23 @@ class AccessKey: NSObject {
     }
 }
 
-/// Opaque Encrypted Access Key type to facilitate offline crypto
-public struct EAKInfo {
+/// Encrypted Access Key information type to facilitate offline crypto
+public struct EAKInfo: Swift.Codable {
 
     /// encrypted key used for encryption operations
-    let eak: String
+    public let eak: String
 
     /// client ID of user authorizing access (typically the writer)
-    let authorizerId: UUID
+    public let authorizerId: UUID
 
     /// public key of the authorizer
-    let authorizerPublicKey: ClientKey
+    public let authorizerPublicKey: ClientKey
 
     /// client ID of user performing the signature (typically the writer)
-    let signerId: UUID?
+    public let signerId: UUID?
 
     /// public signing key of the signer
-    let signerSigningKey: SigningKey?
+    public let signerSigningKey: SigningKey?
 }
 
 /// :nodoc:

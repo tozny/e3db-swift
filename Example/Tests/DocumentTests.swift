@@ -37,6 +37,32 @@ class DocumentTests: XCTestCase, TestUtils {
         (client2, config2) = (c2, cfg2)
     }
 
+    func testCanStoreAndRetrieveEAKInfo() {
+        let eakInfo = createWriterKey(client: client1!, type: type1)
+
+        do {
+            // serialize
+            let serialized = try JSONEncoder().encode(eakInfo)
+
+            // store and retrieve in user defaults
+            let defaultsKey = "eak"
+            let defaults    = UserDefaults.standard
+
+            defaults.set(serialized, forKey: defaultsKey)
+            guard let retrieved = (defaults.value(forKey: defaultsKey) as? Data) else {
+                return XCTFail("Could not retrieve eak data from defaults")
+            }
+
+            // deserialize into eak
+            let deserialized = try JSONDecoder().decode(EAKInfo.self, from: retrieved)
+
+            // compare that they are the same
+            XCTAssertEqual(eakInfo, deserialized)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
+    }
+
     func testCanShareEAK() {
         let test = #function + UUID().uuidString
         var eakInfo1: EAKInfo?
