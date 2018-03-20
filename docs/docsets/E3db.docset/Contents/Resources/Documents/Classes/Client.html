@@ -37,7 +37,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="../Enums.html">Enums</a>
+            <a href="../Enums.html">Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="../Enums/E3dbError.html">E3dbError</a>
@@ -45,13 +45,33 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="../Structs.html">Structs</a>
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/Signable.html">Signable</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="../Structs/ClientCredentials.html">ClientCredentials</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/ClientMeta.html">ClientMeta</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/Config.html">Config</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DecryptedDocument.html">DecryptedDocument</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs.html#/s:4E3db7EAKInfoV">EAKInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/EncryptedDocument.html">EncryptedDocument</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/IncomingSharingPolicy.html">IncomingSharingPolicy</a>
@@ -77,11 +97,17 @@
               <li class="nav-group-task">
                 <a href="../Structs/RecordData.html">RecordData</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SignedDocument.html">SignedDocument</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="../Typealiases.html">Typealiases</a>
+            <a href="../Typealiases.html">Type Aliases</a>
             <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4E3db10CipherDataa">CipherData</a>
+              </li>
               <li class="nav-group-task">
                 <a href="../Typealiases.html#/s:4E3db9Cleartexta">Cleartext</a>
               </li>
@@ -104,7 +130,7 @@
             <h1>Client</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">Client</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">Client</span></code></pre>
 
                 </div>
               </div>
@@ -131,7 +157,7 @@
 <div class="aside aside-see-also">
     <p class="aside-title">See also</p>
     <p><code><a href="../Classes/Client.html#/s:4E3db6ClientC8registerXeXeFZ">Client.register(token:clientName:apiUrl:completion:)</a></code> and
-<code><a href="../Classes/Client.html#/s:4E3db6ClientC8registerXeXeFZ">Client.register(token:clientName:publicKey:apiUrl:completion:)</a></code> to generate
+<code>Client.register(token:clientName:publicKey:apiUrl:completion:)</code> to generate
 the required Config values.</p>
 
 </div>
@@ -141,7 +167,7 @@ the required Config values.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">config</span><span class="p">:</span> <span class="kt"><a href="../Structs/Config.html">Config</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="n">convenience</span> <span class="nf">init</span><span class="p">(</span><span class="nv">config</span><span class="p">:</span> <span class="kt"><a href="../Structs/Config.html">Config</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -175,6 +201,163 @@ already been registered with the E3db service.</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:4E3db6ClientC15createWriterKeyXeXeF"></a>
+                    <a name="//apple_ref/swift/Method/createWriterKey(type:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC15createWriterKeyXeXeF">createWriterKey(type:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Generate encrypted access key for offline encryption operations. <code><a href="../Structs.html#/s:4E3db7EAKInfoV">EAKInfo</a></code> objects are
+safe to store in insecure storage as they are encrypted with the current client&rsquo;s private key.
+This method will store the key with E3db for later access.</p>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <p><code><a href="../Classes/Client.html#/s:4E3db6ClientC12getReaderKeyXeXeF">getReaderKey(writerId:userId:type:completion:)</a></code> for geting keys from E3db.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">createWriterKey</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs.html#/s:4E3db7EAKInfoV">EAKInfo</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>type</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The kind of data that will be encrypted with this key</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes to provide the EAKInfo result</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC12getReaderKeyXeXeF"></a>
+                    <a name="//apple_ref/swift/Method/getReaderKey(writerId:userId:type:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC12getReaderKeyXeXeF">getReaderKey(writerId:userId:type:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get the encrypted access key for offline encryption operations. The EAKInfo object must have
+been created beforehand, and shared with this client.</p>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <p><code><a href="../Classes/Client.html#/s:4E3db6ClientC15createWriterKeyXeXeF">createWriterKey(type:completion:)</a></code> for sending keys to E3db.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">getReaderKey</span><span class="p">(</span><span class="nv">writerId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">userId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">type</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs.html#/s:4E3db7EAKInfoV">EAKInfo</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>writerId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client ID of the writer of an encrypted document.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>userId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client ID of the user for which an encrypted document was created.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>type</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The kind of data that will be encrypted with this key</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes to provide the EAKInfo result, or error if not found.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:4E3db6ClientC15generateKeyPairAA0dE0VSgyFZ"></a>
                     <a name="//apple_ref/swift/Method/generateKeyPair()" class="dashAnchor"></a>
                     <a class="token" href="#/s:4E3db6ClientC15generateKeyPairAA0dE0VSgyFZ">generateKeyPair()</a>
@@ -185,7 +368,7 @@ already been registered with the E3db service.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A helper function to create a compatible key pair for E3db operations.</p>
+                        <p>A helper function to create a compatible key pair for E3db encryption operations.</p>
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
     <p>This method is not required for library use. A key pair is
@@ -195,7 +378,7 @@ generated and stored in the <code><a href="../Structs/Config.html">Config</a></c
 </div>
 <div class="aside aside-see-also">
     <p class="aside-title">See also</p>
-    <p><code><a href="../Classes/Client.html#/s:4E3db6ClientC8registerXeXeFZ">Client.register(token:clientName:publicKey:apiUrl:completion:)</a></code>
+    <p><code>Client.register(token:clientName:publicKey:apiUrl:completion:)</code>
 for supplying your own key for registration.</p>
 
 </div>
@@ -205,13 +388,347 @@ for supplying your own key for registration.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">generateKeyPair</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/KeyPair.html">KeyPair</a></span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">generateKeyPair</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/KeyPair.html">KeyPair</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
                       <div>
                         <h4>Return Value</h4>
-                        <p>A key pair containing Base64URL encoded public and private keys.</p>
+                        <p>A key pair containing Base64URL encoded Curve25519 public and private keys.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC22generateSigningKeyPairAA0eF0VSgyFZ"></a>
+                    <a name="//apple_ref/swift/Method/generateSigningKeyPair()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC22generateSigningKeyPairAA0eF0VSgyFZ">generateSigningKeyPair()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A helper function to create a compatible key pair for E3db signature operations.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <p>This method is not required for library use. A key pair is
+generated and stored in the <code><a href="../Structs/Config.html">Config</a></code> object returned by the
+<code><a href="../Classes/Client.html#/s:4E3db6ClientC8registerXeXeFZ">Client.register(token:clientName:apiUrl:completion:)</a></code> method.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">generateSigningKeyPair</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/KeyPair.html">KeyPair</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A key pair containing Base64URL encoded Ed25519 public and private keys.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC4signAA14SignedDocumentVyxGx8document_tKAA8SignableRzlF"></a>
+                    <a name="//apple_ref/swift/Method/sign(document:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC4signAA14SignedDocumentVyxGx8document_tKAA8SignableRzlF">sign(document:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Use the client&rsquo;s private signing key to create a cryptographic signature
+over the serialized representation of the given document.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <p>this does not change the document at all (e.g. the values are <em>not</em> encrypted).</p>
+
+</div>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <p><code><a href="../Enums/E3dbError.html#/s:4E3db0A5ErrorO06cryptoB0ACSScACmF">E3dbError.cryptoError</a></code> if the operation failed</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">sign</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Signable.html">Signable</a></span><span class="o">&gt;</span><span class="p">(</span><span class="nv">document</span><span class="p">:</span> <span class="kt">T</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SignedDocument.html">SignedDocument</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>document</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A data type that conforms to the <code><a href="../Protocols/Signable.html">Signable</a></code> protocol</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A wrapper object around a given data type and its cryptographic signature</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC6verifySbAA14SignedDocumentVyxG6signed_SS9pubSigKeytKAA8SignableRzlF"></a>
+                    <a name="//apple_ref/swift/Method/verify(signed:pubSigKey:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC6verifySbAA14SignedDocumentVyxG6signed_SS9pubSigKeytKAA8SignableRzlF">verify(signed:pubSigKey:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Verify message authenticity. Confirm that the signature for the <code><a href="../Structs/SignedDocument.html">SignedDocument</a></code> was
+created by the client identified by the given public key, for the document provided.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <code><a href="../Enums/E3dbError.html#/s:4E3db0A5ErrorO06cryptoB0ACSScACmF">E3dbError.cryptoError</a></code> if the operation failed
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">verify</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">signed</span><span class="p">:</span> <span class="kt"><a href="../Structs/SignedDocument.html">SignedDocument</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">pubSigKey</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>signed</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A wrapper object around a given data type and its cryptographic signature</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>pubSigKey</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The public portion of the key used to create the signature in the <code>signed</code> document</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Whether the document was signed by the creator of the given public key</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC7encryptAA17EncryptedDocumentVSS4type_AA10RecordDataV4dataAA7EAKInfoV7eakInfos10DictionaryVyS2SGSg5plaintKF"></a>
+                    <a name="//apple_ref/swift/Method/encrypt(type:data:eakInfo:plain:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC7encryptAA17EncryptedDocumentVSS4type_AA10RecordDataV4dataAA7EAKInfoV7eakInfos10DictionaryVyS2SGSg5plaintKF">encrypt(type:data:eakInfo:plain:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Create a document to hold data signed for authenticicy and encrypted for confidentiality.
+The resulting document also holds info related to the author, type of data, and any additional
+metadata kept in cleartext.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <code><a href="../Enums/E3dbError.html#/s:4E3db0A5ErrorO06cryptoB0ACSScACmF">E3dbError.cryptoError</a></code> if the operation failed
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">encrypt</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">data</span><span class="p">:</span> <span class="kt"><a href="../Structs/RecordData.html">RecordData</a></span><span class="p">,</span> <span class="nv">eakInfo</span><span class="p">:</span> <span class="kt"><a href="../Structs.html#/s:4E3db7EAKInfoV">EAKInfo</a></span><span class="p">,</span> <span class="nv">plain</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db9PlainMetaa">PlainMeta</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/EncryptedDocument.html">EncryptedDocument</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>type</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The kind of data this document represents</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The cleartext data to be encrypted</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>eakInfo</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The encrypted access key information used for the encryption operation</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>plain</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Additional metadata to be included &ndash; remains unencrypted.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Data type to hold encrypted data and related info</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC7decryptAA17DecryptedDocumentVAA09EncryptedE0V12encryptedDoc_AA7EAKInfoV7eakInfotKF"></a>
+                    <a name="//apple_ref/swift/Method/decrypt(encryptedDoc:eakInfo:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC7decryptAA17DecryptedDocumentVAA09EncryptedE0V12encryptedDoc_AA7EAKInfoV7eakInfotKF">decrypt(encryptedDoc:eakInfo:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Create a document to hold the original plaintext data from the given encrypted format.
+The resulting document also holds info related to the author, type of data, and any additional
+metadata kept in cleartext. The input document is also verified for authenticiy with the given
+public signing key, and throws an error if verification fails.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <code><a href="../Enums/E3dbError.html#/s:4E3db0A5ErrorO06cryptoB0ACSScACmF">E3dbError.cryptoError</a></code> if the decrypt operation fails, or if the document fails verification
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">decrypt</span><span class="p">(</span><span class="nv">encryptedDoc</span><span class="p">:</span> <span class="kt"><a href="../Structs/EncryptedDocument.html">EncryptedDocument</a></span><span class="p">,</span> <span class="nv">eakInfo</span><span class="p">:</span> <span class="kt"><a href="../Structs.html#/s:4E3db7EAKInfoV">EAKInfo</a></span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/DecryptedDocument.html">DecryptedDocument</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>encryptedDoc</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Data type to hold encrypted data and related info</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>eakInfo</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The encrypted access key information used for the decryption operation</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Data type to hold the unencrypted data and related info</p>
                       </div>
                     </section>
                   </div>
@@ -246,7 +763,7 @@ the record results will contain empty <code><a href="../Structs/RecordData.html"
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">query</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Structs/QueryParams.html">QueryParams</a></span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/QueryResponse.html">QueryResponse</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">query</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Structs/QueryParams.html">QueryParams</a></span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/QueryResponse.html">QueryResponse</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -310,7 +827,7 @@ metadata associated with the record.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">write</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">data</span><span class="p">:</span> <span class="kt"><a href="../Structs/RecordData.html">RecordData</a></span><span class="p">,</span> <span class="nv">plain</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db9PlainMetaa">PlainMeta</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/Record.html">Record</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">write</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">data</span><span class="p">:</span> <span class="kt"><a href="../Structs/RecordData.html">RecordData</a></span><span class="p">,</span> <span class="nv">plain</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db9PlainMetaa">PlainMeta</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/Record.html">Record</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -396,7 +913,7 @@ metadata associated with the record.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">read</span><span class="p">(</span><span class="nv">recordId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">fields</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/Record.html">Record</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">read</span><span class="p">(</span><span class="nv">recordId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">fields</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/Record.html">Record</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -412,7 +929,7 @@ metadata associated with the record.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>The identifier for the <code>Record</code> to read</p>
+                                  <p>The identifier for the <code><a href="../Structs/Record.html">Record</a></code> to read</p>
                                 </div>
                               </td>
                             </tr>
@@ -471,7 +988,7 @@ the existing data and metadata values.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">update</span><span class="p">(</span><span class="nv">meta</span><span class="p">:</span> <span class="kt"><a href="../Structs/Meta.html">Meta</a></span><span class="p">,</span> <span class="nv">newData</span><span class="p">:</span> <span class="kt"><a href="../Structs/RecordData.html">RecordData</a></span><span class="p">,</span> <span class="nv">plain</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db9PlainMetaa">PlainMeta</a></span><span class="p">?,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/Record.html">Record</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">update</span><span class="p">(</span><span class="nv">meta</span><span class="p">:</span> <span class="kt"><a href="../Structs/Meta.html">Meta</a></span><span class="p">,</span> <span class="nv">newData</span><span class="p">:</span> <span class="kt"><a href="../Structs/RecordData.html">RecordData</a></span><span class="p">,</span> <span class="nv">plain</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db9PlainMetaa">PlainMeta</a></span><span class="p">?,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/Record.html">Record</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -487,7 +1004,7 @@ the existing data and metadata values.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>The <code>Meta</code> information for the record to update</p>
+                                  <p>The <code><a href="../Structs/Meta.html">Meta</a></code> information for the record to update</p>
                                 </div>
                               </td>
                             </tr>
@@ -557,7 +1074,7 @@ the existing data and metadata values.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">delete</span><span class="p">(</span><span class="nv">recordId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">version</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">delete</span><span class="p">(</span><span class="nv">recordId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">version</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -573,7 +1090,7 @@ the existing data and metadata values.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>The identifier for the <code>Record</code> to remove</p>
+                                  <p>The identifier for the <code><a href="../Structs/Record.html">Record</a></code> to remove</p>
                                 </div>
                               </td>
                             </tr>
@@ -585,7 +1102,7 @@ the existing data and metadata values.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>The version of the <code>Record</code> to delete</p>
+                                  <p>The version of the <code><a href="../Structs/Record.html">Record</a></code> to delete</p>
                                 </div>
                               </td>
                             </tr>
@@ -644,7 +1161,7 @@ of this method allows the caller to provide their own public key.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">register</span><span class="p">(</span><span class="nv">token</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">clientName</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">apiUrl</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/Config.html">Config</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">register</span><span class="p">(</span><span class="nv">token</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">clientName</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">apiUrl</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/Config.html">Config</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -696,7 +1213,7 @@ of this method allows the caller to provide their own public key.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>A handler to call when this operation completes to provide a complete <code>Config</code></p>
+                                  <p>A handler to call when this operation completes to provide a complete <code><a href="../Structs/Config.html">Config</a></code></p>
                                 </div>
                               </td>
                             </tr>
@@ -710,8 +1227,8 @@ of this method allows the caller to provide their own public key.</p>
                   <div>
                     <code>
                     <a name="/s:4E3db6ClientC8registerXeXeFZ"></a>
-                    <a name="//apple_ref/swift/Method/register(token:clientName:publicKey:apiUrl:completion:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4E3db6ClientC8registerXeXeFZ">register(token:clientName:publicKey:apiUrl:completion:)</a>
+                    <a name="//apple_ref/swift/Method/register(token:clientName:publicKey:signingKey:apiUrl:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC8registerXeXeFZ">register(token:clientName:publicKey:signingKey:apiUrl:completion:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -739,7 +1256,7 @@ of this method generates the keypair for the caller.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">register</span><span class="p">(</span><span class="nv">token</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">clientName</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">publicKey</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">apiUrl</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/ClientCredentials.html">ClientCredentials</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">register</span><span class="p">(</span><span class="nv">token</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">clientName</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">publicKey</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">signingKey</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">apiUrl</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/ClientCredentials.html">ClientCredentials</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -786,6 +1303,18 @@ of this method generates the keypair for the caller.</p>
                             <tr>
                               <td>
                                 <code>
+                                <em>signingKey</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The public key to register with the E3db service and use for signing operations</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
                                 <em>apiUrl</em>
                                 </code>
                               </td>
@@ -803,8 +1332,8 @@ of this method generates the keypair for the caller.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>A handler to call when this operation completes to provide <code>ClientCredentials</code>
-used to build a <code>Config</code> object for initializing an E3db <code>Client</code></p>
+                                  <p>A handler to call when this operation completes to provide <code><a href="../Structs/ClientCredentials.html">ClientCredentials</a></code>
+used to build a <code><a href="../Structs/Config.html">Config</a></code> object for initializing an E3db <code>Client</code></p>
                                 </div>
                               </td>
                             </tr>
@@ -838,7 +1367,7 @@ used to build a <code>Config</code> object for initializing an E3db <code>Client
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">share</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">readerId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">share</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">readerId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -908,7 +1437,7 @@ used to build a <code>Config</code> object for initializing an E3db <code>Client
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">revoke</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">readerId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">revoke</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">readerId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -982,7 +1511,7 @@ used to build a <code>Config</code> object for initializing an E3db <code>Client
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">getOutgoingSharing</span><span class="p">(</span><span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt"><a href="../Structs/OutgoingSharingPolicy.html">OutgoingSharingPolicy</a></span><span class="p">]</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">getOutgoingSharing</span><span class="p">(</span><span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt"><a href="../Structs/OutgoingSharingPolicy.html">OutgoingSharingPolicy</a></span><span class="p">]</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -999,7 +1528,7 @@ used to build a <code>Config</code> object for initializing an E3db <code>Client
                               <td>
                                 <div>
                                   <p>A handler to call when this operation completes to provide
-the list of <code>OutgoingSharingPolicy</code> objects</p>
+the list of <code><a href="../Structs/OutgoingSharingPolicy.html">OutgoingSharingPolicy</a></code> objects</p>
                                 </div>
                               </td>
                             </tr>
@@ -1029,7 +1558,7 @@ the list of <code>OutgoingSharingPolicy</code> objects</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">getIncomingSharing</span><span class="p">(</span><span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt"><a href="../Structs/IncomingSharingPolicy.html">IncomingSharingPolicy</a></span><span class="p">]</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">getIncomingSharing</span><span class="p">(</span><span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt"><a href="../Structs/IncomingSharingPolicy.html">IncomingSharingPolicy</a></span><span class="p">]</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1046,7 +1575,7 @@ the list of <code>OutgoingSharingPolicy</code> objects</p>
                               <td>
                                 <div>
                                   <p>A handler to call when this operation completes to provide
-the list of <code>IncomingSharingPolicy</code> objects</p>
+the list of <code><a href="../Structs/IncomingSharingPolicy.html">IncomingSharingPolicy</a></code> objects</p>
                                 </div>
                               </td>
                             </tr>
@@ -1061,8 +1590,8 @@ the list of <code>IncomingSharingPolicy</code> objects</p>
           </section>
         </section>
         <section id="footer">
-          <p>© 2017 <a class="link" href="https://tozny.com" target="_blank" rel="external">Tozny, LLC</a>.</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>© 2018 <a class="link" href="https://tozny.com" target="_blank" rel="external">Tozny, LLC</a>.</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

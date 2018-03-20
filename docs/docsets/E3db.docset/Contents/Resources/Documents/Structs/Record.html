@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Record Struct Reference</title>
+    <title>Record Structure Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -11,7 +11,7 @@
   </head>
   <body>
     <a name="//apple_ref/swift/Struct/Record" class="dashAnchor"></a>
-    <a title="Record Struct Reference"></a>
+    <a title="Record Structure Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">E3db Docs</a> (100% documented)</p>
@@ -22,7 +22,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">E3db Reference</a>
         <img id="carat" src="../img/carat.png" />
-        Record Struct Reference
+        Record Structure Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -37,7 +37,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="../Enums.html">Enums</a>
+            <a href="../Enums.html">Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="../Enums/E3dbError.html">E3dbError</a>
@@ -45,13 +45,33 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="../Structs.html">Structs</a>
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/Signable.html">Signable</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="../Structs/ClientCredentials.html">ClientCredentials</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/ClientMeta.html">ClientMeta</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/Config.html">Config</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DecryptedDocument.html">DecryptedDocument</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs.html#/s:4E3db7EAKInfoV">EAKInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/EncryptedDocument.html">EncryptedDocument</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/IncomingSharingPolicy.html">IncomingSharingPolicy</a>
@@ -77,11 +97,17 @@
               <li class="nav-group-task">
                 <a href="../Structs/RecordData.html">RecordData</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SignedDocument.html">SignedDocument</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="../Typealiases.html">Typealiases</a>
+            <a href="../Typealiases.html">Type Aliases</a>
             <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4E3db10CipherDataa">CipherData</a>
+              </li>
               <li class="nav-group-task">
                 <a href="../Typealiases.html#/s:4E3db9Cleartexta">Cleartext</a>
               </li>
@@ -104,7 +130,7 @@
             <h1>Record</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Record</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Record</span></code></pre>
 
                 </div>
               </div>
@@ -134,7 +160,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">meta</span><span class="p">:</span> <span class="kt"><a href="../Structs/Meta.html">Meta</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">meta</span><span class="p">:</span> <span class="kt"><a href="../Structs/Meta.html">Meta</a></span></code></pre>
 
                         </div>
                       </div>
@@ -161,7 +187,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">data</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db9Cleartexta">Cleartext</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">data</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db9Cleartexta">Cleartext</a></span></code></pre>
 
                         </div>
                       </div>
@@ -173,8 +199,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>© 2017 <a class="link" href="https://tozny.com" target="_blank" rel="external">Tozny, LLC</a>.</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>© 2018 <a class="link" href="https://tozny.com" target="_blank" rel="external">Tozny, LLC</a>.</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

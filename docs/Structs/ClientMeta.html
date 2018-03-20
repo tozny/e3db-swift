@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>RecordData Structure Reference</title>
+    <title>ClientMeta Structure Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Struct/RecordData" class="dashAnchor"></a>
-    <a title="RecordData Structure Reference"></a>
+    <a name="//apple_ref/swift/Struct/ClientMeta" class="dashAnchor"></a>
+    <a title="ClientMeta Structure Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">E3db Docs</a> (100% documented)</p>
@@ -22,7 +22,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">E3db Reference</a>
         <img id="carat" src="../img/carat.png" />
-        RecordData Structure Reference
+        ClientMeta Structure Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -127,14 +127,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>RecordData</h1>
+            <h1>ClientMeta</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">RecordData</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ClientMeta</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Signable.html">Signable</a></span></code></pre>
 
                 </div>
               </div>
-            <p>A wrapper to hold unencrypted values</p>
+            <p>A type to hold metadata information created by a client</p>
 
           </section>
           <section class="section task-group-section">
@@ -143,9 +143,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4E3db10RecordDataV9cleartexts10DictionaryVyS2SGv"></a>
-                    <a name="//apple_ref/swift/Property/cleartext" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4E3db10RecordDataV9cleartexts10DictionaryVyS2SGv">cleartext</a>
+                    <a name="/s:4E3db10ClientMetaV8writerId10Foundation4UUIDVv"></a>
+                    <a name="//apple_ref/swift/Property/writerId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db10ClientMetaV8writerId10Foundation4UUIDVv">writerId</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -153,14 +153,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A key-value store of unencrypted data</p>
+                        <p>An identifier for the writer of the document</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">cleartext</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db9Cleartexta">Cleartext</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">writerId</span><span class="p">:</span> <span class="kt">UUID</span></code></pre>
 
                         </div>
                       </div>
@@ -170,9 +170,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4E3db10RecordDataVACs10DictionaryVyS2SG9cleartext_tcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(cleartext:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4E3db10RecordDataVACs10DictionaryVyS2SG9cleartext_tcfc">init(cleartext:)</a>
+                    <a name="/s:4E3db10ClientMetaV6userId10Foundation4UUIDVv"></a>
+                    <a name="//apple_ref/swift/Property/userId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db10ClientMetaV6userId10Foundation4UUIDVv">userId</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -180,39 +180,71 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Initializer to create a structure to hold unencrypted data.
-The keys from the provided dictionary remain as unencrypted plaintext.
-The values are encrypted before transit to the E3db service,
-and decrypted after read back out from the service to support
-full end-to-end encryption.</p>
+                        <p>An identifier for the user of the document</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">cleartext</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">String</span><span class="p">])</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">userId</span><span class="p">:</span> <span class="kt">UUID</span></code></pre>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>cleartext</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Unencrypted data</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db10ClientMetaV4typeSSv"></a>
+                    <a name="//apple_ref/swift/Property/type" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db10ClientMetaV4typeSSv">type</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The kind of data this document represents</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">type</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db10ClientMetaV5plains10DictionaryVyS2SGSgv"></a>
+                    <a name="//apple_ref/swift/Property/plain" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db10ClientMetaV5plains10DictionaryVyS2SGSgv">plain</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A user-defined, key-value store of metadata
+associated with the document that remains as plaintext</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">plain</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db9PlainMetaa">PlainMeta</a></span><span class="p">?</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>

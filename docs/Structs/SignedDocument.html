@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>RecordData Structure Reference</title>
+    <title>SignedDocument Structure Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Struct/RecordData" class="dashAnchor"></a>
-    <a title="RecordData Structure Reference"></a>
+    <a name="//apple_ref/swift/Struct/SignedDocument" class="dashAnchor"></a>
+    <a title="SignedDocument Structure Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">E3db Docs</a> (100% documented)</p>
@@ -22,7 +22,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">E3db Reference</a>
         <img id="carat" src="../img/carat.png" />
-        RecordData Structure Reference
+        SignedDocument Structure Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -127,14 +127,15 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>RecordData</h1>
+            <h1>SignedDocument</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">RecordData</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">SignedDocument</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Signable.html">Signable</a></span><span class="o">&gt;</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Signable.html">Signable</a></span></code></pre>
 
                 </div>
               </div>
-            <p>A wrapper to hold unencrypted values</p>
+            <p>A wrapper object around a given data type and its
+cryptographic signature. Note that document remains unchanged</p>
 
           </section>
           <section class="section task-group-section">
@@ -143,9 +144,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4E3db10RecordDataV9cleartexts10DictionaryVyS2SGv"></a>
-                    <a name="//apple_ref/swift/Property/cleartext" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4E3db10RecordDataV9cleartexts10DictionaryVyS2SGv">cleartext</a>
+                    <a name="/s:4E3db14SignedDocumentV8documentxv"></a>
+                    <a name="//apple_ref/swift/Property/document" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db14SignedDocumentV8documentxv">document</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -153,14 +154,15 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A key-value store of unencrypted data</p>
+                        <p>A data type that conforms to the <code><a href="../Protocols/Signable.html">Signable</a></code> protocol
+(i.e. it is deterministically serializable)</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">cleartext</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db9Cleartexta">Cleartext</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">document</span><span class="p">:</span> <span class="kt">T</span></code></pre>
 
                         </div>
                       </div>
@@ -170,9 +172,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4E3db10RecordDataVACs10DictionaryVyS2SG9cleartext_tcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(cleartext:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4E3db10RecordDataVACs10DictionaryVyS2SG9cleartext_tcfc">init(cleartext:)</a>
+                    <a name="/s:4E3db14SignedDocumentV9signatureSSv"></a>
+                    <a name="//apple_ref/swift/Property/signature" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db14SignedDocumentV9signatureSSv">signature</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -180,18 +182,41 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Initializer to create a structure to hold unencrypted data.
-The keys from the provided dictionary remain as unencrypted plaintext.
-The values are encrypted before transit to the E3db service,
-and decrypted after read back out from the service to support
-full end-to-end encryption.</p>
+                        <p>The cryptographic signature over the serialized document</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">cleartext</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">String</span><span class="p">])</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">signature</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db14SignedDocumentVACyxGx8document_SS9signaturetcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(document:signature:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db14SignedDocumentVACyxGx8document_SS9signaturetcfc">init(document:signature:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initializer to manually create <code>SignedDocument</code> types.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">document</span><span class="p">:</span> <span class="kt">T</span><span class="p">,</span> <span class="nv">signature</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -202,12 +227,24 @@ full end-to-end encryption.</p>
                             <tr>
                               <td>
                                 <code>
-                                <em>cleartext</em>
+                                <em>document</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>Unencrypted data</p>
+                                  <p>A data type that conforms to the <code><a href="../Protocols/Signable.html">Signable</a></code> protocol</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>signature</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The cryptographic signature over the serialized document</p>
                                 </div>
                               </td>
                             </tr>

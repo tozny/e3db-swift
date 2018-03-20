@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Structs  Reference</title>
+    <title>Structures  Reference</title>
     <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,7 +10,7 @@
     
   </head>
   <body>
-    <a title="Structs  Reference"></a>
+    <a title="Structures  Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="index.html">E3db Docs</a> (100% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="index.html">E3db Reference</a>
         <img id="carat" src="img/carat.png" />
-        Structs  Reference
+        Structures  Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -36,7 +36,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="Enums.html">Enums</a>
+            <a href="Enums.html">Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="Enums/E3dbError.html">E3dbError</a>
@@ -44,13 +44,33 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="Structs.html">Structs</a>
+            <a href="Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Protocols/Signable.html">Signable</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="Structs/ClientCredentials.html">ClientCredentials</a>
               </li>
               <li class="nav-group-task">
+                <a href="Structs/ClientMeta.html">ClientMeta</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Structs/Config.html">Config</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/DecryptedDocument.html">DecryptedDocument</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs.html#/s:4E3db7EAKInfoV">EAKInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/EncryptedDocument.html">EncryptedDocument</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/IncomingSharingPolicy.html">IncomingSharingPolicy</a>
@@ -76,11 +96,17 @@
               <li class="nav-group-task">
                 <a href="Structs/RecordData.html">RecordData</a>
               </li>
+              <li class="nav-group-task">
+                <a href="Structs/SignedDocument.html">SignedDocument</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="Typealiases.html">Typealiases</a>
+            <a href="Typealiases.html">Type Aliases</a>
             <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:4E3db10CipherDataa">CipherData</a>
+              </li>
               <li class="nav-group-task">
                 <a href="Typealiases.html#/s:4E3db9Cleartexta">Cleartext</a>
               </li>
@@ -100,11 +126,49 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>Structs</h1>
-            <p>The following structs are available globally.</p>
+            <h1>Structures</h1>
+            <p>The following structures are available globally.</p>
 
           </section>
           <section class="section task-group-section">
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Access%20Key%20Management"></a>
+                <a name="//apple_ref/swift/Section/Access Key Management" class="dashAnchor"></a>
+                <a href="#/Access%20Key%20Management">
+                  <h3 class="section-name">Access Key Management</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db7EAKInfoV"></a>
+                    <a name="//apple_ref/swift/Struct/EAKInfo" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db7EAKInfoV">EAKInfo</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Opaque Encrypted Access Key type to facilitate offline crypto</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EAKInfo</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
             <div class="task-group">
               <div class="task-name-container">
                 <a name="/Key%20Generation"></a>
@@ -127,8 +191,8 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A data type holding the public and private Curve25519 keys as
-Base64URL encoded strings, used for encryption operations.
+                        <p>A data type holding the public and private keys as
+Base64URL encoded strings, used for encryption and signing operations.
 Only the <code>publicKey</code> is sent to the E3db service.</p>
 
                         <a href="Structs/KeyPair.html" class="slightly-smaller">See more</a>
@@ -137,7 +201,7 @@ Only the <code>publicKey</code> is sent to the E3db service.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">KeyPair</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">KeyPair</span></code></pre>
 
                         </div>
                       </div>
@@ -169,7 +233,103 @@ Only the <code>publicKey</code> is sent to the E3db service.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Config</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Config</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Offline%20Crypto%20Operations"></a>
+                <a name="//apple_ref/swift/Section/Offline Crypto Operations" class="dashAnchor"></a>
+                <a href="#/Offline%20Crypto%20Operations">
+                  <h3 class="section-name">Offline Crypto Operations</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db17EncryptedDocumentV"></a>
+                    <a name="//apple_ref/swift/Struct/EncryptedDocument" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db17EncryptedDocumentV">EncryptedDocument</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Data type to hold encrypted data and related info</p>
+
+                        <a href="Structs/EncryptedDocument.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EncryptedDocument</span><span class="p">:</span> <span class="kt"><a href="Protocols/Signable.html">Signable</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db17DecryptedDocumentV"></a>
+                    <a name="//apple_ref/swift/Struct/DecryptedDocument" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db17DecryptedDocumentV">DecryptedDocument</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Data type to hold the verified, unencrypted data and related info</p>
+
+                        <a href="Structs/DecryptedDocument.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DecryptedDocument</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db14SignedDocumentV"></a>
+                    <a name="//apple_ref/swift/Struct/SignedDocument" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db14SignedDocumentV">SignedDocument</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A wrapper object around a given data type and its
+cryptographic signature. Note that document remains unchanged</p>
+
+                        <a href="Structs/SignedDocument.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">SignedDocument</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">:</span> <span class="kt"><a href="Protocols/Signable.html">Signable</a></span><span class="o">&gt;</span><span class="p">:</span> <span class="kt"><a href="Protocols/Signable.html">Signable</a></span></code></pre>
 
                         </div>
                       </div>
@@ -201,7 +361,7 @@ Only the <code>publicKey</code> is sent to the E3db service.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">QueryParams</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">QueryParams</span></code></pre>
 
                         </div>
                       </div>
@@ -229,7 +389,7 @@ Only the <code>publicKey</code> is sent to the E3db service.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">QueryResponse</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">QueryResponse</span></code></pre>
 
                         </div>
                       </div>
@@ -261,7 +421,35 @@ Only the <code>publicKey</code> is sent to the E3db service.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">RecordData</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">RecordData</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db10ClientMetaV"></a>
+                    <a name="//apple_ref/swift/Struct/ClientMeta" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db10ClientMetaV">ClientMeta</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A type to hold metadata information created by a client</p>
+
+                        <a href="Structs/ClientMeta.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ClientMeta</span><span class="p">:</span> <span class="kt"><a href="Protocols/Signable.html">Signable</a></span></code></pre>
 
                         </div>
                       </div>
@@ -289,7 +477,7 @@ Only the <code>publicKey</code> is sent to the E3db service.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Meta</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Meta</span></code></pre>
 
                         </div>
                       </div>
@@ -317,7 +505,7 @@ Only the <code>publicKey</code> is sent to the E3db service.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Record</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Record</span></code></pre>
 
                         </div>
                       </div>
@@ -349,7 +537,7 @@ Only the <code>publicKey</code> is sent to the E3db service.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ClientCredentials</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ClientCredentials</span></code></pre>
 
                         </div>
                       </div>
@@ -389,7 +577,7 @@ written by the client to share with a given user</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">OutgoingSharingPolicy</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">OutgoingSharingPolicy</span></code></pre>
 
                         </div>
                       </div>
@@ -418,7 +606,7 @@ written by others and shared with the client</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">IncomingSharingPolicy</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">IncomingSharingPolicy</span></code></pre>
 
                         </div>
                       </div>
@@ -430,8 +618,8 @@ written by others and shared with the client</p>
           </section>
         </section>
         <section id="footer">
-          <p>© 2017 <a class="link" href="https://tozny.com" target="_blank" rel="external">Tozny, LLC</a>.</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>© 2018 <a class="link" href="https://tozny.com" target="_blank" rel="external">Tozny, LLC</a>.</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>
