@@ -124,6 +124,13 @@ extension TestUtils where Self: XCTestCase {
     }
 }
 
+// allows quick comparisons for testing
+extension EAKInfo: Equatable {
+    public static func ==(lhs: EAKInfo, rhs: EAKInfo) -> Bool {
+        return lhs.eak == rhs.eak
+    }
+}
+
 // MARK: - Collect the memory sizes from different types
 
 protocol MemoryReportable {
