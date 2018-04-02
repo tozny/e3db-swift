@@ -4,14 +4,10 @@
 //
 
 import Foundation
-import Argo
-import Ogra
-import Curry
-import Runes
 import Valet
 
 /// Configuration for the E3DB Client
-public struct Config {
+public struct Config: Swift.Codable {
 
     /// The name for this client
     public let clientName: String
@@ -77,92 +73,186 @@ public struct Config {
     }
 }
 
-// MARK: Json
+// MARK: Storage in Keychain / Secure Enclave
 
-/// :nodoc:
-extension Config: Ogra.Encodable, Argo.Decodable {
+private let defaultProfileName = "com.tozny.e3db.defaultProfile"
+private let defaultUserPrompt  = "Unlock to load profile"
 
-    public func encode() -> JSON {
-        return JSON.object([
-            "client_name": clientName.encode(),
-            "client_id": clientId.encode(),
-            "api_key_id": apiKeyId.encode(),
-            "api_secret": apiSecret.encode(),
-            "public_key": publicKey.encode(),
-            "private_key": privateKey.encode(),
-            "base_api_url": baseApiUrl.encode(),
-            "public_sig_key": publicSigKey.encode(),
-            "private_sig_key": privateSigKey.encode()
-        ])
+/// Access Protections for storing the Config in the device Keychain
+public enum ConfigAccessControl {
+
+    /// Access Control managed by the device's secure element when available
+    public enum SecureEnclave {
+
+        /// Access controlled by either biometrics (e.g. Touch ID, Face ID, etc) or device Passcode.
+        /// Availability is unaffected by adding or removing fingerprints or faces.
+        case userPresence
+
+        /// Requires an enabled and enrolled face for Face ID or fingerprint for Touch ID.
+        /// Availability is unaffected by adding or removing fingerprints or faces.
+        case biometricAny
+
+        /// Requires an enabled and currently enrolled face for Face ID or fingerprint for Touch ID.
+        /// Configuration (i.e. user key pairs and secrets) becomes inaccessable when faces or fingerprints are added or removed.
+        case biometricCurrentSet
+
+        /// Requires that the device has a passcode setup.
+        case devicePasscode
+
+        // Maps the public E3db interface to the internal Valet value
+        var valetAccess: SecureEnclaveAccessControl {
+            switch self {
+            case .userPresence:
+                return .userPresence
+            case .biometricAny:
+                return .biometricAny
+            case .biometricCurrentSet:
+                return .biometricCurrentSet
+            case .devicePasscode:
+                return .devicePasscode
+            }
+        }
     }
 
-    public static func decode(_ j: JSON) -> Decoded<Config> {
-        let tmp = curry(Config.init)
-            <^> j <| "client_name"
-            <*> j <| "client_id"
-            <*> j <| "api_key_id"
-            <*> j <| "api_secret"
+    /// Access Control managed by the device's Keychain
+    public enum Keychain {
 
-        return tmp
-            <*> j <| "public_key"
-            <*> j <| "private_key"
-            <*> j <| "base_api_url"
-            <*> j <| "public_sig_key"
-            <*> j <| "private_sig_key"
+        /// Access allowed when the application is in the foreground and the device is unlocked.
+        /// Configuration will persist through a restore process if using encrypted backups.
+        case whenUnlocked
+
+        /// Access allowed once the device has been unlocked once after startup, whether the application is in the foreground or background.
+        /// Configuration will persist through a restore process if using encrypted backups.
+        case afterFirstUnlock
+
+        /// Access always allowed (not recommended).
+        /// Configuration will persist through a restore process if using encrypted backups.
+        case always
+
+        /// Access allowed when the application is in the foreground and the device is unlocked.
+        /// Configuration will not persist through a restore process.
+        /// Configuration will be lost if the passcode is changed or removed.
+        case whenPasscodeSetThisDeviceOnly
+
+        /// Access allowed when the application is in the foreground and the device is unlocked.
+        /// Configuration will not persist through a restore process.
+        case whenUnlockedThisDeviceOnly
+
+        /// Access allowed once the device has been unlocked once after startup, whether the application is in the foreground or background.
+        /// Configuration will not persist through a restore process.
+        case afterFirstUnlockThisDeviceOnly
+
+        /// Access always allowed (not recommended).
+        /// Configuration will not persist through a restore process.
+        case alwaysThisDeviceOnly
+
+        // Maps the public E3db interface to the internal Valet value
+        var valetAccess: Accessibility {
+            switch self {
+            case .whenUnlocked:
+                return .whenUnlocked
+            case .afterFirstUnlock:
+                return .afterFirstUnlock
+            case .always:
+                return .always
+            case .whenPasscodeSetThisDeviceOnly:
+                return .whenPasscodeSetThisDeviceOnly
+            case .whenUnlockedThisDeviceOnly:
+                return .whenUnlockedThisDeviceOnly
+            case .afterFirstUnlockThisDeviceOnly:
+                return .afterFirstUnlockThisDeviceOnly
+            case .alwaysThisDeviceOnly:
+                return .alwaysThisDeviceOnly
+            }
+        }
+
     }
 }
 
-// MARK: Storage in keychain / secure enclave
-
-private let defaultProfileName   = "com.tozny.e3db.defaultProfile"
-private let defaultUserPrompt    = "Unlock to load profile"
-private let defaultAccessControl = SecureEnclaveAccessControl.biometricAny
-
 extension Config {
 
-    /// Load a profile from the device's secure enclave if available.
+    /// Securely load a profile using the device's Secure Enclave if available.
     ///
-    /// - Important: Accessing this keychain data will require the user to confirm their presence
-    ///   via Touch ID or passcode entry. If no passcode is set on the device, this method will fail.
-    ///   Data is removed from the Secure Enclave when the user removes a passcode from the device.
+    /// - Important: Accessing this Keychain data will require the user to confirm their presence via
+    ///   biometrics (e.g. Touch ID or Face ID) or passcode entry. If no passcode is set on the device, this method will fail.
+    ///   Data may be lost when the user removes an entry (fingerprint, face, or passcode) from the device.
     ///
-    /// - SeeAlso: `save(profile:)` for storing the `Config` object.
+    /// - SeeAlso: `init(loadProfile:keychainAccess:)` for loading `Config` objects from the Keychain without the Secure Enclave.
+    /// - SeeAlso: `save(profile:enclaveAccess:)` for storing the `Config` object using the Secure Enclave.
     ///
-    /// - Parameter loadProfile: Name of the profile that was previously saved,
-    ///   uses internal default if unspecified.
-    /// - Parameter userPrompt: A message used to inform the user about unlocking the profile.
+    /// - Parameters:
+    ///   - loadProfile: Name of the profile that was previously saved. Uses internal default if unspecified.
+    ///   - userPrompt: A message used to inform the user about unlocking the profile. Uses internal default if unspecified.
+    ///   - enclaveAccess: The Secure Enclave access control level used to protect the configuration when saved. Uses `.biometricAny` if unspecified.
     /// - Returns: A fully initialized `Config` object if successful, `nil` otherwise.
-    public init?(loadProfile: String? = nil, userPrompt: String? = nil) {
-        let profile = loadProfile ?? defaultProfileName
-        let prompt  = userPrompt ?? defaultUserPrompt
-        guard let identifier = Identifier(nonEmpty: profile) else { return nil }
+    public init?(loadProfile: String = defaultProfileName, userPrompt: String = defaultUserPrompt, enclaveAccess: ConfigAccessControl.SecureEnclave = .biometricAny) {
+        guard let identifier = Identifier(nonEmpty: loadProfile) else { return nil }
 
-        let valet = SecureEnclaveValet.valet(with: identifier, accessControl: defaultAccessControl)
-        guard case .success(let data) = valet.object(forKey: profile, withPrompt: prompt),
-              let json = try? JSONSerialization.jsonObject(with: data, options: []),
-              case .success(let config) = Config.decode(JSON(json)) else {
-            return nil // Could not create config from json
+        let valet = SecureEnclaveValet.valet(with: identifier, accessControl: enclaveAccess.valetAccess)
+        guard case .success(let data) = valet.object(forKey: loadProfile, withPrompt: userPrompt),
+              let config = try? JSONDecoder().decode(Config.self, from: data) else {
+                return nil // Could not create config from json
         }
         self = config
     }
 
-    /// Save a profile to the device's secure enclave if available.
+    /// Securely load a profile from the device's Keychain.
     ///
-    /// - Important: Accessing this keychain data will require the user to confirm their presence
-    ///   via Touch ID or passcode entry. If no passcode is set on the device, this method will fail.
-    ///   Data is removed from the Secure Enclave when the user removes a passcode from the device.
+    /// - SeeAlso: `init(loadProfile:userPrompt:enclaveAccess:)` for loading `Config` objects from the Keychain using the Secure Enclave.
+    /// - SeeAlso: `save(profile:keychainAccess:)` for storing the `Config` object in the Keychain.
     ///
-    /// - SeeAlso: `init(loadProfile:userPrompt:)` for loading the `Config` object.
+    /// - Parameters:
+    ///   - loadProfile: Name of the profile that was previously saved. Uses internal default if unspecified.
+    ///   - keychainAccess: The Keychain access control level used to protect the configuration when saved.
+    /// - Returns: A fully initialized `Config` object if successful, `nil` otherwise.
+    public init?(loadProfile: String = defaultProfileName, keychainAccess: ConfigAccessControl.Keychain) {
+        guard let identifier = Identifier(nonEmpty: loadProfile) else { return nil }
+
+        let valet = Valet.valet(with: identifier, accessibility: keychainAccess.valetAccess)
+        guard let data   = valet.object(forKey: loadProfile),
+              let config = try? JSONDecoder().decode(Config.self, from: data) else {
+                return nil // Could not create config from json
+        }
+        self = config
+    }
+
+    /// Securely store a profile using the device's Secure Enclave if available.
     ///
-    /// - Parameter profile: Identifier for the profile for loading later,
-    ///   uses internal default if unspecified.
+    /// - Important: Accessing this Keychain data will require the user to confirm their presence via
+    ///   biometrics (e.g. Touch ID or Face ID) or passcode entry. If no passcode is set on the device, this method will fail.
+    ///   Data may be lost when the user removes an entry (fingerprint, face, or passcode) from the device.
+    ///
+    /// - SeeAlso: `save(profile:keychainAccess:)` for storing the `Config` object.
+    /// - SeeAlso: `init(loadProfile:userPrompt:enclaveAccess:)` for loading `Config` objects from the Keychain using the Secure Enclave.
+    ///
+    /// - Parameters:
+    ///   - profile: Identifier for the profile for loading later. Uses internal default if unspecified.
+    ///   - enclaveAccess: The Secure Enclave access control level used to protect the configuration. Uses `.biometricAny` if unspecified.
     /// - Returns: A boolean value indicating whether the config object was successfully saved.
-    public func save(profile named: String? = nil) -> Bool {
-        let profile = named ?? defaultProfileName
+    public func save(profile: String = defaultProfileName, enclaveAccess: ConfigAccessControl.SecureEnclave = .biometricAny) -> Bool {
         guard let identifier = Identifier(nonEmpty: profile) else { return false }
 
-        let valet = SecureEnclaveValet.valet(with: identifier, accessControl: defaultAccessControl)
-        guard let config = try? JSONSerialization.data(withJSONObject: encode().JSONObject(), options: []) else {
+        let valet = SecureEnclaveValet.valet(with: identifier, accessControl: enclaveAccess.valetAccess)
+        guard let config = try? JSONEncoder().encode(self) else {
+            return false // Could not serialize json
+        }
+        return valet.set(object: config, forKey: profile)
+    }
+
+    /// Securely store a profile in the device Keychain.
+    ///
+    /// - SeeAlso: `save(profile:enclaveAccess:)` for storing the `Config` object using the Secure Enclave.
+    /// - SeeAlso: `init(loadProfile:keychainAccess:)` for loading `Config` objects from the device Keychain.
+    ///
+    /// - Parameters:
+    ///   - profile: Identifier for the profile for loading later. Uses internal default if unspecified.
+    ///   - keychainAccess: The Keychain access control level to protect the configuration.
+    /// - Returns: A boolean value indicating whether the config object was successfully saved.
+    public func save(profile: String = defaultProfileName, keychainAccess: ConfigAccessControl.Keychain) -> Bool {
+        guard let identifier = Identifier(nonEmpty: profile) else { return false }
+
+        let valet = Valet.valet(with: identifier, accessibility: keychainAccess.valetAccess)
+        guard let config = try? JSONEncoder().encode(self) else {
             return false // Could not serialize json
         }
         return valet.set(object: config, forKey: profile)

@@ -48,7 +48,7 @@ class ViewController: UIViewController {
                 // create main E3db client with config
                 self.e3db = Client(config: config)
 
-                // save test config under default profile name, protects it in secure enclave w/ TouchID
+                // save test config under default profile name, protects it with Secure Enclave defaults
                 guard config.save() else {
                     return print("Could not save config")
                 }
