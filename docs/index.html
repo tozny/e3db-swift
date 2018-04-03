@@ -39,6 +39,15 @@
             <a href="Enums.html">Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="Enums/ConfigAccessControl.html">ConfigAccessControl</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/ConfigAccessControl/SecureEnclave.html">– SecureEnclave</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/ConfigAccessControl/Keychain.html">– Keychain</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Enums/E3dbError.html">E3dbError</a>
               </li>
             </ul>
@@ -58,6 +67,9 @@
                 <a href="Structs/ClientCredentials.html">ClientCredentials</a>
               </li>
               <li class="nav-group-task">
+                <a href="Structs.html#/s:4E3db9ClientKeyV">ClientKey</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Structs/ClientMeta.html">ClientMeta</a>
               </li>
               <li class="nav-group-task">
@@ -67,7 +79,7 @@
                 <a href="Structs/DecryptedDocument.html">DecryptedDocument</a>
               </li>
               <li class="nav-group-task">
-                <a href="Structs.html#/s:4E3db7EAKInfoV">EAKInfo</a>
+                <a href="Structs/EAKInfo.html">EAKInfo</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/EncryptedDocument.html">EncryptedDocument</a>
@@ -98,6 +110,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Structs/SignedDocument.html">SignedDocument</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs.html#/s:4E3db10SigningKeyV">SigningKey</a>
               </li>
             </ul>
           </li>
@@ -325,7 +340,7 @@ decryption).</li>
 <li>Call <code>encrypt</code> to encrypt a new document. For decryption, call <code>decrypt</code>.</li>
 </ol>
 
-<p>The &lsquo;writer key&rsquo; and &lsquo;reader key&rsquo; are both <code><a href="Structs.html#/s:4E3db7EAKInfoV">EAKInfo</a></code> objects. An <code><a href="Structs.html#/s:4E3db7EAKInfoV">EAKInfo</a></code>
+<p>The &lsquo;writer key&rsquo; and &lsquo;reader key&rsquo; are both <code><a href="Structs/EAKInfo.html">EAKInfo</a></code> objects. An <code><a href="Structs/EAKInfo.html">EAKInfo</a></code>
 object holds an encrypted key that can be used by the intended client to encrypt
 or decrypt associated documents. A writer key can be created by calling
 <code>createWriterKey</code>; a &lsquo;reader key&rsquo; can be obtained by calling <code>getReaderKey</code>.
@@ -335,7 +350,7 @@ writer of those records has given access to the calling client through the
 
 <p>The <code>createWriterKey</code> and <code>getReaderKey</code> are networked operations, (which means
 they are asynchronous operations as well), but can be performed once ahead of
-time. The <code><a href="Structs.html#/s:4E3db7EAKInfoV">EAKInfo</a></code> instances returned from those operations are safe to store
+time. The <code><a href="Structs/EAKInfo.html">EAKInfo</a></code> instances returned from those operations are safe to store
 locally, and can be used in the non-networked operations of <code>encrypt</code> and
 <code>decrypt</code>.</p>
 
@@ -359,13 +374,13 @@ locally, and can be used in the non-networked operations of <code>encrypt</code>
 <span class="p">}</span>
 </code></pre>
 
-<p>(Note that the <code><a href="Structs.html#/s:4E3db7EAKInfoV">EAKInfo</a></code> instance is safe to store with the encrypted data, as
+<p>(Note that the <code><a href="Structs/EAKInfo.html">EAKInfo</a></code> instance is safe to store with the encrypted data, as
 it is also encrypted). The client can decrypt the given record as follows:</p>
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">encrypted</span> <span class="o">=</span> <span class="c1">// get encrypted document (e.g. read from local storage)</span>
 <span class="k">let</span> <span class="nv">writerKey</span> <span class="o">=</span> <span class="c1">// get stored EAKInfo instance (e.g. from local storage)</span>
 
 <span class="c1">// attempt to decrypt an encrypted document with the EAKInfo instance</span>
-<span class="k">let</span> <span class="nv">decrypted</span> <span class="o">=</span> <span class="k">try</span><span class="p">?</span> <span class="n">e3db</span><span class="o">.</span><span class="nf">decrypt</span><span class="p">(</span><span class="nv">encryptedDoc</span><span class="p">:</span> <span class="n">encrypted</span><span class="p">,</span> <span class="nv">eakInfo</span><span class="p">:</span> <span class="n">writerKey</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">decrypted</span> <span class="o">=</span> <span class="k">try</span> <span class="n">e3db</span><span class="o">.</span><span class="nf">decrypt</span><span class="p">(</span><span class="nv">encryptedDoc</span><span class="p">:</span> <span class="n">encrypted</span><span class="p">,</span> <span class="nv">eakInfo</span><span class="p">:</span> <span class="n">writerKey</span><span class="p">)</span>
 <span class="nf">print</span><span class="p">(</span><span class="s">"Decrypted document: </span><span class="se">\(</span><span class="n">decrypted</span><span class="o">!</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>  
 </code></pre>
 <h5 id='local-decryption-of-shared-records' class='heading'>Local Decryption of Shared Records</h5>
@@ -379,11 +394,8 @@ method.</li>
 <li>The &lsquo;reader&rsquo; must then obtain a reader key using <code>getReaderKey</code>.</li>
 </ul>
 
-<p>Note that these are networked operations. However, the <code><a href="Structs.html#/s:4E3db7EAKInfoV">EAKInfo</a></code> instance can be
+<p>Note that these are networked operations. However, the <code><a href="Structs/EAKInfo.html">EAKInfo</a></code> instance can be
 saved for later use.</p>
-
-<p>After obtaining a reader key, the &lsquo;reader&rsquo; can then decrypt any
-records encrypted by the writer as follows:</p>
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">encrypted</span>  <span class="o">=</span> <span class="c1">// get encrypted document (e.g. read from local storage)</span>
 <span class="k">let</span> <span class="nv">writerID</span>   <span class="o">=</span> <span class="c1">// ID of writer that produced record</span>
 <span class="k">let</span> <span class="nv">recordType</span> <span class="o">=</span> <span class="s">"UserInfo"</span>
@@ -401,10 +413,29 @@ records encrypted by the writer as follows:</p>
         <span class="nf">print</span><span class="p">(</span><span class="s">"An error occurred attempting to get reader key: </span><span class="se">\(</span><span class="n">error</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
     <span class="p">}</span>
 <span class="p">}</span>
+</code></pre>
 
-<span class="c1">// attempt to decrypt an encrypted document with the EAKInfo instance</span>
-<span class="k">let</span> <span class="nv">decrypted</span> <span class="o">=</span> <span class="k">try</span><span class="p">?</span> <span class="n">e3db</span><span class="o">.</span><span class="nf">decrypt</span><span class="p">(</span><span class="nv">encryptedDoc</span><span class="p">:</span> <span class="n">encrypted</span><span class="p">,</span> <span class="nv">eakInfo</span><span class="p">:</span> <span class="n">eakInfo</span><span class="o">!</span><span class="p">)</span>
-<span class="nf">print</span><span class="p">(</span><span class="s">"Decrypted document: </span><span class="se">\(</span><span class="n">decrypted</span><span class="o">!</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>  
+<p>The <code><a href="Structs/EAKInfo.html">EAKInfo</a></code> type conforms to Swift&rsquo;s <code>Codable</code> protocol for easy
+serialization, e.g. for saving to <code>UserDefaults</code>:</p>
+<pre class="highlight swift"><code><span class="c1">// store in UserDefaults</span>
+<span class="c1">// assumes eakInfo is a non-optional `EAKInfo` instance</span>
+<span class="k">let</span> <span class="nv">eakData</span> <span class="o">=</span> <span class="k">try</span> <span class="nf">JSONEncoder</span><span class="p">()</span><span class="o">.</span><span class="nf">encode</span><span class="p">(</span><span class="n">eakInfo</span><span class="p">)</span>
+<span class="kt">UserDefaults</span><span class="o">.</span><span class="n">standard</span><span class="o">.</span><span class="nf">set</span><span class="p">(</span><span class="n">eakData</span><span class="p">,</span> <span class="nv">forKey</span><span class="p">:</span> <span class="s">"myReaderKey"</span><span class="p">)</span>
+</code></pre>
+<pre class="highlight swift"><code><span class="c1">// retrieve from UserDefaults</span>
+<span class="k">guard</span> <span class="k">let</span> <span class="nv">eakData</span> <span class="o">=</span> <span class="p">(</span><span class="kt">UserDefaults</span><span class="o">.</span><span class="n">standard</span><span class="o">.</span><span class="nf">value</span><span class="p">(</span><span class="nv">forKey</span><span class="p">:</span> <span class="s">"myReaderKey"</span><span class="p">)</span> <span class="k">as?</span> <span class="kt">Data</span><span class="p">)</span> <span class="nf">else</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nf">print</span><span class="p">(</span><span class="s">"Could not retrieve eak data from defaults"</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// deserialize into eakInfo</span>
+<span class="k">let</span> <span class="nv">eakInfo</span> <span class="o">=</span> <span class="k">try</span> <span class="nf">JSONDecoder</span><span class="p">()</span><span class="o">.</span><span class="nf">decode</span><span class="p">(</span><span class="kt">EAKInfo</span><span class="o">.</span><span class="k">self</span><span class="p">,</span> <span class="nv">from</span><span class="p">:</span> <span class="n">eakData</span><span class="p">)</span>
+</code></pre>
+
+<p>After obtaining a reader key, the &lsquo;reader&rsquo; can then decrypt any
+records encrypted by the writer as follows:</p>
+<pre class="highlight swift"><code><span class="c1">// attempt to decrypt an encrypted document with the EAKInfo instance</span>
+<span class="k">let</span> <span class="nv">decrypted</span> <span class="o">=</span> <span class="k">try</span> <span class="n">e3db</span><span class="o">.</span><span class="nf">decrypt</span><span class="p">(</span><span class="nv">encryptedDoc</span><span class="p">:</span> <span class="n">encrypted</span><span class="p">,</span> <span class="nv">eakInfo</span><span class="p">:</span> <span class="n">eakInfo</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Decrypted document: </span><span class="se">\(</span><span class="n">decrypted</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>  
 </code></pre>
 <h4 id='document-signing-amp-verification' class='heading'>Document Signing &amp; Verification</h4>
 
@@ -434,8 +465,8 @@ types such as <code>Dictionary</code> and <code>Set</code> must be serialized in
 <p>To create a signature, use the <code>sign</code> method. (This example assumes an encrypted
 document as create above):</p>
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">encrypted</span> <span class="o">=</span> <span class="c1">// get encrypted document (or anything that conforms to `Signable`)</span>
-<span class="k">let</span> <span class="nv">signedDoc</span> <span class="o">=</span> <span class="k">try</span><span class="p">?</span> <span class="n">e3db</span><span class="o">.</span><span class="nf">sign</span><span class="p">(</span><span class="nv">document</span><span class="p">:</span> <span class="n">encrypted</span><span class="p">)</span>
-<span class="nf">print</span><span class="p">(</span><span class="s">"Signed Document: </span><span class="se">\(</span><span class="n">signedDoc</span><span class="o">!</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">signedDoc</span> <span class="o">=</span> <span class="k">try</span> <span class="n">e3db</span><span class="o">.</span><span class="nf">sign</span><span class="p">(</span><span class="nv">document</span><span class="p">:</span> <span class="n">encrypted</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Signed Document: </span><span class="se">\(</span><span class="n">signedDoc</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
 </code></pre>
 
 <p>To verify a document, use the <code>verify</code> method. Here, we use the same <code>signedDoc</code>

@@ -39,6 +39,15 @@
             <a href="Enums.html">Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="Enums/ConfigAccessControl.html">ConfigAccessControl</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/ConfigAccessControl/SecureEnclave.html">– SecureEnclave</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/ConfigAccessControl/Keychain.html">– Keychain</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Enums/E3dbError.html">E3dbError</a>
               </li>
             </ul>
@@ -58,6 +67,9 @@
                 <a href="Structs/ClientCredentials.html">ClientCredentials</a>
               </li>
               <li class="nav-group-task">
+                <a href="Structs.html#/s:4E3db9ClientKeyV">ClientKey</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Structs/ClientMeta.html">ClientMeta</a>
               </li>
               <li class="nav-group-task">
@@ -67,7 +79,7 @@
                 <a href="Structs/DecryptedDocument.html">DecryptedDocument</a>
               </li>
               <li class="nav-group-task">
-                <a href="Structs.html#/s:4E3db7EAKInfoV">EAKInfo</a>
+                <a href="Structs/EAKInfo.html">EAKInfo</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/EncryptedDocument.html">EncryptedDocument</a>
@@ -98,6 +110,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Structs/SignedDocument.html">SignedDocument</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs.html#/s:4E3db10SigningKeyV">SigningKey</a>
               </li>
             </ul>
           </li>
@@ -153,14 +168,15 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Opaque Encrypted Access Key type to facilitate offline crypto</p>
+                        <p>Encrypted Access Key information type to facilitate offline crypto</p>
 
+                        <a href="Structs/EAKInfo.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EAKInfo</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EAKInfo</span><span class="p">:</span> <span class="kt">Swift</span><span class="o">.</span><span class="kt">Codable</span></code></pre>
 
                         </div>
                       </div>
@@ -233,7 +249,7 @@ Only the <code>publicKey</code> is sent to the E3db service.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Config</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Config</span><span class="p">:</span> <span class="kt">Swift</span><span class="o">.</span><span class="kt">Codable</span></code></pre>
 
                         </div>
                       </div>
@@ -516,6 +532,60 @@ cryptographic signature. Note that document remains unchanged</p>
             </div>
             <div class="task-group">
               <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db9ClientKeyV"></a>
+                    <a name="//apple_ref/swift/Struct/ClientKey" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db9ClientKeyV">ClientKey</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A type that holds a public encryption key</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ClientKey</span><span class="p">:</span> <span class="kt">Swift</span><span class="o">.</span><span class="kt">Codable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db10SigningKeyV"></a>
+                    <a name="//apple_ref/swift/Struct/SigningKey" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db10SigningKeyV">SigningKey</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A type that holds a public signing key</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">SigningKey</span><span class="p">:</span> <span class="kt">Swift</span><span class="o">.</span><span class="kt">Codable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
                 <li class="item">
                   <div>
                     <code>
