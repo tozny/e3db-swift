@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Meta Structure Reference</title>
+    <title>EAKInfo Structure Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Struct/Meta" class="dashAnchor"></a>
-    <a title="Meta Structure Reference"></a>
+    <a name="//apple_ref/swift/Struct/EAKInfo" class="dashAnchor"></a>
+    <a title="EAKInfo Structure Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">E3db Docs</a> (100% documented)</p>
@@ -22,7 +22,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">E3db Reference</a>
         <img id="carat" src="../img/carat.png" />
-        Meta Structure Reference
+        EAKInfo Structure Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -142,14 +142,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>Meta</h1>
+            <h1>EAKInfo</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Meta</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EAKInfo</span><span class="p">:</span> <span class="kt">Swift</span><span class="o">.</span><span class="kt">Codable</span></code></pre>
 
                 </div>
               </div>
-            <p>A type to hold metadata information about a given record</p>
+            <p>Encrypted Access Key information type to facilitate offline crypto</p>
 
           </section>
           <section class="section task-group-section">
@@ -158,9 +158,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4E3db4MetaV8recordId10Foundation4UUIDVv"></a>
-                    <a name="//apple_ref/swift/Property/recordId" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4E3db4MetaV8recordId10Foundation4UUIDVv">recordId</a>
+                    <a name="/s:4E3db7EAKInfoV3eakSSv"></a>
+                    <a name="//apple_ref/swift/Property/eak" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db7EAKInfoV3eakSSv">eak</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -168,14 +168,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>An identifier for the record</p>
+                        <p>encrypted key used for encryption operations</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">recordId</span><span class="p">:</span> <span class="kt">UUID</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">eak</span><span class="p">:</span> <span class="kt">String</span></code></pre>
 
                         </div>
                       </div>
@@ -185,9 +185,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4E3db4MetaV8writerId10Foundation4UUIDVv"></a>
-                    <a name="//apple_ref/swift/Property/writerId" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4E3db4MetaV8writerId10Foundation4UUIDVv">writerId</a>
+                    <a name="/s:4E3db7EAKInfoV12authorizerId10Foundation4UUIDVv"></a>
+                    <a name="//apple_ref/swift/Property/authorizerId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db7EAKInfoV12authorizerId10Foundation4UUIDVv">authorizerId</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -195,14 +195,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>An identifier for the writer of the record</p>
+                        <p>client ID of user authorizing access (typically the writer)</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">writerId</span><span class="p">:</span> <span class="kt">UUID</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">authorizerId</span><span class="p">:</span> <span class="kt">UUID</span></code></pre>
 
                         </div>
                       </div>
@@ -212,9 +212,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4E3db4MetaV6userId10Foundation4UUIDVv"></a>
-                    <a name="//apple_ref/swift/Property/userId" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4E3db4MetaV6userId10Foundation4UUIDVv">userId</a>
+                    <a name="/s:4E3db7EAKInfoV19authorizerPublicKeyAA06ClientE0Vv"></a>
+                    <a name="//apple_ref/swift/Property/authorizerPublicKey" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db7EAKInfoV19authorizerPublicKeyAA06ClientE0Vv">authorizerPublicKey</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -222,14 +222,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>An identifier for the user of the record</p>
+                        <p>public key of the authorizer</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">userId</span><span class="p">:</span> <span class="kt">UUID</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">authorizerPublicKey</span><span class="p">:</span> <span class="kt"><a href="../Structs.html#/s:4E3db9ClientKeyV">ClientKey</a></span></code></pre>
 
                         </div>
                       </div>
@@ -239,9 +239,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4E3db4MetaV4typeSSv"></a>
-                    <a name="//apple_ref/swift/Property/type" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4E3db4MetaV4typeSSv">type</a>
+                    <a name="/s:4E3db7EAKInfoV8signerId10Foundation4UUIDVSgv"></a>
+                    <a name="//apple_ref/swift/Property/signerId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db7EAKInfoV8signerId10Foundation4UUIDVSgv">signerId</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -249,14 +249,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The kind of data this record represents</p>
+                        <p>client ID of user performing the signature (typically the writer)</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">type</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">signerId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -266,9 +266,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4E3db4MetaV5plains10DictionaryVyS2SGSgv"></a>
-                    <a name="//apple_ref/swift/Property/plain" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4E3db4MetaV5plains10DictionaryVyS2SGSgv">plain</a>
+                    <a name="/s:4E3db7EAKInfoV16signerSigningKeyAA0dE0VSgv"></a>
+                    <a name="//apple_ref/swift/Property/signerSigningKey" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db7EAKInfoV16signerSigningKeyAA0dE0VSgv">signerSigningKey</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -276,96 +276,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A user-defined, key-value store of metadata
-associated with the record that remains as plaintext</p>
+                        <p>public signing key of the signer</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">plain</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db9PlainMetaa">PlainMeta</a></span><span class="p">?</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:4E3db4MetaV7created10Foundation4DateVv"></a>
-                    <a name="//apple_ref/swift/Property/created" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4E3db4MetaV7created10Foundation4DateVv">created</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The timestamp marking the record&rsquo;s creation date, in ISO 8601 format</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">created</span><span class="p">:</span> <span class="kt">Date</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:4E3db4MetaV12lastModified10Foundation4DateVv"></a>
-                    <a name="//apple_ref/swift/Property/lastModified" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4E3db4MetaV12lastModified10Foundation4DateVv">lastModified</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The timestamp marking the record&rsquo;s most recent change, in ISO 8601 format</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">lastModified</span><span class="p">:</span> <span class="kt">Date</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:4E3db4MetaV7versionSSv"></a>
-                    <a name="//apple_ref/swift/Property/version" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4E3db4MetaV7versionSSv">version</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>An identifier for the current version of the record</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">version</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">signerSigningKey</span><span class="p">:</span> <span class="kt"><a href="../Structs.html#/s:4E3db10SigningKeyV">SigningKey</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
