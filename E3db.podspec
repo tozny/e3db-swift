@@ -18,7 +18,7 @@ E3DB provides a familiar JSON-based NoSQL-style API for reading, writing, and qu
   s.source_files = 'E3db/Classes/**/*'
 
   s.subspec 'Core' do |core|
-    core.dependency 'Swish', '~> 2.0'
+    core.dependency 'Swish', '~> 3.0'
     core.dependency 'Curry', '~> 4.0'
     core.dependency 'Sodium', '~> 0.6'
     core.dependency 'Valet', '~> 3.0'
