@@ -9,6 +9,42 @@ import Result
 import Swish
 import Heimdallr
 
+
+protocol E3dbRequest: Request {
+    associatedtype ResponseObject
+}
+
+extension E3dbRequest where ResponseObject: Decodable {
+    func parse(_ data: Data) throws -> ResponseObject {
+        return try staticJsonDecoder.decode(ResponseObject.self, from: data)
+    }
+}
+
+let staticJsonEncoder: JSONEncoder = {
+    let encoder = JSONEncoder()
+    encoder.dateEncodingStrategy = .formatted(Formatter.iso8601)
+    return encoder
+}()
+
+let staticJsonDecoder: JSONDecoder = {
+    let decoder = JSONDecoder()
+    decoder.dateDecodingStrategy = .formatted(Formatter.iso8601)
+    return decoder
+}()
+
+// wrapper to align signable types
+struct AnySignable: Signable {
+    let wrapped: Signable
+
+    init<S: Signable>(_ base: S) {
+        self.wrapped = base
+    }
+
+    func serialized() -> String {
+        return wrapped.serialized()
+    }
+}
+
 /// Possible errors encountered from E3db operations
 public enum E3dbError: Error {
 

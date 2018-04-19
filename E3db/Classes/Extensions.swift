@@ -7,28 +7,6 @@ import Foundation
 import Swish
 import Result
 
-protocol E3dbRequest: Request {
-    associatedtype ResponseObject
-}
-
-extension E3dbRequest where ResponseObject: Decodable {
-    func parse(_ data: Data) throws -> ResponseObject {
-        return try staticJsonDecoder.decode(ResponseObject.self, from: data)
-    }
-}
-
-let staticJsonEncoder: JSONEncoder = {
-    let encoder = JSONEncoder()
-    encoder.dateEncodingStrategy = .formatted(Formatter.iso8601)
-    return encoder
-}()
-
-let staticJsonDecoder: JSONDecoder = {
-    let decoder = JSONDecoder()
-    decoder.dateDecodingStrategy = .formatted(Formatter.iso8601)
-    return decoder
-}()
-
 extension Formatter {
     static let iso8601: DateFormatter = {
         let formatter = DateFormatter()
@@ -129,7 +107,7 @@ extension String: Signable {
 
 extension UUID: Signable {
     public func serialized() -> String {
-        return uuidString
+        return uuidString.lowercased().serialized()
     }
 }
 
@@ -145,9 +123,6 @@ extension Dictionary: Signable where Key == String, Value: Signable {
             .sorted { $0.key.compare($1.key, options: [.literal]) == .orderedAscending }
             .map { elem in "\"\(elem.key)\":\(elem.value.serialized())" }
             .joined(separator: ",")
-
-//        print("Dictionary: \(self)")
-//        print("Joined: \("{\(joined)}")")
         return "{\(joined)}"
     }
 }

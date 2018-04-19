@@ -41,7 +41,7 @@ public struct OutgoingSharingPolicy: Decodable {
 
     enum CodingKeys: String, CodingKey {
         case readerId   = "reader_id"
-        case type       = "recordType"
+        case type       = "record_type"
         case readerName = "reader_name"
     }
 }
@@ -61,7 +61,7 @@ public struct IncomingSharingPolicy: Decodable {
 
     enum CodingKeys: String, CodingKey {
         case writerId   = "writer_id"
-        case type       = "recordType"
+        case type       = "record_type"
         case writerName = "writer_name"
     }
 }

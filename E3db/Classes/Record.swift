@@ -79,10 +79,10 @@ public struct ClientMeta: Encodable {
 extension ClientMeta: Signable {
     public func serialized() -> String {
         return [
-            CodingKeys.writerId.rawValue: writerId.serialized(),
-            CodingKeys.userId.rawValue: userId.serialized(),
-            CodingKeys.type.rawValue: type.serialized(),
-            CodingKeys.plain.rawValue: plain?.serialized()
+            CodingKeys.writerId.rawValue: AnySignable(writerId),
+            CodingKeys.userId.rawValue: AnySignable(userId),
+            CodingKeys.type.rawValue: AnySignable(type),
+            CodingKeys.plain.rawValue: AnySignable(plain)
         ].serialized()
     }
 }

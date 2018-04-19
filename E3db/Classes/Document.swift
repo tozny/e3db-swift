@@ -49,9 +49,9 @@ public struct EncryptedDocument: Encodable {
 extension EncryptedDocument: Signable {
     public func serialized() -> String {
         return [
-            CodingKeys.clientMeta.rawValue: clientMeta.serialized(),
-            CodingKeys.encryptedData.rawValue: encryptedData.serialized(),
-            CodingKeys.recordSignature.rawValue: recordSignature
+            CodingKeys.clientMeta.rawValue: AnySignable(clientMeta),
+            CodingKeys.encryptedData.rawValue: AnySignable(encryptedData),
+            CodingKeys.recordSignature.rawValue:  AnySignable(recordSignature)
         ].serialized()
     }
 }
@@ -97,8 +97,8 @@ public struct SignedDocument<T: Signable> {
 extension SignedDocument: Signable {
     public func serialized() -> String {
         return[
-            CodingKeys.document.rawValue: document.serialized(),
-            CodingKeys.signature.rawValue: signature
+            CodingKeys.document.rawValue: AnySignable(document),
+            CodingKeys.signature.rawValue: AnySignable(signature)
         ].serialized()
     }
 }
