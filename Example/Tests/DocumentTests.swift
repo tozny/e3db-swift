@@ -289,4 +289,30 @@ class DocumentTests: XCTestCase, TestUtils {
             XCTFail("Threw other error: \(error.localizedDescription)")
         }
     }
+
+    func testExternalVerification() {
+        let document = """
+{"doc":{"data":{"test_field":"QWfE7PpAjTgih1E9jyqSGex32ouzu1iF3la8fWNO5wPp48U2F5Q6kK41_8hgymWn.HW-dBzttfU6Xui-o01lOdVqchXJXqfqQ.eo8zE8peRC9qSt2ZOE8_54kOF0bWBEovuZ4.zO56Or0Pu2IFSzQZRpuXLeinTHQl7g9-"},"meta":{"plain":{"client_pub_sig_key":"fcyEKo6HSZo9iebWAQnEemVfqpTUzzR0VNBqgJJG-LY","server_sig_of_client_sig_key":"ZtmkUb6MJ-1LqpIbJadYl_PPH5JjHXKrBspprhzaD8rKM4ejGD8cJsSFO1DlR-r7u-DKsLUk82EJF65RnTmMDQ"},"type":"ticket","user_id":"d405a1ce-e528-4946-8682-4c2369a26604","writer_id":"d405a1ce-e528-4946-8682-4c2369a26604"},"rec_sig":"YsNbSXy0mVqsvgArmdESe6SkTAWFui8_NBn8ZRyxBfQHmJt7kwDU6szEqiRIaoZGrHsqgwS3uduLo_kzG6UeCA"},"sig":"iYc7G6ersNurZRr7_lWqoilr8Ve1d6HPZPPyC4YMXSvg7QvpUAHvjv4LsdMMDthk7vsVpoR0LYPC_SkIip7XCw"}
+"""
+        let serverPublicKey = "xVXHN2hZT2eQ0d45yM2o89Ms2gMRTFhL5KaGu9sbJXY"
+
+        let decoder = JSONDecoder()
+        let encoder = JSONEncoder()
+
+        do {
+            let signedDoc  = try decoder.decode(SignedDocument<EncryptedDocument>.self, from: Data(document.utf8))
+
+//            let signed = try client2!.sign(document: signedDoc.document)
+//            let verify = try client1!.verify(signed: signed, pubSigKey: client2!.config.publicSigKey)
+
+            print(document)
+            print("\n\n")
+            print(signedDoc.document.serialized())
+            let verified  = try client1?.verify(signed: signedDoc, pubSigKey: (signedDoc.document.clientMeta.plain?["client_pub_sig_key"])!)
+            XCTAssert(verified ?? false)
+        } catch {
+            print(error)
+            XCTFail(error.localizedDescription)
+        }
+    }
 }

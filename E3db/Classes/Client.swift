@@ -9,11 +9,6 @@ import Result
 import Sodium
 import Heimdallr
 
-import Argo
-import Ogra
-import Curry
-import Runes
-
 #if E3DB_LOGGING && DEBUG
 import ResponseDetective
 #endif
@@ -119,23 +114,22 @@ extension Client {
 
 // MARK: Get Client Info
 
-struct ClientInfo: Argo.Decodable {
+struct ClientInfo: Decodable {
     let clientId: UUID
     let publicKey: ClientKey
     let signingKey: SigningKey?
     let validated: Bool
 
-    static func decode(_ j: JSON) -> Decoded<ClientInfo> {
-        return curry(ClientInfo.init)
-            <^> j <|  "client_id"
-            <*> j <|  "public_key"
-            <*> j <|? "signing_key"
-            <*> j <|  "validated"
+    enum CodingKeys: String, CodingKey {
+        case clientId   = "client_id"
+        case publicKey  = "public_key"
+        case signingKey = "signing_key"
+        case validated
     }
 }
 
 extension Client {
-    private struct ClientInfoRequest: Request {
+    private struct ClientInfoRequest: E3dbRequest {
         typealias ResponseObject = ClientInfo
         let api: Api
         let clientId: UUID

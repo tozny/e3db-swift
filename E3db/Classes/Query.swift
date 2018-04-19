@@ -5,14 +5,10 @@
 
 import Foundation
 import Swish
-import Argo
-import Ogra
-import Curry
-import Runes
 import Result
 
 /// Data type to specify filters for querying records
-public struct QueryParams {
+public struct QueryParams: Encodable {
 
     /// Limit the number of records returned by the query beyond the E3db default
     let count: Int?
@@ -86,46 +82,51 @@ public struct QueryParams {
             includeAllWriters: self.includeAllWriters
         )
     }
-}
 
-/// :nodoc:
-extension QueryParams: Ogra.Encodable {
-    public func encode() -> JSON {
-        // build json object incrementally to omit null fields
-        var encoded = [String: JSON]()
-        encoded["count"]               = count?.encode()
-        encoded["include_data"]        = includeData?.encode()
-        encoded["writer_ids"]          = writerIds?.encode()
-        encoded["user_ids"]            = userIds?.encode()
-        encoded["record_ids"]          = recordIds?.encode()
-        encoded["content_types"]       = types?.encode()
-        encoded["after_index"]         = after?.encode()
-        encoded["include_all_writers"] = includeAllWriters?.encode()
-        return JSON.object(encoded)
+    enum CodingKeys: String, CodingKey {
+        case count
+        case includeData       = "include_data"
+        case writerIds         = "writer_ids"
+        case userIds           = "user_ids"
+        case recordIds         = "record_ids"
+        case types             = "content_types"
+        case after             = "after_index"
+        case includeAllWriters = "include_all_writers"
+    }
+
+    // build json object incrementally to omit null fields
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(count, forKey: .count)
+        try container.encodeIfPresent(includeData, forKey: .includeData)
+        try container.encodeIfPresent(writerIds, forKey: .writerIds)
+        try container.encodeIfPresent(userIds, forKey: .userIds)
+        try container.encodeIfPresent(recordIds, forKey: .recordIds)
+        try container.encodeIfPresent(types, forKey: .types)
+        try container.encodeIfPresent(after, forKey: .after)
+        try container.encodeIfPresent(includeAllWriters, forKey: .includeAllWriters)
     }
 }
 
-struct SearchRecord: Argo.Decodable {
+struct SearchRecord: Decodable {
     let meta: Meta
     let data: CipherData?
     let eakInfo: EAKInfo?
 
-    static func decode(_ j: JSON) -> Decoded<SearchRecord> {
-        return curry(SearchRecord.init)
-            <^> j <| "meta"
-            <*> .optional((j <| "record_data").flatMap(CipherData.decode))
-            <*> j <|? "access_key"
+    enum CodingKeys: String, CodingKey {
+        case meta
+        case data    = "record_data"
+        case eakInfo = "access_key"
     }
 }
 
-struct SearchResponse: Argo.Decodable {
+struct SearchResponse: Decodable {
     let results: [SearchRecord]
     let lastIndex: Double
 
-    static func decode(_ j: JSON) -> Decoded<SearchResponse> {
-        return curry(SearchResponse.init)
-            <^> j <|| "results"
-            <*> j <|  "last_index"
+    enum CodingKeys: String, CodingKey {
+        case results
+        case lastIndex = "last_index"
     }
 }
 
@@ -149,7 +150,7 @@ public struct QueryResponse {
 // MARK: Search
 
 extension Client {
-    private struct SearchRequest: Request {
+    private struct SearchRequest: E3dbRequest {
         typealias ResponseObject = SearchResponse
         let api: Api
         let params: QueryParams
@@ -157,7 +158,7 @@ extension Client {
         func build() -> URLRequest {
             let url = api.url(endpoint: .search)
             var req = URLRequest(url: url)
-            return req.asJsonRequest(.POST, payload: params.encode())
+            return req.asJsonRequest(.post, payload: params)
         }
     }
 

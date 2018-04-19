@@ -5,11 +5,29 @@
 
 import Foundation
 import Swish
-import Argo
-import Ogra
-import Curry
-import Runes
 import Result
+
+protocol E3dbRequest: Request {
+    associatedtype ResponseObject
+}
+
+extension E3dbRequest where ResponseObject: Decodable {
+    func parse(_ data: Data) throws -> ResponseObject {
+        return try staticJsonDecoder.decode(ResponseObject.self, from: data)
+    }
+}
+
+let staticJsonEncoder: JSONEncoder = {
+    let encoder = JSONEncoder()
+    encoder.dateEncodingStrategy = .formatted(Formatter.iso8601)
+    return encoder
+}()
+
+let staticJsonDecoder: JSONDecoder = {
+    let decoder = JSONDecoder()
+    decoder.dateDecodingStrategy = .formatted(Formatter.iso8601)
+    return decoder
+}()
 
 extension Formatter {
     static let iso8601: DateFormatter = {
@@ -34,52 +52,10 @@ extension String {
     }
 }
 
-extension Date: Ogra.Encodable, Argo.Decodable {
-    public func encode() -> JSON {
-        return iso8601.encode()
-    }
-
-    public static func decode(_ json: JSON) -> Decoded<Date> {
-        guard case let .string(s) = json,
-            let d = s.dateFromISO8601 else {
-                return .typeMismatch(expected: "Date", actual: json)
-        }
-        return pure(d)
-    }
-}
-
-extension URL: Ogra.Encodable, Argo.Decodable {
-    public func encode() -> JSON {
-        return absoluteString.encode()
-    }
-
-    public static func decode(_ json: JSON) -> Decoded<URL> {
-        guard case let .string(s) = json,
-            let url = URL(string: s) else {
-                return .typeMismatch(expected: "URL", actual: json)
-        }
-        return pure(url)
-    }
-}
-
-extension UUID: Ogra.Encodable, Argo.Decodable {
-    public func encode() -> JSON {
-        return uuidString.lowercased().encode()
-    }
-
-    public static func decode(_ json: JSON) -> Decoded<UUID> {
-        guard case let .string(s) = json,
-            let uuid = UUID(uuidString: s) else {
-                return .typeMismatch(expected: "UUID", actual: json)
-        }
-        return pure(uuid)
-    }
-}
-
 extension URLRequest {
-    mutating func asJsonRequest(_ method: RequestMethod, payload: JSON) -> URLRequest {
+    mutating func asJsonRequest<T: Encodable>(_ method: RequestMethod, payload: T) -> URLRequest {
         self.httpMethod  = method.rawValue
-        self.jsonPayload = payload.JSONObject()
+        self.httpBody    = try? staticJsonEncoder.encode(payload)
         self.setValue("application/json", forHTTPHeaderField: "Accept")
         self.setValue("application/json", forHTTPHeaderField: "Content-Type")
         return self
@@ -116,37 +92,6 @@ extension APIClient {
     }
 }
 
-extension JSON: Signable {
-    // swiftlint:disable switch_case_on_newline
-    func serialize() -> String {
-        switch self {
-        case .null:                 return "null"
-        case .bool(let b):          return b ? "true" : "false"
-        case .number(let num):      return "\(num)"
-        case .string(let string):   return "\"\(string)\""
-        case .array(let array):     return "[\(array.map { $0.serialize() }.joined(separator: ","))]"
-        case .object(let object):
-            let inner = object
-                .sorted { $0.key.compare($1.key, options: [.literal]) == .orderedAscending }
-                .map { elem in "\"\(elem.key)\":\(elem.value.serialize())" }
-                .joined(separator: ",")
-            return "{\(inner)}"
-        }
-    }
-}
-
-extension Dictionary where Key == String, Value == String {
-    func serialized() -> String {
-        return JSON.object(mapValues(JSON.string)).serialize()
-    }
-}
-
-extension String: Signable {
-    public func serialized() -> String {
-        return self
-    }
-}
-
 extension Data {
     public init?(base64UrlEncoded string: String) {
         guard let data = try? Crypto.base64UrlDecoded(string: string) else {
@@ -157,5 +102,58 @@ extension Data {
 
     public func base64UrlEncodedString() -> String? {
         return try? Crypto.base64UrlEncoded(data: self)
+    }
+}
+
+// MARK: Signable Extensions
+
+extension AnyHashable {}
+
+extension Bool: Signable {
+    public func serialized() -> String {
+        return self ? "true" : "false"
+    }
+}
+
+extension NSNumber: Signable {
+    public func serialized() -> String {
+        return "\(self)"
+    }
+}
+
+extension String: Signable {
+    public func serialized() -> String {
+        return "\"\(self)\""
+    }
+}
+
+extension UUID: Signable {
+    public func serialized() -> String {
+        return uuidString
+    }
+}
+
+extension Array: Signable where Element: Signable {
+    public func serialized() -> String {
+        return "[\(self.map { $0.serialized() }.joined(separator: ","))]"
+    }
+}
+
+extension Dictionary: Signable where Key == String, Value: Signable {
+    public func serialized() -> String {
+        let joined = self
+            .sorted { $0.key.compare($1.key, options: [.literal]) == .orderedAscending }
+            .map { elem in "\"\(elem.key)\":\(elem.value.serialized())" }
+            .joined(separator: ",")
+
+//        print("Dictionary: \(self)")
+//        print("Joined: \("{\(joined)}")")
+        return "{\(joined)}"
+    }
+}
+
+extension Optional: Signable where Wrapped: Signable {
+    public func serialized() -> String {
+        return self.map { $0.serialized() } ?? "null"
     }
 }

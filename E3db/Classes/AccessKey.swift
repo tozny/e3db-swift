@@ -9,11 +9,6 @@ import Result
 import Sodium
 import Heimdallr
 
-import Argo
-import Ogra
-import Curry
-import Runes
-
 // MARK: Access Key Management
 
 class AkCacheKey: NSObject {
@@ -39,7 +34,7 @@ class AccessKey: NSObject {
 }
 
 /// Encrypted Access Key information type to facilitate offline crypto
-public struct EAKInfo: Swift.Codable {
+public struct EAKInfo: Codable {
 
     /// encrypted key used for encryption operations
     public let eak: String
@@ -55,24 +50,20 @@ public struct EAKInfo: Swift.Codable {
 
     /// public signing key of the signer
     public let signerSigningKey: SigningKey?
-}
 
-/// :nodoc:
-extension EAKInfo: Argo.Decodable {
-    public static func decode(_ j: JSON) -> Decoded<EAKInfo> {
-        return curry(EAKInfo.init)
-            <^> j <|  "eak"
-            <*> j <|  "authorizer_id"
-            <*> j <|  "authorizer_public_key"
-            <*> j <|? "signer_id"
-            <*> j <|? "signer_signing_key"
+    enum CodingKeys: String, CodingKey {
+        case eak
+        case authorizerId        = "authorizer_id"
+        case authorizerPublicKey = "authorizer_public_key"
+        case signerId            = "signer_id"
+        case signerSigningKey    = "signer_signing_key"
     }
 }
 
 // MARK: Get Access Key
 
 extension Client {
-    private struct GetEAKRequest: Request {
+    private struct GetEAKRequest: E3dbRequest {
         typealias ResponseObject = EAKInfo
         let api: Api
         let writerId: UUID
@@ -139,7 +130,7 @@ extension Client {
 // MARK: Put Access Key
 
 extension Client {
-    private struct PutEAKRequest: Request {
+    private struct PutEAKRequest: E3dbRequest {
         typealias ResponseObject = EmptyResponse
         let api: Api
         let eak: EncryptedAccessKey
@@ -152,7 +143,7 @@ extension Client {
             let base = api.url(endpoint: .accessKeys)
             let url  = base / writerId.uuidString / userId.uuidString / readerId.uuidString / recordType
             var req  = URLRequest(url: url)
-            return req.asJsonRequest(.PUT, payload: JSON.object(["eak": eak.encode()]))
+            return req.asJsonRequest(.put, payload: ["eak": eak])
         }
     }
 
@@ -193,8 +184,8 @@ extension Client {
 // MARK: Delete Access Key
 
 extension Client {
-    private struct DeleteEAKRequest: Request {
-        typealias ResponseObject = Void
+    private struct DeleteEAKRequest: E3dbRequest {
+        typealias ResponseObject = EmptyResponse
         let api: Api
         let writerId: UUID
         let userId: UUID
@@ -205,7 +196,7 @@ extension Client {
             let base = api.url(endpoint: .accessKeys)
             let url  = base / writerId.uuidString / userId.uuidString / readerId.uuidString / recordType
             var req  = URLRequest(url: url)
-            req.httpMethod = RequestMethod.DELETE.rawValue
+            req.httpMethod = RequestMethod.delete.rawValue
             return req
         }
     }

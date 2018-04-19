@@ -5,71 +5,37 @@
 
 import Foundation
 import Swish
-import Argo
-import Ogra
-import Curry
-import Runes
 import Result
 import Sodium
 
-struct ClientRequest: Ogra.Encodable {
+struct ClientRequest: Encodable {
     let name: String
     let publicKey: ClientKey
     let signingKey: SigningKey
 
-    func encode() -> JSON {
-        return JSON.object([
-            "name": name.encode(),
-            "public_key": publicKey.encode(),
-            "signing_key": signingKey.encode()
-        ])
+    enum CodingKeys: String, CodingKey {
+        case name
+        case publicKey  = "public_key"
+        case signingKey = "signing_key"
     }
 }
 
 /// A type that holds a public encryption key
-public struct ClientKey: Swift.Codable {
+public struct ClientKey: Codable {
 
     /// The Base64URL encoded value for the public encryption key
     let curve25519: String
 }
 
-/// :nodoc:
-extension ClientKey: Ogra.Encodable, Argo.Decodable {
-    public func encode() -> JSON {
-        return JSON.object([
-            "curve25519": curve25519.encode()
-        ])
-    }
-
-    static public func decode(_ j: JSON) -> Decoded<ClientKey> {
-        return curry(ClientKey.init)
-            <^> j <| "curve25519"
-    }
-}
-
 /// A type that holds a public signing key
-public struct SigningKey: Swift.Codable {
+public struct SigningKey: Codable {
 
     /// The Base64URL encoded value for the public signing key
     let ed25519: String
 }
 
-/// :nodoc:
-extension SigningKey: Ogra.Encodable, Argo.Decodable {
-    public func encode() -> JSON {
-        return JSON.object([
-            "ed25519": ed25519.encode()
-        ])
-    }
-
-    static public func decode(_ j: JSON) -> Decoded<SigningKey> {
-        return curry(SigningKey.init)
-            <^> j <| "ed25519"
-    }
-}
-
 /// A type that contains the registration response info
-public struct ClientCredentials {
+public struct ClientCredentials: Decodable {
 
     /// An identifier for the client
     public let clientId: UUID
@@ -91,43 +57,63 @@ public struct ClientCredentials {
 
     /// A flag indicating whether this client is active
     public let enabled: Bool
-}
 
-/// :nodoc:
-extension ClientCredentials: Argo.Decodable {
-    public static func decode(_ j: JSON) -> Decoded<ClientCredentials> {
-        return curry(ClientCredentials.init)
-            <^> j <| "client_id"
-            <*> j <| "api_key_id"
-            <*> j <| "api_secret"
-            <*> j <| "name"
-            <*> j <| ["public_key", "curve25519"]
-            <*> j <| ["signing_key", "ed25519"]
-            <*> j <| "enabled"
+    enum CodingKeys: String, CodingKey {
+        case clientId   = "client_id"
+        case apiKeyId   = "api_key_id"
+        case apiSecret  = "api_secret"
+        case name
+        case enabled
+        case publicKey  = "public_key"
+        case signingKey = "signing_key"
+    }
+
+    private enum PublicKeyCodingKeys: String, CodingKey {
+        case curve25519
+    }
+
+    private enum SigningKeyCodingKeys: String, CodingKey {
+        case ed25519
+    }
+
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        clientId   = try values.decode(UUID.self, forKey: .clientId)
+        apiKeyId   = try values.decode(String.self, forKey: .apiKeyId)
+        apiSecret  = try values.decode(String.self, forKey: .apiSecret)
+        name       = try values.decode(String.self, forKey: .name)
+        enabled    = try values.decode(Bool.self, forKey: .enabled)
+        let pubKey = try values.nestedContainer(keyedBy: PublicKeyCodingKeys.self, forKey: .publicKey)
+        publicKey  = try pubKey.decode(String.self, forKey: .curve25519)
+        let sigKey = try values.nestedContainer(keyedBy: SigningKeyCodingKeys.self, forKey: .signingKey)
+        signingKey = try sigKey.decode(String.self, forKey: .ed25519)
     }
 }
 
 // MARK: Registration
 
 extension Client {
-    private struct RegistrationRequest: Request, Ogra.Encodable {
+    private struct RegistrationRequest: E3dbRequest, Encodable {
         typealias ResponseObject = ClientCredentials
         let api: Api
 
         let token: String
         let client: ClientRequest
 
-        func encode() -> JSON {
-            return JSON.object([
-                "token": token.encode(),
-                "client": client.encode()
-            ])
+        enum CodingKeys: String, CodingKey {
+            case token, client
+        }
+
+        func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(token, forKey: .token)
+            try container.encode(client, forKey: .client)
         }
 
         func build() -> URLRequest {
             let url = api.registerUrl
             var req = URLRequest(url: url)
-            return req.asJsonRequest(.POST, payload: encode())
+            return req.asJsonRequest(.post, payload: self)
         }
     }
 

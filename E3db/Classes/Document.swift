@@ -5,10 +5,6 @@
 
 import Foundation
 import Swish
-import Argo
-import Ogra
-import Curry
-import Runes
 import Result
 import Sodium
 
@@ -30,7 +26,7 @@ public protocol Signable {
 }
 
 /// Data type to hold encrypted data and related info
-public struct EncryptedDocument: Signable {
+public struct EncryptedDocument: Encodable {
 
     /// Metadata produced by this client about this document
     public let clientMeta: ClientMeta
@@ -42,6 +38,22 @@ public struct EncryptedDocument: Signable {
     /// A cryptographic signature of the `clientMeta`
     /// and the cleartext data before it was encrypted
     public let recordSignature: String
+
+    enum CodingKeys: String, CodingKey {
+        case clientMeta      = "meta"
+        case encryptedData   = "data"
+        case recordSignature = "rec_sig"
+    }
+}
+
+extension EncryptedDocument: Signable {
+    public func serialized() -> String {
+        return [
+            CodingKeys.clientMeta.rawValue: clientMeta.serialized(),
+            CodingKeys.encryptedData.rawValue: encryptedData.serialized(),
+            CodingKeys.recordSignature.rawValue: recordSignature
+        ].serialized()
+    }
 }
 
 /// Data type to hold the verified, unencrypted data and related info
@@ -57,7 +69,7 @@ public struct DecryptedDocument {
 
 /// A wrapper object around a given data type and its
 /// cryptographic signature. Note that document remains unchanged
-public struct SignedDocument<T: Signable>: Signable {
+public struct SignedDocument<T: Signable> {
 
     /// A data type that conforms to the `Signable` protocol
     /// (i.e. it is deterministically serializable)
@@ -75,42 +87,25 @@ public struct SignedDocument<T: Signable>: Signable {
         self.document  = document
         self.signature = signature
     }
+
+    enum CodingKeys: String, CodingKey {
+        case document  = "doc"
+        case signature = "sig"
+    }
 }
 
-// allows anything that conforms to the JSON Encodable
-// protocol to also be Signable
-extension Signable where Self: Ogra.Encodable {
+extension SignedDocument: Signable {
     public func serialized() -> String {
-        return encode().serialize()
-    }
-}
-
-/// :nodoc:
-extension EncryptedDocument: Ogra.Encodable {
-    public func encode() -> JSON {
-        return JSON.object([
-            "meta": clientMeta.encode(),
-            "data": encryptedData.encode(),
-            "rec_sig": recordSignature.encode()
-        ])
-    }
-}
-
-/// :nodoc:
-extension SignedDocument: Ogra.Encodable {
-    public func encode() -> JSON {
-        let encoded = document.serialized()
-        let jsonObj = try? JSONSerialization.jsonObject(with: Data(encoded.utf8), options: [])
-        return JSON.object([
-            "doc": JSON(jsonObj ?? encoded),
-            "sig": signature.encode()
-        ])
+        return[
+            CodingKeys.document.rawValue: document.serialized(),
+            CodingKeys.signature.rawValue: signature
+        ].serialized()
     }
 }
 
 // Container for signing and
 // verification operations
-struct DocInfo: Signable {
+struct DocInfo: Encodable, Signable {
     let meta: ClientMeta
     let data: RecordData
 
