@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Client Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/Client" class="dashAnchor"></a>
+    <a title="Client Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">E3db Docs</a> (100% documented)</p>
+        <p class="header-right"><a href="https://github.com/tozny/e3db-swift"><img src="../img/gh.png"/>View on GitHub</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">E3db Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        Client Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/Client.html">Client</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/ConfigAccessControl.html">ConfigAccessControl</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/ConfigAccessControl/SecureEnclave.html">– SecureEnclave</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/ConfigAccessControl/Keychain.html">– Keychain</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/E3dbError.html">E3dbError</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/Signable.html">Signable</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/ClientCredentials.html">ClientCredentials</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs.html#/s:4E3db9ClientKeyV">ClientKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ClientMeta.html">ClientMeta</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Config.html">Config</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DecryptedDocument.html">DecryptedDocument</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/EAKInfo.html">EAKInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/EncryptedDocument.html">EncryptedDocument</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/IncomingSharingPolicy.html">IncomingSharingPolicy</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/KeyPair.html">KeyPair</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Meta.html">Meta</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/OutgoingSharingPolicy.html">OutgoingSharingPolicy</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/QueryParams.html">QueryParams</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/QueryResponse.html">QueryResponse</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Record.html">Record</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/RecordData.html">RecordData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SignedDocument.html">SignedDocument</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs.html#/s:4E3db10SigningKeyV">SigningKey</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4E3db10CipherDataa">CipherData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4E3db9Cleartexta">Cleartext</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4E3db0A6Resulta">E3dbResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4E3db9PlainMetaa">PlainMeta</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>Client</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">Client</span></code></pre>
+
+                </div>
+              </div>
+            <p>Main E3db class to handle data operations.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientCAcA6ConfigV6config_tcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(config:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientCAcA6ConfigV6config_tcfc">init(config:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initializer for the E3db client class.</p>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <p><code><a href="../Classes/Client.html#/s:4E3db6ClientC8registerySS5token_SS10clientNameSSSg6apiUrly6ResultAIOyAA6ConfigVAA0A5ErrorOGc10completiontFZ">Client.register(token:clientName:apiUrl:completion:)</a></code> and
+<code>Client.register(token:clientName:publicKey:apiUrl:completion:)</code> to generate
+the required Config values.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="n">convenience</span> <span class="nf">init</span><span class="p">(</span><span class="nv">config</span><span class="p">:</span> <span class="kt"><a href="../Structs/Config.html">Config</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>config</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A config object with values that have
+already been registered with the E3db service.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC15createWriterKeyySS4type_y6ResultAFOyAA7EAKInfoVAA0A5ErrorOGc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/createWriterKey(type:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC15createWriterKeyySS4type_y6ResultAFOyAA7EAKInfoVAA0A5ErrorOGc10completiontF">createWriterKey(type:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Generate encrypted access key for offline encryption operations. <code><a href="../Structs/EAKInfo.html">EAKInfo</a></code> objects are
+safe to store in insecure storage as they are encrypted with the current client&rsquo;s private key.
+This method will store the key with E3db for later access.</p>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <p><code><a href="../Classes/Client.html#/s:4E3db6ClientC12getReaderKeyy10Foundation4UUIDV8writerId_AG04userI0SS4typey6ResultAKOyAA7EAKInfoVAA0A5ErrorOGc10completiontF">getReaderKey(writerId:userId:type:completion:)</a></code> for geting keys from E3db.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">createWriterKey</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/EAKInfo.html">EAKInfo</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>type</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The kind of data that will be encrypted with this key</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes to provide the EAKInfo result</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC12getReaderKeyy10Foundation4UUIDV8writerId_AG04userI0SS4typey6ResultAKOyAA7EAKInfoVAA0A5ErrorOGc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/getReaderKey(writerId:userId:type:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC12getReaderKeyy10Foundation4UUIDV8writerId_AG04userI0SS4typey6ResultAKOyAA7EAKInfoVAA0A5ErrorOGc10completiontF">getReaderKey(writerId:userId:type:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get the encrypted access key for offline encryption operations. The EAKInfo object must have
+been created beforehand, and shared with this client.</p>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <p><code><a href="../Classes/Client.html#/s:4E3db6ClientC15createWriterKeyySS4type_y6ResultAFOyAA7EAKInfoVAA0A5ErrorOGc10completiontF">createWriterKey(type:completion:)</a></code> for sending keys to E3db.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">getReaderKey</span><span class="p">(</span><span class="nv">writerId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">userId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">type</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/EAKInfo.html">EAKInfo</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>writerId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client ID of the writer of an encrypted document.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>userId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client ID of the user for which an encrypted document was created.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>type</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The kind of data that will be encrypted with this key</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes to provide the EAKInfo result, or error if not found.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC15generateKeyPairAA0dE0VSgyFZ"></a>
+                    <a name="//apple_ref/swift/Method/generateKeyPair()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC15generateKeyPairAA0dE0VSgyFZ">generateKeyPair()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A helper function to create a compatible key pair for E3db encryption operations.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <p>This method is not required for library use. A key pair is
+generated and stored in the <code><a href="../Structs/Config.html">Config</a></code> object returned by the
+<code><a href="../Classes/Client.html#/s:4E3db6ClientC8registerySS5token_SS10clientNameSSSg6apiUrly6ResultAIOyAA6ConfigVAA0A5ErrorOGc10completiontFZ">Client.register(token:clientName:apiUrl:completion:)</a></code> method.</p>
+
+</div>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <p><code>Client.register(token:clientName:publicKey:apiUrl:completion:)</code>
+for supplying your own key for registration.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">generateKeyPair</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/KeyPair.html">KeyPair</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A key pair containing Base64URL encoded Curve25519 public and private keys.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC22generateSigningKeyPairAA0eF0VSgyFZ"></a>
+                    <a name="//apple_ref/swift/Method/generateSigningKeyPair()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC22generateSigningKeyPairAA0eF0VSgyFZ">generateSigningKeyPair()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A helper function to create a compatible key pair for E3db signature operations.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <p>This method is not required for library use. A key pair is
+generated and stored in the <code><a href="../Structs/Config.html">Config</a></code> object returned by the
+<code><a href="../Classes/Client.html#/s:4E3db6ClientC8registerySS5token_SS10clientNameSSSg6apiUrly6ResultAIOyAA6ConfigVAA0A5ErrorOGc10completiontFZ">Client.register(token:clientName:apiUrl:completion:)</a></code> method.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">generateSigningKeyPair</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/KeyPair.html">KeyPair</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A key pair containing Base64URL encoded Ed25519 public and private keys.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC4signAA14SignedDocumentVyxGx8document_tKAA8SignableRzlF"></a>
+                    <a name="//apple_ref/swift/Method/sign(document:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC4signAA14SignedDocumentVyxGx8document_tKAA8SignableRzlF">sign(document:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Use the client&rsquo;s private signing key to create a cryptographic signature
+over the serialized representation of the given document.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <p>this does not change the document at all (e.g. the values are <em>not</em> encrypted).</p>
+
+</div>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <p><code><a href="../Enums/E3dbError.html#/s:4E3db0A5ErrorO06cryptoB0ACSScACmF">E3dbError.cryptoError</a></code> if the operation failed</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">sign</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Signable.html">Signable</a></span><span class="o">&gt;</span><span class="p">(</span><span class="nv">document</span><span class="p">:</span> <span class="kt">T</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SignedDocument.html">SignedDocument</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>document</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A data type that conforms to the <code><a href="../Protocols/Signable.html">Signable</a></code> protocol</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A wrapper object around a given data type and its cryptographic signature</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC6verifySbAA14SignedDocumentVyxG6signed_SS9pubSigKeytKAA8SignableRzlF"></a>
+                    <a name="//apple_ref/swift/Method/verify(signed:pubSigKey:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC6verifySbAA14SignedDocumentVyxG6signed_SS9pubSigKeytKAA8SignableRzlF">verify(signed:pubSigKey:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Verify message authenticity. Confirm that the signature for the <code><a href="../Structs/SignedDocument.html">SignedDocument</a></code> was
+created by the client identified by the given public key, for the document provided.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <code><a href="../Enums/E3dbError.html#/s:4E3db0A5ErrorO06cryptoB0ACSScACmF">E3dbError.cryptoError</a></code> if the operation failed
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">verify</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">signed</span><span class="p">:</span> <span class="kt"><a href="../Structs/SignedDocument.html">SignedDocument</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">pubSigKey</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>signed</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A wrapper object around a given data type and its cryptographic signature</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>pubSigKey</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The public portion of the key used to create the signature in the <code>signed</code> document</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Whether the document was signed by the creator of the given public key</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC7encryptAA17EncryptedDocumentVSS4type_AA10RecordDataV4dataAA7EAKInfoV7eakInfos10DictionaryVyS2SGSg5plaintKF"></a>
+                    <a name="//apple_ref/swift/Method/encrypt(type:data:eakInfo:plain:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC7encryptAA17EncryptedDocumentVSS4type_AA10RecordDataV4dataAA7EAKInfoV7eakInfos10DictionaryVyS2SGSg5plaintKF">encrypt(type:data:eakInfo:plain:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Create a document to hold data signed for authenticicy and encrypted for confidentiality.
+The resulting document also holds info related to the author, type of data, and any additional
+metadata kept in cleartext.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <code><a href="../Enums/E3dbError.html#/s:4E3db0A5ErrorO06cryptoB0ACSScACmF">E3dbError.cryptoError</a></code> if the operation failed
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">encrypt</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">data</span><span class="p">:</span> <span class="kt"><a href="../Structs/RecordData.html">RecordData</a></span><span class="p">,</span> <span class="nv">eakInfo</span><span class="p">:</span> <span class="kt"><a href="../Structs/EAKInfo.html">EAKInfo</a></span><span class="p">,</span> <span class="nv">plain</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db9PlainMetaa">PlainMeta</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/EncryptedDocument.html">EncryptedDocument</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>type</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The kind of data this document represents</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The cleartext data to be encrypted</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>eakInfo</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The encrypted access key information used for the encryption operation</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>plain</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Additional metadata to be included &ndash; remains unencrypted.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Data type to hold encrypted data and related info</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC7decryptAA17DecryptedDocumentVAA09EncryptedE0V12encryptedDoc_AA7EAKInfoV7eakInfotKF"></a>
+                    <a name="//apple_ref/swift/Method/decrypt(encryptedDoc:eakInfo:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC7decryptAA17DecryptedDocumentVAA09EncryptedE0V12encryptedDoc_AA7EAKInfoV7eakInfotKF">decrypt(encryptedDoc:eakInfo:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Create a document to hold the original plaintext data from the given encrypted format.
+The resulting document also holds info related to the author, type of data, and any additional
+metadata kept in cleartext. The input document is also verified for authenticiy with the given
+public signing key, and throws an error if verification fails.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <code><a href="../Enums/E3dbError.html#/s:4E3db0A5ErrorO06cryptoB0ACSScACmF">E3dbError.cryptoError</a></code> if the decrypt operation fails, or if the document fails verification
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">decrypt</span><span class="p">(</span><span class="nv">encryptedDoc</span><span class="p">:</span> <span class="kt"><a href="../Structs/EncryptedDocument.html">EncryptedDocument</a></span><span class="p">,</span> <span class="nv">eakInfo</span><span class="p">:</span> <span class="kt"><a href="../Structs/EAKInfo.html">EAKInfo</a></span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/DecryptedDocument.html">DecryptedDocument</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>encryptedDoc</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Data type to hold encrypted data and related info</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>eakInfo</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The encrypted access key information used for the decryption operation</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Data type to hold the unencrypted data and related info</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC5queryyAA11QueryParamsV6params_y6ResultAHOyAA0D8ResponseVAA0A5ErrorOGc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/query(params:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC5queryyAA11QueryParamsV6params_y6ResultAHOyAA0D8ResponseVAA0A5ErrorOGc10completiontF">query(params:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Search for records that match a given set of filters.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <p>If the <code>include_data</code> flag is not set in the given <code><a href="../Structs/QueryParams.html">QueryParams</a></code>,
+the record results will contain empty <code><a href="../Structs/RecordData.html">RecordData</a></code> values.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">query</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="kt"><a href="../Structs/QueryParams.html">QueryParams</a></span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/QueryResponse.html">QueryResponse</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>params</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A structure to specify a set of filters for matching records</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes to provide the results of the query</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC5writeySS4type_AA10RecordDataV4datas10DictionaryVyS2SGSg5plainy6ResultANOyAA0E0VAA0A5ErrorOGc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/write(type:data:plain:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC5writeySS4type_AA10RecordDataV4datas10DictionaryVyS2SGSg5plainy6ResultANOyAA0E0VAA0A5ErrorOGc10completiontF">write(type:data:plain:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Write a record to the E3db service. This will encrypt the <code><a href="../Structs/RecordData.html">RecordData</a></code> fields (leaving the keys as plaintext)
+then send to E3db for storage. The <code><a href="../Structs/Record.html">Record</a></code> in the response will contain the unencrypted values and additional
+metadata associated with the record.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">write</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">data</span><span class="p">:</span> <span class="kt"><a href="../Structs/RecordData.html">RecordData</a></span><span class="p">,</span> <span class="nv">plain</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db9PlainMetaa">PlainMeta</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/Record.html">Record</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>type</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The kind of data this record represents</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The unencrypted values for the record</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>plain</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A user-defined, key-value store associated with the record that remains as plaintext</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes to provide the record result</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC4ready10Foundation4UUIDV8recordId_SaySSGSg6fieldsy6ResultALOyAA6RecordVAA0A5ErrorOGc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/read(recordId:fields:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC4ready10Foundation4UUIDV8recordId_SaySSGSg6fieldsy6ResultALOyAA6RecordVAA0A5ErrorOGc10completiontF">read(recordId:fields:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Request and decrypt a record from the E3db service.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">read</span><span class="p">(</span><span class="nv">recordId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">fields</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/Record.html">Record</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>recordId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The identifier for the <code><a href="../Structs/Record.html">Record</a></code> to read</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>fields</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A list of fields to select from the data, instead of the full record data</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when the operation completes to provide the decrypted record</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC6updateyAA4MetaV4meta_AA10RecordDataV03newG0s10DictionaryVyS2SGSg5plainy6ResultAPOyAA0F0VAA0A5ErrorOGc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/update(meta:newData:plain:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC6updateyAA4MetaV4meta_AA10RecordDataV03newG0s10DictionaryVyS2SGSg5plainy6ResultAPOyAA0F0VAA0A5ErrorOGc10completiontF">update(meta:newData:plain:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Replace the data and plain metadata for a record identified by its <code><a href="../Structs/Meta.html">Meta</a></code>. This will overwrite
+the existing data and metadata values.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">update</span><span class="p">(</span><span class="nv">meta</span><span class="p">:</span> <span class="kt"><a href="../Structs/Meta.html">Meta</a></span><span class="p">,</span> <span class="nv">newData</span><span class="p">:</span> <span class="kt"><a href="../Structs/RecordData.html">RecordData</a></span><span class="p">,</span> <span class="nv">plain</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db9PlainMetaa">PlainMeta</a></span><span class="p">?,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/Record.html">Record</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>meta</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code><a href="../Structs/Meta.html">Meta</a></code> information for the record to update</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>newData</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The unencrypted values to encrypt and replace for the record</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>plain</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The plaintext key-value store to replace for the record, pass in the existing plain for no changes</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when the operation completes to provide the updated record</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC6deletey10Foundation4UUIDV8recordId_SS7versiony6ResultAJOyytAA0A5ErrorOGc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/delete(recordId:version:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC6deletey10Foundation4UUIDV8recordId_SS7versiony6ResultAJOyytAA0A5ErrorOGc10completiontF">delete(recordId:version:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Remove the record from the E3db service.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">delete</span><span class="p">(</span><span class="nv">recordId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">version</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>recordId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The identifier for the <code><a href="../Structs/Record.html">Record</a></code> to remove</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>version</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The version of the <code><a href="../Structs/Record.html">Record</a></code> to delete</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when the operation completes</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC8registerySS5token_SS10clientNameSSSg6apiUrly6ResultAIOyAA6ConfigVAA0A5ErrorOGc10completiontFZ"></a>
+                    <a name="//apple_ref/swift/Method/register(token:clientName:apiUrl:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC8registerySS5token_SS10clientNameSSSg6apiUrly6ResultAIOyAA6ConfigVAA0A5ErrorOGc10completiontFZ">register(token:clientName:apiUrl:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Provide registration information to the E3db service to create a new client
+associated with a particular account. The token provided must be generated from
+Tozny&rsquo;s <a href="https://console.tozny.com">InnoVault Console</a> to register successfully.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <p>This registration variant generates the keypair for the client.</p>
+
+</div>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <p>The <code>register(token:clientName:publicKey:apiUrl:completion:)</code> variant
+of this method allows the caller to provide their own public key.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">register</span><span class="p">(</span><span class="nv">token</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">clientName</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">apiUrl</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/Config.html">Config</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>token</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An opaque value associated with an account and generated by the InnoVault Console</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>clientName</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A name to give this client for registration</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>apiUrl</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The base URL for the E3DB service, uses production API URL if none provided here</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes to provide a complete <code><a href="../Structs/Config.html">Config</a></code></p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC8registerySS5token_SS10clientNameSS9publicKeySS07signingH0SSSg6apiUrly6ResultAKOyAA0B11CredentialsVAA0A5ErrorOGc10completiontFZ"></a>
+                    <a name="//apple_ref/swift/Method/register(token:clientName:publicKey:signingKey:apiUrl:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC8registerySS5token_SS10clientNameSS9publicKeySS07signingH0SSSg6apiUrly6ResultAKOyAA0B11CredentialsVAA0A5ErrorOGc10completiontFZ">register(token:clientName:publicKey:signingKey:apiUrl:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Provide registration information to the E3db service to create a new client
+associated with a particular account. The token provided must be generated from
+Tozny&rsquo;s <a href="https://console.tozny.com">InnoVault Console</a> to register successfully.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <p>This registration variant does not generate the keypair for the client.</p>
+
+</div>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <p>The <code><a href="../Classes/Client.html#/s:4E3db6ClientC8registerySS5token_SS10clientNameSSSg6apiUrly6ResultAIOyAA6ConfigVAA0A5ErrorOGc10completiontFZ">register(token:clientName:apiUrl:completion:)</a></code> variant
+of this method generates the keypair for the caller.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">register</span><span class="p">(</span><span class="nv">token</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">clientName</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">publicKey</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">signingKey</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">apiUrl</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/ClientCredentials.html">ClientCredentials</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>token</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An opaque value associated with an account and generated the InnoVault Console</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>clientName</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A name to give this client for registration</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>publicKey</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The public key to register with the E3db service and use for encryption operations</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>signingKey</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The public key to register with the E3db service and use for signing operations</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>apiUrl</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The base URL for the E3DB service, uses production API URL if none provided here</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes to provide <code><a href="../Structs/ClientCredentials.html">ClientCredentials</a></code>
+used to build a <code><a href="../Structs/Config.html">Config</a></code> object for initializing an E3db <code>Client</code></p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC5shareySS4type_10Foundation4UUIDV8readerIdy6ResultAJOyytAA0A5ErrorOGc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/share(type:readerId:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC5shareySS4type_10Foundation4UUIDV8readerIdy6ResultAJOyytAA0A5ErrorOGc10completiontF">share(type:readerId:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Allow another user to view and decrypt records of a given type.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">share</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">readerId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>type</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The kind of records to allow a user to view and decrypt</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>readerId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The identifier of the user to allow access</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC6revokeySS4type_10Foundation4UUIDV8readerIdy6ResultAJOyytAA0A5ErrorOGc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/revoke(type:readerId:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC6revokeySS4type_10Foundation4UUIDV8readerIdy6ResultAJOyytAA0A5ErrorOGc10completiontF">revoke(type:readerId:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Remove a user&rsquo;s access to view and decrypt records of a given type.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">revoke</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">readerId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>type</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The kind of records to remove access</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>readerId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The identifier of the user to remove access</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC18getOutgoingSharingyy6ResultAEOySayAA0dE6PolicyVGAA0A5ErrorOGc10completion_tF"></a>
+                    <a name="//apple_ref/swift/Method/getOutgoingSharing(completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC18getOutgoingSharingyy6ResultAEOySayAA0dE6PolicyVGAA0A5ErrorOGc10completion_tF">getOutgoingSharing(completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Request the list of policies allowing other users to view and decrypt this client&rsquo;s records.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">getOutgoingSharing</span><span class="p">(</span><span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt"><a href="../Structs/OutgoingSharingPolicy.html">OutgoingSharingPolicy</a></span><span class="p">]</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes to provide
+the list of <code><a href="../Structs/OutgoingSharingPolicy.html">OutgoingSharingPolicy</a></code> objects</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC18getIncomingSharingyy6ResultAEOySayAA0dE6PolicyVGAA0A5ErrorOGc10completion_tF"></a>
+                    <a name="//apple_ref/swift/Method/getIncomingSharing(completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC18getIncomingSharingyy6ResultAEOySayAA0dE6PolicyVGAA0A5ErrorOGc10completion_tF">getIncomingSharing(completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Request the list of policies allowing this client to view and decrypt records written by other users.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">getIncomingSharing</span><span class="p">(</span><span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt"><a href="../Structs/IncomingSharingPolicy.html">IncomingSharingPolicy</a></span><span class="p">]</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes to provide
+the list of <code><a href="../Structs/IncomingSharingPolicy.html">IncomingSharingPolicy</a></code> objects</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>© 2018 <a class="link" href="https://tozny.com" target="_blank" rel="external">Tozny, LLC</a>.</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

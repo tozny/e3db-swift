@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Config Structure Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Struct/Config" class="dashAnchor"></a>
+    <a title="Config Structure Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">E3db Docs</a> (100% documented)</p>
+        <p class="header-right"><a href="https://github.com/tozny/e3db-swift"><img src="../img/gh.png"/>View on GitHub</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">E3db Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        Config Structure Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/Client.html">Client</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/ConfigAccessControl.html">ConfigAccessControl</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/ConfigAccessControl/SecureEnclave.html">– SecureEnclave</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/ConfigAccessControl/Keychain.html">– Keychain</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/E3dbError.html">E3dbError</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/Signable.html">Signable</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/ClientCredentials.html">ClientCredentials</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs.html#/s:4E3db9ClientKeyV">ClientKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ClientMeta.html">ClientMeta</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Config.html">Config</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DecryptedDocument.html">DecryptedDocument</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/EAKInfo.html">EAKInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/EncryptedDocument.html">EncryptedDocument</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/IncomingSharingPolicy.html">IncomingSharingPolicy</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/KeyPair.html">KeyPair</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Meta.html">Meta</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/OutgoingSharingPolicy.html">OutgoingSharingPolicy</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/QueryParams.html">QueryParams</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/QueryResponse.html">QueryResponse</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Record.html">Record</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/RecordData.html">RecordData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SignedDocument.html">SignedDocument</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs.html#/s:4E3db10SigningKeyV">SigningKey</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4E3db10CipherDataa">CipherData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4E3db9Cleartexta">Cleartext</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4E3db0A6Resulta">E3dbResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4E3db9PlainMetaa">PlainMeta</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>Config</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Config</span><span class="p">:</span> <span class="kt">Swift</span><span class="o">.</span><span class="kt">Codable</span></code></pre>
+
+                </div>
+              </div>
+            <p>Configuration for the E3DB Client</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ConfigV10clientNameSSv"></a>
+                    <a name="//apple_ref/swift/Property/clientName" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ConfigV10clientNameSSv">clientName</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The name for this client</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">clientName</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ConfigV8clientId10Foundation4UUIDVv"></a>
+                    <a name="//apple_ref/swift/Property/clientId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ConfigV8clientId10Foundation4UUIDVv">clientId</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The client identifier</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">clientId</span><span class="p">:</span> <span class="kt">UUID</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ConfigV8apiKeyIdSSv"></a>
+                    <a name="//apple_ref/swift/Property/apiKeyId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ConfigV8apiKeyIdSSv">apiKeyId</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The API key identifier</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">apiKeyId</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ConfigV9apiSecretSSv"></a>
+                    <a name="//apple_ref/swift/Property/apiSecret" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ConfigV9apiSecretSSv">apiSecret</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The API secret for making authenticated calls</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">apiSecret</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ConfigV9publicKeySSv"></a>
+                    <a name="//apple_ref/swift/Property/publicKey" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ConfigV9publicKeySSv">publicKey</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The client&rsquo;s public encryption key</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">publicKey</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ConfigV10privateKeySSv"></a>
+                    <a name="//apple_ref/swift/Property/privateKey" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ConfigV10privateKeySSv">privateKey</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The client&rsquo;s secret encryption key</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">privateKey</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ConfigV10baseApiUrl10Foundation3URLVv"></a>
+                    <a name="//apple_ref/swift/Property/baseApiUrl" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ConfigV10baseApiUrl10Foundation3URLVv">baseApiUrl</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The base URL for the E3DB service</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">baseApiUrl</span><span class="p">:</span> <span class="kt">URL</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ConfigV12publicSigKeySSv"></a>
+                    <a name="//apple_ref/swift/Property/publicSigKey" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ConfigV12publicSigKeySSv">publicSigKey</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The client&rsquo;s public signing key</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">publicSigKey</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ConfigV13privateSigKeySSv"></a>
+                    <a name="//apple_ref/swift/Property/privateSigKey" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ConfigV13privateSigKeySSv">privateSigKey</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The client&rsquo;s secret signing key</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">privateSigKey</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ConfigVACSS10clientName_10Foundation4UUIDV0C2IdSS06apiKeyG0SS0H6SecretSS06publicI0SS07privateI0AE3URLV10baseApiUrlSS0k3SigI0SS0lqI0tcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(clientName:clientId:apiKeyId:apiSecret:publicKey:privateKey:baseApiUrl:publicSigKey:privateSigKey:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ConfigVACSS10clientName_10Foundation4UUIDV0C2IdSS06apiKeyG0SS0H6SecretSS06publicI0SS07privateI0AE3URLV10baseApiUrlSS0k3SigI0SS0lqI0tcfc">init(clientName:clientId:apiKeyId:apiSecret:publicKey:privateKey:baseApiUrl:publicSigKey:privateSigKey:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initializer to customize the configuration of the client. Typically, library users will
+use the <code><a href="../Classes/Client.html#/s:4E3db6ClientC8registerySS5token_SS10clientNameSSSg6apiUrly6ResultAIOyAA6ConfigVAA0A5ErrorOGc10completiontFZ">Client.register(token:clientName:apiUrl:completion:)</a></code> method which will supply
+an initialized <code>Config</code> object. Use this initializer if you register with the other
+registration method, <code>Client.register(token:clientName:publicKey:apiUrl:completion:)</code>.
+Pass this object to the <code>Client(config:)</code> initializer to create a new <code><a href="../Classes/Client.html">Client</a></code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
+    <span class="nv">clientName</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+    <span class="nv">clientId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span>
+    <span class="nv">apiKeyId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+    <span class="nv">apiSecret</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+    <span class="nv">publicKey</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+    <span class="nv">privateKey</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+    <span class="nv">baseApiUrl</span><span class="p">:</span> <span class="kt">URL</span><span class="p">,</span>
+    <span class="nv">publicSigKey</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+    <span class="nv">privateSigKey</span><span class="p">:</span> <span class="kt">String</span>
+<span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>clientName</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The name for this client</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>clientId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client identifier</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>apiKeyId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The API key identifier</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>apiSecret</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The API secret for making authenticated calls</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>publicKey</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client&rsquo;s public key</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>privateKey</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client&rsquo;s secret key</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>baseApiUrl</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The base URL for the E3DB service</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ConfigVACSgSS11loadProfile_SS10userPromptAA0B13AccessControlO13SecureEnclaveO07enclaveG0tcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(loadProfile:userPrompt:enclaveAccess:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ConfigVACSgSS11loadProfile_SS10userPromptAA0B13AccessControlO13SecureEnclaveO07enclaveG0tcfc">init(loadProfile:userPrompt:enclaveAccess:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Securely load a profile using the device&rsquo;s Secure Enclave if available.</p>
+<div class="aside aside-important">
+    <p class="aside-title">Important</p>
+    <p>Accessing this Keychain data will require the user to confirm their presence via
+biometrics (e.g. Touch ID or Face ID) or passcode entry. If no passcode is set on the device, this method will fail.
+Data may be lost when the user removes an entry (fingerprint, face, or passcode) from the device.</p>
+
+</div>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <p><code><a href="../Structs/Config.html#/s:4E3db6ConfigVACSgSS11loadProfile_AA0B13AccessControlO8KeychainO08keychainE0tcfc">init(loadProfile:keychainAccess:)</a></code> for loading <code>Config</code> objects from the Keychain without the Secure Enclave.</p>
+
+</div>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <p><code><a href="../Structs/Config.html#/s:4E3db6ConfigV4saveSbSS7profile_AA0B13AccessControlO13SecureEnclaveO07enclaveE0tF">save(profile:enclaveAccess:)</a></code> for storing the <code>Config</code> object using the Secure Enclave.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">?(</span><span class="nv">loadProfile</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">defaultProfileName</span><span class="p">,</span> <span class="nv">userPrompt</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">defaultUserPrompt</span><span class="p">,</span> <span class="nv">enclaveAccess</span><span class="p">:</span> <span class="kt"><a href="../Enums/ConfigAccessControl.html">ConfigAccessControl</a></span><span class="o">.</span><span class="kt">SecureEnclave</span> <span class="o">=</span> <span class="o">.</span><span class="n">biometricAny</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>loadProfile</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Name of the profile that was previously saved. Uses internal default if unspecified.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>userPrompt</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A message used to inform the user about unlocking the profile. Uses internal default if unspecified.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>enclaveAccess</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The Secure Enclave access control level used to protect the configuration when saved. Uses <code>.biometricAny</code> if unspecified.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A fully initialized <code>Config</code> object if successful, <code>nil</code> otherwise.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ConfigVACSgSS11loadProfile_AA0B13AccessControlO8KeychainO08keychainE0tcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(loadProfile:keychainAccess:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ConfigVACSgSS11loadProfile_AA0B13AccessControlO8KeychainO08keychainE0tcfc">init(loadProfile:keychainAccess:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Securely load a profile from the device&rsquo;s Keychain.</p>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <code><a href="../Structs/Config.html#/s:4E3db6ConfigVACSgSS11loadProfile_SS10userPromptAA0B13AccessControlO13SecureEnclaveO07enclaveG0tcfc">init(loadProfile:userPrompt:enclaveAccess:)</a></code> for loading <code>Config</code> objects from the Keychain using the Secure Enclave.
+
+</div>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <p><code><a href="../Structs/Config.html#/s:4E3db6ConfigV4saveSbSS7profile_AA0B13AccessControlO8KeychainO08keychainE0tF">save(profile:keychainAccess:)</a></code> for storing the <code>Config</code> object in the Keychain.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">?(</span><span class="nv">loadProfile</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">defaultProfileName</span><span class="p">,</span> <span class="nv">keychainAccess</span><span class="p">:</span> <span class="kt"><a href="../Enums/ConfigAccessControl.html">ConfigAccessControl</a></span><span class="o">.</span><span class="kt">Keychain</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>loadProfile</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Name of the profile that was previously saved. Uses internal default if unspecified.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>keychainAccess</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The Keychain access control level used to protect the configuration when saved.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A fully initialized <code>Config</code> object if successful, <code>nil</code> otherwise.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ConfigV4saveSbSS7profile_AA0B13AccessControlO13SecureEnclaveO07enclaveE0tF"></a>
+                    <a name="//apple_ref/swift/Method/save(profile:enclaveAccess:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ConfigV4saveSbSS7profile_AA0B13AccessControlO13SecureEnclaveO07enclaveE0tF">save(profile:enclaveAccess:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Securely store a profile using the device&rsquo;s Secure Enclave if available.</p>
+<div class="aside aside-important">
+    <p class="aside-title">Important</p>
+    <p>Accessing this Keychain data will require the user to confirm their presence via
+biometrics (e.g. Touch ID or Face ID) or passcode entry. If no passcode is set on the device, this method will fail.
+Data may be lost when the user removes an entry (fingerprint, face, or passcode) from the device.</p>
+
+</div>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <p><code><a href="../Structs/Config.html#/s:4E3db6ConfigV4saveSbSS7profile_AA0B13AccessControlO8KeychainO08keychainE0tF">save(profile:keychainAccess:)</a></code> for storing the <code>Config</code> object.</p>
+
+</div>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <p><code><a href="../Structs/Config.html#/s:4E3db6ConfigVACSgSS11loadProfile_SS10userPromptAA0B13AccessControlO13SecureEnclaveO07enclaveG0tcfc">init(loadProfile:userPrompt:enclaveAccess:)</a></code> for loading <code>Config</code> objects from the Keychain using the Secure Enclave.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">save</span><span class="p">(</span><span class="nv">profile</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">defaultProfileName</span><span class="p">,</span> <span class="nv">enclaveAccess</span><span class="p">:</span> <span class="kt"><a href="../Enums/ConfigAccessControl.html">ConfigAccessControl</a></span><span class="o">.</span><span class="kt">SecureEnclave</span> <span class="o">=</span> <span class="o">.</span><span class="n">biometricAny</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>profile</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Identifier for the profile for loading later. Uses internal default if unspecified.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>enclaveAccess</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The Secure Enclave access control level used to protect the configuration. Uses <code>.biometricAny</code> if unspecified.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A boolean value indicating whether the config object was successfully saved.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ConfigV4saveSbSS7profile_AA0B13AccessControlO8KeychainO08keychainE0tF"></a>
+                    <a name="//apple_ref/swift/Method/save(profile:keychainAccess:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ConfigV4saveSbSS7profile_AA0B13AccessControlO8KeychainO08keychainE0tF">save(profile:keychainAccess:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Securely store a profile in the device Keychain.</p>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <code><a href="../Structs/Config.html#/s:4E3db6ConfigV4saveSbSS7profile_AA0B13AccessControlO13SecureEnclaveO07enclaveE0tF">save(profile:enclaveAccess:)</a></code> for storing the <code>Config</code> object using the Secure Enclave.
+
+</div>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <p><code><a href="../Structs/Config.html#/s:4E3db6ConfigVACSgSS11loadProfile_AA0B13AccessControlO8KeychainO08keychainE0tcfc">init(loadProfile:keychainAccess:)</a></code> for loading <code>Config</code> objects from the device Keychain.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">save</span><span class="p">(</span><span class="nv">profile</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">defaultProfileName</span><span class="p">,</span> <span class="nv">keychainAccess</span><span class="p">:</span> <span class="kt"><a href="../Enums/ConfigAccessControl.html">ConfigAccessControl</a></span><span class="o">.</span><span class="kt">Keychain</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>profile</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Identifier for the profile for loading later. Uses internal default if unspecified.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>keychainAccess</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The Keychain access control level to protect the configuration.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A boolean value indicating whether the config object was successfully saved.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>© 2018 <a class="link" href="https://tozny.com" target="_blank" rel="external">Tozny, LLC</a>.</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

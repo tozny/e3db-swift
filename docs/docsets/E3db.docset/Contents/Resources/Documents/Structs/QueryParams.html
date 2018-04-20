@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>QueryParams Structure Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Struct/QueryParams" class="dashAnchor"></a>
+    <a title="QueryParams Structure Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">E3db Docs</a> (100% documented)</p>
+        <p class="header-right"><a href="https://github.com/tozny/e3db-swift"><img src="../img/gh.png"/>View on GitHub</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">E3db Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        QueryParams Structure Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/Client.html">Client</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/ConfigAccessControl.html">ConfigAccessControl</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/ConfigAccessControl/SecureEnclave.html">– SecureEnclave</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/ConfigAccessControl/Keychain.html">– Keychain</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/E3dbError.html">E3dbError</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/Signable.html">Signable</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/ClientCredentials.html">ClientCredentials</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs.html#/s:4E3db9ClientKeyV">ClientKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ClientMeta.html">ClientMeta</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Config.html">Config</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DecryptedDocument.html">DecryptedDocument</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/EAKInfo.html">EAKInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/EncryptedDocument.html">EncryptedDocument</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/IncomingSharingPolicy.html">IncomingSharingPolicy</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/KeyPair.html">KeyPair</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Meta.html">Meta</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/OutgoingSharingPolicy.html">OutgoingSharingPolicy</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/QueryParams.html">QueryParams</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/QueryResponse.html">QueryResponse</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Record.html">Record</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/RecordData.html">RecordData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SignedDocument.html">SignedDocument</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs.html#/s:4E3db10SigningKeyV">SigningKey</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4E3db10CipherDataa">CipherData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4E3db9Cleartexta">Cleartext</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4E3db0A6Resulta">E3dbResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4E3db9PlainMetaa">PlainMeta</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>QueryParams</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">QueryParams</span></code></pre>
+
+                </div>
+              </div>
+            <p>Data type to specify filters for querying records</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db11QueryParamsVACSiSg5count_SbSg11includeDataSay10Foundation4UUIDVGSg9writerIdsAL04userJ0AL06recordJ0SaySSGSg5typesSdSg5afterAF0E10AllWriterstcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(count:includeData:writerIds:userIds:recordIds:types:after:includeAllWriters:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db11QueryParamsVACSiSg5count_SbSg11includeDataSay10Foundation4UUIDVGSg9writerIdsAL04userJ0AL06recordJ0SaySSGSg5typesSdSg5afterAF0E10AllWriterstcfc">init(count:includeData:writerIds:userIds:recordIds:types:after:includeAllWriters:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initializer to specify filters for querying records</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
+    <span class="nv">count</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">includeData</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">writerIds</span><span class="p">:</span> <span class="p">[</span><span class="kt">UUID</span><span class="p">]?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">userIds</span><span class="p">:</span> <span class="p">[</span><span class="kt">UUID</span><span class="p">]?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">recordIds</span><span class="p">:</span> <span class="p">[</span><span class="kt">UUID</span><span class="p">]?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">types</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">after</span><span class="p">:</span> <span class="kt">Double</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">includeAllWriters</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span>
+<span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>count</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Limit the number of records returned by the query beyond the E3db default</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>includeData</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Supply the full decrypted record set in the results</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>writerIds</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Filter to records written by these IDs</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>userIds</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Filter to records with these user IDs</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>recordIds</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Filter to only the records identified by these IDs</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>contentTypes</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Filter to records that match the given types</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>after</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Number to facilitate paging the results &ndash; used with the <code>last</code> property of the <code><a href="../Structs/QueryResponse.html">QueryResponse</a></code></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>includeAllWriters</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Set this flag to include records that have been shared with you, defaults to <code>false</code></p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db11QueryParamsV4nextACSd5after_tF"></a>
+                    <a name="//apple_ref/swift/Method/next(after:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db11QueryParamsV4nextACSd5after_tF">next(after:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Advance the query beyond the given value, leaving other parameters unchanged.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">next</span><span class="p">(</span><span class="nv">after</span><span class="p">:</span> <span class="kt">Double</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">QueryParams</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>after</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The value to start the results query</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new <code>QueryParams</code> object initialized with existing parameters
+and a new starting value</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>© 2018 <a class="link" href="https://tozny.com" target="_blank" rel="external">Tozny, LLC</a>.</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
