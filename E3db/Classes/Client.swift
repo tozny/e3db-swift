@@ -22,12 +22,12 @@ public typealias E3dbCompletion<T> = (E3dbResult<T>) -> Void
 
 /// Main E3db class to handle data operations.
 public final class Client {
-    internal let api: Api
-    internal let config: Config
-    internal let authedClient: APIClient
-    internal let akCache = NSCache<AkCacheKey, AccessKey>()
+    let api: Api
+    let config: Config
+    let authedClient: APIClient
+    let akCache = NSCache<AkCacheKey, AccessKey>()
 
-    internal static let session: URLSession = {
+    static let session: URLSession = {
         #if E3DB_LOGGING && DEBUG && canImport(ResponseDetective)
         let configuration = URLSessionConfiguration.default
         ResponseDetective.enable(inConfiguration: configuration)
@@ -37,7 +37,7 @@ public final class Client {
         #endif
     }()
 
-    internal init(config: Config, scheduler: @escaping Scheduler) {
+    init(config: Config, scheduler: @escaping Scheduler) {
         self.api    = Api(baseUrl: config.baseApiUrl)
         self.config = config
 

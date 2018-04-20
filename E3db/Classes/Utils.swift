@@ -57,7 +57,7 @@ public enum E3dbError: Error {
     /// An API request encountered an error
     case apiError(code: Int, message: String)
 
-    internal init(swishError: SwishError) {
+    init(swishError: SwishError) {
         switch swishError {
         case .decodingError(DecodingError.dataCorrupted(let ctx)):
             self = .jsonError(expected: ctx.codingPath.map { $0.stringValue }.joined(separator: "."), actual: "corrupted")
@@ -132,7 +132,7 @@ extension AuthedRequestPerformer: RequestPerformer {
     typealias ResponseHandler = (Result<HTTPResponse, SwishError>) -> Void
 
     @discardableResult
-    internal func perform(_ request: URLRequest, completionHandler: @escaping ResponseHandler) -> URLSessionDataTask {
+    func perform(_ request: URLRequest, completionHandler: @escaping ResponseHandler) -> URLSessionDataTask {
         if authenticator.hasAccessToken {
             authenticator.authenticateRequest(request) { result in
                 if case .success(let req) = result {
