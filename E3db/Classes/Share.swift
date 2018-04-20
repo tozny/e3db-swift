@@ -5,7 +5,6 @@
 
 import Foundation
 import Swish
-import Result
 
 // MARK: Sharing
 
@@ -94,7 +93,7 @@ extension Client {
                 let req = ShareRequest(api: self.api, policy: .allow, clientId: clientId, readerId: readerId, contentType: type)
                 self.authedClient.performDefault(req, completion: completion)
             case .failure(let err):
-                completion(Result(error: err))
+                completion(.failure(err))
             }
         }
     }
@@ -112,7 +111,7 @@ extension Client {
             case .success(let ak):
                 self.addSharePolicy(ak: ak.rawAk, type: type, clientId: clientId, readerId: readerId, completion: completion)
             case .failure:
-                completion(Result(error: .apiError(code: 404, message: "No applicable records exist to share")))
+                completion(.failure(.apiError(code: 404, message: "No applicable records exist to share")))
             }
         }
     }
@@ -131,7 +130,7 @@ extension Client {
                 let req = ShareRequest(api: self.api, policy: .deny, clientId: clientId, readerId: readerId, contentType: type)
                 self.authedClient.performDefault(req, completion: completion)
             case .failure(let err):
-                completion(Result(error: err))
+                completion(.failure(err))
             }
         }
     }

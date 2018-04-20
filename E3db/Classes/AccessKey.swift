@@ -4,10 +4,10 @@
 //
 
 import Foundation
-import Swish
+import Heimdallr
 import Result
 import Sodium
-import Heimdallr
+import Swish
 
 // MARK: Access Key Management
 
@@ -164,7 +164,7 @@ extension Client {
 
                 // update server
                 self.putAccessKey(eak: eak, writerId: writerId, userId: userId, readerId: readerId, recordType: recordType) { result in
-                    let response  = EAKInfo(eak: eak, authorizerId: self.config.clientId, authorizerPublicKey: client.publicKey, signerId: self.config.clientId, signerSigningKey:client.signingKey)
+                    let response  = EAKInfo(eak: eak, authorizerId: self.config.clientId, authorizerPublicKey: client.publicKey, signerId: self.config.clientId, signerSigningKey: client.signingKey)
                     let accessKey = AccessKey(rawAk: ak, eakInfo: response)
 
                     // update local cache

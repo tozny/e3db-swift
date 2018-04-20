@@ -4,9 +4,8 @@
 //
 
 import Foundation
-import Swish
-import Result
 import Sodium
+import Swish
 
 struct ClientRequest: Encodable {
     let name: String
@@ -120,17 +119,17 @@ extension Client {
     static func register(token: String, clientName: String, apiUrl: String? = nil, scheduler: @escaping Scheduler, completion: @escaping E3dbCompletion<Config>) {
         // ensure api url is valid
         guard let url = URL(string: apiUrl ?? Api.defaultUrl) else {
-            return completion(Result(error: .configError("Invalid apiUrl: \(apiUrl ?? "")")))
+            return completion(.failure(.configError("Invalid apiUrl: \(apiUrl ?? "")")))
         }
 
         // create encryption key pair
         guard let keyPair = Client.generateKeyPair() else {
-            return completion(Result(error: .cryptoError("Failed to create encryption key pair")))
+            return completion(.failure(.cryptoError("Failed to create encryption key pair")))
         }
 
         // create signing key pair
         guard let signingKeyPair = Client.generateSigningKeyPair() else {
-            return completion(Result(error: .cryptoError("Failed to create signing key pair")))
+            return completion(.failure(.cryptoError("Failed to create signing key pair")))
         }
 
         let api       = Api(baseUrl: url)
@@ -155,7 +154,7 @@ extension Client {
                         publicSigKey: signingKeyPair.publicKey,
                         privateSigKey: signingKeyPair.secretKey
                     )
-            }
+                }
             completion(resp)
         }
     }
@@ -198,7 +197,7 @@ extension Client {
     public static func register(token: String, clientName: String, publicKey: String, signingKey: String, apiUrl: String? = nil, completion: @escaping E3dbCompletion<ClientCredentials>) {
         // ensure api url is valid
         guard let url = URL(string: apiUrl ?? Api.defaultUrl) else {
-            return completion(Result(error: .configError("Invalid apiUrl: \(apiUrl ?? "")")))
+            return completion(.failure(.configError("Invalid apiUrl: \(apiUrl ?? "")")))
         }
 
         let api       = Api(baseUrl: url)

@@ -4,29 +4,23 @@
 //
 
 import Foundation
-import Sodium
-import Result
-import Swish
 import Heimdallr
+import Result
+import Sodium
+import Swish
 
-
+// Allows customizable response parsing
 protocol E3dbRequest: Request {
     associatedtype ResponseObject
 }
 
-extension E3dbRequest where ResponseObject: Decodable {
-    func parse(_ data: Data) throws -> ResponseObject {
-        return try staticJsonDecoder.decode(ResponseObject.self, from: data)
-    }
-}
-
-let staticJsonEncoder: JSONEncoder = {
+let kStaticJsonEncoder: JSONEncoder = {
     let encoder = JSONEncoder()
     encoder.dateEncodingStrategy = .formatted(Formatter.iso8601)
     return encoder
 }()
 
-let staticJsonDecoder: JSONDecoder = {
+let kStaticJsonDecoder: JSONDecoder = {
     let decoder = JSONDecoder()
     decoder.dateDecodingStrategy = .formatted(Formatter.iso8601)
     return decoder
@@ -200,8 +194,8 @@ extension AuthedRequestPerformer: RequestPerformer {
             switch (data, response, error) {
             case let (_, resp as HTTPURLResponse, .some(err)):
                 completionHandler(.failure(.urlSessionError(err, response: resp)))
-            case let (.some(d), resp as HTTPURLResponse, _):
-                let httpResp = HTTPResponse(data: d, response: resp)
+            case let (.some(body), resp as HTTPURLResponse, _):
+                let httpResp = HTTPResponse(data: body, response: resp)
                 completionHandler(.success(httpResp))
             default:
                 completionHandler(.failure(.serverError(code: 400, data: nil)))

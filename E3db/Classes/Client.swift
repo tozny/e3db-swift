@@ -4,12 +4,12 @@
 //
 
 import Foundation
-import Swish
+import Heimdallr
 import Result
 import Sodium
-import Heimdallr
+import Swish
 
-#if E3DB_LOGGING && DEBUG
+#if E3DB_LOGGING && DEBUG && canImport(ResponseDetective)
 import ResponseDetective
 #endif
 
@@ -28,7 +28,7 @@ public final class Client {
     internal let akCache = NSCache<AkCacheKey, AccessKey>()
 
     internal static let session: URLSession = {
-        #if E3DB_LOGGING && DEBUG
+        #if E3DB_LOGGING && DEBUG && canImport(ResponseDetective)
         let configuration = URLSessionConfiguration.default
         ResponseDetective.enable(inConfiguration: configuration)
         return URLSession(configuration: configuration)

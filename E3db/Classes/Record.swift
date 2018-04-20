@@ -4,8 +4,8 @@
 //
 
 import Foundation
-import Swish
 import Result
+import Swish
 
 /// A type that holds arbitrary metadata for a record in cleartext
 public typealias PlainMeta = [String: String]
@@ -187,8 +187,8 @@ extension Client {
 
         let cipher: CipherData
         switch encrypt(data, ak: ak) {
-        case .success(let c):
-            cipher = c
+        case .success(let thisCipher):
+            cipher = thisCipher
         case .failure(let err):
             return completion(Result(error: err))
         }
@@ -282,8 +282,8 @@ extension Client {
     public func read(recordId: UUID, fields: [String]? = nil, completion: @escaping E3dbCompletion<Record>) {
         readRaw(recordId: recordId, fields: fields) { result in
             switch result {
-            case .success(let r):
-                self.decryptRecord(record: r, completion: completion)
+            case .success(let record):
+                self.decryptRecord(record: record, completion: completion)
             case .failure(let err):
                 completion(Result(error: err))
             }
@@ -311,8 +311,8 @@ extension Client {
     private func update(_ recordId: UUID, version: String, metaReq: ClientMeta, data: RecordData, ak: RawAccessKey, completion: @escaping E3dbCompletion<Record>) {
         let cipher: CipherData
         switch self.encrypt(data, ak: ak) {
-        case .success(let c):
-            cipher = c
+        case .success(let thisCipher):
+            cipher = thisCipher
         case .failure(let err):
             return completion(Result(error: err))
         }

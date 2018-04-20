@@ -4,9 +4,8 @@
 //
 
 import Foundation
-import Swish
-import Result
 import Sodium
+import Swish
 
 // MARK: Offline Crypto Operations
 
@@ -34,7 +33,7 @@ public struct EncryptedDocument: Encodable {
     /// The ciphertext after it has been encrypted,
     /// the keys remain unencrypted
     public let encryptedData: CipherData
-    
+
     /// A cryptographic signature of the `clientMeta`
     /// and the cleartext data before it was encrypted
     public let recordSignature: String
@@ -51,7 +50,7 @@ extension EncryptedDocument: Signable {
         return [
             CodingKeys.clientMeta.rawValue: AnySignable(clientMeta),
             CodingKeys.encryptedData.rawValue: AnySignable(encryptedData),
-            CodingKeys.recordSignature.rawValue:  AnySignable(recordSignature)
+            CodingKeys.recordSignature.rawValue: AnySignable(recordSignature)
         ].serialized()
     }
 }
@@ -196,7 +195,7 @@ extension Client {
         }
         let meta      = encryptedDoc.clientMeta
         let localAk   = try getLocalAk(clientId: eakInfo.authorizerId, recordType: meta.type, eakInfo: eakInfo)
-        let decrypted = try Crypto.decrypt(cipherData: encryptedDoc.encryptedData, ak: localAk)        
+        let decrypted = try Crypto.decrypt(cipherData: encryptedDoc.encryptedData, ak: localAk)
         let docInfo   = DocInfo(meta: meta, data: decrypted)
         let signed    = SignedDocument(document: docInfo, signature: encryptedDoc.recordSignature)
         guard try verify(signed: signed, pubSigKey: sigKey) else {

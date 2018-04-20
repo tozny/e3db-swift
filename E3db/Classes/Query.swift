@@ -5,7 +5,6 @@
 
 import Foundation
 import Swish
-import Result
 
 /// Data type to specify filters for querying records
 public struct QueryParams: Encodable {
@@ -165,7 +164,7 @@ extension Client {
     private func decryptSearchRecord(_ searchRecord: SearchRecord) -> E3dbResult<Record> {
         guard let cipherData = searchRecord.data,
               let eakInfo    = searchRecord.eakInfo else {
-                return Result(value: Record(meta: searchRecord.meta, data: Cleartext()))
+                return .success(Record(meta: searchRecord.meta, data: Cleartext()))
         }
 
         return decryptEak(eakInfo: eakInfo, clientPrivateKey: self.config.privateKey)

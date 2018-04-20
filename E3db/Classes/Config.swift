@@ -87,8 +87,8 @@ public struct Config: Codable {
 
 // MARK: Storage in Keychain / Secure Enclave
 
-private let defaultProfileName = "com.tozny.e3db.defaultProfile"
-private let defaultUserPrompt  = "Unlock to load profile"
+private let kDefaultProfileName = "com.tozny.e3db.defaultProfile"
+private let kDefaultUserPrompt  = "Unlock to load profile"
 
 /// Access Protections for storing the Config in the device Keychain
 public enum ConfigAccessControl {
@@ -198,8 +198,8 @@ extension Config {
     ///   - enclaveAccess: The Secure Enclave access control level used to protect the configuration when saved. Uses `.biometricAny` if unspecified.
     /// - Returns: A fully initialized `Config` object if successful, `nil` otherwise.
     public init?(loadProfile: String? = nil, userPrompt: String? = nil, enclaveAccess: ConfigAccessControl.SecureEnclave = .biometricAny) {
-        let profile = loadProfile ?? defaultProfileName
-        let prompt  = userPrompt ?? defaultUserPrompt
+        let profile = loadProfile ?? kDefaultProfileName
+        let prompt  = userPrompt ?? kDefaultUserPrompt
         guard let identifier = Identifier(nonEmpty: profile) else { return nil }
 
         let valet = SecureEnclaveValet.valet(with: identifier, accessControl: enclaveAccess.valetAccess)
@@ -220,7 +220,7 @@ extension Config {
     ///   - keychainAccess: The Keychain access control level used to protect the configuration when saved.
     /// - Returns: A fully initialized `Config` object if successful, `nil` otherwise.
     public init?(loadProfile: String? = nil, keychainAccess: ConfigAccessControl.Keychain) {
-        let profile = loadProfile ?? defaultProfileName
+        let profile = loadProfile ?? kDefaultProfileName
         guard let identifier = Identifier(nonEmpty: profile) else { return nil }
 
         let valet = Valet.valet(with: identifier, accessibility: keychainAccess.valetAccess)
@@ -245,7 +245,7 @@ extension Config {
     ///   - enclaveAccess: The Secure Enclave access control level used to protect the configuration. Uses `.biometricAny` if unspecified.
     /// - Returns: A boolean value indicating whether the config object was successfully saved.
     public func save(profile: String? = nil, enclaveAccess: ConfigAccessControl.SecureEnclave = .biometricAny) -> Bool {
-        let userProfile = profile ?? defaultProfileName
+        let userProfile = profile ?? kDefaultProfileName
         guard let identifier = Identifier(nonEmpty: userProfile) else { return false }
 
         let valet = SecureEnclaveValet.valet(with: identifier, accessControl: enclaveAccess.valetAccess)
@@ -265,7 +265,7 @@ extension Config {
     ///   - keychainAccess: The Keychain access control level to protect the configuration.
     /// - Returns: A boolean value indicating whether the config object was successfully saved.
     public func save(profile: String? = nil, keychainAccess: ConfigAccessControl.Keychain) -> Bool {
-        let userProfile = profile ?? defaultProfileName
+        let userProfile = profile ?? kDefaultProfileName
         guard let identifier = Identifier(nonEmpty: userProfile) else { return false }
 
         let valet = Valet.valet(with: identifier, accessibility: keychainAccess.valetAccess)

@@ -4,8 +4,8 @@
 //
 
 import Foundation
-import Swish
 import Result
+import Swish
 
 extension Formatter {
     static let iso8601: DateFormatter = {
@@ -33,10 +33,18 @@ extension String {
 extension URLRequest {
     mutating func asJsonRequest<T: Encodable>(_ method: RequestMethod, payload: T) -> URLRequest {
         self.httpMethod  = method.rawValue
-        self.httpBody    = try? staticJsonEncoder.encode(payload)
+        self.httpBody    = try? kStaticJsonEncoder.encode(payload)
         self.setValue("application/json", forHTTPHeaderField: "Accept")
         self.setValue("application/json", forHTTPHeaderField: "Content-Type")
         return self
+    }
+}
+
+// Extends Swish.Request to override their `parse`
+// method to replace with custom json decoder
+extension E3dbRequest where ResponseObject: Decodable {
+    func parse(_ data: Data) throws -> ResponseObject {
+        return try kStaticJsonDecoder.decode(ResponseObject.self, from: data)
     }
 }
 
