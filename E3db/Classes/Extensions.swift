@@ -32,8 +32,8 @@ extension String {
 
 extension URLRequest {
     mutating func asJsonRequest<T: Encodable>(_ method: RequestMethod, payload: T) -> URLRequest {
-        self.httpMethod  = method.rawValue
-        self.httpBody    = try? kStaticJsonEncoder.encode(payload)
+        self.httpMethod = method.rawValue
+        self.httpBody   = try? kStaticJsonEncoder.encode(payload)
         self.setValue("application/json", forHTTPHeaderField: "Accept")
         self.setValue("application/json", forHTTPHeaderField: "Content-Type")
         return self
@@ -92,8 +92,6 @@ extension Data {
 }
 
 // MARK: Signable Extensions
-
-extension AnyHashable {}
 
 extension Bool: Signable {
     public func serialized() -> String {
