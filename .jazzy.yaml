@@ -9,6 +9,6 @@ sdk: iphonesimulator
 exclude:
   - 'E3db/Classes/Extensions.swift'
 xcodebuild_arguments: [
-  '-workspace', 'Example/E3db.xcworkspace',
-  '-scheme',    'E3db-Example'
+  '-workspace', 'E3db.xcworkspace',
+  '-scheme',    'E3db_Example'
 ]
