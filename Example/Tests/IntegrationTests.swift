@@ -126,7 +126,7 @@ class IntegrationTests: XCTestCase, TestUtils {
             }
         }
 
-        let badSigK = String(sigPair.publicKey + "badness")!
+        let badSigK = String(sigPair.publicKey + "badness")
         asyncTest(test) { (expect) in
             Client.register(token: TestData.token, clientName: test, publicKey: keyPair.publicKey, signingKey: badSigK, apiUrl: TestData.apiUrl) { (result) in
                 defer { expect.fulfill() }

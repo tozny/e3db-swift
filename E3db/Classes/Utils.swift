@@ -4,14 +4,43 @@
 //
 
 import Foundation
-import Sodium
-import Result
-import Argo
-import Swish
 import Heimdallr
+import Result
+import Sodium
+import Swish
+
+// Allows customizable response parsing
+protocol E3dbRequest: Request {
+    associatedtype ResponseObject
+}
+
+let kStaticJsonEncoder: JSONEncoder = {
+    let encoder = JSONEncoder()
+    encoder.dateEncodingStrategy = .formatted(Formatter.iso8601)
+    return encoder
+}()
+
+let kStaticJsonDecoder: JSONDecoder = {
+    let decoder = JSONDecoder()
+    decoder.dateDecodingStrategy = .formatted(Formatter.iso8601)
+    return decoder
+}()
+
+// wrapper to align signable types
+struct AnySignable: Signable {
+    let wrapped: Signable
+
+    init<S: Signable>(_ base: S) {
+        self.wrapped = base
+    }
+
+    func serialized() -> String {
+        return wrapped.serialized()
+    }
+}
 
 /// Possible errors encountered from E3db operations
-public enum E3dbError: Swift.Error {
+public enum E3dbError: Error {
 
     /// A crypto operation failed
     case cryptoError(String)
@@ -28,14 +57,16 @@ public enum E3dbError: Swift.Error {
     /// An API request encountered an error
     case apiError(code: Int, message: String)
 
-    internal init(swishError: SwishError) {
+    init(swishError: SwishError) {
         switch swishError {
-        case let .argoError(.typeMismatch(exp, act)):
-            self = .jsonError(expected: "Expected: \(exp). ", actual: "Actual: \(act)")
-        case .argoError(.missingKey(let key)):
-            self = .jsonError(expected: "Expected: \(key). ", actual: "Actual: (key not found)")
-        case .argoError(let err):
-            self = .jsonError(expected: "", actual: err.description)
+        case .decodingError(DecodingError.dataCorrupted(let ctx)):
+            self = .jsonError(expected: ctx.codingPath.map { $0.stringValue }.joined(separator: "."), actual: "corrupted")
+        case let .decodingError(DecodingError.keyNotFound(key, _)):
+            self = .jsonError(expected: key.stringValue, actual: "")
+        case let .decodingError(DecodingError.typeMismatch(any, ctx)), let .decodingError(DecodingError.valueNotFound(any, ctx)):
+            self = .jsonError(expected: ctx.codingPath.map { $0.stringValue }.joined(separator: "."), actual: "\(any)")
+        case .decodingError:
+            self = .jsonError(expected: "", actual: swishError.errorDescription ?? "Failed to decode json")
         case .serverError(let code, data: _) where code == 401 || code == 403:
             self = .apiError(code: code, message: "Unauthorized")
         case .serverError(code: 404, data: _):
@@ -44,7 +75,7 @@ public enum E3dbError: Swift.Error {
             self = .apiError(code: 409, message: "Existing item cannot be modified")
         case .serverError(code: let code, data: _):
             self = .apiError(code: code, message: swishError.errorDescription ?? "Failed request")
-        case .deserializationError, .parseError, .urlSessionError:
+        case .urlSessionError:
             self = .networkError(swishError.errorDescription ?? "Failed request")
         }
     }
@@ -101,7 +132,7 @@ extension AuthedRequestPerformer: RequestPerformer {
     typealias ResponseHandler = (Result<HTTPResponse, SwishError>) -> Void
 
     @discardableResult
-    internal func perform(_ request: URLRequest, completionHandler: @escaping ResponseHandler) -> URLSessionDataTask {
+    func perform(_ request: URLRequest, completionHandler: @escaping ResponseHandler) -> URLSessionDataTask {
         if authenticator.hasAccessToken {
             authenticator.authenticateRequest(request) { result in
                 if case .success(let req) = result {
@@ -160,11 +191,14 @@ extension AuthedRequestPerformer: RequestPerformer {
         req.setValue(auth, forHTTPHeaderField: "Authorization")
 
         let task = session.dataTask(with: req) { data, response, error in
-            if let error = error {
-                completionHandler(.failure(.urlSessionError(error)))
-            } else {
-                let resp = HTTPResponse(data: data, response: response)
-                completionHandler(.success(resp))
+            switch (data, response, error) {
+            case let (_, resp as HTTPURLResponse, .some(err)):
+                completionHandler(.failure(.urlSessionError(err, response: resp)))
+            case let (.some(body), resp as HTTPURLResponse, _):
+                let httpResp = HTTPResponse(data: body, response: resp)
+                completionHandler(.success(httpResp))
+            default:
+                completionHandler(.failure(.serverError(code: 400, data: nil)))
             }
         }
         task.resume()

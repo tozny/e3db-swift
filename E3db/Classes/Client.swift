@@ -4,17 +4,12 @@
 //
 
 import Foundation
-import Swish
+import Heimdallr
 import Result
 import Sodium
-import Heimdallr
+import Swish
 
-import Argo
-import Ogra
-import Curry
-import Runes
-
-#if E3DB_LOGGING && DEBUG
+#if E3DB_LOGGING && DEBUG && canImport(ResponseDetective)
 import ResponseDetective
 #endif
 
@@ -27,13 +22,13 @@ public typealias E3dbCompletion<T> = (E3dbResult<T>) -> Void
 
 /// Main E3db class to handle data operations.
 public final class Client {
-    internal let api: Api
-    internal let config: Config
-    internal let authedClient: APIClient
-    internal let akCache = NSCache<AkCacheKey, AccessKey>()
+    let api: Api
+    let config: Config
+    let authedClient: APIClient
+    let akCache = NSCache<AkCacheKey, AccessKey>()
 
-    internal static let session: URLSession = {
-        #if E3DB_LOGGING && DEBUG
+    static let session: URLSession = {
+        #if E3DB_LOGGING && DEBUG && canImport(ResponseDetective)
         let configuration = URLSessionConfiguration.default
         ResponseDetective.enable(inConfiguration: configuration)
         return URLSession(configuration: configuration)
@@ -42,7 +37,7 @@ public final class Client {
         #endif
     }()
 
-    internal init(config: Config, scheduler: @escaping Scheduler) {
+    init(config: Config, scheduler: @escaping Scheduler) {
         self.api    = Api(baseUrl: config.baseApiUrl)
         self.config = config
 
@@ -119,23 +114,22 @@ extension Client {
 
 // MARK: Get Client Info
 
-struct ClientInfo: Argo.Decodable {
+struct ClientInfo: Decodable {
     let clientId: UUID
     let publicKey: ClientKey
     let signingKey: SigningKey?
     let validated: Bool
 
-    static func decode(_ j: JSON) -> Decoded<ClientInfo> {
-        return curry(ClientInfo.init)
-            <^> j <|  "client_id"
-            <*> j <|  "public_key"
-            <*> j <|? "signing_key"
-            <*> j <|  "validated"
+    enum CodingKeys: String, CodingKey {
+        case clientId   = "client_id"
+        case publicKey  = "public_key"
+        case signingKey = "signing_key"
+        case validated
     }
 }
 
 extension Client {
-    private struct ClientInfoRequest: Request {
+    private struct ClientInfoRequest: E3dbRequest {
         typealias ResponseObject = ClientInfo
         let api: Api
         let clientId: UUID

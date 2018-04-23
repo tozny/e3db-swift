@@ -4,12 +4,8 @@
 //
 
 import Foundation
-import Swish
-import Argo
-import Ogra
-import Curry
-import Runes
 import Result
+import Swish
 
 /// A type that holds arbitrary metadata for a record in cleartext
 public typealias PlainMeta = [String: String]
@@ -38,15 +34,19 @@ public struct RecordData {
     }
 }
 
-/// :nodoc:
-extension RecordData: Ogra.Encodable, Signable {
-    public func encode() -> JSON {
-        return JSON.object(cleartext.mapValues(JSON.string))
+// encoding and signing pass through to underlying cleartext
+extension RecordData: Encodable, Signable {
+    public func encode(to encoder: Encoder) throws {
+        try cleartext.encode(to: encoder)
+    }
+
+    public func serialized() -> String {
+        return cleartext.serialized()
     }
 }
 
 /// A type to hold metadata information created by a client
-public struct ClientMeta: Signable {
+public struct ClientMeta: Encodable {
     /// An identifier for the writer of the document
     public let writerId: UUID
 
@@ -59,22 +59,36 @@ public struct ClientMeta: Signable {
     /// A user-defined, key-value store of metadata
     /// associated with the document that remains as plaintext
     public let plain: PlainMeta?
+
+    enum CodingKeys: String, CodingKey {
+        case writerId = "writer_id"
+        case userId   = "user_id"
+        case type
+        case plain
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(writerId, forKey: .writerId)
+        try container.encode(userId, forKey: .userId)
+        try container.encode(type, forKey: .type)
+        try container.encode(plain ?? [:], forKey: .plain) // default to empty object
+    }
 }
 
-/// :nodoc:
-extension ClientMeta: Ogra.Encodable {
-    public func encode() -> JSON {
-        return JSON.object([
-            "writer_id": writerId.encode(),
-            "user_id": userId.encode(),
-            "type": type.encode(),
-            "plain": (plain ?? [:]).encode() // default to empty object
-        ])
+extension ClientMeta: Signable {
+    public func serialized() -> String {
+        return [
+            CodingKeys.writerId.rawValue: AnySignable(writerId),
+            CodingKeys.userId.rawValue: AnySignable(userId),
+            CodingKeys.type.rawValue: AnySignable(type),
+            CodingKeys.plain.rawValue: AnySignable(plain)
+        ].serialized()
     }
 }
 
 /// A type to hold metadata information about a given record
-public struct Meta {
+public struct Meta: Decodable {
 
     /// An identifier for the record
     public let recordId: UUID
@@ -100,50 +114,43 @@ public struct Meta {
 
     /// An identifier for the current version of the record
     public let version: String
-}
 
-/// :nodoc:
-extension Meta: Argo.Decodable {
-    public static func decode(_ j: JSON) -> Decoded<Meta> {
+    enum CodingKeys: String, CodingKey {
+        case recordId     = "record_id"
+        case writerId     = "writer_id"
+        case userId       = "user_id"
+        case type
+        case plain
+        case created
+        case lastModified = "last_modified"
+        case version
+    }
 
-        let tmp = curry(Meta.init)
-            <^> j <| "record_id"
-            <*> j <| "writer_id"
-            <*> j <| "user_id"
-            <*> j <| "type"
-
-        // split decode fixes: "expression was too complex
-        // to be solved in reasonable time."
-        // `<|>` provides a default empty value,
-        // response from API may change to allow for `nil` values
-        return tmp
-            <*> .optional((j <| "plain").flatMap(PlainMeta.decode) <|> .success(PlainMeta()))
-            <*> j <| "created"
-            <*> j <| "last_modified"
-            <*> j <| "version"
+    public init(from decoder: Decoder) throws {
+        let values   = try decoder.container(keyedBy: CodingKeys.self)
+        recordId     = try values.decode(UUID.self, forKey: .recordId)
+        writerId     = try values.decode(UUID.self, forKey: .writerId)
+        userId       = try values.decode(UUID.self, forKey: .userId)
+        type         = try values.decode(String.self, forKey: .type)
+        plain        = (try? values.decode(PlainMeta.self, forKey: .plain)) ?? PlainMeta() // provide a default empty value
+        created      = try values.decode(Date.self, forKey: .created)
+        lastModified = try values.decode(Date.self, forKey: .lastModified)
+        version      = try values.decode(String.self, forKey: .version)
     }
 }
 
-struct RecordRequestInfo: Ogra.Encodable {
+struct RecordRequestInfo: Encodable {
     let meta: ClientMeta
     let data: CipherData
-
-    public func encode() -> JSON {
-        return JSON.object([
-            "meta": meta.encode(),
-            "data": data.encode()
-        ])
-    }
 }
 
-struct RecordResponse: Argo.Decodable {
+struct RecordResponse: Decodable {
     let meta: Meta
     let cipherData: CipherData
 
-    static func decode(_ j: JSON) -> Decoded<RecordResponse> {
-        return curry(RecordResponse.init)
-            <^> j  <| "meta"
-            <*> (j <| "data").flatMap(CipherData.decode)
+    enum CodingKeys: String, CodingKey {
+        case meta
+        case cipherData = "data"
     }
 }
 
@@ -160,7 +167,7 @@ public struct Record {
 // MARK: Write Record
 
 extension Client {
-    private struct CreateRecordRequest: Request {
+    private struct CreateRecordRequest: E3dbRequest {
         typealias ResponseObject = RecordResponse
         let api: Api
         let recordInfo: RecordRequestInfo
@@ -168,7 +175,7 @@ extension Client {
         func build() -> URLRequest {
             let url = api.url(endpoint: .records)
             var req = URLRequest(url: url)
-            return req.asJsonRequest(.POST, payload: recordInfo.encode())
+            return req.asJsonRequest(.post, payload: recordInfo)
         }
     }
 
@@ -180,8 +187,8 @@ extension Client {
 
         let cipher: CipherData
         switch encrypt(data, ak: ak) {
-        case .success(let c):
-            cipher = c
+        case .success(let thisCipher):
+            cipher = thisCipher
         case .failure(let err):
             return completion(Result(error: err))
         }
@@ -228,7 +235,7 @@ extension Client {
 // MARK: Read Record
 
 extension Client {
-    private struct RecordRequest: Request {
+    private struct RecordRequest: E3dbRequest {
         typealias ResponseObject = RecordResponse
         let api: Api
         let recordId: UUID
@@ -275,8 +282,8 @@ extension Client {
     public func read(recordId: UUID, fields: [String]? = nil, completion: @escaping E3dbCompletion<Record>) {
         readRaw(recordId: recordId, fields: fields) { result in
             switch result {
-            case .success(let r):
-                self.decryptRecord(record: r, completion: completion)
+            case .success(let record):
+                self.decryptRecord(record: record, completion: completion)
             case .failure(let err):
                 completion(Result(error: err))
             }
@@ -287,7 +294,7 @@ extension Client {
 // MARK: Update Record
 
 extension Client {
-    private struct RecordUpdateRequest: Request {
+    private struct RecordUpdateRequest: E3dbRequest {
         typealias ResponseObject = RecordResponse
         let api: Api
         let recordId: UUID
@@ -297,15 +304,15 @@ extension Client {
         func build() -> URLRequest {
             let url = api.url(endpoint: .records) / "safe" / recordId.uuidString / version
             var req = URLRequest(url: url)
-            return req.asJsonRequest(.PUT, payload: recordInfo.encode())
+            return req.asJsonRequest(.put, payload: recordInfo)
         }
     }
 
     private func update(_ recordId: UUID, version: String, metaReq: ClientMeta, data: RecordData, ak: RawAccessKey, completion: @escaping E3dbCompletion<Record>) {
         let cipher: CipherData
         switch self.encrypt(data, ak: ak) {
-        case .success(let c):
-            cipher = c
+        case .success(let thisCipher):
+            cipher = thisCipher
         case .failure(let err):
             return completion(Result(error: err))
         }
@@ -348,8 +355,8 @@ extension Client {
 // MARK: Delete Record
 
 extension Client {
-    private struct DeleteRecordRequest: Request {
-        typealias ResponseObject = Void
+    private struct DeleteRecordRequest: E3dbRequest {
+        typealias ResponseObject = EmptyResponse
         let api: Api
         let recordId: UUID
         let version: String
@@ -357,7 +364,7 @@ extension Client {
         func build() -> URLRequest {
             let url = api.url(endpoint: .records) / "safe" / recordId.uuidString / version
             var req = URLRequest(url: url)
-            req.httpMethod = RequestMethod.DELETE.rawValue
+            req.httpMethod = RequestMethod.delete.rawValue
             return req
         }
     }

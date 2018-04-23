@@ -131,6 +131,36 @@ extension EAKInfo: Equatable {
     }
 }
 
+extension SignedDocument: Decodable where T: Decodable {
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let sig    = try values.decode(String.self, forKey: .signature)
+        let doc    = try values.decode(T.self, forKey: .document)
+        self.init(document: doc, signature: sig)
+    }
+}
+
+extension ClientMeta: Decodable {
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let writer = try values.decode(UUID.self, forKey: .writerId)
+        let user   = try values.decode(UUID.self, forKey: .userId)
+        let type   = try values.decode(String.self, forKey: .type)
+        let plain  = try values.decode(PlainMeta.self, forKey: .plain)
+        self.init(writerId: writer, userId: user, type: type, plain: plain)
+    }
+}
+
+extension EncryptedDocument: Decodable {
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let meta   = try values.decode(ClientMeta.self, forKey: .clientMeta)
+        let data   = try values.decode(CipherData.self, forKey: .encryptedData)
+        let sig    = try values.decode(String.self, forKey: .recordSignature)
+        self.init(clientMeta: meta, encryptedData: data, recordSignature: sig)
+    }
+}
+
 // MARK: - Collect the memory sizes from different types
 
 protocol MemoryReportable {

@@ -5,30 +5,29 @@
 
 import Foundation
 import Swish
-import Argo
-import Ogra
-import Curry
-import Runes
-import Result
 
 // MARK: Sharing
 
-enum Policy: Ogra.Encodable {
+enum Policy: Encodable {
     case allow, deny
 
-    func encode() -> JSON {
+    private typealias PolicyRepresentation = [String: [[String: [String: String]]]]
+
+    func encode(to encoder: Encoder) throws {
         switch self {
         case .allow:
-            return .object(["allow": .array([.object(["read": .object([:])])])])
+            let allow: PolicyRepresentation = ["allow": [["read": [:]]]]
+            try allow.encode(to: encoder)
         case .deny:
-            return .object(["deny": .array([.object(["read": .object([:])])])])
+            let deny: PolicyRepresentation = ["deny": [["read": [:]]]]
+            try deny.encode(to: encoder)
         }
     }
 }
 
 /// A type to describe an existing policy for records
 /// written by the client to share with a given user
-public struct OutgoingSharingPolicy {
+public struct OutgoingSharingPolicy: Decodable {
 
     /// An identifier for a user with whom to share
     public let readerId: UUID
@@ -38,21 +37,17 @@ public struct OutgoingSharingPolicy {
 
     /// A name for the given user
     public let readerName: String?
-}
 
-/// :nodoc:
-extension OutgoingSharingPolicy: Argo.Decodable {
-    public static func decode(_ j: JSON) -> Decoded<OutgoingSharingPolicy> {
-        return curry(OutgoingSharingPolicy.init)
-            <^> j <|  "reader_id"
-            <*> j <|  "record_type"
-            <*> j <|? "reader_name"
+    enum CodingKeys: String, CodingKey {
+        case readerId   = "reader_id"
+        case type       = "record_type"
+        case readerName = "reader_name"
     }
 }
 
 /// A type to describe an existing policy for records
 /// written by others and shared with the client
-public struct IncomingSharingPolicy {
+public struct IncomingSharingPolicy: Decodable {
 
     /// The identifier for the user sharing with the client
     public let writerId: UUID
@@ -62,23 +57,19 @@ public struct IncomingSharingPolicy {
 
     /// A name for the given user
     public let writerName: String?
-}
 
-/// :nodoc:
-extension IncomingSharingPolicy: Argo.Decodable {
-    public static func decode(_ j: JSON) -> Decoded<IncomingSharingPolicy> {
-        return curry(IncomingSharingPolicy.init)
-            <^> j <|  "writer_id"
-            <*> j <|  "record_type"
-            <*> j <|? "writer_name"
+    enum CodingKeys: String, CodingKey {
+        case writerId   = "writer_id"
+        case type       = "record_type"
+        case writerName = "writer_name"
     }
 }
 
 // MARK: Share and Revoke
 
 extension Client {
-    private struct ShareRequest: Request {
-        typealias ResponseObject = Void
+    private struct ShareRequest: E3dbRequest {
+        typealias ResponseObject = EmptyResponse
         let api: Api
         let policy: Policy
 
@@ -90,7 +81,7 @@ extension Client {
             let base = api.url(endpoint: .policy)
             let url  = base / clientId.uuidString / clientId.uuidString / readerId.uuidString / contentType
             var req  = URLRequest(url: url)
-            return req.asJsonRequest(.PUT, payload: policy.encode())
+            return req.asJsonRequest(.put, payload: policy)
         }
     }
 
@@ -102,7 +93,7 @@ extension Client {
                 let req = ShareRequest(api: self.api, policy: .allow, clientId: clientId, readerId: readerId, contentType: type)
                 self.authedClient.performDefault(req, completion: completion)
             case .failure(let err):
-                completion(Result(error: err))
+                completion(.failure(err))
             }
         }
     }
@@ -120,7 +111,7 @@ extension Client {
             case .success(let ak):
                 self.addSharePolicy(ak: ak.rawAk, type: type, clientId: clientId, readerId: readerId, completion: completion)
             case .failure:
-                completion(Result(error: .apiError(code: 404, message: "No applicable records exist to share")))
+                completion(.failure(.apiError(code: 404, message: "No applicable records exist to share")))
             }
         }
     }
@@ -139,7 +130,7 @@ extension Client {
                 let req = ShareRequest(api: self.api, policy: .deny, clientId: clientId, readerId: readerId, contentType: type)
                 self.authedClient.performDefault(req, completion: completion)
             case .failure(let err):
-                completion(Result(error: err))
+                completion(.failure(err))
             }
         }
     }
@@ -148,7 +139,7 @@ extension Client {
 // MARK: Current Sharing Policies
 
 extension Client {
-    private struct GetOutgoingRequest: Request {
+    private struct GetOutgoingRequest: E3dbRequest {
         typealias ResponseObject = [OutgoingSharingPolicy]
         let api: Api
 
@@ -158,7 +149,7 @@ extension Client {
         }
     }
 
-    private struct GetIncomingRequest: Request {
+    private struct GetIncomingRequest: E3dbRequest {
         typealias ResponseObject = [IncomingSharingPolicy]
         let api: Api
 

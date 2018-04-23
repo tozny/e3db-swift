@@ -2,9 +2,6 @@
 //  AppDelegate.swift
 //  E3db
 //
-//  Created by gstro on 06/25/2017.
-//  Copyright (c) 2017 gstro. All rights reserved.
-//
 
 import UIKit
 
