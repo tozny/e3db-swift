@@ -25,7 +25,7 @@ public protocol Signable {
 }
 
 /// Data type to hold encrypted data and related info
-public struct EncryptedDocument: Encodable {
+public struct EncryptedDocument: Codable, Signable {
 
     /// Metadata produced by this client about this document
     public let clientMeta: ClientMeta
@@ -43,9 +43,7 @@ public struct EncryptedDocument: Encodable {
         case encryptedData   = "data"
         case recordSignature = "rec_sig"
     }
-}
 
-extension EncryptedDocument: Signable {
     public func serialized() -> String {
         return [
             CodingKeys.clientMeta.rawValue: AnySignable(clientMeta),
@@ -68,7 +66,7 @@ public struct DecryptedDocument {
 
 /// A wrapper object around a given data type and its
 /// cryptographic signature. Note that document remains unchanged
-public struct SignedDocument<T: Signable> {
+public struct SignedDocument<T: Signable>: Signable {
 
     /// A data type that conforms to the `Signable` protocol
     /// (i.e. it is deterministically serializable)
@@ -76,6 +74,11 @@ public struct SignedDocument<T: Signable> {
 
     /// The cryptographic signature over the serialized document
     public let signature: String
+
+    enum CodingKeys: String, CodingKey {
+        case document  = "doc"
+        case signature = "sig"
+    }
 
     /// Initializer to manually create `SignedDocument` types.
     ///
@@ -87,15 +90,8 @@ public struct SignedDocument<T: Signable> {
         self.signature = signature
     }
 
-    enum CodingKeys: String, CodingKey {
-        case document  = "doc"
-        case signature = "sig"
-    }
-}
-
-extension SignedDocument: Signable {
     public func serialized() -> String {
-        return[
+        return [
             CodingKeys.document.rawValue: AnySignable(document),
             CodingKeys.signature.rawValue: AnySignable(signature)
         ].serialized()

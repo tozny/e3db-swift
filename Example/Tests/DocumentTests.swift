@@ -290,6 +290,30 @@ class DocumentTests: XCTestCase, TestUtils {
         }
     }
 
+    func testSignedEncryptedCodability() {
+        let eakInfo = createWriterKey(client: client1!, type: type1)
+        do {
+            let testData  = ["test": "data"]
+            let encrypted = try client1!.encrypt(type: type1, data: RecordData(cleartext: testData), eakInfo: eakInfo)
+            let signed    = try client1!.sign(document: encrypted)
+
+            let encoder = JSONEncoder()
+            let encoded = try encoder.encode(signed)
+
+            let decoder = JSONDecoder()
+            let decoded = try decoder.decode(SignedDocument<EncryptedDocument>.self, from: encoded)
+
+            // encoding / decoding round trip was successful
+            XCTAssertEqual(encrypted.encryptedData, decoded.document.encryptedData)
+
+            // round trip did not modify
+            let verified = try client1!.verify(signed: decoded, pubSigKey: config1!.publicSigKey)
+            XCTAssert(verified)
+        } catch {
+            XCTFail("Threw error: \(error.localizedDescription)")
+        }
+    }
+
     func testExternalVerification() {
         // shared with e3db-js SDK
         let document = """
