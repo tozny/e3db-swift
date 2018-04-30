@@ -18,27 +18,23 @@ extension UUID: Arbitrary {
 
 extension ClientMeta: Arbitrary {
     public static var arbitrary: Gen<ClientMeta> {
-        return UUID.arbitrary.flatMap { writer in
-            return UUID.arbitrary.flatMap { user in
-                return String.arbitrary.flatMap { type in
-                    return PlainMeta.arbitrary.flatMap { plain in
-                        return Gen<ClientMeta>.pure(ClientMeta(writerId: writer, userId: user, type: type, plain: plain))
-                    }
-                }
-            }
+        let plainArbitrary = Optional<DictionaryOf<String, String>>.arbitrary
+        return Gen<ClientMeta>.compose { c in
+            ClientMeta(
+                writerId: c.generate(),
+                userId: c.generate(),
+                type: c.generate(),
+                plain: plainArbitrary.generate?.getDictionary
+            )
         }
     }
 }
 
 extension EncryptedDocument: Arbitrary {
     public static var arbitrary: Gen<EncryptedDocument> {
-        return ClientMeta.arbitrary.flatMap { meta in
-            return CipherData.arbitrary.flatMap { data in
-                return String.arbitrary.flatMap { sig in
-                    return Gen<EncryptedDocument>.pure(EncryptedDocument(clientMeta: meta, encryptedData: data, recordSignature: sig))
-                }
-            }
-        }
+        return Gen<(ClientMeta, CipherData, String)>
+            .zip(ClientMeta.arbitrary, CipherData.arbitrary, String.arbitrary)
+            .map(EncryptedDocument.init)
     }
 }
 

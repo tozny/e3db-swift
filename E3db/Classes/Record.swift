@@ -66,30 +66,6 @@ public struct ClientMeta: Codable {
         case type
         case plain
     }
-
-    init(writerId: UUID, userId: UUID, type: String, plain: PlainMeta?) {
-        self.writerId = writerId
-        self.userId   = userId
-        self.type     = type
-        self.plain    = plain ?? [:] // default to empty object
-    }
-
-    public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        let writer = try values.decode(UUID.self, forKey: .writerId)
-        let user   = try values.decode(UUID.self, forKey: .userId)
-        let type   = try values.decode(String.self, forKey: .type)
-        let plain  = try values.decode(PlainMeta.self, forKey: .plain)
-        self.init(writerId: writer, userId: user, type: type, plain: plain)
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(writerId, forKey: .writerId)
-        try container.encode(userId, forKey: .userId)
-        try container.encode(type, forKey: .type)
-        try container.encode(plain ?? [:], forKey: .plain) // default to empty object
-    }
 }
 
 /// A type to hold metadata information about a given record
@@ -129,18 +105,6 @@ public struct Meta: Decodable {
         case created
         case lastModified = "last_modified"
         case version
-    }
-
-    public init(from decoder: Decoder) throws {
-        let values   = try decoder.container(keyedBy: CodingKeys.self)
-        recordId     = try values.decode(UUID.self, forKey: .recordId)
-        writerId     = try values.decode(UUID.self, forKey: .writerId)
-        userId       = try values.decode(UUID.self, forKey: .userId)
-        type         = try values.decode(String.self, forKey: .type)
-        plain        = (try? values.decode(PlainMeta.self, forKey: .plain)) ?? PlainMeta() // default to empty object
-        created      = try values.decode(Date.self, forKey: .created)
-        lastModified = try values.decode(Date.self, forKey: .lastModified)
-        version      = try values.decode(String.self, forKey: .version)
     }
 }
 
