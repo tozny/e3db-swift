@@ -10,6 +10,6 @@ target 'E3db_Example' do
         pod 'E3db', :path => '../'
         pod 'E3db/Logging', :path => '../'
 
-        pod 'SwiftCheck', '~> 0.9'
+        pod 'SwiftCheck', '~> 0.10'
     end
 end

@@ -18,13 +18,12 @@ extension UUID: Arbitrary {
 
 extension ClientMeta: Arbitrary {
     public static var arbitrary: Gen<ClientMeta> {
-        let plainArbitrary = Optional<DictionaryOf<String, String>>.arbitrary
         return Gen<ClientMeta>.compose { c in
             ClientMeta(
                 writerId: c.generate(),
                 userId: c.generate(),
                 type: c.generate(),
-                plain: plainArbitrary.generate?.getDictionary
+                plain: c.generate()
             )
         }
     }
@@ -32,9 +31,13 @@ extension ClientMeta: Arbitrary {
 
 extension EncryptedDocument: Arbitrary {
     public static var arbitrary: Gen<EncryptedDocument> {
-        return Gen<(ClientMeta, CipherData, String)>
-            .zip(ClientMeta.arbitrary, CipherData.arbitrary, String.arbitrary)
-            .map(EncryptedDocument.init)
+        return Gen<EncryptedDocument>.compose { c in
+            EncryptedDocument(
+                clientMeta: c.generate(),
+                encryptedData: c.generate(),
+                recordSignature: c.generate()
+            )
+        }
     }
 }
 
