@@ -145,7 +145,7 @@
             <h1>EncryptedDocument</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EncryptedDocument</span><span class="p">:</span> <span class="kt">Encodable</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EncryptedDocument</span><span class="p">:</span> <span class="kt">Codable</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Signable.html">Signable</a></span></code></pre>
 
                 </div>
               </div>
@@ -238,10 +238,6 @@ and the cleartext data before it was encrypted</p>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
                 <li class="item">
                   <div>
                     <code>
