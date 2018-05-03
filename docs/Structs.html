@@ -288,7 +288,7 @@ Only the <code>publicKey</code> is sent to the E3db service.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EncryptedDocument</span><span class="p">:</span> <span class="kt">Encodable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EncryptedDocument</span><span class="p">:</span> <span class="kt">Codable</span><span class="p">,</span> <span class="kt"><a href="Protocols/Signable.html">Signable</a></span></code></pre>
 
                         </div>
                       </div>
@@ -345,7 +345,7 @@ cryptographic signature. Note that document remains unchanged</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">SignedDocument</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">:</span> <span class="kt"><a href="Protocols/Signable.html">Signable</a></span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">SignedDocument</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">:</span> <span class="kt"><a href="Protocols/Signable.html">Signable</a></span><span class="o">&gt;</span><span class="p">:</span> <span class="kt"><a href="Protocols/Signable.html">Signable</a></span></code></pre>
 
                         </div>
                       </div>
@@ -465,7 +465,7 @@ cryptographic signature. Note that document remains unchanged</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ClientMeta</span><span class="p">:</span> <span class="kt">Encodable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ClientMeta</span><span class="p">:</span> <span class="kt">Codable</span></code></pre>
 
                         </div>
                       </div>

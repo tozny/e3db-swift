@@ -91,6 +91,34 @@ extension Data {
     }
 }
 
+extension SignedDocument: Decodable where T: Decodable {
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let sig    = try values.decode(String.self, forKey: .signature)
+        let doc    = try values.decode(T.self, forKey: .document)
+        self.init(document: doc, signature: sig)
+    }
+}
+
+extension SignedDocument: Encodable where T: Encodable {
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(signature, forKey: .signature)
+        try container.encode(document, forKey: .document)
+    }
+}
+
+extension ClientMeta: Signable {
+    public func serialized() -> String {
+        return [
+            CodingKeys.writerId.rawValue: AnySignable(writerId),
+            CodingKeys.userId.rawValue: AnySignable(userId),
+            CodingKeys.type.rawValue: AnySignable(type),
+            CodingKeys.plain.rawValue: AnySignable(plain ?? PlainMeta()) // default to empty object for serialization
+        ].serialized()
+    }
+}
+
 // MARK: Signable Extensions
 
 extension Bool: Signable {

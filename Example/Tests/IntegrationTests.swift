@@ -291,7 +291,7 @@ class IntegrationTests: XCTestCase, TestUtils {
                 XCTAssertEqual(result.value!.meta.recordId, record.meta.recordId)
                 XCTAssertEqual(result.value!.data, newData.cleartext)
 
-                // plain defaults to empty map (for now)
+                // plain defaults to empty map on write (for now)
                 XCTAssertNotNil(record.meta.plain)
                 XCTAssert(record.meta.plain!.isEmpty)
                 XCTAssertNotNil(result.value!.meta.plain)
@@ -320,10 +320,9 @@ class IntegrationTests: XCTestCase, TestUtils {
                 XCTAssertEqual(result.value!.meta.recordId, record.meta.recordId)
                 XCTAssertEqual(result.value!.data, newData.cleartext)
 
-                // plain defaults to empty map (for now)
+                // plain should be nil
                 XCTAssertNotNil(record.meta.plain)
-                XCTAssertNotNil(result.value!.meta.plain)
-                XCTAssertNotEqual(record.meta.plain!, result.value!.meta.plain!)
+                XCTAssertNil(result.value!.meta.plain)
 
                 record = result.value!
                 expect.fulfill()
