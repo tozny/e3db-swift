@@ -1,4 +1,7 @@
-github "trivago/Heimdallr.swift" ~> 3.6
+# Temporarily point to Heimdallr commit where dependencies were updated
+# Will change back to versioning if Heimdallr project bumps release
+# https://github.com/trivago/Heimdallr.swift/issues/118
+github "https://github.com/trivago/Heimdallr.swift.git" "b6b8ea3"
 github "jedisct1/swift-sodium"   ~> 0.6
 github "thoughtbot/Swish"        ~> 3.0
 github "Square/Valet"            ~> 3.1
