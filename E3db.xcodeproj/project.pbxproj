@@ -20,10 +20,6 @@
 		2C5AE685208E55D0008F52C5 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5AE67A208E55D0008F52C5 /* Extensions.swift */; };
 		2C5AE686208E55D0008F52C5 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5AE67B208E55D0008F52C5 /* Client.swift */; };
 		2CEA3AF0208E6B7600AC46EE /* Heimdallr.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE68D208E55F7008F52C5 /* Heimdallr.framework */; };
-		2CEA3AF1208E6B7600AC46EE /* ReactiveHeimdallr.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE68B208E55F7008F52C5 /* ReactiveHeimdallr.framework */; };
-		2CEA3AF2208E6B7600AC46EE /* ReactiveObjC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE68E208E55F7008F52C5 /* ReactiveObjC.framework */; };
-		2CEA3AF3208E6B7600AC46EE /* ReactiveObjCBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE688208E55F7008F52C5 /* ReactiveObjCBridge.framework */; };
-		2CEA3AF4208E6B7600AC46EE /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE68F208E55F7008F52C5 /* ReactiveSwift.framework */; };
 		2CEA3AF5208E6B7600AC46EE /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE690208E55F7008F52C5 /* Result.framework */; };
 		2CEA3AF6208E6B7600AC46EE /* Sodium.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE68A208E55F7008F52C5 /* Sodium.framework */; };
 		2CEA3AF7208E6B7600AC46EE /* Swish.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE689208E55F7008F52C5 /* Swish.framework */; };
@@ -62,10 +58,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2CEA3AF0208E6B7600AC46EE /* Heimdallr.framework in Frameworks */,
-				2CEA3AF1208E6B7600AC46EE /* ReactiveHeimdallr.framework in Frameworks */,
-				2CEA3AF2208E6B7600AC46EE /* ReactiveObjC.framework in Frameworks */,
-				2CEA3AF3208E6B7600AC46EE /* ReactiveObjCBridge.framework in Frameworks */,
-				2CEA3AF4208E6B7600AC46EE /* ReactiveSwift.framework in Frameworks */,
 				2CEA3AF5208E6B7600AC46EE /* Result.framework in Frameworks */,
 				2CEA3AF6208E6B7600AC46EE /* Sodium.framework in Frameworks */,
 				2CEA3AF7208E6B7600AC46EE /* Swish.framework in Frameworks */,
