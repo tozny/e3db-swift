@@ -9,10 +9,6 @@ import Result
 import Sodium
 import Swish
 
-#if E3DB_LOGGING && DEBUG && canImport(ResponseDetective)
-import ResponseDetective
-#endif
-
 /// A type that contains either a value of type `T` or an `E3dbError`
 public typealias E3dbResult<T> = Result<T, E3dbError>
 
@@ -27,25 +23,15 @@ public final class Client {
     let authedClient: APIClient
     let akCache = NSCache<AkCacheKey, AccessKey>()
 
-    static let session: URLSession = {
-        #if E3DB_LOGGING && DEBUG && canImport(ResponseDetective)
-        let configuration = URLSessionConfiguration.default
-        ResponseDetective.enable(inConfiguration: configuration)
-        return URLSession(configuration: configuration)
-        #else
-        return URLSession.shared
-        #endif
-    }()
-
-    init(config: Config, scheduler: @escaping Scheduler) {
+    init(config: Config, urlSession: URLSession, scheduler: @escaping Scheduler) {
         self.api    = Api(baseUrl: config.baseApiUrl)
         self.config = config
 
-        let httpClient    = HeimdallrHTTPClientURLSession(urlSession: Client.session)
+        let httpClient    = HeimdallrHTTPClientURLSession(urlSession: urlSession)
         let credentials   = OAuthClientCredentials(id: config.apiKeyId, secret: config.apiSecret)
         let tokenStore    = OAuthAccessTokenKeychainStore(service: config.clientId.uuidString)
         let heimdallr     = Heimdallr(tokenURL: api.tokenUrl, credentials: credentials, accessTokenStore: tokenStore, httpClient: httpClient)
-        let authPerformer = AuthedRequestPerformer(authenticator: heimdallr, session: Client.session)
+        let authPerformer = AuthedRequestPerformer(authenticator: heimdallr, session: urlSession)
         self.authedClient = APIClient(requestPerformer: authPerformer, scheduler: scheduler)
     }
 
@@ -55,10 +41,11 @@ public final class Client {
     ///   `Client.register(token:clientName:publicKey:apiUrl:completion:)` to generate
     ///   the required Config values.
     ///
-    /// - Parameter config: A config object with values that have
-    ///   already been registered with the E3db service.
-    public convenience init(config: Config) {
-        self.init(config: config, scheduler: mainQueueScheduler)
+    /// - Parameters:
+    ///   - config: A config object with values that have already been registered with the E3db service.
+    ///   - urlSession: The URLSession to use for the client. Defaults to `URLSession.shared`
+    public convenience init(config: Config, urlSession: URLSession = .shared) {
+        self.init(config: config, urlSession: urlSession, scheduler: mainQueueScheduler)
     }
 }
 
