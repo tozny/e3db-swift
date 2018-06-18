@@ -24,10 +24,5 @@ E3DB provides a familiar JSON-based NoSQL-style API for reading, writing, and qu
     core.dependency 'Heimdallr', '~> 3.6'
   end
 
-  s.subspec 'Logging' do |l|
-    l.dependency 'ResponseDetective', '~> 1.2'
-    l.pod_target_xcconfig = { 'OTHER_SWIFT_FLAGS' => '-DE3DB_LOGGING' }
-  end
-
   s.default_subspec = 'Core'
 end
