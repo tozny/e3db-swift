@@ -81,7 +81,8 @@ class IntegrationTests: XCTestCase, TestUtils {
     func testRegistrationDefault() {
         let test = #function + UUID().uuidString
         asyncTest(test) { (expect) in
-            Client.register(token: TestData.token, clientName: test, apiUrl: TestData.apiUrl) { (result) in
+            let session = IntegrationTests.verboseUrlSession()
+            Client.register(token: TestData.token, clientName: test, urlSession: session, apiUrl: TestData.apiUrl) { (result) in
                 defer { expect.fulfill() }
                 switch result {
                 case .success(let config):
@@ -102,7 +103,8 @@ class IntegrationTests: XCTestCase, TestUtils {
         let keyPair = Client.generateKeyPair()!
         let sigPair = Client.generateSigningKeyPair()!
         asyncTest(test) { (expect) in
-            Client.register(token: TestData.token, clientName: test, publicKey: keyPair.publicKey, signingKey: sigPair.publicKey, apiUrl: TestData.apiUrl) { (result) in
+            let session = IntegrationTests.verboseUrlSession()
+            Client.register(token: TestData.token, clientName: test, publicKey: keyPair.publicKey, signingKey: sigPair.publicKey, urlSession: session, apiUrl: TestData.apiUrl) { (result) in
                 XCTAssertNotNil(result.value)
                 XCTAssertEqual(result.value!.publicKey, keyPair.publicKey)
                 XCTAssertEqual(result.value!.signingKey, sigPair.publicKey)
@@ -116,8 +118,9 @@ class IntegrationTests: XCTestCase, TestUtils {
         let keyPair = Client.generateKeyPair()!
         let sigPair = Client.generateSigningKeyPair()!
         let badKey  = String(keyPair.publicKey.dropFirst(5))
+        let session = IntegrationTests.verboseUrlSession()
         asyncTest(test) { (expect) in
-            Client.register(token: TestData.token, clientName: test, publicKey: badKey, signingKey: sigPair.publicKey, apiUrl: TestData.apiUrl) { (result) in
+            Client.register(token: TestData.token, clientName: test, publicKey: badKey, signingKey: sigPair.publicKey, urlSession: session, apiUrl: TestData.apiUrl) { (result) in
                 defer { expect.fulfill() }
                 guard case .failure(.apiError) = result else {
                     return XCTFail("Should not accept invalid key for registration")
@@ -128,7 +131,7 @@ class IntegrationTests: XCTestCase, TestUtils {
 
         let badSigK = String(sigPair.publicKey + "badness")
         asyncTest(test) { (expect) in
-            Client.register(token: TestData.token, clientName: test, publicKey: keyPair.publicKey, signingKey: badSigK, apiUrl: TestData.apiUrl) { (result) in
+            Client.register(token: TestData.token, clientName: test, publicKey: keyPair.publicKey, signingKey: badSigK, urlSession: session, apiUrl: TestData.apiUrl) { (result) in
                 defer { expect.fulfill() }
                 guard case .failure(.apiError) = result else {
                     return XCTFail("Should not accept invalid key for registration")
@@ -661,6 +664,101 @@ class IntegrationTests: XCTestCase, TestUtils {
             mainClient.revoke(type: #function, readerId: sharedId) { (result) in
                 XCTAssertNil(result.error)
                 expect.fulfill()
+            }
+        }
+    }
+}
+
+class ValidCertIntegrationTests: XCTestCase, TestUtils, PinnedCertificate, URLSessionDelegate {
+
+    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping CertificateCompletion) {
+        validateCertificate(TestData.validCert, for: session, challenge: challenge, completion: completionHandler)
+    }
+
+    func testClientRegistrationWithValidPinnedCert() {
+        let test = #function + UUID().uuidString
+        asyncTest(test) { (expect) in
+
+            // use pinned session delegate
+            let session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
+            Client.register(token: TestData.token, clientName: test, urlSession: session, apiUrl: TestData.apiUrl) { (result) in
+                defer { expect.fulfill() }
+                switch result {
+                case .success(let config):
+                    // also test config save and load
+                    XCTAssert(config.save(profile: test))
+                    let loaded = Config(loadProfile: test)
+                    XCTAssertNotNil(loaded)
+                    XCTAssertEqual(config.clientId, loaded!.clientId)
+                case .failure(let error):
+                    XCTFail("Could not register: \(error.description)")
+                }
+            }
+        }
+    }
+
+    func testClientConfigWithValidPinnedCert() {
+        let (_, config) = clientWithConfig()
+
+        // use pinned session delegate
+        let session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
+        let client  = Client(config: config, urlSession: session)
+
+        let test = #function + UUID().uuidString
+        asyncTest(test) { (expect) in
+            client.getIncomingSharing() { (result) in
+                defer { expect.fulfill() }
+                switch result {
+                case .success(let policies):
+                    XCTAssert(policies.isEmpty, "New client should have empty policies")
+                case .failure(let error):
+                    XCTFail("Failed to get incoming policies: \(error.description)")
+                }
+            }
+        }
+    }
+}
+
+class InvalidCertIntegrationTests: XCTestCase, TestUtils, PinnedCertificate, URLSessionDelegate {
+
+    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping CertificateCompletion) {
+        validateCertificate(TestData.invalidCert, for: session, challenge: challenge, completion: completionHandler)
+    }
+
+    func testClientRegistrationWithInvalidPinnedCert() {
+        let test = #function + UUID().uuidString
+        asyncTest(test) { (expect) in
+            // use pinned session delegate
+            let session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
+            Client.register(token: TestData.token, clientName: test, urlSession: session, apiUrl: TestData.apiUrl) { (result) in
+                defer { expect.fulfill() }
+                switch result {
+                case .success(let config):
+                    XCTFail("Should not be able to register with invalid pinned cert: \(config)")
+                case .failure(_):
+                    XCTAssert(true)
+                }
+            }
+        }
+    }
+
+    func testClientConfigWithInvalidPinnedCert() {
+        let (_, config) = clientWithConfig()
+
+        // use pinned session delegate
+        let session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
+        let client  = Client(config: config, urlSession: session)
+
+        let test = #function + UUID().uuidString
+        asyncTest(test) { (expect) in
+            client.getIncomingSharing() { (result) in
+                defer { expect.fulfill() }
+                switch result {
+                case .success(let policies):
+                    XCTFail("Should not be able to make API call with invalid pinned cert: \(policies)")
+                case .failure(_):
+                    XCTAssert(true)
+                }
             }
         }
     }
