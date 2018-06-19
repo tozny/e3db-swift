@@ -173,7 +173,7 @@ extension Client {
     ///
     /// - Note: This registration variant generates the keypair for the client.
     ///
-    /// - SeeAlso: The `register(token:clientName:publicKey:apiUrl:completion:)` variant
+    /// - SeeAlso: The `register(token:clientName:publicKey:signingKey:urlSession:apiUrl:completion:)` variant
     ///   of this method allows the caller to provide their own public key.
     ///
     /// - Parameters:
@@ -192,7 +192,7 @@ extension Client {
     ///
     /// - Note: This registration variant does not generate the keypair for the client.
     ///
-    /// - SeeAlso: The `register(token:clientName:apiUrl:completion:)` variant
+    /// - SeeAlso: The `register(token:clientName:urlSession:apiUrl:completion:)` variant
     ///   of this method generates the keypair for the caller.
     ///
     /// - Parameters:

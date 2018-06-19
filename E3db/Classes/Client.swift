@@ -37,8 +37,8 @@ public final class Client {
 
     /// Initializer for the E3db client class.
     ///
-    /// - SeeAlso: `Client.register(token:clientName:apiUrl:completion:)` and
-    ///   `Client.register(token:clientName:publicKey:apiUrl:completion:)` to generate
+    /// - SeeAlso: `Client.register(token:clientName:urlSession:apiUrl:completion:)` and
+    ///   `Client.register(token:clientName:publicKey:signingKey:urlSession:apiUrl:completion:)` to generate
     ///   the required Config values.
     ///
     /// - Parameters:
@@ -71,7 +71,7 @@ extension Client {
     ///   generated and stored in the `Config` object returned by the
     ///   `Client.register(token:clientName:apiUrl:completion:)` method.
     ///
-    /// - SeeAlso: `Client.register(token:clientName:publicKey:apiUrl:completion:)`
+    /// - SeeAlso: `Client.register(token:clientName:publicKey:signingKey:urlSession:apiUrl:completion:)`
     ///   for supplying your own key for registration.
     ///
     /// - Returns: A key pair containing Base64URL encoded Curve25519 public and private keys.
@@ -87,7 +87,7 @@ extension Client {
     ///
     /// - Note: This method is not required for library use. A key pair is
     ///   generated and stored in the `Config` object returned by the
-    ///   `Client.register(token:clientName:apiUrl:completion:)` method.
+    ///   `Client.register(token:clientName:urlSession:apiUrl:completion:)` method.
     ///
     /// - Returns: A key pair containing Base64URL encoded Ed25519 public and private keys.
     public static func generateSigningKeyPair() -> KeyPair? {

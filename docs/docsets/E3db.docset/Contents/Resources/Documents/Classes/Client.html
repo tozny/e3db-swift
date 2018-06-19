@@ -158,9 +158,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4E3db6ClientCAcA6ConfigV6config_tcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(config:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4E3db6ClientCAcA6ConfigV6config_tcfc">init(config:)</a>
+                    <a name="/s:4E3db6ClientCAcA6ConfigV6config_So10URLSessionC10urlSessiontcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(config:urlSession:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientCAcA6ConfigV6config_So10URLSessionC10urlSessiontcfc">init(config:urlSession:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -171,8 +171,8 @@
                         <p>Initializer for the E3db client class.</p>
 <div class="aside aside-see-also">
     <p class="aside-title">See also</p>
-    <p><code><a href="../Classes/Client.html#/s:4E3db6ClientC8registerySS5token_SS10clientNameSSSg6apiUrly6ResultAIOyAA6ConfigVAA0A5ErrorOGc10completiontFZ">Client.register(token:clientName:apiUrl:completion:)</a></code> and
-<code>Client.register(token:clientName:publicKey:apiUrl:completion:)</code> to generate
+    <p><code><a href="../Classes/Client.html#/s:4E3db6ClientC8registerySS5token_SS10clientNameSo10URLSessionC10urlSessionSSSg6apiUrly6ResultALOyAA6ConfigVAA0A5ErrorOGc10completiontFZ">Client.register(token:clientName:urlSession:apiUrl:completion:)</a></code> and
+<code><a href="../Classes/Client.html#/s:4E3db6ClientC8registerySS5token_SS10clientNameSS9publicKeySS07signingH0So10URLSessionC10urlSessionSSSg6apiUrly6ResultANOyAA0B11CredentialsVAA0A5ErrorOGc10completiontFZ">Client.register(token:clientName:publicKey:signingKey:urlSession:apiUrl:completion:)</a></code> to generate
 the required Config values.</p>
 
 </div>
@@ -182,7 +182,7 @@ the required Config values.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="n">convenience</span> <span class="nf">init</span><span class="p">(</span><span class="nv">config</span><span class="p">:</span> <span class="kt"><a href="../Structs/Config.html">Config</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="n">convenience</span> <span class="nf">init</span><span class="p">(</span><span class="nv">config</span><span class="p">:</span> <span class="kt"><a href="../Structs/Config.html">Config</a></span><span class="p">,</span> <span class="nv">urlSession</span><span class="p">:</span> <span class="kt">URLSession</span> <span class="o">=</span> <span class="o">.</span><span class="n">shared</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -198,8 +198,19 @@ the required Config values.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>A config object with values that have
-already been registered with the E3db service.</p>
+                                  <p>A config object with values that have already been registered with the E3db service.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>urlSession</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The URLSession to use for the client. Defaults to <code>URLSession.shared</code></p>
                                 </div>
                               </td>
                             </tr>
@@ -388,12 +399,12 @@ been created beforehand, and shared with this client.</p>
     <p class="aside-title">Note</p>
     <p>This method is not required for library use. A key pair is
 generated and stored in the <code><a href="../Structs/Config.html">Config</a></code> object returned by the
-<code><a href="../Classes/Client.html#/s:4E3db6ClientC8registerySS5token_SS10clientNameSSSg6apiUrly6ResultAIOyAA6ConfigVAA0A5ErrorOGc10completiontFZ">Client.register(token:clientName:apiUrl:completion:)</a></code> method.</p>
+<code>Client.register(token:clientName:apiUrl:completion:)</code> method.</p>
 
 </div>
 <div class="aside aside-see-also">
     <p class="aside-title">See also</p>
-    <p><code>Client.register(token:clientName:publicKey:apiUrl:completion:)</code>
+    <p><code><a href="../Classes/Client.html#/s:4E3db6ClientC8registerySS5token_SS10clientNameSS9publicKeySS07signingH0So10URLSessionC10urlSessionSSSg6apiUrly6ResultANOyAA0B11CredentialsVAA0A5ErrorOGc10completiontFZ">Client.register(token:clientName:publicKey:signingKey:urlSession:apiUrl:completion:)</a></code>
 for supplying your own key for registration.</p>
 
 </div>
@@ -432,7 +443,7 @@ for supplying your own key for registration.</p>
     <p class="aside-title">Note</p>
     <p>This method is not required for library use. A key pair is
 generated and stored in the <code><a href="../Structs/Config.html">Config</a></code> object returned by the
-<code><a href="../Classes/Client.html#/s:4E3db6ClientC8registerySS5token_SS10clientNameSSSg6apiUrly6ResultAIOyAA6ConfigVAA0A5ErrorOGc10completiontFZ">Client.register(token:clientName:apiUrl:completion:)</a></code> method.</p>
+<code><a href="../Classes/Client.html#/s:4E3db6ClientC8registerySS5token_SS10clientNameSo10URLSessionC10urlSessionSSSg6apiUrly6ResultALOyAA6ConfigVAA0A5ErrorOGc10completiontFZ">Client.register(token:clientName:urlSession:apiUrl:completion:)</a></code> method.</p>
 
 </div>
 
@@ -1146,9 +1157,9 @@ the existing data and metadata values.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4E3db6ClientC8registerySS5token_SS10clientNameSSSg6apiUrly6ResultAIOyAA6ConfigVAA0A5ErrorOGc10completiontFZ"></a>
-                    <a name="//apple_ref/swift/Method/register(token:clientName:apiUrl:completion:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4E3db6ClientC8registerySS5token_SS10clientNameSSSg6apiUrly6ResultAIOyAA6ConfigVAA0A5ErrorOGc10completiontFZ">register(token:clientName:apiUrl:completion:)</a>
+                    <a name="/s:4E3db6ClientC8registerySS5token_SS10clientNameSo10URLSessionC10urlSessionSSSg6apiUrly6ResultALOyAA6ConfigVAA0A5ErrorOGc10completiontFZ"></a>
+                    <a name="//apple_ref/swift/Method/register(token:clientName:urlSession:apiUrl:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC8registerySS5token_SS10clientNameSo10URLSessionC10urlSessionSSSg6apiUrly6ResultALOyAA6ConfigVAA0A5ErrorOGc10completiontFZ">register(token:clientName:urlSession:apiUrl:completion:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1166,7 +1177,7 @@ Tozny&rsquo;s <a href="https://console.tozny.com">InnoVault Console</a> to regis
 </div>
 <div class="aside aside-see-also">
     <p class="aside-title">See also</p>
-    <p>The <code>register(token:clientName:publicKey:apiUrl:completion:)</code> variant
+    <p>The <code><a href="../Classes/Client.html#/s:4E3db6ClientC8registerySS5token_SS10clientNameSS9publicKeySS07signingH0So10URLSessionC10urlSessionSSSg6apiUrly6ResultANOyAA0B11CredentialsVAA0A5ErrorOGc10completiontFZ">register(token:clientName:publicKey:signingKey:urlSession:apiUrl:completion:)</a></code> variant
 of this method allows the caller to provide their own public key.</p>
 
 </div>
@@ -1176,7 +1187,7 @@ of this method allows the caller to provide their own public key.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">register</span><span class="p">(</span><span class="nv">token</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">clientName</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">apiUrl</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/Config.html">Config</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">register</span><span class="p">(</span><span class="nv">token</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">clientName</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">urlSession</span><span class="p">:</span> <span class="kt">URLSession</span> <span class="o">=</span> <span class="o">.</span><span class="n">shared</span><span class="p">,</span> <span class="nv">apiUrl</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/Config.html">Config</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1205,6 +1216,18 @@ of this method allows the caller to provide their own public key.</p>
                               <td>
                                 <div>
                                   <p>A name to give this client for registration</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>urlSession</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The URLSession to use for the client. Defaults to <code>URLSession.shared</code></p>
                                 </div>
                               </td>
                             </tr>
@@ -1241,9 +1264,9 @@ of this method allows the caller to provide their own public key.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4E3db6ClientC8registerySS5token_SS10clientNameSS9publicKeySS07signingH0SSSg6apiUrly6ResultAKOyAA0B11CredentialsVAA0A5ErrorOGc10completiontFZ"></a>
-                    <a name="//apple_ref/swift/Method/register(token:clientName:publicKey:signingKey:apiUrl:completion:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4E3db6ClientC8registerySS5token_SS10clientNameSS9publicKeySS07signingH0SSSg6apiUrly6ResultAKOyAA0B11CredentialsVAA0A5ErrorOGc10completiontFZ">register(token:clientName:publicKey:signingKey:apiUrl:completion:)</a>
+                    <a name="/s:4E3db6ClientC8registerySS5token_SS10clientNameSS9publicKeySS07signingH0So10URLSessionC10urlSessionSSSg6apiUrly6ResultANOyAA0B11CredentialsVAA0A5ErrorOGc10completiontFZ"></a>
+                    <a name="//apple_ref/swift/Method/register(token:clientName:publicKey:signingKey:urlSession:apiUrl:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC8registerySS5token_SS10clientNameSS9publicKeySS07signingH0So10URLSessionC10urlSessionSSSg6apiUrly6ResultANOyAA0B11CredentialsVAA0A5ErrorOGc10completiontFZ">register(token:clientName:publicKey:signingKey:urlSession:apiUrl:completion:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1261,7 +1284,7 @@ Tozny&rsquo;s <a href="https://console.tozny.com">InnoVault Console</a> to regis
 </div>
 <div class="aside aside-see-also">
     <p class="aside-title">See also</p>
-    <p>The <code><a href="../Classes/Client.html#/s:4E3db6ClientC8registerySS5token_SS10clientNameSSSg6apiUrly6ResultAIOyAA6ConfigVAA0A5ErrorOGc10completiontFZ">register(token:clientName:apiUrl:completion:)</a></code> variant
+    <p>The <code><a href="../Classes/Client.html#/s:4E3db6ClientC8registerySS5token_SS10clientNameSo10URLSessionC10urlSessionSSSg6apiUrly6ResultALOyAA6ConfigVAA0A5ErrorOGc10completiontFZ">register(token:clientName:urlSession:apiUrl:completion:)</a></code> variant
 of this method generates the keypair for the caller.</p>
 
 </div>
@@ -1271,7 +1294,7 @@ of this method generates the keypair for the caller.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">register</span><span class="p">(</span><span class="nv">token</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">clientName</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">publicKey</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">signingKey</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">apiUrl</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/ClientCredentials.html">ClientCredentials</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">register</span><span class="p">(</span><span class="nv">token</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">clientName</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">publicKey</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">signingKey</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">urlSession</span><span class="p">:</span> <span class="kt">URLSession</span> <span class="o">=</span> <span class="o">.</span><span class="n">shared</span><span class="p">,</span> <span class="nv">apiUrl</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/ClientCredentials.html">ClientCredentials</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1324,6 +1347,18 @@ of this method generates the keypair for the caller.</p>
                               <td>
                                 <div>
                                   <p>The public key to register with the E3db service and use for signing operations</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>urlSession</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The URLSession to use for the client. Defaults to <code>URLSession.shared</code></p>
                                 </div>
                               </td>
                             </tr>
