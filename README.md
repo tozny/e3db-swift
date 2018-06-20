@@ -365,3 +365,47 @@ guard try e3db.verify(signed: signed, pubSigKey: config.publicSigKey)) else {
 }
 // Document verified!
 ```
+
+### Certificate Pinning
+
+If desired, E3DB Clients can be provided with a `URLSession` instance. This can
+allow custom configuration for networked calls, including pinning TLS sessions
+to trusted certificate(s).
+
+Simply supply a pre-configured `URLSession` to either the `Client.register` or
+the `Client.init` methods.
+
+```swift
+let config  = // load config from secure storage
+
+// set custom delegate
+let session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
+let e3db    = Client(config: config, urlSession: session)
+```
+
+The following shows an example of how to use the `URLSessionDelegate` callback
+to restrict network activity to an intermediate certificate in a cert chain.
+
+```swift
+func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping CertificateCompletion) {
+    // Adapted from OWASP https://www.owasp.org/index.php/Certificate_and_Public_Key_Pinning#iOS
+    let cancel = URLSession.AuthChallengeDisposition.cancelAuthenticationChallenge
+
+    guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
+          let trust = challenge.protectionSpace.serverTrust,
+          SecTrustEvaluate(trust, nil) == errSecSuccess,
+          let serverCert = SecTrustGetCertificateAtIndex(trust, 1) else { // checks intermediate cert (index 1)
+            return completion(cancel, nil)
+    }
+
+    let pinnedCertData = loadTrustedCertData() // load cert (e.g. from file)
+    let serverCertData = SecCertificateCopyData(serverCert) as Data
+
+    guard pinnedCertData == serverCertData else {
+        return completion(cancel, nil)
+    }
+
+    // pinning succeeded
+    completion(.useCredential, URLCredential(trust: trust))
+}
+```
