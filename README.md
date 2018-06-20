@@ -395,17 +395,17 @@ func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationCh
           let trust = challenge.protectionSpace.serverTrust,
           SecTrustEvaluate(trust, nil) == errSecSuccess,
           let serverCert = SecTrustGetCertificateAtIndex(trust, 1) else { // checks intermediate cert (index 1)
-            return completion(cancel, nil)
+            return completionHandler(cancel, nil)
     }
 
     let pinnedCertData = loadTrustedCertData() // load cert (e.g. from file)
     let serverCertData = SecCertificateCopyData(serverCert) as Data
 
     guard pinnedCertData == serverCertData else {
-        return completion(cancel, nil)
+        return completionHandler(cancel, nil)
     }
 
     // pinning succeeded
-    completion(.useCredential, URLCredential(trust: trust))
+    completionHandler(.useCredential, URLCredential(trust: trust))
 }
 ```
