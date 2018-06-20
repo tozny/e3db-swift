@@ -387,7 +387,7 @@ The following shows an example of how to use the `URLSessionDelegate` callback
 to restrict network activity to an intermediate certificate in a cert chain.
 
 ```swift
-func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping CertificateCompletion) {
+func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
     // Adapted from OWASP https://www.owasp.org/index.php/Certificate_and_Public_Key_Pinning#iOS
     let cancel = URLSession.AuthChallengeDisposition.cancelAuthenticationChallenge
 
