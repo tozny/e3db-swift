@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'E3db'
-  s.version          = '1.4.1'
+  s.version          = '1.4.2'
   s.summary          = 'Super Easy End-to-End Encryption'
 
   s.description      = <<-DESC
