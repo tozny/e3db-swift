@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C13341720F1412F0000759D /* blns.json in Resources */ = {isa = PBXBuildFile; fileRef = 2C13341620F1412F0000759D /* blns.json */; };
+		2C13341B20F40D500000759D /* blns-swift.json in Resources */ = {isa = PBXBuildFile; fileRef = 2C13341A20F40D500000759D /* blns-swift.json */; };
+		2C13341D20F535220000759D /* blns-node.json in Resources */ = {isa = PBXBuildFile; fileRef = 2C13341C20F535210000759D /* blns-node.json */; };
+		2C13341F20F5357D0000759D /* blns-java.json in Resources */ = {isa = PBXBuildFile; fileRef = 2C13341E20F5357D0000759D /* blns-java.json */; };
 		2C5AE665208E54F4008F52C5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5AE65D208E54F4008F52C5 /* ViewController.swift */; };
 		2C5AE666208E54F4008F52C5 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C5AE65E208E54F4008F52C5 /* LaunchScreen.xib */; };
 		2C5AE667208E54F4008F52C5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C5AE660208E54F4008F52C5 /* Main.storyboard */; };
@@ -38,6 +42,10 @@
 /* Begin PBXFileReference section */
 		1AF9C0CA897DE439F2391934 /* Pods_E3db_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_E3db_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		261B9B0E0E7CDF9808E9C883 /* Pods_E3db_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_E3db_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2C13341620F1412F0000759D /* blns.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = blns.json; sourceTree = "<group>"; };
+		2C13341A20F40D500000759D /* blns-swift.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "blns-swift.json"; sourceTree = "<group>"; };
+		2C13341C20F535210000759D /* blns-node.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "blns-node.json"; sourceTree = "<group>"; };
+		2C13341E20F5357D0000759D /* blns-java.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "blns-java.json"; sourceTree = "<group>"; };
 		2C5AE65D208E54F4008F52C5 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		2C5AE65F208E54F4008F52C5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		2C5AE661208E54F4008F52C5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -129,6 +137,10 @@
 				2CAF7AED2085B1DF0061397F /* IntegrationTests.swift */,
 				2CAF7AEA2085B1DF0061397F /* PropertyTests.swift */,
 				2CAF7AEE2085B1E00061397F /* TestUtils.swift */,
+				2C13341A20F40D500000759D /* blns-swift.json */,
+				2C13341E20F5357D0000759D /* blns-java.json */,
+				2C13341C20F535210000759D /* blns-node.json */,
+				2C13341620F1412F0000759D /* blns.json */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
 			path = Tests;
@@ -275,6 +287,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C13341F20F5357D0000759D /* blns-java.json in Resources */,
+				2C13341B20F40D500000759D /* blns-swift.json in Resources */,
+				2C13341D20F535220000759D /* blns-node.json in Resources */,
+				2C13341720F1412F0000759D /* blns.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

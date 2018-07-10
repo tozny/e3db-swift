@@ -31,6 +31,9 @@ protocol TestUtils {
     func writeTestRecord(_ e3db: Client, _ contentType: String) -> Record
     func deleteRecord(_ record: Record, e3db: Client)
     func deleteAllRecords(_ e3db: Client)
+    func serializeBlns() -> [[String: String]]
+    func loadBlnsSerializationResults(filename: String) -> [[String: String]]
+    func writeBlnsTestsToFile(tests: [[String: String]])
     static func verboseUrlSession() -> URLSession
     static func createClientSync() -> Client
     static func createKeySync(client: Client, recordType: String) -> EAKInfo
@@ -97,6 +100,66 @@ extension TestUtils where Self: XCTestCase {
         }
         records.forEach { (record) in
             deleteRecord(record, e3db: e3db)
+        }
+    }
+
+    func serializeBlns() -> [[String: String]] {
+        guard let jsonUrl = Bundle(for: type(of: self)).url(forResource: "blns", withExtension: "json") else {
+            XCTFail("Could not load blns.json")
+            return []
+        }
+
+        do {
+            let jsonData = try Data(contentsOf: jsonUrl)
+            let strings  = try JSONDecoder().decode([String].self, from: jsonData)
+
+            let tests = strings.enumerated().map { pair -> [String : String] in
+                let elementIdx = "\(pair.offset)"
+                let recordData = RecordData(cleartext: [elementIdx: pair.element])
+                let serialized = recordData.serialized()
+                let b64Encoded = Data(serialized.utf8).base64EncodedString()
+                return [
+                    "index": elementIdx,
+                    "element": pair.element,
+                    "serialized": serialized,
+                    "b64Encoded": b64Encoded
+                ]
+            }
+            return tests
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
+        return []
+    }
+
+    func loadBlnsSerializationResults(filename: String) -> [[String: String]] {
+        guard let jsonUrl = Bundle(for: type(of: self)).url(forResource: filename, withExtension: "json") else {
+            XCTFail("Could not load \(filename).json")
+            return []
+        }
+
+        do {
+            let data = try Data(contentsOf: jsonUrl)
+            return try JSONDecoder().decode([[String: String]].self, from: data)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
+        return []
+    }
+
+    func writeBlnsTestsToFile(tests: [[String: String]]) {
+        guard let outputUrl = Bundle(for: type(of: self)).url(forResource: "blns-swift", withExtension: "json") else {
+            return XCTFail("Could not load blns-swift.json")
+        }
+
+        let jsonEncoder = JSONEncoder()
+        jsonEncoder.outputFormatting = .prettyPrinted
+        do {
+            let encodedTests = try jsonEncoder.encode(tests)
+            try encodedTests.write(to: outputUrl)
+            print("BLNS tests serialized to \(outputUrl.absoluteString)")
+        } catch {
+            XCTFail(error.localizedDescription)
         }
     }
 

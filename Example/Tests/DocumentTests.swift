@@ -327,4 +327,34 @@ class DocumentTests: XCTestCase, TestUtils {
             XCTFail(error.localizedDescription)
         }
     }
+
+    func testBlnsSerializationSwiftMatchesJavaScript() {
+        let swiftTests = serializeBlns()
+        let nodeTests  = loadBlnsSerializationResults(filename: "blns-node")
+
+        // known indexes for tests that fail based on known issues
+        // 96 and 169 have hidden-whitespace related errors
+        let knownFailures = ["96", "169"]
+        let failedTests = zip(swiftTests, nodeTests)
+            .filter { $0.0["serialized"] != $0.1["serialized"] }
+            .filter { !knownFailures.contains($0.0["index"]!) }
+
+        XCTAssert(failedTests.isEmpty)
+    }
+
+    func testBlnsSerializationSwiftMatchesJava() {
+        let swiftTests = serializeBlns()
+        let javaTests  = loadBlnsSerializationResults(filename: "blns-java")
+
+        // known indexes for tests that fail based on known issues
+        // 96 and 169 have hidden-whitespace related errors
+        // 92, 94, 503, 504 have unicode case-sensitivity related errors
+        let knownFailures = ["92", "94", "96", "169", "503", "504"]
+        let failedTests = zip(swiftTests, javaTests)
+            .filter { $0.0["serialized"] != $0.1["serialized"] }
+            .filter { !knownFailures.contains($0.0["index"]!) }
+
+        XCTAssert(failedTests.isEmpty)
+    }
+
 }
