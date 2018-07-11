@@ -134,8 +134,25 @@ extension NSNumber: Signable {
 }
 
 extension String: Signable {
+    /// Encodes the string using the JSONEncoder, with modifications to match other SDKs
+    /// (e.g. Java's Jackson Object Mapper, and JavaScript's JSON.stringify). Matching other
+    /// E3db SDK implementations is required for document signature verification.
+    ///
+    /// The Swift JSONEncoder will escape a forward slash, as shown here:
+    /// https://github.com/apple/swift-corelibs-foundation/blob/d23f4d7a4151d959ac185eca1c0f14de2c8dc73a/Foundation/JSONSerialization.swift#L407
+    /// so this function will unescape it, again to match implementations in other languages.
+    ///
+    /// - Returns: An encoded string, matching other E3db SDK implementations, for signature verification.
     public func serialized() -> String {
-        return "\"\(self)\""
+        // Encodes the string as part of an array, then removes the first and last bytes
+        // (representing the opening and closing brackets). This will provide the proper
+        // escaping for most string values, but it also escapes a forward slash, so we
+        // replace any occurrences of those.
+        let array   = try? kStaticJsonEncoder.encode([self])
+        let string  = array?.advanced(by: 1).dropLast(1)
+        let value   = string.flatMap { String(bytes: $0, encoding: .utf8) }
+        let escaped = value?.replacingOccurrences(of: "\\/", with: "/")
+        return escaped ?? ""
     }
 }
 
