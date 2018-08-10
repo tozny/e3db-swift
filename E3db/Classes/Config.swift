@@ -193,7 +193,6 @@ public protocol ConfigProtocol {
     var privateSigKey: String { get }
 
     init?(loadProfile: String?, keychainAccess: ConfigAccessControl.Keychain)
-    func save(profile: String?, keychainAccess: ConfigAccessControl.Keychain) -> Bool
 }
 
 extension Config: ConfigProtocol {

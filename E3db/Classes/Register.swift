@@ -90,12 +90,7 @@ public struct ClientCredentials: Decodable {
 }
 
 // MARK: Registration
-public protocol ClientProtocol {
-    init(config: ConfigProtocol, urlSession: URLSession)
-    static func register(token: String, clientName: String, urlSession: URLSession, apiUrl: String?, completion: @escaping E3dbCompletion<Config>)
-}
-
-extension Client: ClientProtocol {
+extension Client {
     private struct RegistrationRequest: E3dbRequest, Encodable {
         typealias ResponseObject = ClientCredentials
         let api: Api

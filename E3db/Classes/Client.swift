@@ -9,6 +9,10 @@ import Result
 import Sodium
 import Swish
 
+public protocol ClientProtocol {
+    init(config: ConfigProtocol, urlSession: URLSession)
+}
+
 /// A type that contains either a value of type `T` or an `E3dbError`
 public typealias E3dbResult<T> = Result<T, E3dbError>
 
@@ -17,7 +21,7 @@ public typealias E3dbResult<T> = Result<T, E3dbError>
 public typealias E3dbCompletion<T> = (E3dbResult<T>) -> Void
 
 /// Main E3db class to handle data operations.
-public final class Client {
+public final class Client: ClientProtocol {
     let api: Api
     let config: ConfigProtocol
     let authedClient: APIClient
