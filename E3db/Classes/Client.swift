@@ -9,6 +9,10 @@ import Result
 import Sodium
 import Swish
 
+public protocol ClientProtocol {
+    init(config: ConfigProtocol, urlSession: URLSession)
+}
+
 /// A type that contains either a value of type `T` or an `E3dbError`
 public typealias E3dbResult<T> = Result<T, E3dbError>
 
@@ -17,13 +21,13 @@ public typealias E3dbResult<T> = Result<T, E3dbError>
 public typealias E3dbCompletion<T> = (E3dbResult<T>) -> Void
 
 /// Main E3db class to handle data operations.
-public final class Client {
+public final class Client: ClientProtocol {
     let api: Api
-    let config: Config
+    let config: ConfigProtocol
     let authedClient: APIClient
     let akCache = NSCache<AkCacheKey, AccessKey>()
 
-    init(config: Config, urlSession: URLSession, scheduler: @escaping Scheduler) {
+    init(config: ConfigProtocol, urlSession: URLSession, scheduler: @escaping Scheduler) {
         self.api    = Api(baseUrl: config.baseApiUrl)
         self.config = config
 
@@ -44,7 +48,7 @@ public final class Client {
     /// - Parameters:
     ///   - config: A config object with values that have already been registered with the E3db service.
     ///   - urlSession: The URLSession to use for the client. Defaults to `URLSession.shared`
-    public convenience init(config: Config, urlSession: URLSession = .shared) {
+    public convenience init(config: ConfigProtocol, urlSession: URLSession = .shared) {
         self.init(config: config, urlSession: urlSession, scheduler: mainQueueScheduler)
     }
 }

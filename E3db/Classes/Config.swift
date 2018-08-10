@@ -181,8 +181,21 @@ public enum ConfigAccessControl {
     }
 }
 
-extension Config {
+public protocol ConfigProtocol {
+    var clientName: String { get }
+    var clientId: UUID { get }
+    var apiKeyId: String { get }
+    var apiSecret: String { get }
+    var publicKey: String { get }
+    var privateKey: String { get }
+    var baseApiUrl: URL { get }
+    var publicSigKey: String { get }
+    var privateSigKey: String { get }
 
+    init?(loadProfile: String?, keychainAccess: ConfigAccessControl.Keychain)
+}
+
+extension Config: ConfigProtocol {
     /// Securely load a profile using the device's Secure Enclave if available.
     ///
     /// - Important: Accessing this Keychain data will require the user to confirm their presence via

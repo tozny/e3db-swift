@@ -90,7 +90,6 @@ public struct ClientCredentials: Decodable {
 }
 
 // MARK: Registration
-
 extension Client {
     private struct RegistrationRequest: E3dbRequest, Encodable {
         typealias ResponseObject = ClientCredentials
