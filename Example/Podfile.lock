@@ -1,7 +1,7 @@
 PODS:
-  - E3db (1.4.0):
-    - E3db/Core (= 1.4.0)
-  - E3db/Core (1.4.0):
+  - E3db (2.0.0):
+    - E3db/Core (= 2.0.0)
+  - E3db/Core (2.0.0):
     - Heimdallr (~> 3.6)
     - Sodium (~> 0.6)
     - Swish (~> 3.0)
@@ -24,7 +24,7 @@ DEPENDENCIES:
   - SwiftCheck (~> 0.10)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  https://github.com/cocoapods/specs.git:
     - Heimdallr
     - ResponseDetective
     - Result
@@ -38,7 +38,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  E3db: c7f1c885bdc810b05a9115782d925a0b7c73d3c0
+  E3db: aff1a842ae9b9c77c9438898305cbe22ad84abc5
   Heimdallr: d2a8b1dc3ecc7ad249c9ffd20c990e2248fcd599
   ResponseDetective: 710b1b41903382460592a75a480440661bcadfa6
   Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
@@ -49,4 +49,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 64794b8cc17b0d0d47676843076f1d7caca89541
 
-COCOAPODS: 1.5.0
+COCOAPODS: 1.5.3
