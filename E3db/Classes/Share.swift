@@ -69,16 +69,23 @@ public struct IncomingSharingPolicy: Decodable {
     }
 }
 
+/// A type to describe an existing policy for clients that
+/// are authorized to perform sharing and revoking operations
 public struct AuthorizerPolicy: Decodable {
 
+    /// The identifier of the client that can share on the writer's behalf
     public let authorizerId: UUID
 
+    /// The identifier of the writer producing the records
     public let writerId: UUID
 
+    /// An identifier for the user of the record
     public let userId: UUID
 
+    /// The kind of records that are being shared
     public let recordType: String
 
+    /// The identifier for the client that performed the authorization
     public let authorizedBy: UUID
 
     enum CodingKeys: String, CodingKey {
@@ -157,6 +164,13 @@ extension Client {
         share(writerId: clientId, initialReaderId: clientId, destinationReaderId: readerId, type: type, completion: completion)
     }
 
+    /// Share records written by the given writer with the given reader
+    ///
+    /// - Parameters:
+    ///   - writerId: The identifier of the client that produced the records
+    ///   - type: The kind of records to allow a user to view and decrypt
+    ///   - readerId: The identifier of the user to allow access
+    ///   - completion: A handler to call when this operation completes
     public func share(onBehalfOf writerId: UUID, type: String, readerId: UUID, completion: @escaping E3dbCompletion<Void>) {
         share(writerId: writerId, initialReaderId: config.clientId, destinationReaderId: readerId, type: type, completion: completion)
     }
@@ -171,6 +185,13 @@ extension Client {
         revoke(writerId: config.clientId, readerId: readerId, type: type, completion: completion)
     }
 
+    /// Remove permission for the given reader to read records produced by the given writer
+    ///
+    /// - Parameters:
+    ///   - writerId: The identifier of the client that produced the records
+    ///   - type: The kind of records to remove access
+    ///   - readerId: The identifier of the user to remove access
+    ///   - completion: A handler to call when this operation completes
     public func revoke(onBehalfOf writerId: UUID, type: String, readerId: UUID, completion: @escaping E3dbCompletion<Void>) {
         revoke(writerId: writerId, readerId: readerId, type: type, completion: completion)
     }
@@ -237,12 +258,21 @@ extension Client {
         authedClient.performDefault(req, completion: completion)
     }
 
-
+    /// Request the list of policies allowing other clients to perform share and revoke operations
+    /// on behalf of this client.
+    ///
+    /// - Parameter completion: A handler to call when this operation completes to provide
+    ///   the list of `AuthorizerPolicy` objects
     public func getAuthorizers(completion: @escaping E3dbCompletion<[AuthorizerPolicy]>) {
         let req = GetAuthorizersRequest(api: api)
         authedClient.performDefault(req, completion: completion)
     }
 
+    /// Request the list of policies allowing this client to perform share and revoke operations
+    /// on behalf of other clients.
+    ///
+    /// - Parameter completion: A handler to call when this operation completes to provide
+    ///   the list of `AuthorizerPolicy` objects
     public func getAuthorizedBy(completion: @escaping E3dbCompletion<[AuthorizerPolicy]>) {
         let req = GetAuthorizedByRequest(api: api)
         authedClient.performDefault(req, completion: completion)
@@ -268,6 +298,15 @@ extension Client {
         }
     }
 
+    /// Add an authorizer for records written by this client
+    ///
+    /// Calling this method will grant permission for the "authorizer" client to allow _other_
+    /// clients to read records of the given type, written by this client.
+    ///
+    /// - Parameters:
+    ///   - authorizerId: The identifier of the client that can share on the writer's behalf
+    ///   - type: The kind of records being shared
+    ///   - completion: A handler to call when this operation completes
     public func add(authorizerId: UUID, type: String, completion: @escaping E3dbCompletion<Void>) {
         let clientId = config.clientId
         getAccessKey(writerId: clientId, userId: clientId, readerId: clientId, recordType: type) { result in
@@ -280,11 +319,28 @@ extension Client {
         }
     }
 
+    /// Remove an authorizer for records of a given type written by this client
+    ///
+    /// This method removes the permission granted by `add(authorizerId:type:completion:)` for
+    /// the provided record type.
+    ///
+    /// - Parameters:
+    ///   - authorizerId: The identifier of the client that can share on the writer's behalf
+    ///   - type: The kind of records being shared
+    ///   - completion: A handler to call when this operation completes
     public func remove(authorizerId: UUID, type: String, completion: @escaping E3dbCompletion<Void>) {
         let req = ShareRequest(api: api, policy: .denyAuthorizer, clientId: config.clientId, readerId: authorizerId, contentType: type)
         authedClient.performDefault(req, completion: completion)
     }
 
+    /// Remove an authorizer for all records written by this client
+    ///
+    /// This method removes the permission granted by `add(authorizerId:type:completion:)` for
+    /// all record types.
+    ///
+    /// - Parameters:
+    ///   - authorizerId: The identifier of the client that can share on the writer's behalf
+    ///   - completion: A handler to call when this operation completes
     public func remove(authorizerId: UUID, completion: @escaping E3dbCompletion<Void>) {
         let req = DeletePolicyRequest(api: api, clientId: config.clientId, readerId: authorizerId)
         authedClient.performDefault(req, completion: completion)
