@@ -10,9 +10,11 @@ typealias RawAccessKey       = SecretBox.Key
 typealias EncryptedAccessKey = String
 
 struct Crypto {
-    typealias SecretBoxCipherNonce = (authenticatedCipherText: Data, nonce: SecretBox.Nonce)
-    typealias BoxCipherNonce       = (authenticatedCipherText: Data, nonce: Box.Nonce)
-    fileprivate static let sodium  = Sodium()
+    typealias SecretBoxCipherNonce   = (authenticatedCipherText: Data, nonce: SecretBox.Nonce)
+    typealias BoxCipherNonce         = (authenticatedCipherText: Data, nonce: Box.Nonce)
+    fileprivate static let sodium    = Sodium()
+    fileprivate static let version   = "3"
+    fileprivate static let blockSize = 65_536
 }
 
 // MARK: Base64url Encoding / Decoding
@@ -163,4 +165,139 @@ extension Crypto {
             .map { sodium.sign.verify(message: message, publicKey: verifyingKey, signature: $0) }
     }
 
+}
+
+// MARK: Files Crypto
+
+extension Crypto {
+
+    private typealias Stream = SecretStream.XChaCha20Poly1305
+
+    private static func initializeStreams(src: URL, dst: URL) throws -> (InputStream, OutputStream) {
+        guard let inputStream = InputStream(url: src),
+              let outputStream = OutputStream(url: dst, append: false) else {
+            throw E3dbError.cryptoError("Failed to open files")
+        }
+        return (inputStream, outputStream)
+    }
+
+    // Header: v || '.' || edk || '.' ||  edkN || '.'
+    private static func createHeader(dk: Stream.Key, ak: RawAccessKey) throws -> String {
+        let (edk, edkN) = try encrypt(value: dk, key: ak)
+        let b64Encoded  = try b64Join(edk, edkN)
+        return [Crypto.version, b64Encoded]
+            .map { $0 + "." }
+            .joined()
+    }
+
+    static func encrypt(fileAt src: URL, ak: RawAccessKey) throws -> URL {
+        guard let dk = sodium.secretStream.xchacha20poly1305.key(),
+              let stream = sodium.secretStream.xchacha20poly1305.initPush(secretKey: dk) else {
+            throw E3dbError.cryptoError("Failed to initialize stream")
+        }
+        let dst = FileManager.tempBinFile()
+        let (input, output) = try initializeStreams(src: src, dst: dst)
+
+        // manage resources
+        input.open()
+        output.open()
+        defer {
+            input.close()
+            output.close()
+        }
+
+        // write headers
+        let e3dbHeader   = try createHeader(dk: dk, ak: ak)
+        let headerData   = Data(e3dbHeader.utf8)
+        let streamHeader = stream.header()
+        guard output.hasSpaceAvailable, output.write(data: headerData) == headerData.count,
+              output.hasSpaceAvailable, output.write(data: streamHeader) == streamHeader.count else {
+            throw E3dbError.cryptoError("Failed to write ciphertext header")
+        }
+
+        // simulate 2-element queue for easy EOF detection
+        var headBuf = Data(count: Crypto.blockSize)
+        var nextBuf = Data(count: Crypto.blockSize)
+        var headAmt = input.read(data: &headBuf)
+        var nextAmt = input.read(data: &nextBuf)
+        while headAmt > 0 {
+            guard nextAmt != -1 else {
+                throw E3dbError.cryptoError("An error occured reading input data")
+            }
+            let tag: Stream.Tag = nextAmt == 0 ? .FINAL : .MESSAGE
+            let cipherText = stream.push(message: headBuf, tag: tag)
+            guard let data = cipherText, output.write(data: data) != -1 else {
+                throw E3dbError.cryptoError("Failed to write encrypted data")
+            }
+
+            headAmt = nextAmt
+            headBuf = nextBuf
+            nextAmt = input.read(data: &nextBuf)
+        }
+        // ensure EOF
+        guard headAmt == 0 else {
+            throw E3dbError.cryptoError("An error occured reading input data")
+        }
+        return dst
+    }
+
+    static func decrypt(fileAt src: URL, to dst: URL, ak: RawAccessKey) throws {
+        let (input, output) = try initializeStreams(src: src, dst: dst)
+
+        // manage resources
+        input.open()
+        output.open()
+        defer {
+            input.close()
+            output.close()
+        }
+
+        // read version
+        let delimiter = [UInt8](".".utf8)[0]
+        var fileVer   = Data(count: 1)
+        guard input.read(until: delimiter, data: &fileVer) != -1,
+              let ver = String(data: fileVer, encoding: .utf8),
+              ver == Crypto.version else {
+            throw E3dbError.cryptoError("Unknown files version")
+        }
+
+        // read edk, edkN and decrypt to get dk
+        var edkBuf  = Data(count: 100)
+        var edkNBuf = Data(count: 100)
+        guard input.read(until: delimiter, data: &edkBuf) != -1,
+              input.read(until: delimiter, data: &edkNBuf) != -1,
+              let edkStr  = String(bytes: edkBuf, encoding: .utf8),
+              let edkNStr = String(bytes: edkNBuf, encoding: .utf8) else {
+            throw E3dbError.cryptoError("Invalid header format")
+        }
+        let edk  = try base64UrlDecoded(string: edkStr)
+        let edkN = try base64UrlDecoded(string: edkNStr)
+        let dk   = try decrypt(ciphertext: edk, nonce: edkN, key: ak)
+
+        // read stream header
+        var header = Data(count: Stream.HeaderBytes)
+        guard input.read(data: &header) != -1 else {
+            throw E3dbError.cryptoError("Invalid header format")
+        }
+
+        // read, decrypt, write file
+        guard let stream = sodium.secretStream.xchacha20poly1305.initPull(secretKey: dk, header: header) else {
+            throw E3dbError.cryptoError("Failed to initialize stream")
+        }
+        var cipherText = Data(count: Crypto.blockSize + Stream.ABytes)
+        var response   = input.read(data: &cipherText)
+        while response > 0 {
+            guard response != -1 else {
+                throw E3dbError.cryptoError("An error occured reading input data")
+            }
+            guard let (plainText, tag) = stream.pull(cipherText: cipherText),
+                  tag == .MESSAGE || tag == .FINAL else {
+                throw E3dbError.cryptoError("Failed to decrypt values")
+            }
+            guard output.write(data: plainText) != -1 else {
+                throw E3dbError.cryptoError("An error occured writing output data")
+            }
+            response = input.read(data: &cipherText)
+        }
+    }
 }

@@ -91,6 +91,57 @@ extension Data {
     }
 }
 
+extension FileManager {
+    static func tempBinFile() -> URL {
+        let tempUrl: URL
+        if #available(iOS 10.0, *) {
+            tempUrl = FileManager.default.temporaryDirectory
+        } else {
+            tempUrl = URL(fileURLWithPath: NSTemporaryDirectory())
+        }
+        return tempUrl
+            .appendingPathComponent(UUID().uuidString)
+            .appendingPathExtension("bin")
+    }
+}
+
+extension OutputStream {
+    public func write(data: Data) -> Int {
+        let count = data.count
+        return data.withUnsafeBytes { write($0, maxLength: count) }
+    }
+}
+
+extension InputStream {
+    func read(data: inout Data) -> Int {
+        let count = data.count
+        return data.withUnsafeMutableBytes { read($0, maxLength: count) }
+    }
+
+    func read(until byte: UInt8, data: inout Data) -> Int {
+        let maxSize = data.count
+        var buffer  = [UInt8]()
+        var headBuf = Data(count: 1)
+        var nextBuf = Data(count: 1)
+        var headAmt = read(data: &headBuf)
+        var nextAmt = read(data: &nextBuf)
+        var total   = headAmt
+        buffer.append(contentsOf: headBuf)
+        while nextBuf[0] != byte && headAmt > 0 && total < maxSize {
+            guard nextAmt != -1 else {
+                return nextAmt
+            }
+            total  += 1
+            headAmt = nextAmt
+            headBuf = nextBuf
+            nextAmt = read(data: &nextBuf)
+            buffer.append(contentsOf: headBuf)
+        }
+        data = Data(bytes: buffer)
+        return headAmt
+    }
+}
+
 extension SignedDocument: Decodable where T: Decodable {
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)

@@ -1,6 +1,6 @@
 import UIKit
 import XCTest
-import E3db
+@testable import E3db
 
 class IntegrationTests: XCTestCase, TestUtils {
 
@@ -665,6 +665,38 @@ class IntegrationTests: XCTestCase, TestUtils {
                 XCTAssertNil(result.error)
                 expect.fulfill()
             }
+        }
+    }
+
+    func testFileEncryptDecryptEqual() {
+        let srcUrl = FileManager.tempBinFile()
+        let data   = Data(repeatElement("testing", count: 100).joined().utf8)
+
+        do {
+            try data.write(to: srcUrl)
+            let accessKey = Crypto.generateAccessKey()!
+            let encrypted = try Crypto.encrypt(fileAt: srcUrl, ak: accessKey)
+            let decrypted = FileManager.tempBinFile()
+            try Crypto.decrypt(fileAt: encrypted, to: decrypted, ak: accessKey)
+
+            guard let input = InputStream(url: decrypted) else {
+                return XCTFail("Could not open decrypted file")
+            }
+            input.open()
+            defer {
+                input.close()
+                try! FileManager.default.removeItem(at: srcUrl)
+                try! FileManager.default.removeItem(at: encrypted)
+                try! FileManager.default.removeItem(at: decrypted)
+            }
+
+            var buffer = Data(count: data.count)
+            guard input.read(data: &buffer) != -1 else {
+                return XCTFail("Failed to read file")
+            }
+            XCTAssertEqual(buffer, data)
+        } catch {
+            return XCTFail(error.localizedDescription)
         }
     }
 }
