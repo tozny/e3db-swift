@@ -3,6 +3,7 @@
 //  E3db
 //
 
+import CommonCrypto
 import Foundation
 import Sodium
 
@@ -169,6 +170,11 @@ extension Crypto {
 
 // MARK: Files Crypto
 
+struct FileInfo {
+    let md5: String
+    let size: UInt64
+}
+
 extension Crypto {
 
     private typealias Stream = SecretStream.XChaCha20Poly1305
@@ -188,6 +194,33 @@ extension Crypto {
         return [Crypto.version, b64Encoded]
             .map { $0 + "." }
             .joined()
+    }
+
+    static func computeInfo(ofFile: URL) throws -> FileInfo {
+        guard let input = InputStream(url: ofFile) else {
+            throw E3dbError.cryptoError("Failed to open file")
+        }
+        input.open()
+        let context = UnsafeMutablePointer<CC_MD5_CTX>.allocate(capacity: 1)
+        defer {
+            input.close()
+            context.deallocate()
+        }
+
+        var buffer = Data(count: Crypto.blockSize)
+        var count  = input.read(data: &buffer)
+        var size   = UInt64(0)
+        CC_MD5_Init(context)
+        // swiftlint:disable empty_count
+        while count > 0 {
+            _ = buffer.withUnsafeBytes { CC_MD5_Update(context, $0, CC_LONG(count)) }
+            size += UInt64(count)
+            count = input.read(data: &buffer)
+        }
+        var digest = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
+        CC_MD5_Final(&digest, context)
+        let md5 = Data(digest).base64EncodedString()
+        return FileInfo(md5: md5, size: size)
     }
 
     static func encrypt(fileAt src: URL, ak: RawAccessKey) throws -> URL {
@@ -212,7 +245,7 @@ extension Crypto {
         let streamHeader = stream.header()
         guard output.hasSpaceAvailable, output.write(data: headerData) == headerData.count,
               output.hasSpaceAvailable, output.write(data: streamHeader) == streamHeader.count else {
-            throw E3dbError.cryptoError("Failed to write ciphertext header")
+            throw E3dbError.cryptoError("Failed to write ciphertext headers")
         }
 
         // simulate 2-element queue for easy EOF detection
@@ -221,9 +254,6 @@ extension Crypto {
         var headAmt = input.read(data: &headBuf)
         var nextAmt = input.read(data: &nextBuf)
         while headAmt > 0 {
-            guard nextAmt != -1 else {
-                throw E3dbError.cryptoError("An error occured reading input data")
-            }
             let tag: Stream.Tag = nextAmt == 0 ? .FINAL : .MESSAGE
             let cipherText = stream.push(message: headBuf, tag: tag)
             guard let data = cipherText, output.write(data: data) != -1 else {
@@ -286,7 +316,7 @@ extension Crypto {
         }
         var cipherText = Data(count: Crypto.blockSize + Stream.ABytes)
         var response   = input.read(data: &cipherText)
-        while response > 0 {
+        while output.hasSpaceAvailable, response > 0 {
             guard response != -1 else {
                 throw E3dbError.cryptoError("An error occured reading input data")
             }

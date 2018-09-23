@@ -60,11 +60,14 @@ public struct ClientMeta: Codable {
     /// associated with the document that remains as plaintext
     public let plain: PlainMeta?
 
+    public let fileMeta: FileMeta?
+
     enum CodingKeys: String, CodingKey {
         case writerId = "writer_id"
         case userId   = "user_id"
         case type
         case plain
+        case fileMeta = "file_meta"
     }
 }
 
@@ -96,6 +99,8 @@ public struct Meta: Decodable {
     /// An identifier for the current version of the record
     public let version: String
 
+    public let fileMeta: FileMeta?
+
     enum CodingKeys: String, CodingKey {
         case recordId     = "record_id"
         case writerId     = "writer_id"
@@ -105,6 +110,7 @@ public struct Meta: Decodable {
         case created
         case lastModified = "last_modified"
         case version
+        case fileMeta     = "file_meta"
     }
 }
 
@@ -166,7 +172,8 @@ extension Client {
             writerId: config.clientId,
             userId: config.clientId,    // for now
             type: type,
-            plain: plain
+            plain: plain,
+            fileMeta: nil
         )
         let record = RecordRequestInfo(meta: meta, data: cipher)
 
@@ -311,7 +318,8 @@ extension Client {
                     writerId: meta.writerId,
                     userId: meta.userId,
                     type: meta.type,
-                    plain: plain
+                    plain: plain,
+                    fileMeta: nil
                 )
                 self.update(meta.recordId, version: meta.version, metaReq: metaReq, data: newData, ak: ak.rawAk, completion: completion)
             case .failure(let err):

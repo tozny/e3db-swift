@@ -668,35 +668,22 @@ class IntegrationTests: XCTestCase, TestUtils {
         }
     }
 
-    func testFileEncryptDecryptEqual() {
+    func testFileUpload() {
+        let e3db   = client()
         let srcUrl = FileManager.tempBinFile()
         let data   = Data(repeatElement("testing", count: 100).joined().utf8)
 
-        do {
-            try data.write(to: srcUrl)
-            let accessKey = Crypto.generateAccessKey()!
-            let encrypted = try Crypto.encrypt(fileAt: srcUrl, ak: accessKey)
-            let decrypted = FileManager.tempBinFile()
-            try Crypto.decrypt(fileAt: encrypted, to: decrypted, ak: accessKey)
+        guard let _ = try? data.write(to: srcUrl) else {
+            return XCTFail("Failed to write data")
+        }
 
-            guard let input = InputStream(url: decrypted) else {
-                return XCTFail("Could not open decrypted file")
+        asyncTest(#function) { (expect) in
+            e3db.writeFile(type: "test-file", fileUrl: srcUrl) { (result) in
+                XCTAssertNil(result.error)
+                XCTAssertNotNil(result.value)
+                XCTAssertNotNil(result.value?.fileMeta?.fileName)
+                expect.fulfill()
             }
-            input.open()
-            defer {
-                input.close()
-                try! FileManager.default.removeItem(at: srcUrl)
-                try! FileManager.default.removeItem(at: encrypted)
-                try! FileManager.default.removeItem(at: decrypted)
-            }
-
-            var buffer = Data(count: data.count)
-            guard input.read(data: &buffer) != -1 else {
-                return XCTFail("Failed to read file")
-            }
-            XCTAssertEqual(buffer, data)
-        } catch {
-            return XCTFail(error.localizedDescription)
         }
     }
 }

@@ -167,7 +167,7 @@ extension Client {
     /// - Throws: `E3dbError.cryptoError` if the operation failed
     public func encrypt(type: String, data: RecordData, eakInfo: EAKInfo, plain: PlainMeta? = nil) throws -> EncryptedDocument {
         let clientId  = config.clientId
-        let meta      = ClientMeta(writerId: clientId, userId: clientId, type: type, plain: plain)
+        let meta      = ClientMeta(writerId: clientId, userId: clientId, type: type, plain: plain, fileMeta: nil)
         let docInfo   = DocInfo(meta: meta, data: data)
         let signed    = try sign(document: docInfo)
         let localAk   = try getLocalAk(clientId: clientId, recordType: type, eakInfo: eakInfo)

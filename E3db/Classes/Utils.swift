@@ -100,6 +100,7 @@ struct Api {
         case accessKeys = "access_keys"
         case search
         case policy
+        case files
     }
 
     static let defaultUrl   = "https://api.e3db.com/"

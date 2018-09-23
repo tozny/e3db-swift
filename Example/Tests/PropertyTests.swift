@@ -16,6 +16,28 @@ extension UUID: Arbitrary {
     }
 }
 
+extension URL: Arbitrary {
+    public static var arbitrary: Gen<URL> {
+        return Gen<URL>.compose { c in
+            return URL(fileURLWithPath: c.generate())
+        }
+    }
+}
+
+extension FileMeta: Arbitrary {
+    public static var arbitrary: Gen<FileMeta> {
+        return Gen<FileMeta>.compose { c in
+            FileMeta(
+                fileUrl: c.generate(),
+                fileName: c.generate(),
+                checksum: c.generate(),
+                compression: c.generate(),
+                size: c.generate()
+            )
+        }
+    }
+}
+
 extension ClientMeta: Arbitrary {
     public static var arbitrary: Gen<ClientMeta> {
         return Gen<ClientMeta>.compose { c in
@@ -23,7 +45,8 @@ extension ClientMeta: Arbitrary {
                 writerId: c.generate(),
                 userId: c.generate(),
                 type: c.generate(),
-                plain: c.generate()
+                plain: c.generate(),
+                fileMeta: c.generate()
             )
         }
     }

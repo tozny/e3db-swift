@@ -76,6 +76,39 @@ extension APIClient {
     func performDefault<T: Request>(_ request: T, completion: @escaping (Result<T.ResponseObject, E3dbError>) -> Void) {
         perform(request) { completion($0.mapError(E3dbError.init)) }
     }
+
+    func upload<T: Request>(fileAt: URL, request: T, session: URLSession, completion: @escaping (Result<T.ResponseObject, E3dbError>) -> Void) {
+        func parse(_ data: Data) -> Result<T.ResponseObject, SwishError> {
+            do {
+                let parsed = try request.parse(data)
+                return .success(parsed)
+            } catch {
+                return .failure(.decodingError(error))
+            }
+        }
+        func validate(_ httpResponse: HTTPResponse) -> Result<Data, SwishError> {
+            guard case (200...299) = httpResponse.code else {
+                return .failure(.serverError(code: httpResponse.code, data: httpResponse.data))
+            }
+            return .success(httpResponse.data)
+        }
+
+        let req  = request.build()
+        let task = session.uploadTask(with: req, fromFile: fileAt) { data, response, error in
+            let resp: Result<T.ResponseObject, SwishError>
+            switch (data, response, error) {
+            case let (_, urlResp as HTTPURLResponse, .some(err)):
+                resp = .failure(.urlSessionError(err, response: urlResp))
+            case let (.some(body), urlResp as HTTPURLResponse, _):
+                let httpResp = HTTPResponse(data: body, response: urlResp)
+                resp = validate(httpResp).flatMap(parse)
+            default:
+                resp = .failure(.serverError(code: 400, data: nil))
+            }
+            completion(resp.mapError(E3dbError.init))
+        }
+        task.resume()
+    }
 }
 
 extension Data {
