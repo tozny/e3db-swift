@@ -170,7 +170,8 @@ extension Crypto {
 
 // MARK: Files Crypto
 
-struct FileInfo {
+struct EncryptedFileInfo {
+    let url: URL
     let md5: String
     let size: UInt64
 }
@@ -196,7 +197,7 @@ extension Crypto {
             .joined()
     }
 
-    static func computeInfo(ofFile: URL) throws -> FileInfo {
+    static func md5(ofFile: URL) throws -> String {
         guard let input = InputStream(url: ofFile) else {
             throw E3dbError.cryptoError("Failed to open file")
         }
@@ -209,21 +210,19 @@ extension Crypto {
 
         var buffer = Data(count: Crypto.blockSize)
         var count  = input.read(data: &buffer)
-        var size   = UInt64(0)
         CC_MD5_Init(context)
         // swiftlint:disable empty_count
         while count > 0 {
             _ = buffer.withUnsafeBytes { CC_MD5_Update(context, $0, CC_LONG(count)) }
-            size += UInt64(count)
             count = input.read(data: &buffer)
         }
         var digest = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
         CC_MD5_Final(&digest, context)
-        let md5 = Data(digest).base64EncodedString()
-        return FileInfo(md5: md5, size: size)
+        return Data(digest).base64EncodedString()
     }
 
-    static func encrypt(fileAt src: URL, ak: RawAccessKey) throws -> URL {
+    // swiftlint:disable function_body_length
+    static func encrypt(fileAt src: URL, ak: RawAccessKey) throws -> EncryptedFileInfo {
         guard let dk = sodium.secretStream.xchacha20poly1305.key(),
               let stream = sodium.secretStream.xchacha20poly1305.initPush(secretKey: dk) else {
             throw E3dbError.cryptoError("Failed to initialize stream")
@@ -234,10 +233,13 @@ extension Crypto {
         // manage resources
         input.open()
         output.open()
+        let context = UnsafeMutablePointer<CC_MD5_CTX>.allocate(capacity: 1)
         defer {
             input.close()
             output.close()
+            context.deallocate()
         }
+        CC_MD5_Init(context)
 
         // write headers
         let e3dbHeader   = try createHeader(dk: dk, ak: ak)
@@ -247,19 +249,24 @@ extension Crypto {
               output.hasSpaceAvailable, output.write(data: streamHeader) == streamHeader.count else {
             throw E3dbError.cryptoError("Failed to write ciphertext headers")
         }
+        _ = headerData.withUnsafeBytes { CC_MD5_Update(context, $0, CC_LONG(headerData.count)) }
+        _ = streamHeader.withUnsafeBytes { CC_MD5_Update(context, $0, CC_LONG(streamHeader.count)) }
 
         // simulate 2-element queue for easy EOF detection
         var headBuf = Data(count: Crypto.blockSize)
         var nextBuf = Data(count: Crypto.blockSize)
         var headAmt = input.read(data: &headBuf)
         var nextAmt = input.read(data: &nextBuf)
+        var size    = UInt64(headerData.count + streamHeader.count)
         while headAmt > 0 {
             let tag: Stream.Tag = nextAmt == 0 ? .FINAL : .MESSAGE
-            let cipherText = stream.push(message: headBuf, tag: tag)
-            guard let data = cipherText, output.write(data: data) != -1 else {
+            guard let cipherText = stream.push(message: headBuf, tag: tag),
+                  output.write(data: cipherText) != -1 else {
                 throw E3dbError.cryptoError("Failed to write encrypted data")
             }
+            _ = cipherText.withUnsafeBytes { CC_MD5_Update(context, $0, CC_LONG(cipherText.count)) }
 
+            size   += UInt64(cipherText.count)
             headAmt = nextAmt
             headBuf = nextBuf
             nextAmt = input.read(data: &nextBuf)
@@ -268,7 +275,10 @@ extension Crypto {
         guard headAmt == 0 else {
             throw E3dbError.cryptoError("An error occured reading input data")
         }
-        return dst
+        var digest = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
+        CC_MD5_Final(&digest, context)
+        let md5 = Data(digest).base64EncodedString()
+        return EncryptedFileInfo(url: dst, md5: md5, size: size)
     }
 
     static func decrypt(fileAt src: URL, to dst: URL, ak: RawAccessKey) throws {

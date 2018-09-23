@@ -104,23 +104,22 @@ extension Client {
             do {
                 // creates a temp encrypted file
                 let encrypted = try Crypto.encrypt(fileAt: file, ak: ak)
-                let fileInfo  = try Crypto.computeInfo(ofFile: encrypted)
                 let fileName  = file.lastPathComponent
-                let fileMeta  = FileMeta(fileUrl: nil, fileName: fileName, checksum: fileInfo.md5, compression: "raw", size: fileInfo.size)
+                let fileMeta  = FileMeta(fileUrl: nil, fileName: fileName, checksum: encrypted.md5, compression: "raw", size: encrypted.size)
                 let meta      = ClientMeta(writerId: info.writerId, userId: info.userId, type: info.type, plain: info.plain, fileMeta: fileMeta)
                 let recInfo   = RecordRequestInfo(meta: meta, data: [:])
 
                 // remove temp encrypted file when done,
                 // regardless of success or error
                 let withCleanup: E3dbCompletion<Meta> = { result in
-                    _ = try? FileManager.default.removeItem(at: encrypted)
+                    _ = try? FileManager.default.removeItem(at: encrypted.url)
                     return completion(result)
                 }
                 let createReq = CreateFileRequest(api: self.api, recordInfo: recInfo)
                 self.authedClient.perform(createReq) { result in
                     switch result {
                     case .success(let pending):
-                        self.upload(file: encrypted, fileInfo: fileInfo, pendingInfo: pending, completion: withCleanup)
+                        self.upload(file: encrypted, pendingInfo: pending, completion: withCleanup)
                     case .failure(let error):
                         withCleanup(.failure(E3dbError(swishError: error)))
                     }
@@ -136,9 +135,9 @@ extension Client {
         }
     }
 
-    private func upload(file: URL, fileInfo: FileInfo, pendingInfo: PendingFile, completion: @escaping E3dbCompletion<Meta>) {
-        let uploadReq = UploadFileRequest(fileUrl: pendingInfo.fileUrl, fileMd5: fileInfo.md5)
-        authedClient.upload(fileAt: file, request: uploadReq, session: session) { result in
+    private func upload(file: EncryptedFileInfo, pendingInfo: PendingFile, completion: @escaping E3dbCompletion<Meta>) {
+        let uploadReq = UploadFileRequest(fileUrl: pendingInfo.fileUrl, fileMd5: file.md5)
+        authedClient.upload(fileAt: file.url, request: uploadReq, session: session) { result in
             switch result {
             case .success:
                 self.commit(fileId: pendingInfo.id, completion: completion)
