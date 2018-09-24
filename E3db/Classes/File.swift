@@ -43,6 +43,8 @@ struct PendingFile: Decodable {
     }
 }
 
+// MARK: Write File
+
 extension Client {
 
     private typealias MetaInfo = (writerId: UUID, userId: UUID, type: String, plain: PlainMeta?)
@@ -150,5 +152,74 @@ extension Client {
     private func commit(fileId: UUID, completion: @escaping E3dbCompletion<Meta>) {
         let commitReq = CommitFileRequest(api: api, fileId: fileId)
         authedClient.performDefault(commitReq) { resp in completion(resp.map { $0.meta }) }
+    }
+}
+
+// MARK: Read File
+
+extension Client {
+
+    private struct ReadFileRequest: E3dbRequest {
+        typealias ResponseObject = RecordResponse
+        let api: Api
+        let recordId: UUID
+
+        func build() -> URLRequest {
+            let url = api.url(endpoint: .files) / recordId.uuidString
+            return URLRequest(url: url)
+        }
+    }
+
+    public func readFile(recordId: UUID, destination: URL, completion: @escaping E3dbCompletion<Meta>) {
+        let readReq = ReadFileRequest(api: api, recordId: recordId)
+        authedClient.performDefault(readReq) { result in
+            switch result {
+            case .success(let record):
+                self.download(fileFrom: record.meta, to: destination, completion: completion)
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+
+    private func download(fileFrom meta: Meta, to destination: URL, completion: @escaping E3dbCompletion<Meta>) {
+        guard let downloadUrl = meta.fileMeta?.fileUrl else {
+            return completion(.failure(.apiError(code: 400, message: "Record missing file url")))
+        }
+        getStoredAccessKey(writerId: meta.writerId, userId: meta.userId, readerId: self.config.clientId, recordType: meta.type) { result in
+            switch result {
+            case .success(let eak):
+                self.decrypt(fileAt: downloadUrl, to: destination, accessKey: eak) { result in
+                    completion(result.map { _ in meta })
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+
+    private func decrypt(fileAt downloadUrl: URL, to destination: URL, accessKey: AccessKey, completion: @escaping E3dbCompletion<Void>) {
+        let downloadReq = URLRequest(url: downloadUrl)
+        authedClient.download(downloadReq, session: self.session) { result in
+            switch result {
+            case .success(let local):
+                DispatchQueue.global().async {
+                    let resp: E3dbResult<()>
+                    do {
+                        try Crypto.decrypt(fileAt: local, to: destination, ak: accessKey.rawAk)
+                        resp = .success(())
+                    } catch let error as E3dbError {
+                        resp = .failure(error)
+                    } catch {
+                        resp = .failure(.cryptoError("Failed to decrypt file"))
+                    }
+                    DispatchQueue.main.async {
+                        completion(resp)
+                    }
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
     }
 }

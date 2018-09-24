@@ -669,9 +669,11 @@ class IntegrationTests: XCTestCase, TestUtils {
     }
 
     func testFileUpload() {
-        let e3db   = client()
-        let srcUrl = FileManager.tempBinFile()
-        let data   = Data(repeatElement("testing", count: 100).joined().utf8)
+        guard let srcUrl = FileManager.tempBinFile() else {
+            return XCTFail("Could not open file")
+        }
+        let e3db = client()
+        let data = Data(repeatElement("testing", count: 100).joined().utf8)
 
         guard let _ = try? data.write(to: srcUrl) else {
             return XCTFail("Failed to write data")
@@ -684,6 +686,46 @@ class IntegrationTests: XCTestCase, TestUtils {
                 XCTAssertNotNil(result.value?.fileMeta?.fileName)
                 expect.fulfill()
             }
+        }
+    }
+
+    func testFileRoundTrip() {
+        guard let srcUrl = FileManager.tempBinFile(),
+              let dstUrl = FileManager.tempBinFile() else {
+            return XCTFail("Could not open files")
+        }
+        let e3db = client()
+        let data = Data(repeatElement("testing", count: 100).joined().utf8)
+
+        guard let _ = try? data.write(to: srcUrl) else {
+            return XCTFail("Failed to write data")
+        }
+
+        var recordId: UUID?
+        asyncTest(#function + "write") { (expect) in
+            e3db.writeFile(type: "test-file", fileUrl: srcUrl) { (result) in
+                XCTAssertNil(result.error)
+                XCTAssertNotNil(result.value)
+                XCTAssertNotNil(result.value?.fileMeta?.fileName)
+                recordId = result.value!.recordId
+                expect.fulfill()
+            }
+        }
+
+        asyncTest(#function + "read") { (expect) in
+            e3db.readFile(recordId: recordId!, destination: dstUrl) { (result) in
+                XCTAssertNil(result.error)
+                XCTAssertNotNil(result.value)
+                XCTAssertNotNil(result.value?.fileMeta?.fileName)
+                expect.fulfill()
+            }
+        }
+
+        do {
+            let result = try Data(contentsOf: dstUrl)
+            XCTAssertEqual(result, data)
+        } catch {
+            XCTFail(error.localizedDescription)
         }
     }
 }
