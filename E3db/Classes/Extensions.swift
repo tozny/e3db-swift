@@ -3,6 +3,9 @@
 //  E3db
 //
 
+#if canImport(CommonCrypto)
+import CommonCrypto
+#endif
 import Foundation
 import Result
 import Swish
@@ -130,6 +133,7 @@ extension APIClient {
 }
 
 extension Data {
+
     public init?(base64UrlEncoded string: String) {
         guard let data = try? Crypto.base64UrlDecoded(string: string) else {
             return nil
@@ -140,6 +144,12 @@ extension Data {
     public func base64UrlEncodedString() -> String? {
         return try? Crypto.base64UrlEncoded(data: self)
     }
+
+    #if canImport(CommonCrypto)
+    func updateMD5(context: UnsafeMutablePointer<CC_MD5_CTX>) {
+        _ = withUnsafeBytes { CC_MD5_Update(context, $0, CC_LONG(count)) }
+    }
+    #endif
 }
 
 extension FileManager {

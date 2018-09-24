@@ -205,7 +205,7 @@ extension Crypto {
 
         var buffer = input.readData(ofLength: blockSize)
         while !buffer.isEmpty {
-            _ = buffer.withUnsafeBytes { CC_MD5_Update(context, $0, CC_LONG(buffer.count)) }
+            buffer.updateMD5(context: context)
             buffer = input.readData(ofLength: blockSize)
         }
         var digest = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
@@ -244,8 +244,8 @@ extension Crypto {
         let streamHeader = stream.header()
         output.write(headerData)
         output.write(streamHeader)
-        _ = headerData.withUnsafeBytes { CC_MD5_Update(context, $0, CC_LONG(headerData.count)) }
-        _ = streamHeader.withUnsafeBytes { CC_MD5_Update(context, $0, CC_LONG(streamHeader.count)) }
+        headerData.updateMD5(context: context)
+        streamHeader.updateMD5(context: context)
 
         // simulate 2-element queue for easy EOF detection
         var headBuf = input.readData(ofLength: blockSize)
@@ -257,7 +257,7 @@ extension Crypto {
                 throw E3dbError.cryptoError("Failed to encrypted data")
             }
             output.write(cipherText)
-            _ = cipherText.withUnsafeBytes { CC_MD5_Update(context, $0, CC_LONG(cipherText.count)) }
+            cipherText.updateMD5(context: context)
 
             size   += UInt64(cipherText.count)
             headBuf = nextBuf
