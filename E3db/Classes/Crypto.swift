@@ -3,7 +3,9 @@
 //  E3db
 //
 
+#if canImport(CommonCrypto)
 import CommonCrypto
+#endif
 import Foundation
 import Sodium
 
@@ -190,6 +192,9 @@ extension Crypto {
     }
 
     static func md5(of file: URL) throws -> String {
+        #if !canImport(CommonCrypto)
+            throw E3dbError.cryptoError("Cannot perform MD5 without CommonCrypto module.")
+        #endif
         let input   = try FileHandle(forReadingFrom: file)
         let context = UnsafeMutablePointer<CC_MD5_CTX>.allocate(capacity: 1)
         defer {
@@ -208,7 +213,12 @@ extension Crypto {
         return Data(digest).base64EncodedString()
     }
 
+    // swiftlint:disable function_body_length
     static func encrypt(fileAt src: URL, ak: RawAccessKey) throws -> EncryptedFileInfo {
+        #if !canImport(CommonCrypto)
+            throw E3dbError.cryptoError("Cannot perform file encryption without CommonCrypto module.")
+        #endif
+
         guard let dk = sodium.secretStream.xchacha20poly1305.key(),
               let stream = sodium.secretStream.xchacha20poly1305.initPush(secretKey: dk) else {
             throw E3dbError.cryptoError("Failed to initialize stream")
@@ -264,6 +274,10 @@ extension Crypto {
     }
 
     static func decrypt(fileAt src: URL, to dst: URL, ak: RawAccessKey) throws {
+        #if !canImport(CommonCrypto)
+            throw E3dbError.cryptoError("Cannot perform file decryption without CommonCrypto module.")
+        #endif
+
         let input  = try FileHandle(forReadingFrom: src)
         let output = try FileHandle(forWritingTo: dst)
 
