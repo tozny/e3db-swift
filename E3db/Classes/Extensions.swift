@@ -73,26 +73,27 @@ extension Array where Element: ResultProtocol {
 }
 
 extension APIClient {
-    func performDefault<T: Request>(_ request: T, completion: @escaping (Result<T.ResponseObject, E3dbError>) -> Void) {
+    private func parse<T: Request>(_ data: Data, request: T) -> Result<T.ResponseObject, SwishError> {
+        do {
+            let parsed = try request.parse(data)
+            return .success(parsed)
+        } catch {
+            return .failure(.decodingError(error))
+        }
+    }
+
+    private func validate(_ httpResponse: HTTPResponse) -> Result<Data, SwishError> {
+        guard case (200...299) = httpResponse.code else {
+            return .failure(.serverError(code: httpResponse.code, data: httpResponse.data))
+        }
+        return .success(httpResponse.data)
+    }
+
+    func performDefault<T: Request>(_ request: T, completion: @escaping E3dbCompletion<T.ResponseObject>) {
         perform(request) { completion($0.mapError(E3dbError.init)) }
     }
 
-    func upload<T: Request>(fileAt: URL, request: T, session: URLSession, completion: @escaping (Result<T.ResponseObject, E3dbError>) -> Void) {
-        func parse(_ data: Data) -> Result<T.ResponseObject, SwishError> {
-            do {
-                let parsed = try request.parse(data)
-                return .success(parsed)
-            } catch {
-                return .failure(.decodingError(error))
-            }
-        }
-        func validate(_ httpResponse: HTTPResponse) -> Result<Data, SwishError> {
-            guard case (200...299) = httpResponse.code else {
-                return .failure(.serverError(code: httpResponse.code, data: httpResponse.data))
-            }
-            return .success(httpResponse.data)
-        }
-
+    func upload<T: Request>(fileAt: URL, request: T, session: URLSession, completion: @escaping E3dbCompletion<T.ResponseObject>) {
         let req  = request.build()
         let task = session.uploadTask(with: req, fromFile: fileAt) { data, response, error in
             let resp: Result<T.ResponseObject, SwishError>
@@ -101,7 +102,24 @@ extension APIClient {
                 resp = .failure(.urlSessionError(err, response: urlResp))
             case let (.some(body), urlResp as HTTPURLResponse, _):
                 let httpResp = HTTPResponse(data: body, response: urlResp)
-                resp = validate(httpResp).flatMap(parse)
+                resp = self.validate(httpResp).flatMap { self.parse($0, request: request) }
+            default:
+                resp = .failure(.serverError(code: 400, data: nil))
+            }
+            completion(resp.mapError(E3dbError.init))
+        }
+        task.resume()
+    }
+
+    func download(_ request: URLRequest, session: URLSession, completion: @escaping E3dbCompletion<URL>) {
+        let task = session.downloadTask(with: request) { localUrl, response, error in
+            let resp: Result<URL, SwishError>
+            switch (localUrl, response, error) {
+            case let (_, urlResp as HTTPURLResponse, .some(err)):
+                resp = .failure(.urlSessionError(err, response: urlResp))
+            case let (.some(local), urlResp as HTTPURLResponse, _):
+                let httpResp = HTTPResponse(data: Data(), response: urlResp)
+                resp = self.validate(httpResp).map { _ in local }
             default:
                 resp = .failure(.serverError(code: 400, data: nil))
             }
@@ -125,53 +143,30 @@ extension Data {
 }
 
 extension FileManager {
-    static func tempBinFile() -> URL {
+    static func tempBinFile() -> URL? {
         let tempUrl: URL
         if #available(iOS 10.0, *) {
             tempUrl = FileManager.default.temporaryDirectory
         } else {
             tempUrl = URL(fileURLWithPath: NSTemporaryDirectory())
         }
-        return tempUrl
+        let fullUrl = tempUrl
             .appendingPathComponent(UUID().uuidString)
             .appendingPathExtension("bin")
+        guard FileManager.default.createFile(atPath: fullUrl.path, contents: nil) else { return nil }
+        return fullUrl
     }
 }
 
-extension OutputStream {
-    public func write(data: Data) -> Int {
-        let count = data.count
-        return data.withUnsafeBytes { write($0, maxLength: count) }
-    }
-}
-
-extension InputStream {
-    func read(data: inout Data) -> Int {
-        let count = data.count
-        return data.withUnsafeMutableBytes { read($0, maxLength: count) }
-    }
-
-    func read(until byte: UInt8, data: inout Data) -> Int {
-        let maxSize = data.count
-        var buffer  = [UInt8]()
-        var headBuf = Data(count: 1)
-        var nextBuf = Data(count: 1)
-        var headAmt = read(data: &headBuf)
-        var nextAmt = read(data: &nextBuf)
-        var total   = headAmt
-        buffer.append(contentsOf: headBuf)
-        while nextBuf[0] != byte && headAmt > 0 && total < maxSize {
-            guard nextAmt != -1 else {
-                return nextAmt
-            }
-            total  += 1
-            headAmt = nextAmt
-            headBuf = nextBuf
-            nextAmt = read(data: &nextBuf)
-            buffer.append(contentsOf: headBuf)
+extension FileHandle {
+    func read(until byte: UInt8) -> Data {
+        var buffer = Data()
+        var next   = readData(ofLength: 1)
+        while !next.isEmpty && next[0] != byte {
+            buffer.append(next)
+            next = readData(ofLength: 1)
         }
-        data = Data(bytes: buffer)
-        return headAmt
+        return buffer
     }
 }
 

@@ -1,4 +1,4 @@
-//
+ //
 //  CryptoTests.swift
 //  E3db_Tests
 //
@@ -9,31 +9,27 @@ import XCTest
 class CryptoTests: XCTestCase, TestUtils {
 
     func testFileEncryptDecryptEqual() {
-        let srcUrl = FileManager.tempBinFile()
-        let data   = Data(repeatElement("testing", count: 100).joined().utf8)
+        guard let srcUrl = FileManager.tempBinFile(),
+              let dstUrl = FileManager.tempBinFile() else {
+            return XCTFail("Could not open files")
+        }
+        defer {
+            try! FileManager.default.removeItem(at: srcUrl)
+            try! FileManager.default.removeItem(at: dstUrl)
+        }
 
         do {
+            let data = Data(repeatElement("testing", count: 10).joined().utf8)
             try data.write(to: srcUrl)
             let accessKey = Crypto.generateAccessKey()!
             let encrypted = try Crypto.encrypt(fileAt: srcUrl, ak: accessKey)
-            let decrypted = FileManager.tempBinFile()
-            try Crypto.decrypt(fileAt: encrypted.url, to: decrypted, ak: accessKey)
-
-            guard let input = InputStream(url: decrypted) else {
-                return XCTFail("Could not open decrypted file")
-            }
-            input.open()
             defer {
-                input.close()
-                try! FileManager.default.removeItem(at: srcUrl)
                 try! FileManager.default.removeItem(at: encrypted.url)
-                try! FileManager.default.removeItem(at: decrypted)
             }
-
-            var buffer = Data(count: data.count)
-            guard input.read(data: &buffer) != -1 else {
-                return XCTFail("Failed to read file")
-            }
+            try Crypto.decrypt(fileAt: encrypted.url, to: dstUrl, ak: accessKey)
+            let input  = try FileHandle(forReadingFrom: dstUrl)
+            let buffer = input.readDataToEndOfFile()
+            input.closeFile()
             XCTAssertEqual(buffer, data)
         } catch {
             return XCTFail(error.localizedDescription)
@@ -41,15 +37,17 @@ class CryptoTests: XCTestCase, TestUtils {
     }
 
     func testMD5() {
-        let srcUrl = FileManager.tempBinFile()
-        let data   = Data(repeatElement("testing", count: 10).joined().utf8)
+        guard let srcUrl = FileManager.tempBinFile() else {
+            return XCTFail("Could not open file")
+        }
         defer {
             try! FileManager.default.removeItem(at: srcUrl)
         }
         do {
+            let data = Data(repeatElement("testing", count: 10).joined().utf8)
             try data.write(to: srcUrl)
             let expected = "DPb7oJVFD4O0cXsAkVRltA=="
-            let actual   = try Crypto.md5(ofFile: srcUrl)
+            let actual   = try Crypto.md5(of: srcUrl)
             XCTAssertEqual(expected, actual)
         } catch {
             return XCTFail(error.localizedDescription)

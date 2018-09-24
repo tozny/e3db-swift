@@ -180,14 +180,6 @@ extension Crypto {
 
     private typealias Stream = SecretStream.XChaCha20Poly1305
 
-    private static func initializeStreams(src: URL, dst: URL) throws -> (InputStream, OutputStream) {
-        guard let inputStream = InputStream(url: src),
-              let outputStream = OutputStream(url: dst, append: false) else {
-            throw E3dbError.cryptoError("Failed to open files")
-        }
-        return (inputStream, outputStream)
-    }
-
     // Header: v || '.' || edk || '.' ||  edkN || '.'
     private static func createHeader(dk: Stream.Key, ak: RawAccessKey) throws -> String {
         let (edk, edkN) = try encrypt(value: dk, key: ak)
@@ -197,24 +189,19 @@ extension Crypto {
             .joined()
     }
 
-    static func md5(ofFile: URL) throws -> String {
-        guard let input = InputStream(url: ofFile) else {
-            throw E3dbError.cryptoError("Failed to open file")
-        }
-        input.open()
+    static func md5(of file: URL) throws -> String {
+        let input   = try FileHandle(forReadingFrom: file)
         let context = UnsafeMutablePointer<CC_MD5_CTX>.allocate(capacity: 1)
         defer {
-            input.close()
+            input.closeFile()
             context.deallocate()
         }
-
-        var buffer = Data(count: Crypto.blockSize)
-        var count  = input.read(data: &buffer)
         CC_MD5_Init(context)
-        // swiftlint:disable empty_count
-        while count > 0 {
-            _ = buffer.withUnsafeBytes { CC_MD5_Update(context, $0, CC_LONG(count)) }
-            count = input.read(data: &buffer)
+
+        var buffer = input.readData(ofLength: blockSize)
+        while !buffer.isEmpty {
+            _ = buffer.withUnsafeBytes { CC_MD5_Update(context, $0, CC_LONG(buffer.count)) }
+            buffer = input.readData(ofLength: blockSize)
         }
         var digest = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
         CC_MD5_Final(&digest, context)
@@ -227,16 +214,17 @@ extension Crypto {
               let stream = sodium.secretStream.xchacha20poly1305.initPush(secretKey: dk) else {
             throw E3dbError.cryptoError("Failed to initialize stream")
         }
-        let dst = FileManager.tempBinFile()
-        let (input, output) = try initializeStreams(src: src, dst: dst)
+        guard let dst = FileManager.tempBinFile() else {
+            throw E3dbError.cryptoError("Failed to open file")
+        }
+        let input  = try FileHandle(forReadingFrom: src)
+        let output = try FileHandle(forWritingTo: dst)
 
         // manage resources
-        input.open()
-        output.open()
         let context = UnsafeMutablePointer<CC_MD5_CTX>.allocate(capacity: 1)
         defer {
-            input.close()
-            output.close()
+            input.closeFile()
+            output.closeFile()
             context.deallocate()
         }
         CC_MD5_Init(context)
@@ -245,31 +233,30 @@ extension Crypto {
         let e3dbHeader   = try createHeader(dk: dk, ak: ak)
         let headerData   = Data(e3dbHeader.utf8)
         let streamHeader = stream.header()
-        guard output.hasSpaceAvailable, output.write(data: headerData) == headerData.count,
-              output.hasSpaceAvailable, output.write(data: streamHeader) == streamHeader.count else {
-            throw E3dbError.cryptoError("Failed to write ciphertext headers")
-        }
+        output.write(headerData)
+        output.write(streamHeader)
         _ = headerData.withUnsafeBytes { CC_MD5_Update(context, $0, CC_LONG(headerData.count)) }
         _ = streamHeader.withUnsafeBytes { CC_MD5_Update(context, $0, CC_LONG(streamHeader.count)) }
 
         // simulate 2-element queue for easy EOF detection
-        var headBuf = Data(count: Crypto.blockSize)
-        var nextBuf = Data(count: Crypto.blockSize)
-        var headAmt = input.read(data: &headBuf)
-        var nextAmt = input.read(data: &nextBuf)
+        var headBuf = input.readData(ofLength: blockSize)
+        var nextBuf = input.readData(ofLength: blockSize)
+        var headAmt = headBuf.count
+        var nextAmt = nextBuf.count
         var size    = UInt64(headerData.count + streamHeader.count)
         while headAmt > 0 {
             let tag: Stream.Tag = nextAmt == 0 ? .FINAL : .MESSAGE
-            guard let cipherText = stream.push(message: headBuf, tag: tag),
-                  output.write(data: cipherText) != -1 else {
-                throw E3dbError.cryptoError("Failed to write encrypted data")
+            guard let cipherText = stream.push(message: headBuf, tag: tag) else {
+                throw E3dbError.cryptoError("Failed to encrypted data")
             }
+            output.write(cipherText)
             _ = cipherText.withUnsafeBytes { CC_MD5_Update(context, $0, CC_LONG(cipherText.count)) }
 
             size   += UInt64(cipherText.count)
             headAmt = nextAmt
             headBuf = nextBuf
-            nextAmt = input.read(data: &nextBuf)
+            nextBuf = input.readData(ofLength: blockSize)
+            nextAmt = nextBuf.count
         }
         // ensure EOF
         guard headAmt == 0 else {
@@ -282,30 +269,28 @@ extension Crypto {
     }
 
     static func decrypt(fileAt src: URL, to dst: URL, ak: RawAccessKey) throws {
-        let (input, output) = try initializeStreams(src: src, dst: dst)
+        let input  = try FileHandle(forReadingFrom: src)
+        let output = try FileHandle(forWritingTo: dst)
 
         // manage resources
-        input.open()
-        output.open()
         defer {
-            input.close()
-            output.close()
+            input.closeFile()
+            output.closeFile()
         }
 
         // read version
         let delimiter = [UInt8](".".utf8)[0]
-        var fileVer   = Data(count: 1)
-        guard input.read(until: delimiter, data: &fileVer) != -1,
+        let fileVer   = input.read(until: delimiter)
+        guard fileVer.count == 1,
               let ver = String(data: fileVer, encoding: .utf8),
               ver == Crypto.version else {
             throw E3dbError.cryptoError("Unknown files version")
         }
 
         // read edk, edkN and decrypt to get dk
-        var edkBuf  = Data(count: 100)
-        var edkNBuf = Data(count: 100)
-        guard input.read(until: delimiter, data: &edkBuf) != -1,
-              input.read(until: delimiter, data: &edkNBuf) != -1,
+        let edkBuf  = input.read(until: delimiter)
+        let edkNBuf = input.read(until: delimiter)
+        guard !edkBuf.isEmpty, !edkNBuf.isEmpty,
               let edkStr  = String(bytes: edkBuf, encoding: .utf8),
               let edkNStr = String(bytes: edkNBuf, encoding: .utf8) else {
             throw E3dbError.cryptoError("Invalid header format")
@@ -315,8 +300,8 @@ extension Crypto {
         let dk   = try decrypt(ciphertext: edk, nonce: edkN, key: ak)
 
         // read stream header
-        var header = Data(count: Stream.HeaderBytes)
-        guard input.read(data: &header) != -1 else {
+        let header = input.readData(ofLength: Stream.HeaderBytes)
+        guard header.count == Stream.HeaderBytes else {
             throw E3dbError.cryptoError("Invalid header format")
         }
 
@@ -324,20 +309,15 @@ extension Crypto {
         guard let stream = sodium.secretStream.xchacha20poly1305.initPull(secretKey: dk, header: header) else {
             throw E3dbError.cryptoError("Failed to initialize stream")
         }
-        var cipherText = Data(count: Crypto.blockSize + Stream.ABytes)
-        var response   = input.read(data: &cipherText)
-        while output.hasSpaceAvailable, response > 0 {
-            guard response != -1 else {
-                throw E3dbError.cryptoError("An error occured reading input data")
-            }
+        let bufferSize = blockSize + Stream.ABytes
+        var cipherText = input.readData(ofLength: bufferSize)
+        while !cipherText.isEmpty {
             guard let (plainText, tag) = stream.pull(cipherText: cipherText),
                   tag == .MESSAGE || tag == .FINAL else {
                 throw E3dbError.cryptoError("Failed to decrypt values")
             }
-            guard output.write(data: plainText) != -1 else {
-                throw E3dbError.cryptoError("An error occured writing output data")
-            }
-            response = input.read(data: &cipherText)
+            output.write(plainText)
+            cipherText = input.readData(ofLength: bufferSize)
         }
     }
 }
