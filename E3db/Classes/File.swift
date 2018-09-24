@@ -21,18 +21,6 @@ public struct FileMeta: Codable {
     }
 }
 
-struct FilePendingUpdate: Decodable {
-    let fileUrl: URL
-    let fileName: String
-    let version: UUID
-
-    enum CodingKeys: String, CodingKey {
-        case fileUrl  = "file_url"
-        case fileName = "file_name"
-        case version
-    }
-}
-
 struct PendingFile: Decodable {
     let fileUrl: URL
     let id: UUID
@@ -118,12 +106,12 @@ extension Client {
                     return completion(result)
                 }
                 let createReq = CreateFileRequest(api: self.api, recordInfo: recInfo)
-                self.authedClient.perform(createReq) { result in
+                self.authedClient.performDefault(createReq) { result in
                     switch result {
                     case .success(let pending):
                         self.upload(file: encrypted, pendingInfo: pending, completion: withCleanup)
                     case .failure(let error):
-                        withCleanup(.failure(E3dbError(swishError: error)))
+                        withCleanup(.failure(error))
                     }
                 }
             } catch {

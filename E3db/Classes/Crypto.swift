@@ -208,7 +208,6 @@ extension Crypto {
         return Data(digest).base64EncodedString()
     }
 
-    // swiftlint:disable function_body_length
     static func encrypt(fileAt src: URL, ak: RawAccessKey) throws -> EncryptedFileInfo {
         guard let dk = sodium.secretStream.xchacha20poly1305.key(),
               let stream = sodium.secretStream.xchacha20poly1305.initPush(secretKey: dk) else {
@@ -241,11 +240,9 @@ extension Crypto {
         // simulate 2-element queue for easy EOF detection
         var headBuf = input.readData(ofLength: blockSize)
         var nextBuf = input.readData(ofLength: blockSize)
-        var headAmt = headBuf.count
-        var nextAmt = nextBuf.count
         var size    = UInt64(headerData.count + streamHeader.count)
-        while headAmt > 0 {
-            let tag: Stream.Tag = nextAmt == 0 ? .FINAL : .MESSAGE
+        while !headBuf.isEmpty {
+            let tag: Stream.Tag = nextBuf.isEmpty ? .FINAL : .MESSAGE
             guard let cipherText = stream.push(message: headBuf, tag: tag) else {
                 throw E3dbError.cryptoError("Failed to encrypted data")
             }
@@ -253,13 +250,11 @@ extension Crypto {
             _ = cipherText.withUnsafeBytes { CC_MD5_Update(context, $0, CC_LONG(cipherText.count)) }
 
             size   += UInt64(cipherText.count)
-            headAmt = nextAmt
             headBuf = nextBuf
             nextBuf = input.readData(ofLength: blockSize)
-            nextAmt = nextBuf.count
         }
         // ensure EOF
-        guard headAmt == 0 else {
+        guard headBuf.isEmpty else {
             throw E3dbError.cryptoError("An error occured reading input data")
         }
         var digest = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))

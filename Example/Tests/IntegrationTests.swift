@@ -672,6 +672,9 @@ class IntegrationTests: XCTestCase, TestUtils {
         guard let srcUrl = FileManager.tempBinFile() else {
             return XCTFail("Could not open file")
         }
+        defer {
+            try! FileManager.default.removeItem(at: srcUrl)
+        }
         let e3db = client()
         let data = Data(repeatElement("testing", count: 100).joined().utf8)
 
@@ -693,6 +696,10 @@ class IntegrationTests: XCTestCase, TestUtils {
         guard let srcUrl = FileManager.tempBinFile(),
               let dstUrl = FileManager.tempBinFile() else {
             return XCTFail("Could not open files")
+        }
+        defer {
+            try! FileManager.default.removeItem(at: srcUrl)
+            try! FileManager.default.removeItem(at: dstUrl)
         }
         let e3db = client()
         let data = Data(repeatElement("testing", count: 100).joined().utf8)
