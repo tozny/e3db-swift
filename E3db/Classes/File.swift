@@ -5,12 +5,23 @@
 
 import Foundation
 
+/// Represents information about an encrypted file stored by E3DB.
 public struct FileMeta: Codable {
-    let fileUrl: URL?
-    let fileName: String?
-    let checksum: String
-    let compression: String
-    let size: UInt64?
+
+    /// URL where the file can be downloaded
+    public let fileUrl: URL?
+
+    /// Name of the file
+    public let fileName: String?
+
+    /// MD5 checksum for the file, as a Base64 encoded string
+    public let checksum: String
+
+    /// Compression used for the plaintext contents of the file
+    public let compression: String
+
+    /// Size of the encrypted file
+    public let size: UInt64?
 
     enum CodingKeys: String, CodingKey {
         case fileUrl     = "file_url"
@@ -76,6 +87,14 @@ extension Client {
         }
     }
 
+    /// Write the given file to E3DB. Intended for data from 1MB up to 5GB in size. The contents of the file are
+    /// encrypted before being uploaded.
+    ///
+    /// - Parameters:
+    ///   - type: The kind of data this record represents
+    ///   - fileUrl: The local URL for the file to upload
+    ///   - plain: A user-defined, key-value store associated with the record that remains as plaintext
+    ///   - completion: A handler to call when this operation completes to provide the file info result
     public func writeFile(type: String, fileUrl: URL, plain: PlainMeta? = nil, completion: @escaping E3dbCompletion<Meta>) {
         let clientId = config.clientId
         getAccessKey(writerId: clientId, userId: clientId, readerId: clientId, recordType: type) { result in
@@ -158,6 +177,12 @@ extension Client {
         }
     }
 
+    /// Read the file associated with the given record from the server.
+    ///
+    /// - Parameters:
+    ///   - recordId: The identifier for the `Record` to read. Record must reference a previously uploaded file.
+    ///   - destination: Local location to write the decrypted contents of the referenced file.
+    ///   - completion: A handler to call when the operation completes to provide the decrypted record `Meta`
     public func readFile(recordId: UUID, destination: URL, completion: @escaping E3dbCompletion<Meta>) {
         let readReq = ReadFileRequest(api: api, recordId: recordId)
         authedClient.performDefault(readReq) { result in

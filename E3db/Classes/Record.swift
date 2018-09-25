@@ -60,6 +60,7 @@ public struct ClientMeta: Codable {
     /// associated with the document that remains as plaintext
     public let plain: PlainMeta?
 
+    /// Holds info about a file associated with this record, if any
     public let fileMeta: FileMeta?
 
     enum CodingKeys: String, CodingKey {
@@ -99,6 +100,7 @@ public struct Meta: Decodable {
     /// An identifier for the current version of the record
     public let version: String
 
+    /// Holds info about a file associated with this record, if any
     public let fileMeta: FileMeta?
 
     enum CodingKeys: String, CodingKey {
