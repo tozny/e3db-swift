@@ -259,6 +259,10 @@ extension Client {
         readRaw(recordId: recordId, fields: fields) { result in
             switch result {
             case .success(let record):
+                guard !record.cipherData.isEmpty else {
+                    let emptyRec = Record(meta: record.meta, data: [:])
+                    return completion(.success(emptyRec))
+                }
                 self.decryptRecord(record: record, completion: completion)
             case .failure(let err):
                 completion(Result(error: err))
