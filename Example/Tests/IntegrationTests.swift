@@ -868,7 +868,7 @@ class IntegrationTests: XCTestCase, TestUtils {
             }
         }
 
-        // shared client should now see file contents
+        // shared client should not see file contents
         asyncTest(#function + "read file failure") { (expect) in
             shareClient.readFile(recordId: meta!.recordId, destination: dstUrl) { (result) in
                 XCTAssertNil(result.value)
