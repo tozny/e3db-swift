@@ -827,6 +827,106 @@ class IntegrationTests: XCTestCase, TestUtils {
         let fileData = try! Data(contentsOf: dstUrl)
         XCTAssert(fileData.isEmpty, "File should have no contents")
     }
+
+    func testShareRevokeFile() {
+        let mainClient = client()
+        let (shareClient, sharedId) = clientWithId()
+        guard let srcUrl = FileManager.tempBinFile(),
+              let dstUrl = FileManager.tempBinFile() else {
+                return XCTFail("Could not open files")
+        }
+        defer {
+            try! FileManager.default.removeItem(at: srcUrl)
+            try! FileManager.default.removeItem(at: dstUrl)
+        }
+        let data = Data(repeatElement("testing", count: 100).joined().utf8)
+        let type = "test-file"
+
+        guard let _ = try? data.write(to: srcUrl) else {
+            return XCTFail("Failed to write data")
+        }
+        var meta: Meta?
+
+        // write initial file
+        asyncTest(#function + "write") { (expect) in
+            mainClient.writeFile(type: type, fileUrl: srcUrl) { (result) in
+                XCTAssertNil(result.error)
+                XCTAssertNotNil(result.value)
+                XCTAssertNotNil(result.value?.fileMeta?.fileName)
+                meta = result.value
+                expect.fulfill()
+            }
+        }
+
+        // shared client should not see records initially
+        let query = QueryParams(includeData: true, includeAllWriters: true)
+        asyncTest(#function + "read first") { (expect) in
+            shareClient.query(params: query) { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.records.count == 0)
+                expect.fulfill()
+            }
+        }
+
+        // shared client should now see file contents
+        asyncTest(#function + "read file failure") { (expect) in
+            shareClient.readFile(recordId: meta!.recordId, destination: dstUrl) { (result) in
+                XCTAssertNil(result.value)
+                XCTAssertNotNil(result.error)
+                expect.fulfill()
+            }
+        }
+
+        // share record type
+        asyncTest(#function + "share") { (expect) in
+            mainClient.share(type: meta!.type, readerId: sharedId) { (result) in
+                XCTAssertNil(result.error)
+                expect.fulfill()
+            }
+        }
+
+        // shared client should now see full record
+        asyncTest(#function + "read again") { (expect) in
+            shareClient.query(params: query) { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.records.count == 1)
+                XCTAssert(result.value!.records[0].meta.recordId == meta!.recordId)
+                XCTAssert(result.value!.records[0].data.isEmpty)
+                expect.fulfill()
+            }
+        }
+
+        // shared client should now see file contents
+        asyncTest(#function + "read file") { (expect) in
+            shareClient.readFile(recordId: meta!.recordId, destination: dstUrl) { (result) in
+                XCTAssertNil(result.error)
+                do {
+                    let contents = try Data(contentsOf: dstUrl)
+                    XCTAssertEqual(contents, data)
+                } catch {
+                    XCTFail(error.localizedDescription)
+                }
+                expect.fulfill()
+            }
+        }
+
+        // unshare record type
+        asyncTest(#function + "revoke") { (expect) in
+            mainClient.revoke(type: meta!.type, readerId: sharedId) { (result) in
+                XCTAssertNil(result.error)
+                expect.fulfill()
+            }
+        }
+
+        // shared client should no longer see record
+        asyncTest(#function + "read last") { (expect) in
+            shareClient.query(params: query) { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.records.count == 0)
+                expect.fulfill()
+            }
+        }
+    }
 }
 
 class ValidCertIntegrationTests: XCTestCase, TestUtils, PinnedCertificate, URLSessionDelegate {
