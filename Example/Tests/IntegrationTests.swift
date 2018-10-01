@@ -534,140 +534,6 @@ class IntegrationTests: XCTestCase, TestUtils {
         }
     }
 
-    func testShareRevoke() {
-        let mainClient = client()
-        let (shareClient, sharedId) = clientWithId()
-        let record = writeTestRecord(mainClient)
-        defer { deleteRecord(record, e3db: mainClient) }
-
-        // shared client should not see records initially
-        let query = QueryParams(includeData: true, includeAllWriters: true)
-        asyncTest(#function + "read first") { (expect) in
-            shareClient.query(params: query) { (result) in
-                XCTAssertNotNil(result.value)
-                XCTAssert(result.value!.records.count == 0)
-                expect.fulfill()
-            }
-        }
-
-        // share record type
-        asyncTest(#function + "share") { (expect) in
-            mainClient.share(type: record.meta.type, readerId: sharedId) { (result) in
-                XCTAssertNil(result.error)
-                expect.fulfill()
-            }
-        }
-
-        // shared client should now see full record
-        asyncTest(#function + "read again") { (expect) in
-            shareClient.query(params: query) { (result) in
-                XCTAssertNotNil(result.value)
-                XCTAssert(result.value!.records.count == 1)
-                XCTAssert(result.value!.records[0].meta.recordId == record.meta.recordId)
-                XCTAssert(result.value!.records[0].data == record.data)
-                expect.fulfill()
-            }
-        }
-
-        // unshare record type
-        asyncTest(#function + "revoke") { (expect) in
-            mainClient.revoke(type: record.meta.type, readerId: sharedId) { (result) in
-                XCTAssertNil(result.error)
-                expect.fulfill()
-            }
-        }
-
-        // shared client should no longer see record
-        asyncTest(#function + "read last") { (expect) in
-            shareClient.query(params: query) { (result) in
-                XCTAssertNotNil(result.value)
-                XCTAssert(result.value!.records.count == 0)
-                expect.fulfill()
-            }
-        }
-    }
-
-    func testGetPolicies() {
-        let mainClient = client()
-        let (shareClient, sharedId) = clientWithId()
-
-        // current policies should be empty
-        asyncTest(#function + "main incoming policy check1") { (expect) in
-            mainClient.getIncomingSharing() { (result) in
-                XCTAssertNotNil(result.value)
-                XCTAssert(result.value!.count == 0)
-                expect.fulfill()
-            }
-        }
-        asyncTest(#function + "main outgoing policy check1") { (expect) in
-            mainClient.getOutgoingSharing() { (result) in
-                XCTAssertNotNil(result.value)
-                XCTAssert(result.value!.count == 0)
-                expect.fulfill()
-            }
-        }
-        asyncTest(#function + "shared incoming policy check1") { (expect) in
-            shareClient.getIncomingSharing() { (result) in
-                XCTAssertNotNil(result.value)
-                XCTAssert(result.value!.count == 0)
-                expect.fulfill()
-            }
-        }
-        asyncTest(#function + "shared outgoing policy check1") { (expect) in
-            shareClient.getOutgoingSharing() { (result) in
-                XCTAssertNotNil(result.value)
-                XCTAssert(result.value!.count == 0)
-                expect.fulfill()
-            }
-        }
-
-        // set share policy from main to shared
-        asyncTest(#function + "share") { (expect) in
-            mainClient.share(type: #function, readerId: sharedId) { (result) in
-                XCTAssertNil(result.error)
-                expect.fulfill()
-            }
-        }
-
-        // confirm the right policies have changed
-        asyncTest(#function + "main incoming policy check2") { (expect) in
-            mainClient.getIncomingSharing() { (result) in
-                XCTAssertNotNil(result.value)
-                XCTAssert(result.value!.count == 0)
-                expect.fulfill()
-            }
-        }
-        asyncTest(#function + "main outgoing policy check2") { (expect) in
-            mainClient.getOutgoingSharing() { (result) in
-                XCTAssertNotNil(result.value)
-                XCTAssert(result.value!.count > 0)
-                expect.fulfill()
-            }
-        }
-        asyncTest(#function + "shared incoming policy check3") { (expect) in
-            shareClient.getIncomingSharing() { (result) in
-                XCTAssertNotNil(result.value)
-                XCTAssert(result.value!.count > 0)
-                expect.fulfill()
-            }
-        }
-        asyncTest(#function + "shared outgoing policy check4") { (expect) in
-            shareClient.getOutgoingSharing() { (result) in
-                XCTAssertNotNil(result.value)
-                XCTAssert(result.value!.count == 0)
-                expect.fulfill()
-            }
-        }
-
-        // reset share policy
-        asyncTest(#function + "revoke") { (expect) in
-            mainClient.revoke(type: #function, readerId: sharedId) { (result) in
-                XCTAssertNil(result.error)
-                expect.fulfill()
-            }
-        }
-    }
-
     func testFileUpload() {
         guard let srcUrl = FileManager.tempBinFile() else {
             return XCTFail("Could not open file")
@@ -695,7 +561,7 @@ class IntegrationTests: XCTestCase, TestUtils {
     func testFileRoundTrip() {
         guard let srcUrl = FileManager.tempBinFile(),
               let dstUrl = FileManager.tempBinFile() else {
-            return XCTFail("Could not open files")
+                return XCTFail("Could not open files")
         }
         defer {
             try! FileManager.default.removeItem(at: srcUrl)
@@ -738,7 +604,7 @@ class IntegrationTests: XCTestCase, TestUtils {
 
     func testReadFileRecord() {
         guard let srcUrl = FileManager.tempBinFile() else {
-                return XCTFail("Could not open files")
+            return XCTFail("Could not open files")
         }
         defer {
             try! FileManager.default.removeItem(at: srcUrl)
@@ -826,6 +692,140 @@ class IntegrationTests: XCTestCase, TestUtils {
         }
         let fileData = try! Data(contentsOf: dstUrl)
         XCTAssert(fileData.isEmpty, "File should have no contents")
+    }
+
+    func testShareRevoke() {
+        let mainClient = client()
+        let (shareClient, sharedId) = clientWithId()
+        let record = writeTestRecord(mainClient)
+        defer { deleteRecord(record, e3db: mainClient) }
+
+        // shared client should not see records initially
+        let query = QueryParams(includeData: true, includeAllWriters: true)
+        asyncTest(#function + "read first") { (expect) in
+            shareClient.query(params: query) { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.records.isEmpty)
+                expect.fulfill()
+            }
+        }
+
+        // share record type
+        asyncTest(#function + "share") { (expect) in
+            mainClient.share(type: record.meta.type, readerId: sharedId) { (result) in
+                XCTAssertNil(result.error)
+                expect.fulfill()
+            }
+        }
+
+        // shared client should now see full record
+        asyncTest(#function + "read again") { (expect) in
+            shareClient.query(params: query) { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.records.count == 1)
+                XCTAssert(result.value!.records[0].meta.recordId == record.meta.recordId)
+                XCTAssert(result.value!.records[0].data == record.data)
+                expect.fulfill()
+            }
+        }
+
+        // unshare record type
+        asyncTest(#function + "revoke") { (expect) in
+            mainClient.revoke(type: record.meta.type, readerId: sharedId) { (result) in
+                XCTAssertNil(result.error)
+                expect.fulfill()
+            }
+        }
+
+        // shared client should no longer see record
+        asyncTest(#function + "read last") { (expect) in
+            shareClient.query(params: query) { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.records.isEmpty)
+                expect.fulfill()
+            }
+        }
+    }
+
+    func testGetPolicies() {
+        let mainClient = client()
+        let (shareClient, sharedId) = clientWithId()
+
+        // current policies should be empty
+        asyncTest(#function + "main incoming policy check1") { (expect) in
+            mainClient.getIncomingSharing() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.isEmpty)
+                expect.fulfill()
+            }
+        }
+        asyncTest(#function + "main outgoing policy check1") { (expect) in
+            mainClient.getOutgoingSharing() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.isEmpty)
+                expect.fulfill()
+            }
+        }
+        asyncTest(#function + "shared incoming policy check1") { (expect) in
+            shareClient.getIncomingSharing() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.isEmpty)
+                expect.fulfill()
+            }
+        }
+        asyncTest(#function + "shared outgoing policy check1") { (expect) in
+            shareClient.getOutgoingSharing() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.isEmpty)
+                expect.fulfill()
+            }
+        }
+
+        // set share policy from main to shared
+        asyncTest(#function + "share") { (expect) in
+            mainClient.share(type: #function, readerId: sharedId) { (result) in
+                XCTAssertNil(result.error)
+                expect.fulfill()
+            }
+        }
+
+        // confirm the right policies have changed
+        asyncTest(#function + "main incoming policy check2") { (expect) in
+            mainClient.getIncomingSharing() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.isEmpty)
+                expect.fulfill()
+            }
+        }
+        asyncTest(#function + "main outgoing policy check2") { (expect) in
+            mainClient.getOutgoingSharing() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.count > 0)
+                expect.fulfill()
+            }
+        }
+        asyncTest(#function + "shared incoming policy check3") { (expect) in
+            shareClient.getIncomingSharing() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.count > 0)
+                expect.fulfill()
+            }
+        }
+        asyncTest(#function + "shared outgoing policy check4") { (expect) in
+            shareClient.getOutgoingSharing() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.isEmpty)
+                expect.fulfill()
+            }
+        }
+
+        // reset share policy
+        asyncTest(#function + "revoke") { (expect) in
+            mainClient.revoke(type: #function, readerId: sharedId) { (result) in
+                XCTAssertNil(result.error)
+                expect.fulfill()
+            }
+        }
     }
 
     func testShareRevokeFile() {
@@ -923,6 +923,220 @@ class IntegrationTests: XCTestCase, TestUtils {
             shareClient.query(params: query) { (result) in
                 XCTAssertNotNil(result.value)
                 XCTAssert(result.value!.records.count == 0)
+                expect.fulfill()
+            }
+        }
+    }
+
+    func testShareRevokeBehalfOf() {
+        let (mainClient, mainId)   = clientWithId()
+        let (authzClient, authzId) = clientWithId()
+        let (shareClient, shareId) = clientWithId()
+        let record  = writeTestRecord(mainClient)
+        let recType = record.meta.type
+        defer { deleteRecord(record, e3db: mainClient) }
+
+        // shared client should not see records initially
+        let query = QueryParams(includeData: true, includeAllWriters: true)
+        asyncTest(#function + "read first") { (expect) in
+            shareClient.query(params: query) { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.records.isEmpty)
+                expect.fulfill()
+            }
+        }
+
+        // main client authorize the authz client
+        asyncTest(#function + "authorize") { (expect) in
+            mainClient.add(authorizerId: authzId, type: recType) { (result) in
+                XCTAssertNil(result.error)
+                expect.fulfill()
+            }
+        }
+
+        // authz client share record type
+        asyncTest(#function + "share on behalf of") { (expect) in
+            authzClient.share(onBehalfOf: mainId, type: recType, readerId: shareId) { (result) in
+                XCTAssertNil(result.error)
+                expect.fulfill()
+            }
+        }
+
+        // shared client should now see full record
+        asyncTest(#function + "read again") { (expect) in
+            shareClient.query(params: query) { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.records.count == 1)
+                XCTAssert(result.value!.records[0].meta.recordId == record.meta.recordId)
+                XCTAssert(result.value!.records[0].data == record.data)
+                expect.fulfill()
+            }
+        }
+
+        // unshare record type
+        asyncTest(#function + "revoke on behalf of") { (expect) in
+            authzClient.revoke(onBehalfOf: mainId, type: recType, readerId: shareId) { (result) in
+                XCTAssertNil(result.error)
+                expect.fulfill()
+            }
+        }
+
+        // shared client should no longer see record
+        asyncTest(#function + "read last") { (expect) in
+            shareClient.query(params: query) { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.records.isEmpty)
+                expect.fulfill()
+            }
+        }
+    }
+
+    func testAuthorizerPolicies() {
+        let (mainClient, mainId)   = clientWithId()
+        let (authzClient, authzId) = clientWithId()
+        let (shareClient, shareId) = clientWithId()
+        let record  = writeTestRecord(mainClient)
+        let recType = record.meta.type
+        defer { deleteRecord(record, e3db: mainClient) }
+
+        // current policies should be empty
+        asyncTest(#function + "main outgoing policy check1") { (expect) in
+            mainClient.getOutgoingSharing() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.isEmpty)
+                expect.fulfill()
+            }
+        }
+        asyncTest(#function + "main get authorizers check1") { (expect) in
+            mainClient.getAuthorizers() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.isEmpty)
+                expect.fulfill()
+            }
+        }
+        asyncTest(#function + "authz get authorized by check1") { (expect) in
+            authzClient.getAuthorizedBy() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.isEmpty)
+                expect.fulfill()
+            }
+        }
+        asyncTest(#function + "shared incoming policy check1") { (expect) in
+            shareClient.getIncomingSharing() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.isEmpty)
+                expect.fulfill()
+            }
+        }
+
+        // authorize the authz client
+        asyncTest(#function + "authorize") { (expect) in
+            mainClient.add(authorizerId: authzId, type: recType) { (result) in
+                XCTAssertNil(result.error)
+                expect.fulfill()
+            }
+        }
+
+        // confirm the right policies have changed
+        asyncTest(#function + "main outgoing policy check2") { (expect) in
+            mainClient.getOutgoingSharing() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.isEmpty) // not shared yet
+                expect.fulfill()
+            }
+        }
+        asyncTest(#function + "main get authorizers check2") { (expect) in
+            mainClient.getAuthorizers() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.count > 0)
+                XCTAssert(result.value!.first!.authorizedBy == mainId)
+                XCTAssert(result.value!.first!.authorizerId == authzId)
+                expect.fulfill()
+            }
+        }
+        asyncTest(#function + "authz get authorized by check2") { (expect) in
+            authzClient.getAuthorizedBy() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.count > 0)
+                XCTAssert(result.value!.first!.authorizedBy == mainId)
+                XCTAssert(result.value!.first!.authorizerId == authzId)
+                expect.fulfill()
+            }
+        }
+        asyncTest(#function + "shared incoming policy check2") { (expect) in
+            shareClient.getIncomingSharing() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.isEmpty) // not shared yet
+                expect.fulfill()
+            }
+        }
+
+        // authz client share record type
+        asyncTest(#function + "share on behalf of") { (expect) in
+            authzClient.share(onBehalfOf: mainId, type: recType, readerId: shareId) { (result) in
+                XCTAssertNil(result.error)
+                expect.fulfill()
+            }
+        }
+
+        // confirm the right policies have changed
+        asyncTest(#function + "main outgoing policy check3") { (expect) in
+            mainClient.getOutgoingSharing() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.count > 0)
+                XCTAssert(result.value!.first!.readerId == shareId)
+                expect.fulfill()
+            }
+        }
+        asyncTest(#function + "shared incoming policy check3") { (expect) in
+            shareClient.getIncomingSharing() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.count > 0)
+                XCTAssert(result.value!.first!.writerId == mainId)
+                expect.fulfill()
+            }
+        }
+
+        // unshare record type
+        asyncTest(#function + "revoke on behalf of") { (expect) in
+            authzClient.revoke(onBehalfOf: mainId, type: recType, readerId: shareId) { (result) in
+                XCTAssertNil(result.error)
+                expect.fulfill()
+            }
+        }
+        asyncTest(#function + "main outgoing policy check3") { (expect) in
+            mainClient.getOutgoingSharing() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.isEmpty)
+                expect.fulfill()
+            }
+        }
+        asyncTest(#function + "shared incoming policy check3") { (expect) in
+            shareClient.getIncomingSharing() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.isEmpty)
+                expect.fulfill()
+            }
+        }
+
+        // reset authorizer policy
+        asyncTest(#function + "revoke") { (expect) in
+            mainClient.remove(authorizerId: authzId) { (result) in
+                XCTAssertNil(result.error)
+                expect.fulfill()
+            }
+        }
+        asyncTest(#function + "main get authorizers check1") { (expect) in
+            mainClient.getAuthorizers() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.isEmpty)
+                expect.fulfill()
+            }
+        }
+        asyncTest(#function + "authz get authorized by check1") { (expect) in
+            authzClient.getAuthorizedBy() { (result) in
+                XCTAssertNotNil(result.value)
+                XCTAssert(result.value!.isEmpty)
                 expect.fulfill()
             }
         }

@@ -199,6 +199,60 @@ e3db.revoke(type: "UserInfo", readerId: otherClient) { result in
 }
 ```
 
+#### Authorizers
+
+Every E3DB client can authorize any other client to share data on their behalf.
+That is, the data producer does not need to be the sole entity that enables
+sharing with other clients. We call the client that is allowed to share data on
+a data producer's behalf the "authorizer".
+
+Just like `share`, authorization is granted based on record types. That is, a
+client can only authorize another client to share a specific record type. There
+is no mechanism to grant sharing of all record types (whether any exist or not).
+
+Note that the authorizer does *not* have permission to read the data shared
+themselves - they are only allowed to share data on behalf of the data producer.
+
+To add an authorizer, use the `add(authorizerId:type:completion:)` method:
+
+```swift
+let authorizerId = // ID of client to share on this data producer's behalf
+let recordType   = // type of records to authorize
+
+e3db.add(authorizerId: authorizerId, type: recordType) { result in
+    guard case .success = result else {
+        return print("An error occurred attempting to grant authorizer privilege: \(result.error)")
+    }
+    // client successfully authorized
+}
+```
+
+Authorization can be removed with the `remove(authorizerId:...` methods.
+Authorization *can* be removed for all record types, or for a single record
+type.
+
+A client can list all clients that it has authorized to share on its behalf
+using the `add(authorizerId:type:completion:)` method. Similarly, a client can
+determine all the data producers that it can share on behalf of using the
+`getAuthorizedBy` method.
+
+#### Sharing as an Authorizer
+A client that has been given permission to share records on behalf of a writer
+can use the `share(onBehalfOf:type:readerId:completion:)` method:
+
+```swift
+let writerId   = // ID of data writer
+let readerId   = // ID of client we are sharing with
+let recordType = // type of records to share
+
+e3db.share(onBehalfOf: writerId, type: recordType, readerId: readerId) { result in
+    guard case .success = result else {
+        return print("An error occurred attempting to share: \(result.error)")
+    }
+    // successfully shared
+}
+```
+
 #### Local Encryption & Decryption
 
 The E3DB SDK allows you to encrypt documents for local storage, which can
