@@ -107,13 +107,11 @@ struct ClientInfo: Decodable {
     let clientId: UUID
     let publicKey: ClientKey
     let signingKey: SigningKey?
-    let validated: Bool
 
     enum CodingKeys: String, CodingKey {
         case clientId   = "client_id"
         case publicKey  = "public_key"
         case signingKey = "signing_key"
-        case validated
     }
 }
 
@@ -130,7 +128,14 @@ extension Client {
     }
 
     func getClientInfo(clientId: UUID? = nil, completion: @escaping E3dbCompletion<ClientInfo>) {
-        let req = ClientInfoRequest(api: api, clientId: clientId ?? config.clientId)
+        guard let otherId = clientId,
+              otherId != config.clientId else {
+            let pubK = ClientKey(curve25519: config.publicKey)
+            let sigK = SigningKey(ed25519: config.publicSigKey)
+            let info = ClientInfo(clientId: config.clientId, publicKey: pubK, signingKey: sigK)
+            return completion(.success(info))
+        }
+        let req = ClientInfoRequest(api: api, clientId: otherId)
         authedClient.performDefault(req, completion: completion)
     }
 }
