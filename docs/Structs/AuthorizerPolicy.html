@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>DecryptedDocument Structure Reference</title>
+    <title>AuthorizerPolicy Structure Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Struct/DecryptedDocument" class="dashAnchor"></a>
-    <a title="DecryptedDocument Structure Reference"></a>
+    <a name="//apple_ref/swift/Struct/AuthorizerPolicy" class="dashAnchor"></a>
+    <a title="AuthorizerPolicy Structure Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">E3db Docs</a> (100% documented)</p>
@@ -22,7 +22,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">E3db Reference</a>
         <img id="carat" src="../img/carat.png" />
-        DecryptedDocument Structure Reference
+        AuthorizerPolicy Structure Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -148,14 +148,15 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>DecryptedDocument</h1>
+            <h1>AuthorizerPolicy</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DecryptedDocument</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">AuthorizerPolicy</span><span class="p">:</span> <span class="kt">Decodable</span></code></pre>
 
                 </div>
               </div>
-            <p>Data type to hold the verified, unencrypted data and related info</p>
+            <p>A type to describe an existing policy for clients that
+are authorized to perform sharing and revoking operations</p>
 
           </section>
           <section class="section task-group-section">
@@ -164,9 +165,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4E3db17DecryptedDocumentV10clientMetaAA06ClientE0Vvp"></a>
-                    <a name="//apple_ref/swift/Property/clientMeta" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4E3db17DecryptedDocumentV10clientMetaAA06ClientE0Vvp">clientMeta</a>
+                    <a name="/s:4E3db16AuthorizerPolicyV12authorizerId10Foundation4UUIDVvp"></a>
+                    <a name="//apple_ref/swift/Property/authorizerId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db16AuthorizerPolicyV12authorizerId10Foundation4UUIDVvp">authorizerId</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -174,14 +175,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Metadata produced by this client about this document</p>
+                        <p>The identifier of the client that can share on the writer&rsquo;s behalf</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">clientMeta</span><span class="p">:</span> <span class="kt"><a href="../Structs/ClientMeta.html">ClientMeta</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">authorizerId</span><span class="p">:</span> <span class="kt">UUID</span></code></pre>
 
                         </div>
                       </div>
@@ -191,9 +192,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4E3db17DecryptedDocumentV4datas10DictionaryVyS2SGvp"></a>
-                    <a name="//apple_ref/swift/Property/data" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4E3db17DecryptedDocumentV4datas10DictionaryVyS2SGvp">data</a>
+                    <a name="/s:4E3db16AuthorizerPolicyV8writerId10Foundation4UUIDVvp"></a>
+                    <a name="//apple_ref/swift/Property/writerId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db16AuthorizerPolicyV8writerId10Foundation4UUIDVvp">writerId</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -201,15 +202,95 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The plaintext information where both keys and values
-are unencrypted</p>
+                        <p>The identifier of the writer producing the records</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">data</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db9Cleartexta">Cleartext</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">writerId</span><span class="p">:</span> <span class="kt">UUID</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db16AuthorizerPolicyV6userId10Foundation4UUIDVvp"></a>
+                    <a name="//apple_ref/swift/Property/userId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db16AuthorizerPolicyV6userId10Foundation4UUIDVvp">userId</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>An identifier for the user of the record</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">userId</span><span class="p">:</span> <span class="kt">UUID</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db16AuthorizerPolicyV10recordTypeSSvp"></a>
+                    <a name="//apple_ref/swift/Property/recordType" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db16AuthorizerPolicyV10recordTypeSSvp">recordType</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The kind of records that are being shared</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">recordType</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db16AuthorizerPolicyV12authorizedBy10Foundation4UUIDVvp"></a>
+                    <a name="//apple_ref/swift/Property/authorizedBy" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db16AuthorizerPolicyV12authorizedBy10Foundation4UUIDVvp">authorizedBy</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The identifier for the client that performed the authorization</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">authorizedBy</span><span class="p">:</span> <span class="kt">UUID</span></code></pre>
 
                         </div>
                       </div>

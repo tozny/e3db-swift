@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>DecryptedDocument Structure Reference</title>
+    <title>FileMeta Structure Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Struct/DecryptedDocument" class="dashAnchor"></a>
-    <a title="DecryptedDocument Structure Reference"></a>
+    <a name="//apple_ref/swift/Struct/FileMeta" class="dashAnchor"></a>
+    <a title="FileMeta Structure Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">E3db Docs</a> (100% documented)</p>
@@ -22,7 +22,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">E3db Reference</a>
         <img id="carat" src="../img/carat.png" />
-        DecryptedDocument Structure Reference
+        FileMeta Structure Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -148,14 +148,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>DecryptedDocument</h1>
+            <h1>FileMeta</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DecryptedDocument</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">FileMeta</span><span class="p">:</span> <span class="kt">Codable</span></code></pre>
 
                 </div>
               </div>
-            <p>Data type to hold the verified, unencrypted data and related info</p>
+            <p>Represents information about an encrypted file stored by E3DB.</p>
 
           </section>
           <section class="section task-group-section">
@@ -164,9 +164,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4E3db17DecryptedDocumentV10clientMetaAA06ClientE0Vvp"></a>
-                    <a name="//apple_ref/swift/Property/clientMeta" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4E3db17DecryptedDocumentV10clientMetaAA06ClientE0Vvp">clientMeta</a>
+                    <a name="/s:4E3db8FileMetaV7fileUrl10Foundation3URLVSgvp"></a>
+                    <a name="//apple_ref/swift/Property/fileUrl" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db8FileMetaV7fileUrl10Foundation3URLVSgvp">fileUrl</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -174,14 +174,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Metadata produced by this client about this document</p>
+                        <p>URL where the file can be downloaded</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">clientMeta</span><span class="p">:</span> <span class="kt"><a href="../Structs/ClientMeta.html">ClientMeta</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">fileUrl</span><span class="p">:</span> <span class="kt">URL</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -191,9 +191,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4E3db17DecryptedDocumentV4datas10DictionaryVyS2SGvp"></a>
-                    <a name="//apple_ref/swift/Property/data" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4E3db17DecryptedDocumentV4datas10DictionaryVyS2SGvp">data</a>
+                    <a name="/s:4E3db8FileMetaV8fileNameSSSgvp"></a>
+                    <a name="//apple_ref/swift/Property/fileName" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db8FileMetaV8fileNameSSSgvp">fileName</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -201,15 +201,95 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The plaintext information where both keys and values
-are unencrypted</p>
+                        <p>Name of the file</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">data</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db9Cleartexta">Cleartext</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">fileName</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db8FileMetaV8checksumSSvp"></a>
+                    <a name="//apple_ref/swift/Property/checksum" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db8FileMetaV8checksumSSvp">checksum</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>MD5 checksum for the file, as a Base64 encoded string</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">checksum</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db8FileMetaV11compressionSSvp"></a>
+                    <a name="//apple_ref/swift/Property/compression" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db8FileMetaV11compressionSSvp">compression</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Compression used for the plaintext contents of the file</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">compression</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db8FileMetaV4sizes6UInt64VSgvp"></a>
+                    <a name="//apple_ref/swift/Property/size" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db8FileMetaV4sizes6UInt64VSgvp">size</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Size of the encrypted file</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">size</span><span class="p">:</span> <span class="kt">UInt64</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>

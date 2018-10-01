@@ -64,6 +64,9 @@
             <a href="Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="Structs/AuthorizerPolicy.html">AuthorizerPolicy</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Structs/ClientCredentials.html">ClientCredentials</a>
               </li>
               <li class="nav-group-task">
@@ -83,6 +86,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Structs/EncryptedDocument.html">EncryptedDocument</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/FileMeta.html">FileMeta</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/IncomingSharingPolicy.html">IncomingSharingPolicy</a>
@@ -324,6 +330,55 @@ can be removed with the <code>revoke</code> method.</p>
     <span class="c1">// Revoking was successful!</span>
 <span class="p">}</span>
 </code></pre>
+<h4 id='authorizers' class='heading'>Authorizers</h4>
+
+<p>Every E3DB client can authorize any other client to share data on their behalf.
+That is, the data producer does not need to be the sole entity that enables
+sharing with other clients. We call the client that is allowed to share data on
+a data producer&rsquo;s behalf the <q>authorizer</q>.</p>
+
+<p>Just like <code>share</code>, authorization is granted based on record types. That is, a
+client can only authorize another client to share a specific record type. There
+is no mechanism to grant sharing of all record types (whether any exist or not).</p>
+
+<p>Note that the authorizer does <em>not</em> have permission to read the data shared
+themselves - they are only allowed to share data on behalf of the data producer.</p>
+
+<p>To add an authorizer, use the <code>add(authorizerId:type:completion:)</code> method:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">authorizerId</span> <span class="o">=</span> <span class="c1">// ID of client to share on this data producer's behalf</span>
+<span class="k">let</span> <span class="nv">recordType</span>   <span class="o">=</span> <span class="c1">// type of records to authorize</span>
+
+<span class="n">e3db</span><span class="o">.</span><span class="nf">add</span><span class="p">(</span><span class="nv">authorizerId</span><span class="p">:</span> <span class="n">authorizerId</span><span class="p">,</span> <span class="nv">type</span><span class="p">:</span> <span class="n">recordType</span><span class="p">)</span> <span class="p">{</span> <span class="n">result</span> <span class="k">in</span>
+    <span class="k">guard</span> <span class="k">case</span> <span class="o">.</span><span class="n">success</span> <span class="o">=</span> <span class="n">result</span> <span class="nf">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nf">print</span><span class="p">(</span><span class="s">"An error occurred attempting to grant authorizer privilege: </span><span class="se">\(</span><span class="n">result</span><span class="o">.</span><span class="n">error</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="c1">// client successfully authorized</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>Authorization can be removed with the <code>remove(authorizerId:...</code> methods.
+Authorization <em>can</em> be removed for all record types, or for a single record
+type.</p>
+
+<p>A client can list all clients that it has authorized to share on its behalf
+using the <code>add(authorizerId:type:completion:)</code> method. Similarly, a client can
+determine all the data producers that it can share on behalf of using the
+<code>getAuthorizedBy</code> method.</p>
+<h4 id='sharing-as-an-authorizer' class='heading'>Sharing as an Authorizer</h4>
+
+<p>A client that has been given permission to share records on behalf of a writer
+can use the <code>share(onBehalfOf:type:readerId:completion:)</code> method:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">writerId</span>   <span class="o">=</span> <span class="c1">// ID of data writer</span>
+<span class="k">let</span> <span class="nv">readerId</span>   <span class="o">=</span> <span class="c1">// ID of client we are sharing with</span>
+<span class="k">let</span> <span class="nv">recordType</span> <span class="o">=</span> <span class="c1">// type of records to share</span>
+
+<span class="n">e3db</span><span class="o">.</span><span class="nf">share</span><span class="p">(</span><span class="nv">onBehalfOf</span><span class="p">:</span> <span class="n">writerId</span><span class="p">,</span> <span class="nv">type</span><span class="p">:</span> <span class="n">recordType</span><span class="p">,</span> <span class="nv">readerId</span><span class="p">:</span> <span class="n">readerId</span><span class="p">)</span> <span class="p">{</span> <span class="n">result</span> <span class="k">in</span>
+    <span class="k">guard</span> <span class="k">case</span> <span class="o">.</span><span class="n">success</span> <span class="o">=</span> <span class="n">result</span> <span class="nf">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nf">print</span><span class="p">(</span><span class="s">"An error occurred attempting to share: </span><span class="se">\(</span><span class="n">result</span><span class="o">.</span><span class="n">error</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="c1">// successfully shared</span>
+<span class="p">}</span>
+</code></pre>
 <h4 id='local-encryption-amp-decryption' class='heading'>Local Encryption &amp; Decryption</h4>
 
 <p>The E3DB SDK allows you to encrypt documents for local storage, which can
@@ -477,6 +532,127 @@ that wrote the record):</p>
     <span class="k">return</span> <span class="nf">print</span><span class="p">(</span><span class="s">"Document failed verification"</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="c1">// Document verified!</span>
+</code></pre>
+<h4 id='reading-and-writing-files' class='heading'>Reading and Writing Files</h4>
+
+<p>E3DB supports the storage of large encrypted files, using a similar interface
+for reading and writing records. The SDK will handle encrypting and uploading
+the file. Similarly, it will download and decrypt files as well.</p>
+
+<p>To write a file, use the <code>writeFile</code> method.</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">data</span> <span class="o">=</span> <span class="nf">Data</span><span class="p">(</span><span class="s">"Hello there"</span><span class="o">.</span><span class="n">utf8</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">src</span>  <span class="o">=</span> <span class="kt">FileManager</span>
+    <span class="o">.</span><span class="k">default</span>
+    <span class="o">.</span><span class="n">temporaryDirectory</span>
+    <span class="o">.</span><span class="nf">appendingPathComponent</span><span class="p">(</span><span class="s">"source-file"</span><span class="p">)</span>
+    <span class="o">.</span><span class="nf">appendingPathExtension</span><span class="p">(</span><span class="s">"txt"</span><span class="p">)</span>
+
+<span class="k">guard</span> <span class="kt">FileManager</span><span class="o">.</span><span class="k">default</span><span class="o">.</span><span class="nf">createFile</span><span class="p">(</span><span class="nv">atPath</span><span class="p">:</span> <span class="n">src</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="nv">contents</span><span class="p">:</span> <span class="n">data</span><span class="p">)</span> <span class="nf">else</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nf">print</span><span class="p">(</span><span class="s">"Could not create file"</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">var</span> <span class="nv">recordId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">?</span>
+<span class="n">e3db</span><span class="o">.</span><span class="nf">writeFile</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="n">type</span><span class="p">,</span> <span class="nv">fileUrl</span><span class="p">:</span> <span class="n">src</span><span class="p">)</span> <span class="p">{</span> <span class="n">result</span> <span class="k">in</span>
+    <span class="k">switch</span> <span class="nf">result</span> <span class="p">{</span>
+    <span class="c1">// The operation was successful, here's the `Meta` instance.</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">meta</span><span class="p">):</span>
+        <span class="n">recordId</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">recordId</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"An error occurred attempting to write file: </span><span class="se">\(</span><span class="n">error</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>Similarly, to read a file, use the <code>readFile</code> method. The <code>File</code> argument should
+be the destination that the plaintext file will be written to. Continuing the
+example above, you could read the file written as follows:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">dest</span> <span class="o">=</span> <span class="kt">FileManager</span>
+    <span class="o">.</span><span class="k">default</span>
+    <span class="o">.</span><span class="n">temporaryDirectory</span>
+    <span class="o">.</span><span class="nf">appendingPathComponent</span><span class="p">(</span><span class="s">"destination-file"</span><span class="p">)</span>
+    <span class="o">.</span><span class="nf">appendingPathExtension</span><span class="p">(</span><span class="s">"txt"</span><span class="p">)</span>
+
+<span class="k">guard</span> <span class="kt">FileManager</span><span class="o">.</span><span class="k">default</span><span class="o">.</span><span class="nf">createFile</span><span class="p">(</span><span class="nv">atPath</span><span class="p">:</span> <span class="n">dest</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="nv">contents</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span> <span class="nf">else</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nf">print</span><span class="p">(</span><span class="s">"Could not create file"</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="n">e3db</span><span class="o">.</span><span class="nf">readFile</span><span class="p">(</span><span class="nv">recordId</span><span class="p">:</span> <span class="n">recordId</span><span class="p">,</span> <span class="nv">destination</span><span class="p">:</span> <span class="n">dest</span><span class="p">)</span> <span class="p">{</span> <span class="n">result</span> <span class="k">in</span>
+    <span class="k">switch</span> <span class="nf">result</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nv">success</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"File was downloaded, decrypted, and saved to </span><span class="se">\(</span><span class="n">dest</span><span class="o">.</span><span class="n">path</span><span class="se">)</span><span class="s">!"</span><span class="p">)</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"An error occurred attempting to read file: </span><span class="se">\(</span><span class="n">error</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+<h5 id='storage-requirements' class='heading'>Storage Requirements</h5>
+
+<p>When uploading a file, the SDK expects to be able to (temporarily) store an
+encrypted version of the plaintext file in the system&rsquo;s temporary directory.
+Once the upload finishes (with or without error), the temporary file will be
+deleted.</p>
+
+<p>When downloading a file, you must provide a location to which the file can be
+written. The SDK will save the encrypted file to storage, again in the system&rsquo;s
+temporary directory. The SDK will then decrypt the encrypted file writing the
+plaintext to the destination file.</p>
+
+<p>In both cases, uploading and downloading, the SDK expects at least twice as much
+free storage as the size of the plaintext or encrypted file.</p>
+<h5 id='query-results' class='heading'>Query Results</h5>
+
+<p>Query results may include file records (uploaded via the <code>writeFile</code> method).
+A large file (vs. just a record) is indicated when the <code>fileMeta</code> property on
+the <code><a href="Structs/Meta.html">Meta</a></code> instance is not <code>nil</code>. The contents of the file will <em>not</em> be
+included in query results, even if the <code>includeData</code> parameter of the
+<code><a href="Structs/QueryParams.html">QueryParams</a></code> is <code>true</code>. Use the <code>readFile</code> method to retrieve the contents of
+the file.</p>
+
+<p>Note that the <code>data</code> property will be empty when the record refers to a file.</p>
+<h5 id='reading-records' class='heading'>Reading Records</h5>
+
+<p>If the <code>read(recordId:)</code> method is used to read a record that refers to a file,
+the result will be the same as when a query result contains a file record.
+Namely, the record&rsquo;s <code>data</code> property will be empty, and the <code>fileMeta</code> property
+of the returned <code>meta</code> will be non-<code>nil</code>.</p>
+<h3 id='certificate-pinning' class='heading'>Certificate Pinning</h3>
+
+<p>If desired, E3DB Clients can be provided with a <code>URLSession</code> instance. This can
+allow custom configuration for networked calls, including pinning TLS sessions
+to trusted certificate(s).</p>
+
+<p>Simply supply a pre-configured <code>URLSession</code> to either the <code>Client.register</code> or
+the <code>Client.init</code> methods.</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">config</span>  <span class="o">=</span> <span class="c1">// load config from secure storage</span>
+
+<span class="c1">// set custom delegate</span>
+<span class="k">let</span> <span class="nv">session</span> <span class="o">=</span> <span class="nf">URLSession</span><span class="p">(</span><span class="nv">configuration</span><span class="p">:</span> <span class="o">.</span><span class="k">default</span><span class="p">,</span> <span class="nv">delegate</span><span class="p">:</span> <span class="k">self</span><span class="p">,</span> <span class="nv">delegateQueue</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">e3db</span>    <span class="o">=</span> <span class="nf">Client</span><span class="p">(</span><span class="nv">config</span><span class="p">:</span> <span class="n">config</span><span class="p">,</span> <span class="nv">urlSession</span><span class="p">:</span> <span class="n">session</span><span class="p">)</span>
+</code></pre>
+
+<p>The following shows an example of how to use the <code>URLSessionDelegate</code> callback
+to restrict network activity to an intermediate certificate in a cert chain.</p>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">urlSession</span><span class="p">(</span><span class="n">_</span> <span class="nv">session</span><span class="p">:</span> <span class="kt">URLSession</span><span class="p">,</span> <span class="n">didReceive</span> <span class="nv">challenge</span><span class="p">:</span> <span class="kt">URLAuthenticationChallenge</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">URLSession</span><span class="o">.</span><span class="kt">AuthChallengeDisposition</span><span class="p">,</span> <span class="kt">URLCredential</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Adapted from OWASP https://www.owasp.org/index.php/Certificate_and_Public_Key_Pinning#iOS</span>
+    <span class="k">let</span> <span class="nv">cancel</span> <span class="o">=</span> <span class="kt">URLSession</span><span class="o">.</span><span class="kt">AuthChallengeDisposition</span><span class="o">.</span><span class="n">cancelAuthenticationChallenge</span>
+
+    <span class="k">guard</span> <span class="n">challenge</span><span class="o">.</span><span class="n">protectionSpace</span><span class="o">.</span><span class="n">authenticationMethod</span> <span class="o">==</span> <span class="kt">NSURLAuthenticationMethodServerTrust</span><span class="p">,</span>
+          <span class="k">let</span> <span class="nv">trust</span> <span class="o">=</span> <span class="n">challenge</span><span class="o">.</span><span class="n">protectionSpace</span><span class="o">.</span><span class="n">serverTrust</span><span class="p">,</span>
+          <span class="nf">SecTrustEvaluate</span><span class="p">(</span><span class="n">trust</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">==</span> <span class="n">errSecSuccess</span><span class="p">,</span>
+          <span class="k">let</span> <span class="nv">serverCert</span> <span class="o">=</span> <span class="nf">SecTrustGetCertificateAtIndex</span><span class="p">(</span><span class="n">trust</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="nf">else</span> <span class="p">{</span> <span class="c1">// checks intermediate cert (index 1)</span>
+            <span class="k">return</span> <span class="nf">completionHandler</span><span class="p">(</span><span class="n">cancel</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">let</span> <span class="nv">pinnedCertData</span> <span class="o">=</span> <span class="nf">loadTrustedCertData</span><span class="p">()</span> <span class="c1">// load cert (e.g. from file)</span>
+    <span class="k">let</span> <span class="nv">serverCertData</span> <span class="o">=</span> <span class="nf">SecCertificateCopyData</span><span class="p">(</span><span class="n">serverCert</span><span class="p">)</span> <span class="k">as</span> <span class="kt">Data</span>
+
+    <span class="k">guard</span> <span class="n">pinnedCertData</span> <span class="o">==</span> <span class="n">serverCertData</span> <span class="nf">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nf">completionHandler</span><span class="p">(</span><span class="n">cancel</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="c1">// pinning succeeded</span>
+    <span class="nf">completionHandler</span><span class="p">(</span><span class="o">.</span><span class="n">useCredential</span><span class="p">,</span> <span class="nf">URLCredential</span><span class="p">(</span><span class="nv">trust</span><span class="p">:</span> <span class="n">trust</span><span class="p">))</span>
+<span class="p">}</span>
 </code></pre>
 
           </section>

@@ -65,6 +65,9 @@
             <a href="../Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="../Structs/AuthorizerPolicy.html">AuthorizerPolicy</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/ClientCredentials.html">ClientCredentials</a>
               </li>
               <li class="nav-group-task">
@@ -84,6 +87,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/EncryptedDocument.html">EncryptedDocument</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/FileMeta.html">FileMeta</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/IncomingSharingPolicy.html">IncomingSharingPolicy</a>
@@ -1400,6 +1406,167 @@ used to build a <code><a href="../Structs/Config.html">Config</a></code> object 
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:4E3db6ClientC9writeFileySS4type_10Foundation3URLV7fileUrls10DictionaryVyS2SGSg5plainy6ResultAOOyAA4MetaVAA0A5ErrorOGc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/writeFile(type:fileUrl:plain:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC9writeFileySS4type_10Foundation3URLV7fileUrls10DictionaryVyS2SGSg5plainy6ResultAOOyAA4MetaVAA0A5ErrorOGc10completiontF">writeFile(type:fileUrl:plain:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Write the given file to E3DB. Intended for data from 1MB up to 5GB in size. The contents of the file are
+encrypted before being uploaded.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">writeFile</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">fileUrl</span><span class="p">:</span> <span class="kt">URL</span><span class="p">,</span> <span class="nv">plain</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db9PlainMetaa">PlainMeta</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/Meta.html">Meta</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>type</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The kind of data this record represents</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>fileUrl</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The local URL for the file to upload</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>plain</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A user-defined, key-value store associated with the record that remains as plaintext</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes to provide the file info result</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC8readFiley10Foundation4UUIDV8recordId_AE3URLV11destinationy6ResultALOyAA4MetaVAA0A5ErrorOGc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/readFile(recordId:destination:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC8readFiley10Foundation4UUIDV8recordId_AE3URLV11destinationy6ResultALOyAA4MetaVAA0A5ErrorOGc10completiontF">readFile(recordId:destination:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Read the file associated with the given record from the server.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">readFile</span><span class="p">(</span><span class="nv">recordId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">destination</span><span class="p">:</span> <span class="kt">URL</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/Meta.html">Meta</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>recordId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The identifier for the <code><a href="../Structs/Record.html">Record</a></code> to read. Record must reference a previously uploaded file.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>destination</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Local location to write the decrypted contents of the referenced file.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when the operation completes to provide the decrypted record <code><a href="../Structs/Meta.html">Meta</a></code></p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:4E3db6ClientC5shareySS4type_10Foundation4UUIDV8readerIdy6ResultAJOyytAA0A5ErrorOGc10completiontF"></a>
                     <a name="//apple_ref/swift/Method/share(type:readerId:completion:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:4E3db6ClientC5shareySS4type_10Foundation4UUIDV8readerIdy6ResultAJOyytAA0A5ErrorOGc10completiontF">share(type:readerId:completion:)</a>
@@ -1470,6 +1637,88 @@ used to build a <code><a href="../Structs/Config.html">Config</a></code> object 
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:4E3db6ClientC5sharey10Foundation4UUIDV10onBehalfOf_SS4typeAG8readerIdy6ResultAKOyytAA0A5ErrorOGc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/share(onBehalfOf:type:readerId:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC5sharey10Foundation4UUIDV10onBehalfOf_SS4typeAG8readerIdy6ResultAKOyytAA0A5ErrorOGc10completiontF">share(onBehalfOf:type:readerId:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Share records written by the given writer with the given reader</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">share</span><span class="p">(</span><span class="n">onBehalfOf</span> <span class="nv">writerId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">type</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">readerId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>writerId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The identifier of the client that produced the records</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>type</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The kind of records to allow a user to view and decrypt</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>readerId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The identifier of the user to allow access</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:4E3db6ClientC6revokeySS4type_10Foundation4UUIDV8readerIdy6ResultAJOyytAA0A5ErrorOGc10completiontF"></a>
                     <a name="//apple_ref/swift/Method/revoke(type:readerId:completion:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:4E3db6ClientC6revokeySS4type_10Foundation4UUIDV8readerIdy6ResultAJOyytAA0A5ErrorOGc10completiontF">revoke(type:readerId:completion:)</a>
@@ -1495,6 +1744,88 @@ used to build a <code><a href="../Structs/Config.html">Config</a></code> object 
                         <h4>Parameters</h4>
                         <table class="graybox">
                           <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>type</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The kind of records to remove access</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>readerId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The identifier of the user to remove access</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC6revokey10Foundation4UUIDV10onBehalfOf_SS4typeAG8readerIdy6ResultAKOyytAA0A5ErrorOGc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/revoke(onBehalfOf:type:readerId:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC6revokey10Foundation4UUIDV10onBehalfOf_SS4typeAG8readerIdy6ResultAKOyytAA0A5ErrorOGc10completiontF">revoke(onBehalfOf:type:readerId:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Remove permission for the given reader to read records produced by the given writer</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">revoke</span><span class="p">(</span><span class="n">onBehalfOf</span> <span class="nv">writerId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">type</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">readerId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>writerId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The identifier of the client that produced the records</p>
+                                </div>
+                              </td>
+                            </tr>
                             <tr>
                               <td>
                                 <code>
@@ -1626,6 +1957,313 @@ the list of <code><a href="../Structs/OutgoingSharingPolicy.html">OutgoingSharin
                                 <div>
                                   <p>A handler to call when this operation completes to provide
 the list of <code><a href="../Structs/IncomingSharingPolicy.html">IncomingSharingPolicy</a></code> objects</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC14getAuthorizersyy6ResultAEOySayAA16AuthorizerPolicyVGAA0A5ErrorOGc10completion_tF"></a>
+                    <a name="//apple_ref/swift/Method/getAuthorizers(completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC14getAuthorizersyy6ResultAEOySayAA16AuthorizerPolicyVGAA0A5ErrorOGc10completion_tF">getAuthorizers(completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Request the list of policies allowing other clients to perform share and revoke operations
+on behalf of this client.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">getAuthorizers</span><span class="p">(</span><span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt"><a href="../Structs/AuthorizerPolicy.html">AuthorizerPolicy</a></span><span class="p">]</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes to provide
+the list of <code><a href="../Structs/AuthorizerPolicy.html">AuthorizerPolicy</a></code> objects</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC15getAuthorizedByyy6ResultAEOySayAA16AuthorizerPolicyVGAA0A5ErrorOGc10completion_tF"></a>
+                    <a name="//apple_ref/swift/Method/getAuthorizedBy(completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC15getAuthorizedByyy6ResultAEOySayAA16AuthorizerPolicyVGAA0A5ErrorOGc10completion_tF">getAuthorizedBy(completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Request the list of policies allowing this client to perform share and revoke operations
+on behalf of other clients.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">getAuthorizedBy</span><span class="p">(</span><span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt"><a href="../Structs/AuthorizerPolicy.html">AuthorizerPolicy</a></span><span class="p">]</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes to provide
+the list of <code><a href="../Structs/AuthorizerPolicy.html">AuthorizerPolicy</a></code> objects</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC3addy10Foundation4UUIDV12authorizerId_SS4typey6ResultAJOyytAA0A5ErrorOGc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/add(authorizerId:type:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC3addy10Foundation4UUIDV12authorizerId_SS4typey6ResultAJOyytAA0A5ErrorOGc10completiontF">add(authorizerId:type:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Add an authorizer for records written by this client</p>
+
+<p>Calling this method will grant permission for the <q>authorizer</q> client to allow <em>other</em>
+clients to read records of the given type, written by this client.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">add</span><span class="p">(</span><span class="nv">authorizerId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">type</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>authorizerId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The identifier of the client that can share on the writer&rsquo;s behalf</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>type</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The kind of records being shared</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC6removey10Foundation4UUIDV12authorizerId_SS4typey6ResultAJOyytAA0A5ErrorOGc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/remove(authorizerId:type:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC6removey10Foundation4UUIDV12authorizerId_SS4typey6ResultAJOyytAA0A5ErrorOGc10completiontF">remove(authorizerId:type:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Remove an authorizer for records of a given type written by this client</p>
+
+<p>This method removes the permission granted by <code><a href="../Classes/Client.html#/s:4E3db6ClientC3addy10Foundation4UUIDV12authorizerId_SS4typey6ResultAJOyytAA0A5ErrorOGc10completiontF">add(authorizerId:type:completion:)</a></code> for
+the provided record type.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">remove</span><span class="p">(</span><span class="nv">authorizerId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">type</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>authorizerId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The identifier of the client that can share on the writer&rsquo;s behalf</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>type</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The kind of records being shared</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4E3db6ClientC6removey10Foundation4UUIDV12authorizerId_y6ResultAIOyytAA0A5ErrorOGc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/remove(authorizerId:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4E3db6ClientC6removey10Foundation4UUIDV12authorizerId_y6ResultAIOyytAA0A5ErrorOGc10completiontF">remove(authorizerId:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Remove an authorizer for all records written by this client</p>
+
+<p>This method removes the permission granted by <code><a href="../Classes/Client.html#/s:4E3db6ClientC3addy10Foundation4UUIDV12authorizerId_SS4typey6ResultAJOyytAA0A5ErrorOGc10completiontF">add(authorizerId:type:completion:)</a></code> for
+all record types.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">remove</span><span class="p">(</span><span class="nv">authorizerId</span><span class="p">:</span> <span class="kt">UUID</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4E3db0A10Completiona">E3dbCompletion</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>authorizerId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The identifier of the client that can share on the writer&rsquo;s behalf</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A handler to call when this operation completes</p>
                                 </div>
                               </td>
                             </tr>
