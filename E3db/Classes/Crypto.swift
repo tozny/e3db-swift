@@ -3,6 +3,9 @@
 //  E3db
 //
 
+#if canImport(CommonCrypto)
+import CommonCrypto
+#endif
 import Foundation
 import Sodium
 
@@ -10,9 +13,11 @@ typealias RawAccessKey       = SecretBox.Key
 typealias EncryptedAccessKey = String
 
 struct Crypto {
-    typealias SecretBoxCipherNonce = (authenticatedCipherText: Data, nonce: SecretBox.Nonce)
-    typealias BoxCipherNonce       = (authenticatedCipherText: Data, nonce: Box.Nonce)
-    fileprivate static let sodium  = Sodium()
+    typealias SecretBoxCipherNonce   = (authenticatedCipherText: Data, nonce: SecretBox.Nonce)
+    typealias BoxCipherNonce         = (authenticatedCipherText: Data, nonce: Box.Nonce)
+    fileprivate static let sodium    = Sodium()
+    fileprivate static let version   = "3"
+    fileprivate static let blockSize = 65_536
 }
 
 // MARK: Base64url Encoding / Decoding
@@ -163,4 +168,165 @@ extension Crypto {
             .map { sodium.sign.verify(message: message, publicKey: verifyingKey, signature: $0) }
     }
 
+}
+
+// MARK: Files Crypto
+
+struct EncryptedFileInfo {
+    let url: URL
+    let md5: String
+    let size: UInt64
+}
+
+extension Crypto {
+
+    private typealias Stream = SecretStream.XChaCha20Poly1305
+
+    // Header: v || '.' || edk || '.' ||  edkN || '.'
+    private static func createHeader(dk: Stream.Key, ak: RawAccessKey) throws -> String {
+        let (edk, edkN) = try encrypt(value: dk, key: ak)
+        let b64Encoded  = try b64Join(edk, edkN)
+        return [Crypto.version, b64Encoded]
+            .map { $0 + "." }
+            .joined()
+    }
+
+    static func md5(of file: URL) throws -> String {
+        #if !canImport(CommonCrypto)
+            throw E3dbError.cryptoError("Cannot perform MD5 without CommonCrypto module.")
+        #endif
+        let input   = try FileHandle(forReadingFrom: file)
+        let context = UnsafeMutablePointer<CC_MD5_CTX>.allocate(capacity: 1)
+        defer {
+            input.closeFile()
+            context.deallocate()
+        }
+        CC_MD5_Init(context)
+
+        var buffer = input.readData(ofLength: blockSize)
+        while !buffer.isEmpty {
+            buffer.updateMD5(context: context)
+            buffer = input.readData(ofLength: blockSize)
+        }
+        var digest = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
+        CC_MD5_Final(&digest, context)
+        return Data(digest).base64EncodedString()
+    }
+
+    // swiftlint:disable function_body_length
+    static func encrypt(fileAt src: URL, ak: RawAccessKey) throws -> EncryptedFileInfo {
+        #if !canImport(CommonCrypto)
+            throw E3dbError.cryptoError("Cannot perform file encryption without CommonCrypto module.")
+        #endif
+
+        guard let dk = sodium.secretStream.xchacha20poly1305.key(),
+              let stream = sodium.secretStream.xchacha20poly1305.initPush(secretKey: dk) else {
+            throw E3dbError.cryptoError("Failed to initialize stream")
+        }
+        guard let dst = FileManager.tempBinFile() else {
+            throw E3dbError.cryptoError("Failed to open file")
+        }
+        let input  = try FileHandle(forReadingFrom: src)
+        let output = try FileHandle(forWritingTo: dst)
+
+        // manage resources
+        let context = UnsafeMutablePointer<CC_MD5_CTX>.allocate(capacity: 1)
+        defer {
+            input.closeFile()
+            output.closeFile()
+            context.deallocate()
+        }
+        CC_MD5_Init(context)
+
+        // write headers
+        let e3dbHeader   = try createHeader(dk: dk, ak: ak)
+        let headerData   = Data(e3dbHeader.utf8)
+        let streamHeader = stream.header()
+        output.write(headerData)
+        output.write(streamHeader)
+        headerData.updateMD5(context: context)
+        streamHeader.updateMD5(context: context)
+
+        // simulate 2-element queue for easy EOF detection
+        var headBuf = input.readData(ofLength: blockSize)
+        var nextBuf = input.readData(ofLength: blockSize)
+        var size    = UInt64(headerData.count + streamHeader.count)
+        while !headBuf.isEmpty {
+            let tag: Stream.Tag = nextBuf.isEmpty ? .FINAL : .MESSAGE
+            guard let cipherText = stream.push(message: headBuf, tag: tag) else {
+                throw E3dbError.cryptoError("Failed to encrypted data")
+            }
+            output.write(cipherText)
+            cipherText.updateMD5(context: context)
+
+            size   += UInt64(cipherText.count)
+            headBuf = nextBuf
+            nextBuf = input.readData(ofLength: blockSize)
+        }
+        // ensure EOF
+        guard headBuf.isEmpty else {
+            throw E3dbError.cryptoError("An error occured reading input data")
+        }
+        var digest = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
+        CC_MD5_Final(&digest, context)
+        let md5 = Data(digest).base64EncodedString()
+        return EncryptedFileInfo(url: dst, md5: md5, size: size)
+    }
+
+    static func decrypt(fileAt src: URL, to dst: URL, ak: RawAccessKey) throws {
+        #if !canImport(CommonCrypto)
+            throw E3dbError.cryptoError("Cannot perform file decryption without CommonCrypto module.")
+        #endif
+
+        let input  = try FileHandle(forReadingFrom: src)
+        let output = try FileHandle(forWritingTo: dst)
+
+        // manage resources
+        defer {
+            input.closeFile()
+            output.closeFile()
+        }
+
+        // read version
+        let delimiter = [UInt8](".".utf8)[0]
+        let fileVer   = input.read(until: delimiter)
+        guard fileVer.count == 1,
+              let ver = String(data: fileVer, encoding: .utf8),
+              ver == Crypto.version else {
+            throw E3dbError.cryptoError("Unknown files version")
+        }
+
+        // read edk, edkN and decrypt to get dk
+        let edkBuf  = input.read(until: delimiter)
+        let edkNBuf = input.read(until: delimiter)
+        guard !edkBuf.isEmpty, !edkNBuf.isEmpty,
+              let edkStr  = String(bytes: edkBuf, encoding: .utf8),
+              let edkNStr = String(bytes: edkNBuf, encoding: .utf8) else {
+            throw E3dbError.cryptoError("Invalid header format")
+        }
+        let edk  = try base64UrlDecoded(string: edkStr)
+        let edkN = try base64UrlDecoded(string: edkNStr)
+        let dk   = try decrypt(ciphertext: edk, nonce: edkN, key: ak)
+
+        // read stream header
+        let header = input.readData(ofLength: Stream.HeaderBytes)
+        guard header.count == Stream.HeaderBytes else {
+            throw E3dbError.cryptoError("Invalid header format")
+        }
+
+        // read, decrypt, write file
+        guard let stream = sodium.secretStream.xchacha20poly1305.initPull(secretKey: dk, header: header) else {
+            throw E3dbError.cryptoError("Failed to initialize stream")
+        }
+        let bufferSize = blockSize + Stream.ABytes
+        var cipherText = input.readData(ofLength: bufferSize)
+        while !cipherText.isEmpty {
+            guard let (plainText, tag) = stream.pull(cipherText: cipherText),
+                  tag == .MESSAGE || tag == .FINAL else {
+                throw E3dbError.cryptoError("Failed to decrypt values")
+            }
+            output.write(plainText)
+            cipherText = input.readData(ofLength: bufferSize)
+        }
+    }
 }

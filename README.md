@@ -420,6 +420,96 @@ guard try e3db.verify(signed: signed, pubSigKey: config.publicSigKey)) else {
 // Document verified!
 ```
 
+#### Reading and Writing Files
+
+E3DB supports the storage of large encrypted files, using a similar interface
+for reading and writing records. The SDK will handle encrypting and uploading
+the file. Similarly, it will download and decrypt files as well.
+
+To write a file, use the `writeFile` method.
+
+```swift
+let data = Data("Hello there".utf8)
+let src  = FileManager
+    .default
+    .temporaryDirectory
+    .appendingPathComponent("source-file")
+    .appendingPathExtension("txt")
+
+guard FileManager.default.createFile(atPath: src.path, contents: data) else {
+    return print("Could not create file")
+}
+
+var recordId: UUID?
+e3db.writeFile(type: type, fileUrl: src) { result in
+    switch result {
+    // The operation was successful, here's the `Meta` instance.
+    case .success(let meta):
+        recordId = meta.recordId
+    case .failure(let error):
+        print("An error occurred attempting to write file: \(error)")
+    }
+}
+```
+
+Similarly, to read a file, use the `readFile` method. The `File` argument should
+be the destination that the plaintext file will be written to. Continuing the
+example above, you could read the file written as follows:
+
+```swift
+let dest = FileManager
+    .default
+    .temporaryDirectory
+    .appendingPathComponent("destination-file")
+    .appendingPathExtension("txt")
+
+guard FileManager.default.createFile(atPath: dest.path, contents: nil) else {
+    return print("Could not create file")
+}
+
+e3db.readFile(recordId: recordId, destination: dest) { result in
+    switch result {
+    case .success:
+        print("File was downloaded, decrypted, and saved to \(dest.path)!")
+    case .failure(let error):
+        print("An error occurred attempting to read file: \(error)")
+    }
+}
+```
+
+##### Storage Requirements
+
+When uploading a file, the SDK expects to be able to (temporarily) store an
+encrypted version of the plaintext file in the system's temporary directory.
+Once the upload finishes (with or without error), the temporary file will be
+deleted.
+
+When downloading a file, you must provide a location to which the file can be
+written. The SDK will save the encrypted file to storage, again in the system's
+temporary directory. The SDK will then decrypt the encrypted file writing the
+plaintext to the destination file.
+
+In both cases, uploading and downloading, the SDK expects at least twice as much
+free storage as the size of the plaintext or encrypted file.
+
+##### Query Results
+
+Query results may include file records (uploaded via the `writeFile` method).
+A large file (vs. just a record) is indicated when the `fileMeta` property on
+the `Meta` instance is not `nil`. The contents of the file will _not_ be
+included in query results, even if the `includeData` parameter of the
+`QueryParams` is `true`. Use the `readFile` method to retrieve the contents of
+the file.
+
+Note that the `data` property will be empty when the record refers to a file.
+
+##### Reading Records
+
+If the `read(recordId:)` method is used to read a record that refers to a file,
+the result will be the same as when a query result contains a file record.
+Namely, the record's `data` property will be empty, and the `fileMeta` property
+of the returned `meta` will be non-`nil`.
+
 ### Certificate Pinning
 
 If desired, E3DB Clients can be provided with a `URLSession` instance. This can

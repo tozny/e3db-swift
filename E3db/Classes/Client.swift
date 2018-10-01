@@ -20,12 +20,14 @@ public typealias E3dbCompletion<T> = (E3dbResult<T>) -> Void
 public final class Client {
     let api: Api
     let config: Config
+    let session: URLSession
     let authedClient: APIClient
     let akCache = NSCache<AkCacheKey, AccessKey>()
 
     init(config: Config, urlSession: URLSession, scheduler: @escaping Scheduler) {
-        self.api    = Api(baseUrl: config.baseApiUrl)
-        self.config = config
+        self.api     = Api(baseUrl: config.baseApiUrl)
+        self.config  = config
+        self.session = urlSession
 
         let httpClient    = HeimdallrHTTPClientURLSession(urlSession: urlSession)
         let credentials   = OAuthClientCredentials(id: config.apiKeyId, secret: config.apiSecret)

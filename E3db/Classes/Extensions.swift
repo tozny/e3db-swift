@@ -3,6 +3,9 @@
 //  E3db
 //
 
+#if canImport(CommonCrypto)
+import CommonCrypto
+#endif
 import Foundation
 import Result
 import Swish
@@ -73,12 +76,64 @@ extension Array where Element: ResultProtocol {
 }
 
 extension APIClient {
-    func performDefault<T: Request>(_ request: T, completion: @escaping (Result<T.ResponseObject, E3dbError>) -> Void) {
+    private func parse<T: Request>(_ data: Data, request: T) -> Result<T.ResponseObject, SwishError> {
+        do {
+            let parsed = try request.parse(data)
+            return .success(parsed)
+        } catch {
+            return .failure(.decodingError(error))
+        }
+    }
+
+    private func validate(_ httpResponse: HTTPResponse) -> Result<Data, SwishError> {
+        guard case (200...299) = httpResponse.code else {
+            return .failure(.serverError(code: httpResponse.code, data: httpResponse.data))
+        }
+        return .success(httpResponse.data)
+    }
+
+    func performDefault<T: Request>(_ request: T, completion: @escaping E3dbCompletion<T.ResponseObject>) {
         perform(request) { completion($0.mapError(E3dbError.init)) }
+    }
+
+    func upload<T: Request>(fileAt: URL, request: T, session: URLSession, completion: @escaping E3dbCompletion<T.ResponseObject>) {
+        let req  = request.build()
+        let task = session.uploadTask(with: req, fromFile: fileAt) { data, response, error in
+            let resp: Result<T.ResponseObject, SwishError>
+            switch (data, response, error) {
+            case let (_, urlResp as HTTPURLResponse, .some(err)):
+                resp = .failure(.urlSessionError(err, response: urlResp))
+            case let (.some(body), urlResp as HTTPURLResponse, _):
+                let httpResp = HTTPResponse(data: body, response: urlResp)
+                resp = self.validate(httpResp).flatMap { self.parse($0, request: request) }
+            default:
+                resp = .failure(.serverError(code: 400, data: nil))
+            }
+            completion(resp.mapError(E3dbError.init))
+        }
+        task.resume()
+    }
+
+    func download(_ request: URLRequest, session: URLSession, completion: @escaping E3dbCompletion<URL>) {
+        let task = session.downloadTask(with: request) { localUrl, response, error in
+            let resp: Result<URL, SwishError>
+            switch (localUrl, response, error) {
+            case let (_, urlResp as HTTPURLResponse, .some(err)):
+                resp = .failure(.urlSessionError(err, response: urlResp))
+            case let (.some(local), urlResp as HTTPURLResponse, _):
+                let httpResp = HTTPResponse(data: Data(), response: urlResp)
+                resp = self.validate(httpResp).map { _ in local }
+            default:
+                resp = .failure(.serverError(code: 400, data: nil))
+            }
+            completion(resp.mapError(E3dbError.init))
+        }
+        task.resume()
     }
 }
 
 extension Data {
+
     public init?(base64UrlEncoded string: String) {
         guard let data = try? Crypto.base64UrlDecoded(string: string) else {
             return nil
@@ -88,6 +143,40 @@ extension Data {
 
     public func base64UrlEncodedString() -> String? {
         return try? Crypto.base64UrlEncoded(data: self)
+    }
+
+    #if canImport(CommonCrypto)
+    func updateMD5(context: UnsafeMutablePointer<CC_MD5_CTX>) {
+        _ = withUnsafeBytes { CC_MD5_Update(context, $0, CC_LONG(count)) }
+    }
+    #endif
+}
+
+extension FileManager {
+    static func tempBinFile() -> URL? {
+        let tempUrl: URL
+        if #available(iOS 10.0, *) {
+            tempUrl = FileManager.default.temporaryDirectory
+        } else {
+            tempUrl = URL(fileURLWithPath: NSTemporaryDirectory())
+        }
+        let fullUrl = tempUrl
+            .appendingPathComponent(UUID().uuidString)
+            .appendingPathExtension("bin")
+        guard FileManager.default.createFile(atPath: fullUrl.path, contents: nil) else { return nil }
+        return fullUrl
+    }
+}
+
+extension FileHandle {
+    func read(until byte: UInt8) -> Data {
+        var buffer = Data()
+        var next   = readData(ofLength: 1)
+        while !next.isEmpty && next[0] != byte {
+            buffer.append(next)
+            next = readData(ofLength: 1)
+        }
+        return buffer
     }
 }
 
