@@ -291,9 +291,8 @@ extension SignedDocument: MemoryReportable {
     }
 }
 
-extension Data {
-    func asciiMasked() -> Data {
-        let maskedBytes = [UInt8](self).map { $0 & 127 }
-        return Data(bytes: maskedBytes)
+extension Array where Element == UInt8 {
+    func asciiMasked() -> [UInt8] {
+        return map { $0 & 127 }
     }
 }
