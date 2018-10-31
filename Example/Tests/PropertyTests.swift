@@ -80,7 +80,7 @@ class PropertyTests: XCTestCase, TestUtils {
     
     func testBase64urlEncoding() {
         property("Base64url encoding for sodium should match manual") <- forAll { (data: Data) in
-            let sodiumEncoded = try? Crypto.base64UrlEncoded(data: data)
+            let sodiumEncoded = try? Crypto.base64UrlEncoded(bytes: data.bytes)
             let manualEncoded = data.base64URLEncodedString()
             return sodiumEncoded != nil && sodiumEncoded! == manualEncoded
         }
@@ -90,7 +90,7 @@ class PropertyTests: XCTestCase, TestUtils {
         property("Base64url decoding for sodium should match manual") <- forAll { (encoded: Base64UrlEncodedString) in
             let sodiumDecoded = try? Crypto.base64UrlDecoded(string: encoded.value)
             let manualDecoded = Data(base64URLEncoded: encoded.value)
-            return sodiumDecoded != nil && manualDecoded != nil && sodiumDecoded! == manualDecoded!
+            return sodiumDecoded != nil && manualDecoded != nil && Data(bytes: sodiumDecoded!) == manualDecoded!
         }
     }
 

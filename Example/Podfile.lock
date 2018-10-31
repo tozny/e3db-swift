@@ -1,9 +1,9 @@
 PODS:
-  - E3db (1.4.0):
-    - E3db/Core (= 1.4.0)
-  - E3db/Core (1.4.0):
+  - E3db (3.0.0):
+    - E3db/Core (= 3.0.0)
+  - E3db/Core (3.0.0):
     - Heimdallr (~> 3.6)
-    - Sodium (~> 0.6)
+    - Sodium (~> 0.7)
     - Swish (~> 3.0)
     - Valet (~> 3.1)
   - Heimdallr (3.6.1):
@@ -12,11 +12,11 @@ PODS:
     - Result (~> 3.0)
   - ResponseDetective (1.2.4)
   - Result (3.2.4)
-  - Sodium (0.6)
+  - Sodium (0.7.0)
   - SwiftCheck (0.10.0)
   - Swish (3.0.0):
     - Result (~> 3.1)
-  - Valet (3.1.3)
+  - Valet (3.2.2)
 
 DEPENDENCIES:
   - E3db (from `../`)
@@ -38,14 +38,14 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  E3db: c7f1c885bdc810b05a9115782d925a0b7c73d3c0
+  E3db: 49672ac7be551985814b0404cd26859f22146631
   Heimdallr: d2a8b1dc3ecc7ad249c9ffd20c990e2248fcd599
   ResponseDetective: 710b1b41903382460592a75a480440661bcadfa6
   Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
-  Sodium: bf524b0a3d5ad6870dcf343205cca7e659c15ad5
+  Sodium: c5510cc6f5e1b27858e5f260b5cac80d4a3f9379
   SwiftCheck: 8a3c3638941467bc142d625f374a8409dd262ae8
   Swish: 68621dbf8f0c0ed1660cb620f3ce8d5218f6bf38
-  Valet: fae4295525b1f13048147d30a38f66d266af9338
+  Valet: 0babf5737029004185a7a009c1135f0c073011d1
 
 PODFILE CHECKSUM: 64794b8cc17b0d0d47676843076f1d7caca89541
 

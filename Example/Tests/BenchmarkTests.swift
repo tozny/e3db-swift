@@ -76,7 +76,7 @@ class BenchmarkTests: XCTestCase, TestUtils {
     // 1-byte-per-character sizes for easier measurement
     static func randomRecordData(numBytes: Int) -> RecordData {
         let data = sodium.randomBytes.buf(length: numBytes)
-            .map { $0.asciiMasked() }
+            .map { Data(bytes: $0.asciiMasked()) }
             .flatMap { String(data: $0, encoding: .ascii) }
             .map { RecordData(cleartext: ["": $0]) }
         return data!

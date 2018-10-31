@@ -13,8 +13,8 @@ typealias RawAccessKey       = SecretBox.Key
 typealias EncryptedAccessKey = String
 
 struct Crypto {
-    typealias SecretBoxCipherNonce   = (authenticatedCipherText: Data, nonce: SecretBox.Nonce)
-    typealias BoxCipherNonce         = (authenticatedCipherText: Data, nonce: Box.Nonce)
+    typealias SecretBoxCipherNonce   = (authenticatedCipherText: Bytes, nonce: SecretBox.Nonce)
+    typealias BoxCipherNonce         = (authenticatedCipherText: Bytes, nonce: Box.Nonce)
     fileprivate static let sodium    = Sodium()
     fileprivate static let version   = "3"
     fileprivate static let blockSize = 65_536
@@ -23,14 +23,14 @@ struct Crypto {
 // MARK: Base64url Encoding / Decoding
 
 extension Crypto {
-    static func base64UrlEncoded(data: Data) throws -> String {
-        guard let encoded = sodium.utils.bin2base64(data, variant: .URLSAFE_NO_PADDING) else {
+    static func base64UrlEncoded(bytes: Bytes) throws -> String {
+        guard let encoded = sodium.utils.bin2base64(bytes, variant: .URLSAFE_NO_PADDING) else {
             throw E3dbError.cryptoError("Failed to encode data")
         }
         return encoded
     }
 
-    static func base64UrlDecoded(string: String) throws -> Data {
+    static func base64UrlDecoded(string: String) throws -> Bytes {
         guard let decoded = sodium.utils.base642bin(string, variant: .URLSAFE_NO_PADDING) else {
             throw E3dbError.cryptoError("Failed to decode data")
         }
@@ -53,23 +53,23 @@ extension Crypto {
         return sodium.secretBox.key()
     }
 
-    static func b64Join(_ ciphertexts: Data...) throws -> String {
+    static func b64Join(_ ciphertexts: Bytes...) throws -> String {
         return try ciphertexts.map(base64UrlEncoded).joined(separator: ".")
     }
 
-    static func b64SplitData(_ value: String) throws -> (Data, Data, Data, Data)? {
+    static func b64SplitData(_ value: String) throws -> (Bytes, Bytes, Bytes, Bytes)? {
         let split = try b64Split(value)
         guard split.count == 4 else { return nil }
         return (split[0], split[1], split[2], split[3])
     }
 
-    static func b64SplitEak(_ value: String) throws -> (Data, Data)? {
+    static func b64SplitEak(_ value: String) throws -> (Bytes, Bytes)? {
         let split = try b64Split(value)
         guard split.count == 2 else { return nil }
         return (split[0], split[1])
     }
 
-    private static func b64Split(_ value: String) throws -> [Data] {
+    private static func b64Split(_ value: String) throws -> [Bytes] {
         return try value.components(separatedBy: ".").map(base64UrlDecoded)
     }
 }
@@ -103,14 +103,11 @@ extension Crypto {
 
 extension Crypto {
 
-    private static func generateDataKey() throws -> SecretBox.Key {
-        guard let secretKey = sodium.secretBox.key() else {
-            throw E3dbError.cryptoError("Failed to generate data key")
-        }
-        return secretKey
+    private static func generateDataKey() -> SecretBox.Key {
+        return sodium.secretBox.key()
     }
 
-    private static func encrypt(value: Data?, key: SecretBox.Key) throws -> SecretBoxCipherNonce {
+    private static func encrypt(value: Bytes?, key: SecretBox.Key) throws -> SecretBoxCipherNonce {
         guard let data = value,
               let cipher: SecretBoxCipherNonce = sodium.secretBox.seal(message: data, secretKey: key) else {
             throw E3dbError.cryptoError("Failed to encrypt value")
@@ -122,8 +119,8 @@ extension Crypto {
         var encrypted = CipherData()
 
         for (key, value) in recordData.cleartext {
-            let bytes       = value.data(using: .utf8)
-            let dk          = try generateDataKey()
+            let bytes       = value.data(using: .utf8)?.bytes
+            let dk          = generateDataKey()
             let (ef, efN)   = try encrypt(value: bytes, key: dk)
             let (edk, edkN) = try encrypt(value: dk, key: ak)
             encrypted[key]  = try b64Join(edk, edkN, ef, efN)
@@ -131,7 +128,7 @@ extension Crypto {
         return encrypted
     }
 
-    private static func decrypt(ciphertext: Data, nonce: SecretBox.Nonce, key: SecretBox.Key) throws -> Data {
+    private static func decrypt(ciphertext: Bytes, nonce: SecretBox.Nonce, key: SecretBox.Key) throws -> Bytes {
         guard let plain = sodium.secretBox.open(authenticatedCipherText: ciphertext, secretKey: key, nonce: nonce) else {
             throw E3dbError.cryptoError("Failed to decrypt value")
         }
@@ -147,7 +144,7 @@ extension Crypto {
             }
             let dk    = try decrypt(ciphertext: edk, nonce: edkN, key: ak)
             let field = try decrypt(ciphertext: ef, nonce: efN, key: dk)
-            decrypted[key] = String(data: field, encoding: .utf8)
+            decrypted[key] = field.utf8String
         }
         return RecordData(cleartext: decrypted)
     }
@@ -158,13 +155,13 @@ extension Crypto {
 extension Crypto {
 
     static func signature(doc: Signable, signingKey: Sign.SecretKey) -> String? {
-        let message = Data(doc.serialized().utf8)
+        let message = Bytes(doc.serialized().utf8)
         return sodium.sign.signature(message: message, secretKey: signingKey)?.base64UrlEncodedString()
     }
 
     static func verify(doc: Signable, encodedSig: String, verifyingKey: Sign.PublicKey) -> Bool? {
-        let message = Data(doc.serialized().utf8)
-        return Data(base64UrlEncoded: encodedSig)
+        let message = Bytes(doc.serialized().utf8)
+        return Bytes(base64UrlEncoded: encodedSig)
             .map { sodium.sign.verify(message: message, publicKey: verifyingKey, signature: $0) }
     }
 
@@ -219,8 +216,8 @@ extension Crypto {
             throw E3dbError.cryptoError("Cannot perform file encryption without CommonCrypto module.")
         #endif
 
-        guard let dk = sodium.secretStream.xchacha20poly1305.key(),
-              let stream = sodium.secretStream.xchacha20poly1305.initPush(secretKey: dk) else {
+        let dk = sodium.secretStream.xchacha20poly1305.key()
+        guard let stream = sodium.secretStream.xchacha20poly1305.initPush(secretKey: dk) else {
             throw E3dbError.cryptoError("Failed to initialize stream")
         }
         guard let dst = FileManager.tempBinFile() else {
@@ -241,7 +238,7 @@ extension Crypto {
         // write headers
         let e3dbHeader   = try createHeader(dk: dk, ak: ak)
         let headerData   = Data(e3dbHeader.utf8)
-        let streamHeader = stream.header()
+        let streamHeader = Data(bytes: stream.header())
         output.write(headerData)
         output.write(streamHeader)
         headerData.updateMD5(context: context)
@@ -253,11 +250,12 @@ extension Crypto {
         var size    = UInt64(headerData.count + streamHeader.count)
         while !headBuf.isEmpty {
             let tag: Stream.Tag = nextBuf.isEmpty ? .FINAL : .MESSAGE
-            guard let cipherText = stream.push(message: headBuf, tag: tag) else {
+            guard let cipherText = stream.push(message: headBuf.bytes, tag: tag) else {
                 throw E3dbError.cryptoError("Failed to encrypted data")
             }
-            output.write(cipherText)
-            cipherText.updateMD5(context: context)
+            let cipherData = Data(bytes: cipherText)
+            output.write(cipherData)
+            cipherData.updateMD5(context: context)
 
             size   += UInt64(cipherText.count)
             headBuf = nextBuf
@@ -309,7 +307,7 @@ extension Crypto {
         let dk   = try decrypt(ciphertext: edk, nonce: edkN, key: ak)
 
         // read stream header
-        let header = input.readData(ofLength: Stream.HeaderBytes)
+        let header = input.readData(ofLength: Stream.HeaderBytes).bytes
         guard header.count == Stream.HeaderBytes else {
             throw E3dbError.cryptoError("Invalid header format")
         }
@@ -321,11 +319,12 @@ extension Crypto {
         let bufferSize = blockSize + Stream.ABytes
         var cipherText = input.readData(ofLength: bufferSize)
         while !cipherText.isEmpty {
-            guard let (plainText, tag) = stream.pull(cipherText: cipherText),
+            guard let (plainText, tag) = stream.pull(cipherText: cipherText.bytes),
                   tag == .MESSAGE || tag == .FINAL else {
                 throw E3dbError.cryptoError("Failed to decrypt values")
             }
-            output.write(plainText)
+            let plainData = Data(bytes: plainText)
+            output.write(plainData)
             cipherText = input.readData(ofLength: bufferSize)
         }
     }

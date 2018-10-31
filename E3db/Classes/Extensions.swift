@@ -132,24 +132,32 @@ extension APIClient {
     }
 }
 
-extension Data {
+extension Array where Element == UInt8 {
 
     public init?(base64UrlEncoded string: String) {
-        guard let data = try? Crypto.base64UrlDecoded(string: string) else {
+        guard let bytes = try? Crypto.base64UrlDecoded(string: string) else {
             return nil
         }
-        self = data
+        self = bytes
     }
 
     public func base64UrlEncodedString() -> String? {
-        return try? Crypto.base64UrlEncoded(data: self)
+        return try? Crypto.base64UrlEncoded(bytes: self)
     }
+
+}
+
+extension Data {
 
     #if canImport(CommonCrypto)
     func updateMD5(context: UnsafeMutablePointer<CC_MD5_CTX>) {
         _ = withUnsafeBytes { CC_MD5_Update(context, $0, CC_LONG(count)) }
     }
     #endif
+
+    var bytes: [UInt8] {
+        return [UInt8](self)
+    }
 }
 
 extension FileManager {
