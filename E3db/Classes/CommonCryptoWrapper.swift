@@ -25,24 +25,23 @@ struct CommonCrypto {
     // MARK: CC Key Generation
     
     // Sec random bytes, is this the right RNG to use
-    static func generateRandomAccessKey(length: Int) -> [UInt8]? {
+    static func generateRandomAccessKey(length: Int) -> Data? {
         var bytes = [UInt8](repeating: 0, count: length)
         let status = SecRandomCopyBytes(kSecRandomDefault, bytes.count, &bytes)
         guard status == errSecSuccess else {
             return nil
         }
-        return bytes
+        let data = Data(bytes: bytes)
+        return data
     }
     
     // Create the key and iv for aes
     static func generateCCKey() throws -> CCKey {
-        guard let keyBytes = generateRandomAccessKey(length: kCCBlockSizeAES128/8),
-              let ivBytes = generateRandomAccessKey(length: kCCBlockSizeAES128/8),
-              let key = String(bytes: keyBytes, encoding: .utf8),
-              let iv = String(bytes: ivBytes, encoding: .utf8) else {
+        guard let keyBytes = generateRandomAccessKey(length: kCCBlockSizeAES128),
+              let ivBytes = generateRandomAccessKey(length: kCCBlockSizeAES128) else {
             throw E3dbError.cryptoError("CCKey Key generation failed")
         }
-        return CCKey(aesKey: key, aesIV: iv)
+        return CCKey(aesKey: keyBytes.base64EncodedString(), aesIV: ivBytes.base64EncodedString())
     }
     
     // MARK: CC Crypto
@@ -77,20 +76,20 @@ struct CommonCrypto {
     }
     
     static func encrypt(rawData: Data, ccKey: CCKey) throws -> Data {
-        guard let key = ccKey.aesKey.data(using: .utf8) else {
+        guard let key = Data(base64Encoded: ccKey.aesKey) else {
             throw E3dbError.cryptoError("Common Crypto invalid Key")
         }
-        guard let iv = ccKey.aesIV.data(using: .utf8) else {
+        guard let iv = Data(base64Encoded: ccKey.aesIV) else {
             throw E3dbError.cryptoError("Common Crypto invalid IV")
         }
         return try crypt(input: rawData, operation: CCOperation(kCCEncrypt), key: key, iv: iv, algo: CCAlgorithm(kCCAlgorithmAES128), options: CCOptions(kCCOptionPKCS7Padding | kCCModeCBC), blockSize: kCCBlockSizeAES128)
     }
     
     static func decrypt(encryptedData: Data, ccKey: CCKey) throws -> Data {
-        guard let key = ccKey.aesKey.data(using: .utf8) else {
+        guard let key = Data(base64Encoded: ccKey.aesKey) else {
             throw E3dbError.cryptoError("Common Crypto invalid Key")
         }
-        guard let iv = ccKey.aesIV.data(using: .utf8) else {
+        guard let iv = Data(base64Encoded: ccKey.aesIV) else {
             throw E3dbError.cryptoError("Common Crypto invalid IV")
         }
         return try crypt(input: encryptedData, operation: CCOperation(kCCDecrypt), key: key, iv: iv, algo: CCAlgorithm(kCCAlgorithmAES128), options: CCOptions(kCCOptionPKCS7Padding | kCCModeCBC), blockSize: kCCBlockSizeAES128)

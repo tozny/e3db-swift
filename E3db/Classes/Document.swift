@@ -228,16 +228,12 @@ extension Client {
                 throw E3dbError.cryptoError("Error Unwrapping once encrypted value")
             }
             let twiceEncrypted = try CommonCrypto.encrypt(rawData: onceEncrypted, ccKey: ccKey)
-            guard let encryptedString = String(bytes: twiceEncrypted, encoding: .utf8) else {
-                throw E3dbError.cryptoError("Error converting twiceEncrypted to utf8")
-            }
-            ccEncrypted[key] = encryptedString
+            ccEncrypted[key] = twiceEncrypted.base64EncodedString()
         }
         // The signing is likely invalid now. What should we do about that?
         // Sign again possibly // what does the signing do?
         return EncryptedDocument(clientMeta: encryptedDocument.clientMeta, encryptedData: ccEncrypted, recordSignature: encryptedDocument.recordSignature)
     }
-    
     
     /*
      Decrypt the Wrapped Encrypted Documents with Common Crypto AES
@@ -250,7 +246,7 @@ extension Client {
         let ccCipherData = encryptedDoc.encryptedData
         
         for (key, value) in ccCipherData {
-            guard let twiceEncrypted = value.data(using: .utf8) else {
+            guard let twiceEncrypted = Data(base64Encoded: value) else {
                 throw E3dbError.cryptoError("Invalid data from encyrpted document")
             }
             let onceDecrypted = try CommonCrypto.decrypt(encryptedData: twiceEncrypted, ccKey: ccKey)
