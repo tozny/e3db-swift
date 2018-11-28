@@ -201,3 +201,44 @@ extension Client {
     }
 
 }
+
+// MARK: Wrap document encryption in Common Crypto
+
+extension Client {
+    /*
+      Wrap Encrypted Documents with Common Crypto AES
+
+      - Parameters:
+        - ccKey: Special common crypto key to for AES
+     
+      Consider adding a tag to EncryptedDocument so we know when it's been encrypted with Common Crypto
+      TODO: How do we know that the user want's to use this fips compliant version?
+      TODO: Flag to set that wraps encrypt(document) and just switches between the two?
+      TODO: Test encryption
+     */
+    public func encryptWrapCC(ccKey: CCKey, type: String, data: RecordData, eakInfo: EAKInfo, plain: PlainMeta? = nil) throws -> EncryptedDocument {
+        // e3db lib sodium encryption
+        let clientId  = config.clientId
+        let meta      = ClientMeta(writerId: clientId, userId: clientId, type: type, plain: plain, fileMeta: nil)
+        let docInfo   = DocInfo(meta: meta, data: data)
+        let signed    = try sign(document: docInfo)
+        let localAk   = try getLocalAk(clientId: clientId, recordType: type, eakInfo: eakInfo)
+        let encrypted = try Crypto.encrypt(recordData: docInfo.data, ak: localAk)
+        
+        // wrap encrypted data with CC encryption
+        var ccEncrypted = CipherData()
+        for (key, value) in encrypted {
+            guard let onceEncrypted = value.data(using: .utf8) else {
+                throw E3dbError.cryptoError("Error Unwrapping once encrypted value")
+            }
+            let twiceEncrypted = try CommonCrypto.encrypt(rawData: onceEncrypted, ccKey: ccKey)
+            guard let encryptedString = String(bytes: twiceEncrypted, encoding: .utf8) else {
+                throw E3dbError.cryptoError("Error converting twiceEncrypted to utf8")
+            }
+            ccEncrypted[key] = encryptedString
+        }
+        
+        return EncryptedDocument(clientMeta: meta, encryptedData: ccEncrypted, recordSignature: signed.signature)
+    }
+    
+}
