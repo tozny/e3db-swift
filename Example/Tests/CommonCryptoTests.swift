@@ -16,11 +16,27 @@ class CommonCryptoTests: XCTestCase, TestUtils {
     var client: Client?
     var config: Config?
     
-//    override func setUp() {
-//        super.setUp()
-//        let (c, cfg) = clientWithConfig()
-//        (self.client, self.config) = (c, cfg)
-//    }
+    let type1 = "type1"
+    
+    private func createWriterKey(client: Client, type: String) -> EAKInfo {
+        var eakInfo: EAKInfo?
+        asyncTest("createWriterKey") { (expect) in
+            client.createWriterKey(type: type) { (result) in
+                defer { expect.fulfill() }
+                guard case .success(let eak) = result else {
+                    return XCTFail()
+                }
+                eakInfo = eak
+            }
+        }
+        return eakInfo!
+    }
+    
+    override func setUp() {
+        super.setUp()
+        let (c, cfg) = clientWithConfig()
+        (self.client, self.config) = (c, cfg)
+    }
     
     func testCanGenerateRandomAccessKey() {
         let someKey = CommonCrypto.generateRandomAccessKey(length: 8)
@@ -30,21 +46,34 @@ class CommonCryptoTests: XCTestCase, TestUtils {
     
     func testCanGenerateCCKey() {
         do {
-            let _ = try CommonCrypto.generateCCKey()
-//            XCTAssert(ccKey.aesKey.utf8.count == 128)
-//            XCTAssert(ccKey.aesIV.utf8.count == 128)
+            let ccKey = try CommonCrypto.generateCCKey()
+            XCTAssert(Data(base64Encoded: ccKey.aesKey)?.count == 16)
+            XCTAssert(Data(base64Encoded: ccKey.aesIV)?.count == 16)
+
         } catch {
             XCTFail(error.localizedDescription)
         }
     }
     
     func testCanEncryptAndDecryptDataWithCC() {
-//        do {
-//            throw
-//        } catch {
-//            XCTFail(error.localizedDescription)
-//        }
-//
+        let eakInfo = self.createWriterKey(client: client!, type: type1)
+
+        do {
+            let testData = ["test": "data"]
+            let ccKey = try CommonCrypto.generateCCKey()
+            let encrypted = try client!.encryptWrapCC(ccKey: ccKey, type: type1, data: RecordData(cleartext: testData), eakInfo: eakInfo)
+            
+            XCTAssert(encrypted.clientMeta.writerId == config!.clientId)
+            XCTAssert(testData != encrypted.encryptedData)
+            
+            let decrypted = try client!.decryptWrapCC(ccKey: ccKey, encryptedDoc: encrypted, eakInfo: eakInfo)
+            XCTAssert(decrypted.clientMeta.writerId == config!.clientId)
+            XCTAssertEqual(decrypted.data, testData)
+            
+            print("decrypted data \(decrypted.data) should match initial string: \(testData)")
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
     }
     
 }
