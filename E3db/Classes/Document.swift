@@ -218,12 +218,8 @@ extension Client {
      */
     public func encryptWrapCC(ccKey: CCKey, type: String, data: RecordData, eakInfo: EAKInfo, plain: PlainMeta? = nil) throws -> EncryptedDocument {
         // e3db lib sodium encryption
-        let clientId  = config.clientId
-        let meta      = ClientMeta(writerId: clientId, userId: clientId, type: type, plain: plain, fileMeta: nil)
-        let docInfo   = DocInfo(meta: meta, data: data)
-        let signed    = try sign(document: docInfo)
-        let localAk   = try getLocalAk(clientId: clientId, recordType: type, eakInfo: eakInfo)
-        let encrypted = try Crypto.encrypt(recordData: docInfo.data, ak: localAk)
+        let encryptedDocument = try self.encrypt(type: type, data: data, eakInfo: eakInfo, plain: plain)
+        let encrypted = encryptedDocument.encryptedData
         
         // wrap encrypted data with CC encryption
         var ccEncrypted = CipherData()
@@ -237,8 +233,37 @@ extension Client {
             }
             ccEncrypted[key] = encryptedString
         }
+        // The signing is likely invalid now. What should we do about that?
+        // Sign again possibly // what does the signing do?
+        return EncryptedDocument(clientMeta: encryptedDocument.clientMeta, encryptedData: ccEncrypted, recordSignature: encryptedDocument.recordSignature)
+    }
+    
+    
+    /*
+     Decrypt the Wrapped Encrypted Documents with Common Crypto AES
+     
+     - Parameters:
+     - ccKey: Special common crypto key to for AES
+     */
+    public func decryptWrapCC(ccKey: CCKey, encryptedDoc: EncryptedDocument, eakInfo: EAKInfo) throws -> DecryptedDocument {
+        var decrypted = Cleartext()
+        let ccCipherData = encryptedDoc.encryptedData
         
-        return EncryptedDocument(clientMeta: meta, encryptedData: ccEncrypted, recordSignature: signed.signature)
+        for (key, value) in ccCipherData {
+            guard let twiceEncrypted = value.data(using: .utf8) else {
+                throw E3dbError.cryptoError("Invalid data from encyrpted document")
+            }
+            let onceDecrypted = try CommonCrypto.decrypt(encryptedData: twiceEncrypted, ccKey: ccKey)
+            guard let onceDecryptedString = String(bytes: onceDecrypted, encoding: .utf8) else {
+                throw E3dbError.cryptoError("Error converting onceDecrypted to utf8")
+            }
+            decrypted[key] = onceDecryptedString
+        }
+        
+        // Create an Encrypted Document to contain the Lib Sodium encrypted records
+        let encryptedDocLS = EncryptedDocument(clientMeta: encryptedDoc.clientMeta, encryptedData: decrypted, recordSignature: encryptedDoc.recordSignature)
+        // Attempt standard decryption with e3db client
+        return try self.decrypt(encryptedDoc: encryptedDocLS, eakInfo: eakInfo)
     }
     
 }
