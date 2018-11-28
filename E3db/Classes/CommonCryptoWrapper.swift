@@ -14,7 +14,6 @@ import Foundation
 public struct CCKey: Codable {
     // AES Key for symmetric encryption
     let aesKey: String
-    
     // AES IV also for symmetric encryption
     let aesIV: String
 }
@@ -96,39 +95,5 @@ struct CommonCrypto {
         }
         return try crypt(input: encryptedData, operation: CCOperation(kCCDecrypt), key: key, iv: iv, algo: CCAlgorithm(kCCAlgorithmAES128), options: CCOptions(kCCOptionPKCS7Padding | kCCModeCBC), blockSize: kCCBlockSizeAES128)
     }
-    
-}
-
-// MARK: ALL Common Crypto Modifications
-
-extension Client {
-    
-    // Common Crypto get access key
-//
-//    func getCommonCryptoAccessKey(writerId: UUID, userId: UUID, readerId: UUID, recordType: String, completion: @escaping E3dbCompletion<AccessKey>) {
-//        let cacheKey = AkCacheKey(writerId: writerId, userId: userId, recordType: recordType)
-//        getStoredAccessKey(writerId: writerId, userId: userId, readerId: readerId, recordType: recordType) { result in
-//            // found access key, return it immediately
-//            guard case .failure(let error) = result else {
-//                return completion(result)
-//            }
-//
-//            // access key not found in cache and eak not found on server, generate raw ak
-//            guard case .apiError(code: 404, message: _) = error,
-//                let ak = Crypto.generateRandomAccessKeyCC() else {
-//                    return completion(Result(error: .cryptoError("Could not create access key")))
-//            }
-//
-//            // encrypts and stores AK on server and local cache before returning it to caller
-//            self.putAccessKey(ak: ak, cacheKey: cacheKey, writerId: writerId, userId: userId, readerId: readerId, recordType: recordType, completion: completion)
-//        }
-//    }
-//
-//    public func createCommonCryptoWriterKey(type: String, completion: @escaping E3dbCompletion<EAKInfo>) {
-//        let id = config.clientId
-//        getCommonCryptoAccessKey(writerId: id, userId: id, readerId: id, recordType: type) { result in
-//            completion(result.map { $0.eakInfo })
-//        }
-//    }
     
 }
