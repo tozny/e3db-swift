@@ -314,6 +314,7 @@ let writerKey = // get stored EAKInfo instance (e.g. from local storage)
 let decrypted = try e3db.decrypt(encryptedDoc: encrypted, eakInfo: writerKey)
 print("Decrypted document: \(decrypted!)")  
 ```
+See [Local File Protection](#local-file-protection) for more information on storing your file securely with iOS. 
 
 ##### Local Decryption of Shared Records
 
@@ -475,6 +476,34 @@ e3db.readFile(recordId: recordId, destination: dest) { result in
         print("An error occurred attempting to read file: \(error)")
     }
 }
+```
+
+<a name="local-file-protection"></a>
+##### Local File Protection
+
+Apple provides level of protections for storing files, [details here](https://developer.apple.com/documentation/uikit/core_app/protecting_the_user_s_privacy/encrypting_your_app_s_files). With these protection levels, your files will be decrypted automatically in the background by the OS.
+By default *Complete until first authentication* is used, but to add higher levels of protection when creating or writing to files use these options:
+
+```swift
+// Creating file
+guard FileManager.default.createFile(atPath: dest.path, 
+    contents: nil, 
+    // Provide the proper FileProtectionType here
+    attributes:[FileAttributeKey.protectionKey: FileProtectionType.complete]
+    ) else {}
+
+// Writing to file
+do {
+    // Provide proper option here
+    try data.write(to: fileURL, options: .completeFileProtection)
+} catch {}
+
+// Changing Existing File
+do {
+   try (fileURL as NSURL).setResourceValue( 
+                  URLFileProtection.complete,
+                  forKey: .fileProtectionKey)
+} catch {}
 ```
 
 ##### Storage Requirements
