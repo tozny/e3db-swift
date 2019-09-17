@@ -4,7 +4,7 @@
 //
 
 import Foundation
-import Swish
+import ToznySwish
 
 // MARK: Sharing
 

@@ -5,7 +5,7 @@
 
 import Foundation
 import Sodium
-import Swish
+import ToznySwish
 
 // MARK: Offline Crypto Operations
 

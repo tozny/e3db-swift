@@ -5,7 +5,7 @@
 
 import Foundation
 import Result
-import Swish
+import ToznySwish
 
 /// A type that holds arbitrary metadata for a record in cleartext
 public typealias PlainMeta = [String: String]

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'E3db'
-  s.version          = '3.0.0'
+  s.version          = '4.0.0'
   s.summary          = 'Super Easy End-to-End Encryption'
 
   s.description      = <<-DESC
@@ -18,10 +18,10 @@ E3DB provides a familiar JSON-based NoSQL-style API for reading, writing, and qu
   s.source_files = 'E3db/Classes/**/*'
 
   s.subspec 'Core' do |core|
-    core.dependency 'Swish', '~> 3.0'
+    core.dependency 'ToznySwish', '~> 5.0.0'
     core.dependency 'Sodium', '~> 0.7'
     core.dependency 'Valet', '~> 3.1'
-    core.dependency 'Heimdallr', '~> 3.6'
+    core.dependency 'ToznyHeimdallr', '~> 4.0'
   end
 
   s.default_subspec = 'Core'

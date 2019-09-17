@@ -4,10 +4,10 @@
 //
 
 import Foundation
-import Heimdallr
+import ToznyHeimdallr
 import Result
 import Sodium
-import Swish
+import ToznySwish
 
 // Allows customizable response parsing
 protocol E3dbRequest: Request {

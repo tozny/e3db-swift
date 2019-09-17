@@ -3,7 +3,7 @@ import UIKit
 import XCTest
 @testable import E3db
 
-import let Swish.immediateScheduler
+import let ToznySwish.immediateScheduler
 
 // non-sensitive test data
 // for running integration tests
@@ -216,10 +216,11 @@ extension PinnedCertificate where Self: URLSessionDelegate {
     func validateCertificate(_ certificate: String, for session: URLSession, challenge: URLAuthenticationChallenge, completion: @escaping CertificateCompletion) {
         // Adapted from OWASP https://www.owasp.org/index.php/Certificate_and_Public_Key_Pinning#iOS
         let cancel = URLSession.AuthChallengeDisposition.cancelAuthenticationChallenge
+        let ptr =  UnsafeMutablePointer<SecTrustResultType>.allocate(capacity: 32)
 
         guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
               let trust = challenge.protectionSpace.serverTrust,
-              SecTrustEvaluate(trust, nil) == errSecSuccess,
+              SecTrustEvaluate(trust, ptr) == errSecSuccess,
               let serverCert = SecTrustGetCertificateAtIndex(trust, 1) else { // checks intermediate cert (index 1)
                 return completion(cancel, nil)
         }
