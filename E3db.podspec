@@ -2,6 +2,7 @@ Pod::Spec.new do |s|
   s.name             = 'E3db'
   s.version          = '4.0.0'
   s.summary          = 'Super Easy End-to-End Encryption'
+  s.swift_version    = '5.0'
 
   s.description      = <<-DESC
 The Tozny End-to-End Encrypted Database (E3DB) is a storage platform with powerful sharing and consent management features.
