@@ -4,10 +4,10 @@
 //
 
 import Foundation
-import Heimdallr
+import ToznyHeimdallr
 import Result
 import Sodium
-import Swish
+import ToznySwish
 
 // MARK: Access Key Management
 
@@ -159,7 +159,7 @@ extension Client {
                 // encrypt ak
                 guard let authorizerPrivKey = Box.SecretKey(base64UrlEncoded: self.config.privateKey),
                       let eak = Crypto.encrypt(accessKey: ak, readerClientKey: client.publicKey, authorizerPrivKey: authorizerPrivKey) else {
-                        return completion(Result(error: .cryptoError("Failed to encrypt access key")))
+                        return completion(Result(error: E3dbError.cryptoError("Failed to encrypt access key")))
                 }
 
                 // update server

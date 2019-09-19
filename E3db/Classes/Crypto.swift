@@ -238,7 +238,7 @@ extension Crypto {
         // write headers
         let e3dbHeader   = try createHeader(dk: dk, ak: ak)
         let headerData   = Data(e3dbHeader.utf8)
-        let streamHeader = Data(bytes: stream.header())
+        let streamHeader = Data(_: stream.header())
         output.write(headerData)
         output.write(streamHeader)
         headerData.updateMD5(context: context)
@@ -253,7 +253,7 @@ extension Crypto {
             guard let cipherText = stream.push(message: headBuf.bytes, tag: tag) else {
                 throw E3dbError.cryptoError("Failed to encrypted data")
             }
-            let cipherData = Data(bytes: cipherText)
+            let cipherData = Data(_: cipherText)
             output.write(cipherData)
             cipherData.updateMD5(context: context)
 
@@ -323,7 +323,7 @@ extension Crypto {
                   tag == .MESSAGE || tag == .FINAL else {
                 throw E3dbError.cryptoError("Failed to decrypt values")
             }
-            let plainData = Data(bytes: plainText)
+            let plainData = Data(_: plainText)
             output.write(plainData)
             cipherText = input.readData(ofLength: bufferSize)
         }

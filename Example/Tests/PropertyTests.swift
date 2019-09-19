@@ -5,7 +5,7 @@ import SwiftCheck
 extension Data: Arbitrary {
     public static var arbitrary: Gen<Data> {
         return [UInt8].arbitrary.flatMap { bytes in
-            return Gen<Data>.pure(Data(bytes: bytes))
+            return Gen<Data>.pure(Data(_: bytes))
         }
     }
 }
@@ -90,7 +90,7 @@ class PropertyTests: XCTestCase, TestUtils {
         property("Base64url decoding for sodium should match manual") <- forAll { (encoded: Base64UrlEncodedString) in
             let sodiumDecoded = try? Crypto.base64UrlDecoded(string: encoded.value)
             let manualDecoded = Data(base64URLEncoded: encoded.value)
-            return sodiumDecoded != nil && manualDecoded != nil && Data(bytes: sodiumDecoded!) == manualDecoded!
+            return sodiumDecoded != nil && manualDecoded != nil && Data(_: sodiumDecoded!) == manualDecoded!
         }
     }
 

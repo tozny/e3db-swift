@@ -1,36 +1,36 @@
 PODS:
-  - E3db (3.0.0):
-    - E3db/Core (= 3.0.0)
-  - E3db/Core (3.0.0):
-    - Heimdallr (~> 3.6)
+  - E3db (4.0.0):
+    - E3db/Core (= 4.0.0)
+  - E3db/Core (4.0.0):
     - Sodium (~> 0.7)
-    - Swish (~> 3.0)
+    - ToznyHeimdallr (~> 4.0)
+    - ToznySwish (~> 5.0.0)
     - Valet (~> 3.1)
-  - Heimdallr (3.6.1):
-    - Heimdallr/Core (= 3.6.1)
-  - Heimdallr/Core (3.6.1):
-    - Result (~> 3.0)
-  - ResponseDetective (1.2.4)
-  - Result (3.2.4)
-  - Sodium (0.7.0)
-  - SwiftCheck (0.10.0)
-  - Swish (3.0.0):
-    - Result (~> 3.1)
-  - Valet (3.2.2)
+  - ResponseDetective (1.3.0)
+  - Result (4.1.0)
+  - Sodium (0.8.0)
+  - SwiftCheck (0.12.0)
+  - ToznyHeimdallr (4.0.1):
+    - ToznyHeimdallr/Core (= 4.0.1)
+  - ToznyHeimdallr/Core (4.0.1):
+    - Result (~> 4.1.0)
+  - ToznySwish (5.0.0):
+    - Result (~> 4.1)
+  - Valet (3.2.6)
 
 DEPENDENCIES:
   - E3db (from `../`)
   - ResponseDetective (~> 1.2)
-  - SwiftCheck (~> 0.10)
+  - SwiftCheck (~> 0.12)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
-    - Heimdallr
+  https://github.com/cocoapods/specs.git:
     - ResponseDetective
     - Result
     - Sodium
     - SwiftCheck
-    - Swish
+    - ToznyHeimdallr
+    - ToznySwish
     - Valet
 
 EXTERNAL SOURCES:
@@ -38,15 +38,15 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  E3db: 49672ac7be551985814b0404cd26859f22146631
-  Heimdallr: d2a8b1dc3ecc7ad249c9ffd20c990e2248fcd599
-  ResponseDetective: 710b1b41903382460592a75a480440661bcadfa6
-  Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
-  Sodium: c5510cc6f5e1b27858e5f260b5cac80d4a3f9379
-  SwiftCheck: 8a3c3638941467bc142d625f374a8409dd262ae8
-  Swish: 68621dbf8f0c0ed1660cb620f3ce8d5218f6bf38
-  Valet: 0babf5737029004185a7a009c1135f0c073011d1
+  E3db: 2dd06b33bca9cf4c466a8f4ba3fa219416a499da
+  ResponseDetective: 8422c5139cf6ff7d7db38b2bfea418b748b440cc
+  Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
+  Sodium: 63c0ca312a932e6da481689537d4b35568841bdc
+  SwiftCheck: d1dd04d955cc76620b0f84e087536bd059a11c24
+  ToznyHeimdallr: 69a0cff11b77ca36b304dede9009264473315695
+  ToznySwish: 22cb7f57696adbb98cb9078b278b756215169dc0
+  Valet: dcc4ff74f0d010be665239ab89c7a4a5cd39ee33
 
-PODFILE CHECKSUM: 64794b8cc17b0d0d47676843076f1d7caca89541
+PODFILE CHECKSUM: 957b019295ab47ff29bd50b027b2a1a8b61fb011
 
-COCOAPODS: 1.5.0
+COCOAPODS: 1.7.5

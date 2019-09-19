@@ -260,6 +260,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -338,26 +339,26 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-E3db_Example/Pods-E3db_Example-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-E3db_Example/Pods-E3db_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/E3db/E3db.framework",
-				"${BUILT_PRODUCTS_DIR}/Heimdallr/Heimdallr.framework",
 				"${BUILT_PRODUCTS_DIR}/Result/Result.framework",
 				"${BUILT_PRODUCTS_DIR}/Sodium/Sodium.framework",
-				"${BUILT_PRODUCTS_DIR}/Swish/Swish.framework",
+				"${BUILT_PRODUCTS_DIR}/ToznyHeimdallr/ToznyHeimdallr.framework",
+				"${BUILT_PRODUCTS_DIR}/ToznySwish/ToznySwish.framework",
 				"${BUILT_PRODUCTS_DIR}/Valet/Valet.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/E3db.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Heimdallr.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Sodium.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swish.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ToznyHeimdallr.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ToznySwish.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Valet.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-E3db_Example/Pods-E3db_Example-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-E3db_Example/Pods-E3db_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		566B14F328A344EB4AA46374 /* [CP] Embed Pods Frameworks */ = {
@@ -366,12 +367,12 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-E3db_Tests/Pods-E3db_Tests-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-E3db_Tests/Pods-E3db_Tests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/E3db/E3db.framework",
-				"${BUILT_PRODUCTS_DIR}/Heimdallr/Heimdallr.framework",
 				"${BUILT_PRODUCTS_DIR}/Result/Result.framework",
 				"${BUILT_PRODUCTS_DIR}/Sodium/Sodium.framework",
-				"${BUILT_PRODUCTS_DIR}/Swish/Swish.framework",
+				"${BUILT_PRODUCTS_DIR}/ToznyHeimdallr/ToznyHeimdallr.framework",
+				"${BUILT_PRODUCTS_DIR}/ToznySwish/ToznySwish.framework",
 				"${BUILT_PRODUCTS_DIR}/Valet/Valet.framework",
 				"${BUILT_PRODUCTS_DIR}/ResponseDetective/ResponseDetective.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftCheck/SwiftCheck.framework",
@@ -379,17 +380,17 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/E3db.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Heimdallr.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Sodium.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swish.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ToznyHeimdallr.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ToznySwish.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Valet.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ResponseDetective.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftCheck.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-E3db_Tests/Pods-E3db_Tests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-E3db_Tests/Pods-E3db_Tests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		B910CE55EC6F7278E6295D85 /* [CP] Check Pods Manifest.lock */ = {
@@ -596,13 +597,13 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/Sodium\"",
 				);
 				INFOPLIST_FILE = "E3db-Example/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks $(inherited)";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tozny.E3db-Example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -625,13 +626,13 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/Sodium\"",
 				);
 				INFOPLIST_FILE = "E3db-Example/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks $(inherited)";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tozny.E3db-Example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -656,7 +657,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/E3db_Example.app/E3db_Example";
 				USER_HEADER_SEARCH_PATHS = "";
 			};
@@ -678,7 +679,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/E3db_Example.app/E3db_Example";
 				USER_HEADER_SEARCH_PATHS = "";
 			};

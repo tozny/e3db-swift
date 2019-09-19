@@ -1,6 +1,6 @@
 use_frameworks!
 
-platform :ios, 9.0
+platform :ios, '11.0'
 target 'E3db_Example' do
     pod 'E3db', :path => '../'
 
@@ -9,6 +9,6 @@ target 'E3db_Example' do
         pod 'E3db', :path => '../'
 
         pod 'ResponseDetective', '~> 1.2'
-        pod 'SwiftCheck', '~> 0.10'
-    end
+        pod 'SwiftCheck', '~> 0.12'
+        end
 end

@@ -4,10 +4,10 @@
 //
 
 import Foundation
-import Heimdallr
+import ToznyHeimdallr
 import Result
 import Sodium
-import Swish
+import ToznySwish
 
 /// A type that contains either a value of type `T` or an `E3dbError`
 public typealias E3dbResult<T> = Result<T, E3dbError>

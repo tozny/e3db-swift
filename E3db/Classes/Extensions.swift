@@ -8,7 +8,7 @@ import CommonCrypto
 #endif
 import Foundation
 import Result
-import Swish
+import ToznySwish
 
 extension Formatter {
     static let iso8601: DateFormatter = {
@@ -93,7 +93,7 @@ extension APIClient {
     }
 
     func performDefault<T: Request>(_ request: T, completion: @escaping E3dbCompletion<T.ResponseObject>) {
-        perform(request) { completion($0.mapError(E3dbError.init)) }
+        perform(request) { request in completion(request.mapError(E3dbError.init)) }
     }
 
     func upload<T: Request>(fileAt: URL, request: T, session: URLSession, completion: @escaping E3dbCompletion<T.ResponseObject>) {
