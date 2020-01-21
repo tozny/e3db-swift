@@ -329,3 +329,19 @@ extension Crypto {
         }
     }
 }
+
+// Mark Identity Functions
+
+extension Crypto {
+    static func hash(stringToHash: String) throws -> String {
+        let hash = sodium.genericHash.hash(message: stringToHash.data(using: .utf8)!.bytes)
+        return try Crypto.base64UrlEncoded(bytes: hash!)
+    }
+    
+    // TODO: Extract 10000 to constant
+    static func deriveCryptoKey(seed: String, salt: String, iterations: int = 10000) {
+        let keypair = sodium.d
+    }
+    
+    
+}
