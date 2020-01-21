@@ -137,6 +137,14 @@ extension Client {
         }
         return SignedDocument(document: document, signature: signature)
     }
+    
+    public static func sign<T: Signable>(document: T, privateKey: String) throws -> SignedDocument<T> {
+        guard let privSigKey = Sign.SecretKey(base64UrlEncoded: privateKey),
+              let signature  = Crypto.signature(doc: document, signingKey: privSigKey) else {
+            throw E3dbError.cryptoError("Failed to sign document")
+        }
+        return SignedDocument(document: document, signature: signature)
+    }
 
     /// Verify message authenticity. Confirm that the signature for the `SignedDocument` was
     /// created by the client identified by the given public key, for the document provided.
