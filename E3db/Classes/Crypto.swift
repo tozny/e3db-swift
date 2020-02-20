@@ -97,6 +97,20 @@ extension Crypto {
 
         return ak
     }
+    
+    static func decrypt(eak: String, authorizerPubKey: String, clientPrivateKey: String) throws -> RawAccessKey {
+        guard let (eak, eakN) = try b64SplitEak(eak) else {
+            throw E3dbError.cryptoError("Invalid access key format")
+        }
+
+        guard let authorizerPubKey = Box.PublicKey(base64UrlEncoded: authorizerPubKey),
+              let privKey = Box.SecretKey(base64UrlEncoded: clientPrivateKey),
+              let ak = sodium.box.open(authenticatedCipherText: eak, senderPublicKey: authorizerPubKey, recipientSecretKey: privKey, nonce: eakN) else {
+            throw E3dbError.cryptoError("Failed to decrypt access key")
+        }
+
+        return ak
+    }
 }
 
 // MARK: Record Data Crypto
@@ -156,7 +170,9 @@ extension Crypto {
 
     static func signature(doc: Signable, signingKey: Sign.SecretKey) -> String? {
         let message = Bytes(doc.serialized().utf8)
-        return sodium.sign.signature(message: message, secretKey: signingKey)?.base64UrlEncodedString()
+        let encodedMessage = try? Crypto.base64UrlDecoded(string: doc.serialized())
+
+        return sodium.sign.signature(message: encodedMessage!, secretKey: signingKey)?.base64UrlEncodedString()
     }
 
     static func verify(doc: Signable, encodedSig: String, verifyingKey: Sign.PublicKey) -> Bool? {
@@ -165,7 +181,137 @@ extension Crypto {
             .map { sodium.sign.verify(message: message, publicKey: verifyingKey, signature: $0) }
     }
 
+
 }
+
+// MARK: Identity Crypto
+
+extension Crypto {
+    static func signatureVersion() -> String{
+      // UUIDv5 TFSP1;ED25519;BLAKE2B
+      return "e7737e7c-1637-511e-8bab-93c4f3e26fd9"
+    }
+    
+    static func signField(key: String, value: String, signingKey: Sign.SecretKey, objectSalt: String? = nil) -> String {
+        var salt = objectSalt
+        if salt == nil {
+            salt = UUID().uuidString
+        }
+        guard let message = try? Crypto.hash(stringToHash: String(format: "%@%@%@", salt!, key, value)) else {
+            return "" // TODO FIXME
+        }
+        let messageBytes = Bytes(message.utf8)
+        let signature = sodium.sign.sign(message: messageBytes, secretKey: signingKey)?.base64UrlEncodedString()
+        let prefix = String(format:"%@;%@;%d;%@", Crypto.signatureVersion(), salt!, signature!.count, signature!)
+        return String(format:"%@%@", prefix, value)
+    }
+    
+    static func validateField(key: String, value: String, signingKey: Sign.SecretKey, objectSalt: String? = nil) throws -> String {
+        let fields = value.split(separator: ";")
+        // If this field is not prefixed with the signature version, assume it is
+        // not a signed field.
+        if (String(fields[0]) != Crypto.signatureVersion()) {
+          return value
+        }
+        if objectSalt != nil && String(fields[1]) != objectSalt {
+          throw NSError(domain: "object salt does not match", code: 401, userInfo: nil)
+        }
+        let headerLength = fields[0].count + fields[1].count + fields[2].count + 3
+        let signatureLength = Int(fields[2])!
+    
+        let signatureIndex = String.Index(utf16Offset: headerLength, in: value)
+        let plainTextIndex = String.Index(utf16Offset: headerLength + signatureLength, in: value)
+        
+        let signature = String(value[signatureIndex..<plainTextIndex])
+        let plainText = String(value[plainTextIndex...])
+        
+        guard let signedMessage = try? Crypto.hash(stringToHash: String.init(format: "%@%@%@", String(fields[1]), key, plainText)) else {
+            throw E3dbError.cryptoError("Failed to hash verifying field")
+        }
+        
+        let valid = Crypto.verify(doc: signableString(signedMessage), encodedSig: signature, verifyingKey: signingKey)
+        if valid != true {
+            throw E3dbError.cryptoError("Could not verify field")
+        }
+        
+        return plainText
+    }
+
+    static func encryptNote(note: Note, accessKey: RawAccessKey, signingKey: String) -> Note? {
+        var encryptedNote = note
+        let signatureSalt = UUID().uuidString
+        guard let signingKeyBytes = Box.SecretKey(base64UrlEncoded: signingKey) else { return nil }
+
+        let noteSignature = Crypto.signField(key: "signature", value: signatureSalt, signingKey: signingKeyBytes)
+        encryptedNote.signature = noteSignature
+        
+        var encryptedData:[String: String] = [:]
+        for (plain, data) in encryptedNote.data {
+            let signedField = Crypto.signField(
+                key: plain,
+                value: data,
+                signingKey: signingKeyBytes,
+                objectSalt: signatureSalt
+            )
+            encryptedData[plain] = try? Crypto.encryptField(plain: signedField, ak: accessKey)
+        }
+        encryptedNote.data = encryptedData
+        return encryptedNote
+    }
+    
+    static func decryptNote(encryptedNote: Note, privateEncryptionKey: String, publicEncryptionKey: String, publicSigningKey: String) throws -> Note {
+        var unencryptedNote = encryptedNote
+        guard let signingKeyBytes = Box.SecretKey(base64UrlEncoded: publicSigningKey) else {
+            throw E3dbError.cryptoError("Invalid signing key")
+        }
+        let ak = try Crypto.decrypt(eak: unencryptedNote.noteKeys.encryptedAccessKey, authorizerPubKey: publicEncryptionKey, clientPrivateKey: privateEncryptionKey)
+        
+        // TODO: Does this need to be here??
+        guard let verifiedSalt = try? Crypto.validateField(key: "signature", value: unencryptedNote.signature!, signingKey: signingKeyBytes) else {
+            throw E3dbError.cryptoError("Could not verify signature salt")
+        }
+        
+        var encryptedData:[String: String] = [:]
+        for (plain, data) in unencryptedNote.data {
+            let decryptedData = try Crypto.decryptField(encrypted: data, ak: ak)
+            let verifiedData = try Crypto.validateField(key: plain, value: decryptedData, signingKey: signingKeyBytes, objectSalt: verifiedSalt)
+            encryptedData[plain] = verifiedData
+        }
+        unencryptedNote.data = encryptedData
+        return unencryptedNote
+    }
+    
+    static func encryptField(plain: String, ak: RawAccessKey) throws -> String {
+        let bytes       = plain.data(using: .utf8)?.bytes
+        let dk          = generateDataKey()
+        let (ef, efN)   = try encrypt(value: bytes, key: dk)
+        let (edk, edkN) = try encrypt(value: dk, key: ak)
+        let encrypted  = try b64Join(edk, edkN, ef, efN)
+        return encrypted
+    }
+    
+    static func decryptField(encrypted: String, ak: RawAccessKey) throws -> String {
+        guard let (edk, edkN, ef, efN) = try b64SplitData(encrypted) else {
+            throw E3dbError.cryptoError("Invalid data format")
+        }
+        let dk    = try decrypt(ciphertext: edk, nonce: edkN, key: ak)
+        let field = try decrypt(ciphertext: ef, nonce: efN, key: dk)
+        guard let plainField = field.utf8String else {
+            throw E3dbError.cryptoError("Invalid field encoding")
+        }
+        return plainField
+    }
+    
+    public static func sign<T: Signable>(document: T, privateSigningKey: String) throws -> SignedDocument<T> {
+        guard let privSigKey = Sign.SecretKey(base64UrlEncoded: privateSigningKey),
+              let signature  = Crypto.signature(doc: document, signingKey: privSigKey) else {
+            throw E3dbError.cryptoError("Failed to sign document")
+        }
+        return SignedDocument(document: document, signature: signature)
+    }
+}
+
+
 
 // MARK: Files Crypto
 
@@ -339,8 +485,7 @@ extension Crypto {
     }
     
     // TODO: Extract 10000 to constant
-    static func deriveCryptoKey(seed: String, salt: String, iterations: int = 10000) {
-        let keypair = sodium.d
+    static func deriveCryptoKey(seed: String, salt: String, iterations: Int = 10000) {
     }
     
     
