@@ -8,7 +8,7 @@
 import Foundation
 
 public class Note: Codable {
-    internal init(data: NoteData, plain: NoteData? = nil, fileMeta: NoteData? = nil, type: String? = nil, signature: String? = nil, createdAt: String? = nil, noteID: String? = nil, noteKeys: NoteKeys, noteOptions: NoteOptions? = nil, views: Int? = nil, eacp: NoteEacp? = nil) {
+    internal init(data: NoteData, plain: NoteData? = nil, fileMeta: NoteData? = nil, type: String? = nil, signature: String? = nil, createdAt: String? = nil, noteID: String? = nil, noteKeys: NoteKeys, noteOptions: NoteOptions? = nil, views: Int? = nil) {
         self.data = data
         self.plain = plain
         self.fileMeta = fileMeta
@@ -19,7 +19,6 @@ public class Note: Codable {
         self.noteKeys = noteKeys
         self.noteOptions = noteOptions
         self.views = views
-        self.eacp = eacp
     }
     
     public required init(from decoder: Decoder) throws {
@@ -42,16 +41,15 @@ public class Note: Codable {
         noteKeys = NoteKeys(mode: mode, recipientSigningKey: recipientSigningKey, writerSigningKey: writerSigningKey, writerEncryptionKey: writerEncryptionKey, encryptedAccessKey: encryptedAccessKey)
         
         views = try? values.decode(Int.self, forKey: .views)
-        eacp = try? values.decode(NoteEacp.self, forKey: .eacp)
 
-        
         let clientID = try? values.decode(String.self, forKey: .clientId)
         let idString = try? values.decode(String.self, forKey: .IdString)
         let maxViews = try? values.decode(Int.self, forKey: .maxViews)
         let expiration = try? values.decode(String.self, forKey: .expiration)
         let expires = try? values.decode(Bool.self, forKey: .expires)
-        
-        noteOptions = NoteOptions(clientId: clientID, IdString: idString, maxViews: maxViews, expiration: expiration, expires: expires)
+        let eacp = try? values.decode(NoteEacp.self, forKey: .eacp)
+
+        noteOptions = NoteOptions(clientId: clientID, IdString: idString, maxViews: maxViews, expiration: expiration, expires: expires, eacp: eacp)
         
     }
     
@@ -82,12 +80,8 @@ public class Note: Codable {
         try container.encode(self.noteOptions?.maxViews, forKey: .maxViews)
         try container.encode(self.noteOptions?.expiration, forKey: .expiration)
         try container.encode(self.noteOptions?.expires, forKey: .expires)
-
-        // eacp
-        try container.encode(self.eacp, forKey: .eacp)
+        try container.encode(self.noteOptions?.eacp, forKey: .eacp)
     }
-    
-
     
     var data: NoteData
     var plain: NoteData?
@@ -101,8 +95,7 @@ public class Note: Codable {
     var noteKeys: NoteKeys
     var noteOptions: NoteOptions?
     var views: Int?
-    var eacp: NoteEacp?
-    
+
     enum CodingKeys: String, CodingKey {
         // core
         case data = "data"
@@ -143,12 +136,13 @@ public struct NoteKeys: Codable {
 }
 
 public class NoteOptions: Codable {
-    internal init(clientId: String? = nil, IdString: String? = nil, maxViews: Int? = nil, expiration: String? = nil, expires: Bool? = nil) {
+    internal init(clientId: String? = nil, IdString: String? = nil, maxViews: Int? = nil, expiration: String? = nil, expires: Bool? = nil, eacp: NoteEacp? = nil) {
         self.clientId = clientId
         self.IdString = IdString
         self.maxViews = maxViews
         self.expiration = expiration
         self.expires = expires
+        self.eacp = eacp
     }
     
     var clientId: String?
@@ -157,20 +151,121 @@ public class NoteOptions: Codable {
     // premium features
     var expiration: String?
     var expires: Bool?
+    var eacp: NoteEacp?
 }
 
 public typealias NoteData = [String: String]
 
 public class NoteEacp: Codable {
     public init() {}
+
+    static func TozOtpEacp(include: Bool) -> Codable {
+        return ["tozny_otp_eacp": ["include": "true"]]
+    }
+
+    static func LastAccessEacp(lastReadId: String) -> Codable {
+        return ["last_access_eacp": ["last_read_note_id": lastReadId]]
+    }
+}
+
+public class TozOtpEacp: NoteEacp {
+    struct EacpWrapper: Codable {
+        let include: Bool
+    }
+    let eacpWrapper: EacpWrapper
+
+    public init(include: Bool) {
+        eacpWrapper = EacpWrapper(include: include)
+        super.init()
+    }
+
+    required public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        eacpWrapper = try values.decode(EacpWrapper.self, forKey: .eacpWrapper)
+        super.init()
+    }
+
+    public override func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(eacpWrapper, forKey: .eacpWrapper)
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case eacpWrapper = "tozny_otp_eacp"
+    }
+}
+
+public class LastAccessEacp: NoteEacp {
+    struct EacpWrapper: Codable {
+        let lastReadNoteId: String
+
+        enum CodingKeys: String, CodingKey {
+            case lastReadNoteId = "last_read_note_id"
+        }
+    }
+    let eacpWrapper: EacpWrapper
+
+    public init(lastReadNoteId: String) {
+        eacpWrapper = EacpWrapper(lastReadNoteId: lastReadNoteId)
+        super.init()
+    }
+
+    required public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        eacpWrapper = try values.decode(EacpWrapper.self, forKey: .eacpWrapper)
+        super.init()
+    }
+
+    public override func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(eacpWrapper, forKey: .eacpWrapper)
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case eacpWrapper = "last_access_eacp"
+    }
+}
+
+public class TozIdEacp: NoteEacp {
+    struct EacpWrapper: Codable {
+        let realmName: String
+
+        enum CodingKeys: String, CodingKey {
+            case realmName = "realm_name"
+        }
+    }
+
+    let eacpWrapper: EacpWrapper
+
+    public init(realmName: String) {
+        self.eacpWrapper = EacpWrapper(realmName: realmName)
+        super.init()
+    }
+
+    required public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        eacpWrapper = try values.decode(EacpWrapper.self, forKey: .eacpWrapper)
+        super.init()
+    }
+
+    public override func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(eacpWrapper, forKey: .eacpWrapper)
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case eacpWrapper = "tozid_eacp"
+    }
 }
 
 public class EmailEacp: NoteEacp {
-    internal init(emailAddress: String, template: String, providerLink: String, defaultExpirationMinutes: Int) {
+    // TODO: Extract 60 to constnat
+    internal init(emailAddress: String, template: String, providerLink: String, defaultExpirationMinutes: Int = 60, templateFields: [String:String]? = nil) {
         self.emailAddress = emailAddress
         self.template = template
         self.providerLink = providerLink
         self.defaultExpirationMinutes = defaultExpirationMinutes
+        self.templateFields = templateFields
         super.init()
     }
     
@@ -178,6 +273,7 @@ public class EmailEacp: NoteEacp {
     let template: String
     let providerLink: String
     let defaultExpirationMinutes: Int
+    let templateFields: [String:String]?
     
     enum CodingKeys: String, CodingKey {
         case eacp = "email_eacp"
@@ -186,6 +282,7 @@ public class EmailEacp: NoteEacp {
     enum EacpInfoKeys: String, CodingKey {
         case emailAddress = "email_address"
         case template
+        case templateFields = "template_fields"
         case providerLink = "provider_link"
         case defaultExpirationMinutes = "default_expiration_minutes"
     }
@@ -195,6 +292,7 @@ public class EmailEacp: NoteEacp {
         let eacpInfo = try values.nestedContainer(keyedBy: EacpInfoKeys.self, forKey: .eacp)
         emailAddress = try eacpInfo.decode(String.self, forKey: .emailAddress)
         template = try eacpInfo.decode(String.self, forKey: .template)
+        templateFields = try? eacpInfo.decode([String:String].self, forKey: .templateFields)
         defaultExpirationMinutes = try eacpInfo.decode(Int.self, forKey: .defaultExpirationMinutes)
         providerLink = try eacpInfo.decode(String.self, forKey: .providerLink)
         super.init()
@@ -207,6 +305,7 @@ public class EmailEacp: NoteEacp {
         try eacpInfo.encode(emailAddress, forKey: .emailAddress)
         try eacpInfo.encode(template, forKey: .template)
         try eacpInfo.encode(providerLink, forKey: .providerLink)
+        try eacpInfo.encode(templateFields, forKey: .templateFields)
         try eacpInfo.encode(defaultExpirationMinutes, forKey: .defaultExpirationMinutes)
     }
 }
