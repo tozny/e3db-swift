@@ -134,8 +134,17 @@ public struct SavedNote: Codable {
         let appName: String?
         let apiUrl: String
         let username: String
+        let brokerTargetUrl: String
         let userId: Int?
-        let brokerTargetUrl: String?
+
+        enum CodingKeys: String, CodingKey {
+            case realmName
+            case appName
+            case apiUrl
+            case username
+            case userId
+            case brokerTargetUrl
+        }
     }
 
     struct storageConfig: Codable {
@@ -170,8 +179,8 @@ public struct SavedNote: Codable {
                           appName: identity.appName,
                           apiUrl: identity.apiUrl,
                           username: identity.username,
-                          userId: identity.userId,
-                          brokerTargetUrl: identity.brokerTargetUrl)
+                          brokerTargetUrl: identity.brokerTargetUrl,
+                          userId: identity.userId)
 
         storage = storageConfig(clientId: store.clientId.uuidString,
                                 apiKeyId: store.apiKeyId,
@@ -191,5 +200,19 @@ public struct SavedNote: Codable {
 
         try container.encode(idSerial, forKey: .config)
         try container.encode(storeSerial, forKey: .storage)
+    }
+
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let storageString = try values.decode(String.self, forKey: .storage)
+        let configString = try values.decode(String.self, forKey: .config)
+
+        storage = try JSONDecoder().decode(storageConfig.self, from: storageString.data(using: .utf8)!)
+        config = try JSONDecoder().decode(idConfig.self, from: configString.data(using: .utf8)!)
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case config
+        case storage
     }
 }

@@ -504,7 +504,6 @@ extension Crypto {
     static func deriveNoteCreds(realmName: String, username: String, password: String, type: String = "password") throws -> NoteCredentials {
         var username = username.lowercased()
         var nameSeed = String(format: "%@@realm:%@", username, realmName)
-        print("this is name Seed \(nameSeed) for type \(type)")
         switch (type) {
         case "email_otp":
             nameSeed = String(format: "broker:%@", nameSeed)
@@ -517,7 +516,6 @@ extension Crypto {
         default:
             throw E3dbError.configError("Note cred type: \(type) is not supported")
         }
-
         let noteName = try Crypto.hash(stringToHash: nameSeed)
         let cryptoKeyPair = try Crypto.deriveCryptoKeys(password: password, salt: nameSeed)
         let signingKeyPair = try Crypto.deriveSigningKeys(password: password, salt: cryptoKeyPair.publicKey + cryptoKeyPair.privateKey)
@@ -563,7 +561,7 @@ extension Crypto {
         return pbkString
     }
 
-    // output key needs 32 bytes
+    // TODO: output key needs 32 bytes
     static func pbkdf2(hash: CCPBKDFAlgorithm, password: String, salt: [UInt8], keyCount: Int, rounds: UInt32!) throws -> Data {
         var localDerivedKeyData:Data = Data(count: keyCount)
         let status = try localDerivedKeyData.withUnsafeMutableBytes() {

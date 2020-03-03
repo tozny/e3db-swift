@@ -22,9 +22,6 @@ public class Application {
             var username = username
             username = username.lowercased()
 
-//            let semaphore = DispatchSemaphore(value: 0)
-//            let actionQueue = DispatchQueue.global()
-
             guard let noteCredentials = try? Crypto.deriveNoteCreds(realmName: self.realmName, username: username, password: password) else {
                 return completionHandler(.failure(E3dbError.cryptoError("Couldn't derive crypto keys from username and password")))
             }
@@ -37,19 +34,14 @@ public class Application {
 
             anonAuth.handledTsv1Request(request: initiateLoginRequest, errorHandler: completionHandler) {
                 (loginSession: [String:String]) -> Void in
-                print("this is login session \(loginSession)")
-
                 guard let encodedString = try? encodeBodyAsUrl(loginSession),
                       let encodedBody = encodedString.data(using: .utf8) else {
                     return completionHandler(.failure(E3dbError.apiError(code: 500, message: "Response from server was not encodable")))
                 }
-
-                // TODO: FIX ME - needed because of ngrok
                 var sessionRequest = URLRequest(url: URL(string: self.apiUrl + "/auth/realms/" + self.realmName + "/protocol/openid-connect/auth")!)
                 sessionRequest.httpMethod = "POST"
                 sessionRequest.addValue("application/json", forHTTPHeaderField: "Accepts")
                 sessionRequest.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-
                 sessionRequest.httpBody = encodedBody
 
                 anonAuth.handledTsv1Request(request: sessionRequest, errorHandler: completionHandler) {
@@ -58,42 +50,38 @@ public class Application {
                     let actionQueue = DispatchQueue.global()
                     actionQueue.async() {
                         var loginAction = loginAction
-                        print("this is the login action \(loginAction)")
+                        while loginAction.loginAction {
+                            if loginAction.type == "fetch"{
+                                break
+                            }
+                            var data: [String: String]? = nil
+                            actionQueue.async() {
+                                data = actionHandler(loginAction)
+                                semaphore.signal()
+                            }
+                            semaphore.wait()
 
-    //                    while loginAction.loginAction {
-    //                        print("beginning")
-    //                        if loginAction.type == "fetch"{
-    //
-    //                            break
-    //                        }
-    //                        var data: [String: String]? = nil
-    //                        actionQueue.async() {
-    //                            data = actionHandler(loginAction)
-    //                            semaphore.signal()
-    //                        }
-    //                        semaphore.wait(timeout: .now() + 100) // TODO: adjust timeout?
-    //
-    //                        var body: Data? // TODO: Handle my questions :(
-    //                        if loginAction.contentType == "application/x-www-form-urlencoded" {
-    //                            body = try? encodeBodyAsUrl(data!).data(using: .utf8)
-    //                        } else {
-    //                            body = try? JSONSerialization.data(withJSONObject: data)
-    //                        }
-    //
-    //                        var loginActionRequest = URLRequest(url: URL(string: loginAction.actionUrl)!)
-    //                        loginActionRequest.httpMethod = "POST"
-    //                        loginActionRequest.httpBody = body
-    //                        loginActionRequest.addValue(loginAction.contentType, forHTTPHeaderField: "Content-Type")
-    //                        anonAuth.handledTsv1Request(request: loginActionRequest, errorHandler: completionHandler) {
-    //                            (newLoginAction: IdentityLoginAction) -> Void in
-    //                            loginAction = newLoginAction
-    //                            semaphore.signal()
-    //                        }
-    //                        semaphore.wait(timeout: .now() + 100) // TODO: SEMAPHORES HERE??
-    //                    }
+                            var body: Data? // TODO: Handle my questions :(
+                            if loginAction.contentType == "application/x-www-form-urlencoded" {
+                                body = try? encodeBodyAsUrl(data!).data(using: .utf8)
+                            } else {
+                                body = try? JSONSerialization.data(withJSONObject: data)
+                            }
+                            guard let bodyData = body else {
+                                return completionHandler(.failure(E3dbError.jsonError(expected: "data returned from actionHandler should be codable to data", actual: "")))
+                            }
+                            var loginActionRequest = URLRequest(url: URL(string: loginAction.actionUrl)!)
+                            loginActionRequest.httpMethod = "POST"
+                            loginActionRequest.httpBody = bodyData
+                            loginActionRequest.addValue(loginAction.contentType, forHTTPHeaderField: "Content-Type")
+                            anonAuth.handledTsv1Request(request: loginActionRequest, errorHandler: completionHandler) {
+                                (newLoginAction: IdentityLoginAction) -> Void in
+                                loginAction = newLoginAction
+                                semaphore.signal()
+                            }
+                            semaphore.wait(timeout: .now() + 5) // TODO: 5s long time to wait
+                        }
 
-                        print("before final request")
-                        print("this is login action \(loginAction)")
                         // Final request
                         var finalRequest = URLRequest(url: URL(string: self.apiUrl + "/v1/identity/tozid/redirect")!)
                         finalRequest.httpMethod = "POST"
@@ -109,37 +97,33 @@ public class Application {
                         }
                         finalRequest.httpBody = finalRequestBody
 
-                        var potentialAccessToken: String? = nil
+                        var potentialToken: AgentToken? = nil
                         anonAuth.handledTsv1Request(request: finalRequest, errorHandler: completionHandler) {
-                            (tokenResp: [String: String]) -> Void in // TODO: Define this as a concrete type?
-                            potentialAccessToken = tokenResp["access_token"]
+                            (token: AgentToken) -> Void in
+                            potentialToken = token
                             semaphore.signal()
                         }
-                        semaphore.wait(timeout: .now() + 5) // TODO: SEMAPHORES HERE??
-                        guard let accessToken = potentialAccessToken else {
+                        semaphore.wait(timeout: .now() + 5) // TODO: 5s long time to wait
+                        guard let token = potentialToken else {
                             return completionHandler(.failure(E3dbError.networkError("failed to get access token")))
                         }
-
-                        print("sign private '\(noteCredentials.signingKeyPair.privateKey)'")
-                        print("sign public '\(noteCredentials.signingKeyPair.publicKey)'")
-                        print("encryption private '\(noteCredentials.encryptionKeyPair.privateKey)'")
-                        print("encryption public '\(noteCredentials.encryptionKeyPair.publicKey)'")
-                        print("this is the not name \(noteCredentials.name)")
-
-                        print("this is api url \(self.apiUrl)")
-                        Identity.readNoteByName(noteName: noteCredentials.name,
+                        Client.readNoteByName(noteName: noteCredentials.name,
                                                 privateEncryptionKey: noteCredentials.encryptionKeyPair.privateKey,
                                                 publicEncryptionKey: noteCredentials.encryptionKeyPair.publicKey,
                                                 publicSigningKey: noteCredentials.signingKeyPair.publicKey,
                                                 privateSigningKey: noteCredentials.signingKeyPair.privateKey,
-                                                additionalHeaders: ["X-TOZID-LOGIN-TOKEN": accessToken],
+                                                additionalHeaders: ["X-TOZID-LOGIN-TOKEN": token.accessToken],
                                                 apiUrl: self.apiUrl) {
                             result -> Void in
                             switch(result) {
                             case .failure(let error):
                                 return completionHandler(.failure(error))
                             case .success(let note):
-                                print("this is the note found \(note)")
+                                guard let idConfig = try? IdentityConfig(fromPassNote: note) else {
+                                    return completionHandler(.failure(E3dbError.jsonError(expected: "Saved Note", actual: "Invalid Note Json")))
+                                }
+                                let partialIdentity = PartialIdentity(idConfig: idConfig)
+                                completionHandler(.success(Identity(fromPartial: partialIdentity, identityServiceToken: token)))
                             }
                         }
                     }
@@ -148,10 +132,6 @@ public class Application {
         } catch {
             completionHandler(.failure(E3dbError.apiError(code: 500, message: "Unexpected error attempting to login")))
         }
-    }
-
-    public func repeatLoginActions(data: [String: String]) {
-
     }
 
     public func register(username: String, password: String, email: String, token: String, firstName: String? = nil, lastName: String? = nil, emailEacpExpiryMinutes: Int = 60, completionHandler: @escaping (Result<PartialIdentity, Error>)
@@ -175,7 +155,7 @@ public class Application {
 
         Authenticator.request(unauthedReq: request) {
             result -> Void in
-            Authenticator.handleURLResponse(urlResult: result, errorHandler: completionHandler) {
+            Authenticator.handleURLResponse(urlResult: result, errorHandler: errorCompletion(completionHandler)) {
                 (identityResponse: IdentityRegisterResponse) -> Void in
                 do {
                     let storageConfig = Config(clientName: username,
@@ -193,7 +173,7 @@ public class Application {
                                                   apiUrl: self.apiUrl,
                                                   username: username,
                                                   userId: identityResponse.identity.id,
-                                                  brokerTargetUrl: identityResponse.realmBrokerIdentityToznyID,
+                                                  brokerTargetUrl: self.brokerTargetUrl,
                                                   firstName: firstName,
                                                   lastName: lastName,
                                                   storageConfig: storageConfig)
@@ -204,21 +184,23 @@ public class Application {
                     let partialIdentity = PartialIdentity(idConfig: idConfig)
 
                     let data = try JSONEncoder().encode(passNote)
+                    // TODO: rename this form json data
                     let jsonData = try JSONSerialization.jsonObject(with: data) as! [String: String]
 
 
                     let tozIdEacp = TozIdEacp(realmName: self.realmName)
                     let options = NoteOptions(IdString: noteCreds.name, maxViews: -1, expires: false, eacp: tozIdEacp)
-                    partialIdentity.writeNote(data: jsonData, recipientEncryptionKey: noteCreds.encryptionKeyPair.publicKey, recipientSigningKey: noteCreds.signingKeyPair.publicKey, options: options) {
+                    partialIdentity.storeClient.writeNote(data: jsonData,
+                                                      recipientEncryptionKey: noteCreds.encryptionKeyPair.publicKey,
+                                                      recipientSigningKey: noteCreds.signingKeyPair.publicKey,
+                                                      options: options) {
                         result -> Void in
                         switch(result) {
                         case .failure(let error):
-                            print("failed to write note \(error)")
                             return completionHandler(.failure(error))
                         case .success:
                             let brokerClientID = identityResponse.realmBrokerIdentityToznyID
                             if brokerClientID == nil || brokerClientID == "00000000-0000-0000-0000-000000000000" {
-                                print("broker client is was not found \(brokerClientID)")
                                 return completionHandler(.success(partialIdentity))
                             }
                             partialIdentity.storeClient.getClientInfo(clientId: UUID(uuidString: brokerClientID!)) {
@@ -255,6 +237,102 @@ public class Application {
         }
     }
 
+    public func completeEmailRecovery(otp: String, noteID: String, recoveryUrl: String? = nil, completionHandler: @escaping (Result<PartialIdentity, Error>) -> Void) {
+        let auth = ["email_otp": otp]
+        self.completeBrokerLogin(authResponse: auth, noteId: noteID, brokerType: "email_otp", brokerUrl: recoveryUrl, completionHandler: completionHandler)
+    }
+
+    public func completeOTPRecovery(otp: String, noteId: String, recoverUrl: String? = nil, completionHandler: @escaping  (Result<PartialIdentity, Error>) -> Void) {
+        let auth = ["tozny_otp": otp]
+        self.completeBrokerLogin(authResponse: auth, noteId: noteId, brokerType: "tozny_otp", brokerUrl: nil, completionHandler: completionHandler)
+    }
+
+    public func initiateBrokerLogin(username: String, brokerUrl: String? = nil, errorHandler: @escaping (Result<Bool, Error>) -> Void) {
+        var brokerUrl = brokerUrl
+        if brokerUrl == nil {
+            brokerUrl = self.apiUrl + "/v1/identity/broker/realm/" + self.realmName + "/challenge"
+        }
+        var username = username
+        username = username.lowercased()
+
+        var request = URLRequest(url: URL(string: brokerUrl!)!)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Accepts")
+        guard let body = try? JSONSerialization.data(withJSONObject: ["username": username, "action": "challenge"]) else {
+            return errorHandler(.failure(E3dbError.jsonError(expected: "{'username', 'action'}", actual: "")))
+        }
+        request.httpBody = body
+        Authenticator.handledRequest(unauthedReq: request, errorHandler: errorCompletion(errorHandler)) {
+            (resp: [String:String]) -> Void in
+            return errorHandler(.success(true))
+        }
+    }
+
+    public func completeBrokerLogin(authResponse: [String: Any], noteId: String, brokerType: String, brokerUrl: String?, completionHandler: @escaping (Result<PartialIdentity, Error>) -> Void) {
+        var brokerUrl = brokerUrl
+        if brokerUrl == nil {
+            brokerUrl = self.apiUrl + "/v1/identity/broker/realm/" + self.realmName + "/login"
+        }
+        guard let cryptoKeys = Client.generateKeyPair(),
+              let signingKeys = Client.generateSigningKeyPair() else {
+            return completionHandler(.failure(E3dbError.cryptoError("Failed to generate crypto or signing key pairs needed for registration")))
+        }
+        let payload: [String: Any] = ["auth_response": authResponse,
+                       "note_id": noteId,
+                       "public_key": cryptoKeys.publicKey,
+                       "signing_key": signingKeys.publicKey,
+                       "action": "login"]
+
+        var request = URLRequest(url: URL(string: brokerUrl!)!)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        guard let body = try? JSONSerialization.data(withJSONObject: payload) else {
+            return completionHandler(.failure(E3dbError.jsonError(expected: "valid payload", actual: "")))
+        }
+        request.httpBody = body
+        Authenticator.handledRequest(unauthedReq: request, errorHandler: errorCompletion(completionHandler)) {
+            (resp: [String: String]) -> Void in
+            guard let transferId = resp["transferId"] else {
+                return completionHandler(.failure(E3dbError.jsonError(expected: "transfer id missing", actual: "nil")))
+            }
+            
+            // fetch broker key transfer note
+            Client.readNote(noteID: transferId, privateEncryptionKey: cryptoKeys.secretKey, publicEncryptionKey: cryptoKeys.publicKey, publicSigningKey: signingKeys.publicKey, privateSigningKey: signingKeys.secretKey, apiUrl: self.apiUrl) {
+                result -> Void in
+                switch(result) {
+                case .failure(let error):
+                    print("hey hey we failed to read transfer note \(error)")
+                    return completionHandler(.failure(error))
+                case .success(let note):
+                    guard let brokerKey = note.data["brokerKey"],
+                    let username = note.data["username"],
+                    let brokerCreds = try? Crypto.deriveNoteCreds(realmName: self.realmName, username: username, password: brokerKey, type: brokerType) else {
+                        return completionHandler(.failure(E3dbError.cryptoError("Couldn't generate credentials from broker note")))
+                    }
+                    Client.readNoteByName(noteName: brokerCreds.name,
+                                            privateEncryptionKey: brokerCreds.encryptionKeyPair.privateKey,
+                                            publicEncryptionKey: brokerCreds.encryptionKeyPair.publicKey,
+                                            publicSigningKey: brokerCreds.signingKeyPair.publicKey,
+                                            privateSigningKey: brokerCreds.signingKeyPair.privateKey,
+                                            apiUrl: self.apiUrl) {
+                        result -> Void in
+                        switch(result) {
+                        case .failure(let error):
+                            print("heye hey we failed to read password note \(error)")
+                            return completionHandler(.failure(error))
+                        case .success(let note):
+                            guard let idConfig = try? IdentityConfig(fromPassNote: note) else {
+                                return completionHandler(.failure(E3dbError.jsonError(expected: "Saved Note", actual: "Invalid Note Json")))
+                            }
+                            // TODO: backwards compat for username not written to note???
+                            completionHandler(.success(PartialIdentity(idConfig: idConfig)))
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     func registerBrokerEmailHelper(username: String, brokerInfo: ClientInfo, email: String, firstName: String?, lastName: String?, partialIdentity: PartialIdentity, passwordNoteContents: NoteData, completionHandler: @escaping (Error?) -> Void) {
         do {
             let brokerKeyNoteName = try Crypto.hash(stringToHash: String(format: "brokerKey:%@@realm:%@", username, self.realmName))
@@ -272,14 +350,17 @@ public class Application {
             let brokerNoteOptions = NoteOptions(IdString: brokerKeyNoteName, maxViews: -1, expires: false, eacp: emailEacp)
 
             let brokerKeyNoteData = ["brokerKey": brokerKey, "username": username]
-            partialIdentity.writeNote(data: brokerKeyNoteData, recipientEncryptionKey: brokerInfo.publicKey.curve25519, recipientSigningKey: brokerInfo.signingKey!.ed25519, options: brokerNoteOptions) {
+            partialIdentity.storeClient.writeNote(data: brokerKeyNoteData, recipientEncryptionKey: brokerInfo.publicKey.curve25519, recipientSigningKey: brokerInfo.signingKey!.ed25519, options: brokerNoteOptions) {
                 result -> Void in
                 switch (result) {
                 case .failure(let error):
                     return completionHandler(error)
                 case .success(let brokerKeyNote):
                     let brokerPassNoteOptions = NoteOptions(IdString: brokerNoteCreds.name, maxViews: -1, expires: false, eacp: LastAccessEacp(lastReadNoteId: brokerKeyNote.noteID!))
-                    partialIdentity.writeNote(data: passwordNoteContents, recipientEncryptionKey: brokerNoteCreds.encryptionKeyPair.publicKey, recipientSigningKey: brokerNoteCreds.signingKeyPair.publicKey, options: brokerPassNoteOptions) {
+                    partialIdentity.storeClient.writeNote(data: passwordNoteContents,
+                                                          recipientEncryptionKey: brokerNoteCreds.encryptionKeyPair.publicKey,
+                                                          recipientSigningKey: brokerNoteCreds.signingKeyPair.publicKey,
+                                                          options: brokerPassNoteOptions) {
                         result -> Void in
                         switch (result) {
                         case .failure(let error):
@@ -295,21 +376,26 @@ public class Application {
         }
     }
 
-
     func registerBrokerOTPHelper(username: String, brokerInfo: ClientInfo, passwordNoteContents: NoteData, partialIdentity: PartialIdentity, completionHandler: @escaping (Error?) -> Void) {
         do {
             let brokerToznyOTPKeyNoteName = try Crypto.hash(stringToHash: String(format: "broker_otp:%@@realm:%@", username, self.realmName))
             let brokerToznyOTPKey = try Crypto.randomBytes(length: 64)
             let brokerToznyOTPNoteCreds = try Crypto.deriveNoteCreds(realmName: self.realmName, username: username, password: brokerToznyOTPKey, type: "tozny_otp")
             let brokerOtpNoteOptions = NoteOptions(IdString: brokerToznyOTPKeyNoteName, maxViews: -1, expires: false, eacp: TozOtpEacp(include: true))
-            partialIdentity.writeNote(data: ["brokerKey": brokerToznyOTPKey, "username": username], recipientEncryptionKey: brokerInfo.publicKey.curve25519, recipientSigningKey: brokerInfo.signingKey!.ed25519, options: brokerOtpNoteOptions) {
+            partialIdentity.storeClient.writeNote(data: ["brokerKey": brokerToznyOTPKey, "username": username],
+                                                  recipientEncryptionKey: brokerInfo.publicKey.curve25519,
+                                                  recipientSigningKey: brokerInfo.signingKey!.ed25519,
+                                                  options: brokerOtpNoteOptions) {
                 result -> Void in
                 switch (result) {
                 case .failure(let error):
                     return completionHandler(error)
                 case .success(let writtenBrokerNote):
                     let brokerPassNoteOptions = NoteOptions(IdString: brokerToznyOTPNoteCreds.name, maxViews: -1, expires: false, eacp: LastAccessEacp(lastReadNoteId: writtenBrokerNote.noteID!))
-                    partialIdentity.writeNote(data: passwordNoteContents, recipientEncryptionKey: brokerToznyOTPNoteCreds.encryptionKeyPair.publicKey, recipientSigningKey: brokerToznyOTPNoteCreds.signingKeyPair.publicKey, options: brokerPassNoteOptions) {
+                    partialIdentity.storeClient.writeNote(data: passwordNoteContents,
+                                                          recipientEncryptionKey: brokerToznyOTPNoteCreds.encryptionKeyPair.publicKey,
+                                                          recipientSigningKey: brokerToznyOTPNoteCreds.signingKeyPair.publicKey,
+                                                          options: brokerPassNoteOptions) {
                         result -> Void in
                         switch (result) {
                         case .failure(let error):

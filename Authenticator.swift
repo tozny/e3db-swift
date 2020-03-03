@@ -97,7 +97,7 @@ public class Authenticator {
     public func handledTsv1Request<T: Decodable, Z: Any>(request: URLRequest, errorHandler: @escaping (Result<Z, Error>) -> Void, successHandler: @escaping (T) -> Void) {
         tsv1Request(request: request) {
             result -> Void in
-            Authenticator.handleURLResponse(urlResult: result, errorHandler: errorHandler,  successHandler: successHandler)
+            Authenticator.handleURLResponse(urlResult: result, errorHandler: errorCompletion(errorHandler),  successHandler: successHandler)
         }
     }
     
@@ -106,7 +106,15 @@ public class Authenticator {
         task.resume()
     }
 
-    static func handledRequest<T: Decodable, Z: Any>(unauthedReq request: URLRequest, urlSession: URLSession = URLSession.shared, errorHandler: @escaping (Result<Z, Error>) -> Void, successHandler: @escaping (T) -> Void) {
+//    static func handledRequest<T: Decodable, Z: Any>(unauthedReq request: URLRequest, urlSession: URLSession = URLSession.shared, errorHandler: @escaping (Result<Z, Error>) -> Void, successHandler: @escaping (T) -> Void) {
+//        let task = urlSession.dataTask(with: request) {
+//            result -> Void in
+//            Authenticator.handleURLResponse(urlResult: result, errorHandler: errorHandler, successHandler: successHandler)
+//        }
+//        task.resume()
+//    }
+
+    static func handledRequest<T: Decodable>(unauthedReq request: URLRequest, urlSession: URLSession = URLSession.shared, errorHandler: @escaping (Error) -> Void, successHandler: @escaping (T) -> Void) {
         let task = urlSession.dataTask(with: request) {
             result -> Void in
             Authenticator.handleURLResponse(urlResult: result, errorHandler: errorHandler, successHandler: successHandler)
@@ -114,25 +122,54 @@ public class Authenticator {
         task.resume()
     }
 
-    // Helper function to decode a generic http response.
-    // Type T must be Decodable, but the error handler should never call the success condition thus type Z can be any.
-    static func handleURLResponse<T: Decodable, Z: Any>(urlResult result: Result<(URLResponse, Data), Error>, errorHandler: @escaping (Result<Z, Error>) -> Void, successHandler: @escaping (T) -> Void) {
+    static func handleURLResponse<T: Decodable>(urlResult result: Result<(URLResponse, Data), Error>, errorHandler: @escaping (Error) -> Void, successHandler: @escaping (T) -> Void) {
         switch (result) {
         case .failure(let error):
-            return errorHandler(.failure(error))
+            return errorHandler(error)
         case .success(let response, let data):
             if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode < 200 || httpResponse.statusCode > 299 {
-                    return errorHandler(.failure(E3dbError.apiError(code: httpResponse.statusCode, message: String(decoding: data, as: UTF8.self))))
+                    return errorHandler(E3dbError.apiError(code: httpResponse.statusCode, message: String(decoding: data, as: UTF8.self)))
                 }
-                guard let response = try? JSONDecoder().decode(T.self, from: data) else {
-                    return errorHandler(.failure(E3dbError.jsonError(expected: "Could not decode server response", actual: String(decoding: data, as: UTF8.self))))
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Full)
+
+                guard let response = try? decoder.decode(T.self, from: data) else {
+                    return errorHandler(E3dbError.jsonError(expected: "Could not decode server response", actual: String(decoding: data, as: UTF8.self)))
                 }
                 successHandler(response)
             } else {
-                return errorHandler(.failure(E3dbError.apiError(code: 500, message: "Failed to decode server response")))
+                return errorHandler(E3dbError.jsonError(expected: "valid json object", actual: response.description))
             }
         }
+    }
+
+//    // Helper function to decode a generic http response.
+//    // Type T must be Decodable, but the error handler should never call the success condition thus type Z can be any.
+//    static func handleURLResponse<T: Decodable, Z: Any>(urlResult result: Result<(URLResponse, Data), Error>, errorHandler: @escaping (Result<Z, Error>) -> Void, successHandler: @escaping (T) -> Void) {
+//        switch (result) {
+//        case .failure(let error):
+//            return errorHandler(.failure(error))
+//        case .success(let response, let data):
+//            if let httpResponse = response as? HTTPURLResponse {
+//                if httpResponse.statusCode < 200 || httpResponse.statusCode > 299 {
+//                    return errorHandler(.failure(E3dbError.apiError(code: httpResponse.statusCode, message: String(decoding: data, as: UTF8.self))))
+//                }
+//                guard let response = try? JSONDecoder().decode(T.self, from: data) else {
+//                    return errorHandler(.failure(E3dbError.jsonError(expected: "Could not decode server response", actual: String(decoding: data, as: UTF8.self))))
+//                }
+//                successHandler(response)
+//            } else {
+//                return errorHandler(.failure(E3dbError.apiError(code: 500, message: "Failed to decode server response")))
+//            }
+//        }
+//    }
+}
+
+public func errorCompletion<Z: Any>(_ errorHandler: @escaping (Result<Z, Error>) -> Void) -> (Error) -> Void {
+    return {
+        error -> Void in
+        errorHandler(.failure(error))
     }
 }
 
