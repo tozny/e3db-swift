@@ -55,12 +55,9 @@ public class PartialIdentity {
         request.httpMethod = "POST"
         request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.httpBody = bodyData
-        self.storeClient.tsv1AuthClient.tsv1Request(request: request) {
-            result -> Void in
-            Authenticator.handleURLResponse(result, completionHandler) {
-                (token: Token) -> Void in
-                completionHandler(.success(token))
-            }
+        self.storeClient.tsv1AuthClient.handledTsv1Request(request: request, errorHandler: completionHandler) {
+            (token: Token) -> Void in
+            completionHandler(.success(token))
         }
     }
 }

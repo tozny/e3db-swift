@@ -56,7 +56,6 @@ extension Client {
         }
     }
 
-    // ReadNote
     public func readNote(noteID: String, completionHandler: @escaping E3dbCompletion<Note>) {
         let params = ["note_id": noteID]
         Client.internalReadNote(params: params, authenticator: self.tsv1AuthClient) {
