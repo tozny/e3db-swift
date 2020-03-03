@@ -25,14 +25,15 @@ class IdentityTests: XCTestCase, TestUtils {
     var idConfig: IdentityConfig!
     var identity: PartialIdentity!
     var validApplication: Application!
-
-    let validUsername = "test5@example.com"
-    let validPass = "pass"
-    let regToken = "cf5d284f7f003ecd449fdc888fa63552d5fba998f5cfc4774618101e5bce5950"
+    var validUsername: String!
+    var validPass: String!
+    var regToken: String!
 
 
     override func setUp() {
         super.setUp()
+        // Initialize valid values for all above config
+
         config = Config(clientName: "local",
                         clientId: UUID(uuidString: "f46d8ca8-5d2e-4fd9-b063-68765f6b6ca7")!,
                         apiKeyId: "68997273f0d73d6768c9e001544a351341e275df192a672c8d300621c3d5b2b6",
@@ -48,7 +49,8 @@ class IdentityTests: XCTestCase, TestUtils {
                                        realmName: "new",
                                        brokerTargetUrl: "hello")
 
-        idConfig = IdentityConfig(realmName: "new",
+        idConfig = IdentityConfig(
+                                  realmName: "new",
                                   appName: "account",
                                   apiUrl: "https://tozauthtest.ngrok.io",
                                   username: "test4@example.com",
@@ -56,6 +58,9 @@ class IdentityTests: XCTestCase, TestUtils {
                                   storageConfig: config)
 
         identity = PartialIdentity(idConfig: idConfig)
+        validUsername = "test5@example.com"
+        validPass = "pass"
+        regToken = "cf5d284f7f003ecd449fdc888fa63552d5fba998f5cfc4774618101e5bce5950"
     }
 
     override func tearDown() {
@@ -74,52 +79,44 @@ class IdentityTests: XCTestCase, TestUtils {
         XCTAssertEqual(sortedQuery, expectedQuery)
     }
     
-//    func testReadNote() {
-//        let urlSession = URLSession.shared
-//        let identity = Identity(config: config, urlSession: urlSession)
-//
-//        var someData:[String: String] = [:]
-//        someData["what"] = "okay"
-//
-//
-//        let writeExpectation = self.expectation(description: "written")
-//        let readExpectation = self.expectation(description: "read")
-//
-//
-//        identity.writeNote(data: someData, recipientEncryptionKey: config.publicKey, recipientSigningKey: config.publicSigKey, options: nil) {
-//            result in
-//            switch (result) {
-//            case .failure:
-//                break
-//            case .success(let note):
-//                writeExpectation.fulfill()
-//                print("this is the note \(String(describing: note.noteID))")
-//                guard let noteID = note.noteID else {
-//                    break
-//                }
-//                identity.readNote(noteID: noteID) {
-//                    result in
-//                    switch (result){
-//                    case .success(let note):
-//                        print("this is note \(note.data)")
-//                        XCTAssert(note.data["what"] == "okay")
-//                        readExpectation.fulfill()
-//                        break
-//                    case .failure(let error):
-//                        print("this is the error found \(error)")
-//                        break
-//                    }
-//                }
-//                break
-//            }
-//        }
-//
-//        waitForExpectations(timeout: 5, handler: nil)
-//    }
-//
-//
+    func testReadNote() {
+        let someData:[String: String] = ["test":"data"]
+
+        let writeExpectation = self.expectation(description: "written")
+        let readExpectation = self.expectation(description: "read")
+
+        identity.storeClient.writeNote(data: someData, recipientEncryptionKey: config.publicKey, recipientSigningKey: config.publicSigKey, options: nil) {
+            result in
+            switch (result) {
+            case .failure:
+                break
+            case .success(let note):
+                writeExpectation.fulfill()
+                guard let noteID = note.noteID else {
+                    XCTFail("Failed to get noteID")
+                    return
+                }
+                self.identity.storeClient.readNote(noteID: noteID) {
+                    result in
+                    switch (result){
+                    case .failure(let error):
+                        XCTFail("Failed to read note \(error)")
+                        break
+                    case .success(let note):
+                        XCTAssert(note.data["test"] == "data")
+                        readExpectation.fulfill()
+                        break
+                    }
+                }
+                break
+            }
+        }
+        waitForExpectations(timeout: 5, handler: nil)
+    }
+
+
     func testStaticReadNote() {
-        let someData:[String: String] = ["what":"okay"]
+        let someData:[String: String] = ["test":"data"]
 
         let writeExpectation = self.expectation(description: "written")
         let readExpectation = self.expectation(description: "read")
@@ -139,7 +136,7 @@ class IdentityTests: XCTestCase, TestUtils {
                     result in
                     switch (result){
                     case .success(let note):
-                        XCTAssert(note.data["what"] == "okay")
+                        XCTAssert(note.data["test"] == "data")
                         readExpectation.fulfill()
                         break
                     case .failure(let error):
@@ -154,7 +151,7 @@ class IdentityTests: XCTestCase, TestUtils {
     }
 
     func testWriteNote() {
-        let someData:[String: String] = ["what":"okay"]
+        let someData:[String: String] = ["test":"data"]
         let expectation = self.expectation(description: "written")
         identity.storeClient.writeNote(data: someData, recipientEncryptionKey: config.publicKey, recipientSigningKey: config.publicSigKey, options: nil) {
             result in
@@ -163,7 +160,7 @@ class IdentityTests: XCTestCase, TestUtils {
                 XCTFail("Error writing: \(error)")
                 break
             case .success(let note):
-                XCTAssert(note.data["what"] != "okay")
+                XCTAssert(note.data["test"] != "data")
                 expectation.fulfill()
                 break
             }
@@ -172,7 +169,7 @@ class IdentityTests: XCTestCase, TestUtils {
     }
 
     func testStaticWriteNote() {
-        let someData:[String: String] = ["what":"okay"]
+        let someData:[String: String] = ["test":"data"]
         let expectation = self.expectation(description: "written")
         Client.writeNote(data: someData,
                            recipientEncryptionKey: self.config.publicKey,
@@ -190,7 +187,7 @@ class IdentityTests: XCTestCase, TestUtils {
                 XCTFail("Error writing: \(error)")
                 break
             case .success(let note):
-                XCTAssert(note.data["what"] != "okay")
+                XCTAssert(note.data["hat"] != "okay")
                 expectation.fulfill()
                 break
             }
@@ -199,7 +196,7 @@ class IdentityTests: XCTestCase, TestUtils {
     }
 
     func testReadNoteByName() {
-        let someData:[String: String] = ["what":"okay"]
+        let someData:[String: String] = ["test":"data"]
 
         let writeExpectation = self.expectation(description: "written")
         let readExpectation = self.expectation(description: "read")
@@ -213,12 +210,12 @@ class IdentityTests: XCTestCase, TestUtils {
                 XCTFail("error writing: \(error)")
                 break
             case .success(let note):
-                XCTAssert(note.data["what"] != "okay")
+                XCTAssert(note.data["test"] != "data")
                 self.identity.storeClient.readNoteByName(noteName: noteName) {
                     result in
                     switch (result){
                     case .success(let note):
-                        XCTAssert(note.data["what"] == "okay")
+                        XCTAssert(note.data["test"] == "data")
                         readExpectation.fulfill()
                         break
                     case .failure(let error):
@@ -252,36 +249,6 @@ class IdentityTests: XCTestCase, TestUtils {
         }
         waitForExpectations(timeout: 5)
     }
-
-//    func testRegisterIdentityLive() {
-//        let application = Application(apiUrl: "https://dev.e3db.com", appName: "account", realmName: "swift", brokerTargetUrl: "https://dev.id.tozny.com/swift/recover")
-//        let regToken = "e06fae4baffd6148e5081d22f2c73fe11706d7347c9174c49c171f4cc794e745"
-//
-//        let registerExpectation = self.expectation(description: "registered")
-//
-//        var username = ""
-//        username = UUID.init().uuidString + "-michael@example.com"
-////        username = "willmichael+10@tozny.com"
-//
-//        let password = "pass"
-//
-//        print("username \(username)")
-//
-//        application.register(username: username, password: password, email: username, token: regToken) {
-//            result -> Void in
-//            switch(result) {
-//            case .failure(let error):
-//                XCTFail("Found error when registering \(error)")
-//                break
-//            case .success(let identity):
-//                registerExpectation.fulfill()
-//                print("success config \(identity.idConfig)")
-//                print("success store \(identity.storeClient.config.publicSigKey)")
-//                break
-//            }
-//        }
-//        waitForExpectations(timeout: 5)
-//    }
 
     func testLogin() {
         let loginExpectation = self.expectation(description: "login")
@@ -391,7 +358,7 @@ class IdentityTests: XCTestCase, TestUtils {
     }
 
     func testReplaceNoteByName() {
-        let someData:[String: String] = ["what":"okay"]
+        let someData:[String: String] = ["test":"data"]
         let newData = ["hello":"goodbye"]
 
         let writeExpectation = self.expectation(description: "written")
