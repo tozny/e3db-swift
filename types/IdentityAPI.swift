@@ -120,8 +120,7 @@ public struct NoteCredentials {
     let signingKeyPair: SigningKeyPair
 }
 
-// SavedNote is a Codable definition of the note saved within storage service
-public struct SavedNote: Codable {
+public struct PasswordNoteData: Codable {
     struct idConfig: Codable {
         let realmName: String
         let appName: String

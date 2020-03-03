@@ -36,7 +36,7 @@ public class PartialIdentity {
         guard let newCredentials = try? Crypto.deriveNoteCreds(realmName: self.idConfig.realmName, username: self.idConfig.username, password: newPassword) else {
             return completionHandler(.failure(E3dbError.cryptoError("Couldn't derive note credentials from new password")))
         }
-        let passNote = SavedNote(identity: self.idConfig, store: self.idConfig.storageConfig)
+        let passNote = PasswordNoteData(identity: self.idConfig, store: self.idConfig.storageConfig)
         guard let passNoteData = try? JSONEncoder().encode(passNote),
               let passNoteDataEncryptable  = try? JSONSerialization.jsonObject(with: passNoteData) as? [String: String] else {
             return completionHandler(.failure(E3dbError.configError("Current identity configuration was invalid")))

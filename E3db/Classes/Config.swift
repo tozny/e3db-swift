@@ -291,7 +291,7 @@ public class IdentityConfig: Codable {
     }
 
     convenience init(fromPassNote note: Note) throws {
-        let noteData = try JSONDecoder().decode(SavedNote.self, from: JSONSerialization.data(withJSONObject: note.data))
+        let noteData = try JSONDecoder().decode(PasswordNoteData.self, from: JSONSerialization.data(withJSONObject: note.data))
 
         let storageConfig = Config(clientName: noteData.config.username,
                                    clientId: UUID.init(uuidString: noteData.storage.clientId)!,

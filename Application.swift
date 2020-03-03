@@ -174,7 +174,7 @@ public class Application {
                                                   storageConfig: storageConfig)
 
                     let noteCreds = try Crypto.deriveNoteCreds(realmName: self.realmName, username: username, password: password)
-                    let passNote = SavedNote(identity: idConfig, store: storageConfig)
+                    let passNote = PasswordNoteData(identity: idConfig, store: storageConfig)
 
                     let partialIdentity = PartialIdentity(idConfig: idConfig)
 
