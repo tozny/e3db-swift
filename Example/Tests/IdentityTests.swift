@@ -34,33 +34,6 @@ class IdentityTests: XCTestCase, TestUtils {
         super.setUp()
         // Initialize valid values for all above config
 
-        config = Config(clientName: "local",
-                        clientId: UUID(uuidString: "f46d8ca8-5d2e-4fd9-b063-68765f6b6ca7")!,
-                        apiKeyId: "68997273f0d73d6768c9e001544a351341e275df192a672c8d300621c3d5b2b6",
-                        apiSecret: "05abbc1e59587546672fbdb228017d5318d485c09298325753a044ff002ecc7e",
-                        publicKey: "hRfXS_jwJCWx5Pu9Thug0ng3OzDs9YQd88cXbCfo6iQ",
-                        privateKey: "mp6rwkXTspV-rUWLmsXJwuC7zjnKBQjwcn645l_mjR4",
-                        baseApiUrl: URL(string: "https://tozauthtest.ngrok.io")!,
-                        publicSigKey: "vrMzlpNeFJwufgpx2HPDtx-ZcR9tCngFH0wwSqUobqs",
-                        privateSigKey: "k4RxD58X8r--adqPyqQ5_leLcrSHizg2ywBTiqgjnIu-szOWk14UnC5-CnHYc8O3H5lxH20KeAUfTDBKpShuqw")
-
-        validApplication = Application(apiUrl: "https://tozauthtest.ngrok.io",
-                                       appName: "account",
-                                       realmName: "new",
-                                       brokerTargetUrl: "hello")
-
-        idConfig = IdentityConfig(
-                                  realmName: "new",
-                                  appName: "account",
-                                  apiUrl: "https://tozauthtest.ngrok.io",
-                                  username: "test4@example.com",
-                                  brokerTargetUrl: "http://localhost:8080",
-                                  storageConfig: config)
-
-        identity = PartialIdentity(idConfig: idConfig)
-        validUsername = "test5@example.com"
-        validPass = "pass"
-        regToken = "cf5d284f7f003ecd449fdc888fa63552d5fba998f5cfc4774618101e5bce5950"
     }
 
     override func tearDown() {
@@ -266,63 +239,6 @@ class IdentityTests: XCTestCase, TestUtils {
         }
         waitForExpectations(timeout: 5)
     }
-
-//    func testInitiateBrokerEmailRecovery() {
-////        let application = Application(apiUrl: "https://dev.e3db.com", appName: "account", realmName: "swift", brokerTargetUrl: "https://dev.e3db.com/swift/recover")
-//        let recoveryExpectation = self.expectation(description: "login")
-//        validApplication.initiateBrokerLogin(username: validUsername) {
-//            result -> Void in
-//            switch(result) {
-//            case .failure(let error):
-//                XCTFail("Found error when initiating broker login \(error)")
-//                break
-//            case .success:
-//                recoveryExpectation.fulfill()
-//                break
-//            }
-//        }
-//        waitForExpectations(timeout: 2)
-//    }
-
-//    func testCompleteBrokerEmailRecovery() {
-//        let application = Application(apiUrl: "https://dev.e3db.com", appName: "account", realmName: "swift", brokerTargetUrl: "https://dev.e3db.com/swift/recover")
-//        let recoveryExpectation = self.expectation(description: "login")
-//        let otp = "XgTNc7ar1RhSq5lLSKenjc77oMtwNgUN1ZAUTTgEH1I"
-//        let noteId = "7654df53-94dc-4eb9-aad4-09ecf36b5d77"
-//        application.completeEmailRecovery(otp: otp, noteID: noteId, recoveryUrl: nil) {
-//            result -> Void in
-//            switch(result) {
-//            case .failure(let error):
-//                XCTFail("Found error when logging in \(error)")
-//                break
-//            case .success(let partial):
-//                print("hey we succeeded \(partial)")
-//                recoveryExpectation.fulfill()
-//                break
-//            }
-//        }
-//        waitForExpectations(timeout: 200)
-//    }
-//
-//    func testCompleteBrokerOTPRecovery() {
-//        let application = Application(apiUrl: "https://dev.e3db.com", appName: "account", realmName: "swift", brokerTargetUrl: "https://dev.e3db.com/swift/recover")
-//        let recoveryExpectation = self.expectation(description: "login")
-//        let otp = "PsEzqXRlTKustyj4EMrMjYfcoeR0ZlIjAmVeAWdRM-I"
-//        let noteId = "5b6b4d04-d16b-44ff-be54-23ec8d882341"
-//        application.completeOTPRecovery(otp: otp, noteId: noteId) {
-//            result -> Void in
-//            switch(result) {
-//            case .failure(let error):
-//                XCTFail("Found error when logging in \(error)")
-//                break
-//            case .success(let partial):
-//                print("hey we succeeded \(partial)")
-//                recoveryExpectation.fulfill()
-//                break
-//            }
-//        }
-//        waitForExpectations(timeout: 200)
-//    }
 
     func testFetchToken() {
         let registerExpectation = self.expectation(description: "registered")
