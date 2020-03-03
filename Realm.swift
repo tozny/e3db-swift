@@ -3,6 +3,7 @@
 //
 
 import Foundation
+import Result
 
 public class Application {
     let apiUrl: String
@@ -17,7 +18,7 @@ public class Application {
         self.brokerTargetUrl = brokerTargetUrl
     }
 
-    public func login(username: String, password: String, actionHandler: @escaping (IdentityLoginAction) -> [String:String], completionHandler: @escaping (Result<Identity, Error>) -> Void) {
+    public func login(username: String, password: String, actionHandler: @escaping (IdentityLoginAction) -> [String:String], completionHandler: @escaping E3dbCompletion<Identity>) {
         do {
             var username = username
             username = username.lowercased()
@@ -33,7 +34,7 @@ public class Application {
             initiateLoginRequest.httpBody = try JSONSerialization.data(withJSONObject: ["username": username, "realm_name": self.realmName, "app_name": self.appName, "login_style": "api"])
 
             anonAuth.handledTsv1Request(request: initiateLoginRequest, errorHandler: completionHandler) {
-                (loginSession: [String:String]) -> Void in
+                (loginSession: [String: String]) -> Void in
                 guard let encodedString = try? encodeBodyAsUrl(loginSession),
                       let encodedBody = encodedString.data(using: .utf8) else {
                     return completionHandler(.failure(E3dbError.apiError(code: 500, message: "Response from server was not encodable")))
@@ -43,7 +44,6 @@ public class Application {
                 sessionRequest.addValue("application/json", forHTTPHeaderField: "Accepts")
                 sessionRequest.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
                 sessionRequest.httpBody = encodedBody
-
                 anonAuth.handledTsv1Request(request: sessionRequest, errorHandler: completionHandler) {
                     (loginAction: IdentityLoginAction) -> Void in
                     let semaphore = DispatchSemaphore(value: 0)
@@ -51,7 +51,7 @@ public class Application {
                     actionQueue.async() {
                         var loginAction = loginAction
                         while loginAction.loginAction {
-                            if loginAction.type == "fetch"{
+                            if loginAction.type == "fetch" {
                                 break
                             }
                             var data: [String: String]? = nil
@@ -108,14 +108,14 @@ public class Application {
                             return completionHandler(.failure(E3dbError.networkError("failed to get access token")))
                         }
                         Client.readNoteByName(noteName: noteCredentials.name,
-                                                privateEncryptionKey: noteCredentials.encryptionKeyPair.privateKey,
-                                                publicEncryptionKey: noteCredentials.encryptionKeyPair.publicKey,
-                                                publicSigningKey: noteCredentials.signingKeyPair.publicKey,
-                                                privateSigningKey: noteCredentials.signingKeyPair.privateKey,
-                                                additionalHeaders: ["X-TOZID-LOGIN-TOKEN": token.accessToken],
-                                                apiUrl: self.apiUrl) {
+                                              privateEncryptionKey: noteCredentials.encryptionKeyPair.privateKey,
+                                              publicEncryptionKey: noteCredentials.encryptionKeyPair.publicKey,
+                                              publicSigningKey: noteCredentials.signingKeyPair.publicKey,
+                                              privateSigningKey: noteCredentials.signingKeyPair.privateKey,
+                                              additionalHeaders: ["X-TOZID-LOGIN-TOKEN": token.accessToken],
+                                              apiUrl: self.apiUrl) {
                             result -> Void in
-                            switch(result) {
+                            switch (result) {
                             case .failure(let error):
                                 return completionHandler(.failure(error))
                             case .success(let note):
@@ -134,8 +134,7 @@ public class Application {
         }
     }
 
-    public func register(username: String, password: String, email: String, token: String, firstName: String? = nil, lastName: String? = nil, emailEacpExpiryMinutes: Int = 60, completionHandler: @escaping (Result<PartialIdentity, Error>)
-    -> Void) {
+    public func register(username: String, password: String, email: String, token: String, firstName: String? = nil, lastName: String? = nil, emailEacpExpiryMinutes: Int = 60, completionHandler: @escaping E3dbCompletion<PartialIdentity>) {
         var username = username
         username = username.lowercased()
 
@@ -155,7 +154,7 @@ public class Application {
 
         Authenticator.request(unauthedReq: request) {
             result -> Void in
-            Authenticator.handleURLResponse(urlResult: result, errorHandler: errorCompletion(completionHandler)) {
+            Authenticator.handleURLResponse(result, completionHandler) {
                 (identityResponse: IdentityRegisterResponse) -> Void in
                 do {
                     let storageConfig = Config(clientName: username,
@@ -215,7 +214,6 @@ public class Application {
                                         if let err = err {
                                             return completionHandler(.failure(err))
                                         }
-
                                         // OTP recovery notes through broker
                                         self.registerBrokerOTPHelper(username: username, brokerInfo: brokerInfo, passwordNoteContents: jsonData, partialIdentity: partialIdentity) {
                                             err -> Void in
@@ -231,23 +229,13 @@ public class Application {
                         }
                     }
                 } catch {
-                    return completionHandler(.failure(error))
+                    return completionHandler(.failure(error as! E3dbError))
                 }
             }
         }
     }
 
-    public func completeEmailRecovery(otp: String, noteID: String, recoveryUrl: String? = nil, completionHandler: @escaping (Result<PartialIdentity, Error>) -> Void) {
-        let auth = ["email_otp": otp]
-        self.completeBrokerLogin(authResponse: auth, noteId: noteID, brokerType: "email_otp", brokerUrl: recoveryUrl, completionHandler: completionHandler)
-    }
-
-    public func completeOTPRecovery(otp: String, noteId: String, recoverUrl: String? = nil, completionHandler: @escaping  (Result<PartialIdentity, Error>) -> Void) {
-        let auth = ["tozny_otp": otp]
-        self.completeBrokerLogin(authResponse: auth, noteId: noteId, brokerType: "tozny_otp", brokerUrl: nil, completionHandler: completionHandler)
-    }
-
-    public func initiateBrokerLogin(username: String, brokerUrl: String? = nil, errorHandler: @escaping (Result<Bool, Error>) -> Void) {
+    public func initiateBrokerLogin(username: String, brokerUrl: String? = nil, errorHandler: @escaping E3dbCompletion<Bool>) {
         var brokerUrl = brokerUrl
         if brokerUrl == nil {
             brokerUrl = self.apiUrl + "/v1/identity/broker/realm/" + self.realmName + "/challenge"
@@ -262,13 +250,23 @@ public class Application {
             return errorHandler(.failure(E3dbError.jsonError(expected: "{'username', 'action'}", actual: "")))
         }
         request.httpBody = body
-        Authenticator.handledRequest(unauthedReq: request, errorHandler: errorCompletion(errorHandler)) {
+        Authenticator.handledRequest(unauthedReq: request, errorHandler: errorHandler) {
             (resp: [String:String]) -> Void in
             return errorHandler(.success(true))
         }
     }
 
-    public func completeBrokerLogin(authResponse: [String: Any], noteId: String, brokerType: String, brokerUrl: String?, completionHandler: @escaping (Result<PartialIdentity, Error>) -> Void) {
+    public func completeEmailRecovery(otp: String, noteID: String, recoveryUrl: String? = nil, completionHandler: @escaping E3dbCompletion<PartialIdentity>) {
+        let auth = ["email_otp": otp]
+        self.completeBrokerLogin(authResponse: auth, noteId: noteID, brokerType: "email_otp", brokerUrl: recoveryUrl, completionHandler: completionHandler)
+    }
+
+    public func completeOTPRecovery(otp: String, noteId: String, recoverUrl: String? = nil, completionHandler: @escaping  E3dbCompletion<PartialIdentity>) {
+        let auth = ["tozny_otp": otp]
+        self.completeBrokerLogin(authResponse: auth, noteId: noteId, brokerType: "tozny_otp", brokerUrl: nil, completionHandler: completionHandler)
+    }
+
+    public func completeBrokerLogin(authResponse: [String: Any], noteId: String, brokerType: String, brokerUrl: String?, completionHandler: @escaping E3dbCompletion<PartialIdentity>) {
         var brokerUrl = brokerUrl
         if brokerUrl == nil {
             brokerUrl = self.apiUrl + "/v1/identity/broker/realm/" + self.realmName + "/login"
@@ -290,7 +288,7 @@ public class Application {
             return completionHandler(.failure(E3dbError.jsonError(expected: "valid payload", actual: "")))
         }
         request.httpBody = body
-        Authenticator.handledRequest(unauthedReq: request, errorHandler: errorCompletion(completionHandler)) {
+        Authenticator.handledRequest(unauthedReq: request, errorHandler: completionHandler) {
             (resp: [String: String]) -> Void in
             guard let transferId = resp["transferId"] else {
                 return completionHandler(.failure(E3dbError.jsonError(expected: "transfer id missing", actual: "nil")))
@@ -333,7 +331,9 @@ public class Application {
         }
     }
 
-    func registerBrokerEmailHelper(username: String, brokerInfo: ClientInfo, email: String, firstName: String?, lastName: String?, partialIdentity: PartialIdentity, passwordNoteContents: NoteData, completionHandler: @escaping (Error?) -> Void) {
+    // MARK: Registration helpers
+
+    func registerBrokerEmailHelper(username: String, brokerInfo: ClientInfo, email: String, firstName: String?, lastName: String?, partialIdentity: PartialIdentity, passwordNoteContents: NoteData, completionHandler: @escaping (E3dbError?) -> Void) {
         do {
             let brokerKeyNoteName = try Crypto.hash(stringToHash: String(format: "brokerKey:%@@realm:%@", username, self.realmName))
             let brokerKey = try Crypto.randomBytes(length: 64)
@@ -372,11 +372,11 @@ public class Application {
                 }
             }
         } catch {
-            completionHandler(error)
+            completionHandler(error as! E3dbError)
         }
     }
 
-    func registerBrokerOTPHelper(username: String, brokerInfo: ClientInfo, passwordNoteContents: NoteData, partialIdentity: PartialIdentity, completionHandler: @escaping (Error?) -> Void) {
+    func registerBrokerOTPHelper(username: String, brokerInfo: ClientInfo, passwordNoteContents: NoteData, partialIdentity: PartialIdentity, completionHandler: @escaping (E3dbError?) -> Void) {
         do {
             let brokerToznyOTPKeyNoteName = try Crypto.hash(stringToHash: String(format: "broker_otp:%@@realm:%@", username, self.realmName))
             let brokerToznyOTPKey = try Crypto.randomBytes(length: 64)
@@ -407,7 +407,7 @@ public class Application {
                 }
             }
         } catch {
-            completionHandler(error)
+            completionHandler(error as! E3dbError)
         }
     }
 }

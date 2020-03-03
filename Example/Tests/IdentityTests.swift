@@ -214,13 +214,7 @@ class IdentityTests: XCTestCase, TestUtils {
                 break
             case .success(let note):
                 XCTAssert(note.data["what"] != "okay")
-                Client.readNoteByName(noteName: noteName,
-                                        privateEncryptionKey: self.config.privateKey,
-                                        publicEncryptionKey: self.config.publicKey,
-                                        publicSigningKey: self.config.publicSigKey,
-                                        privateSigningKey: self.config.privateSigKey,
-                                        additionalHeaders: ["garbage": "lol"],
-                                        apiUrl: "https://tozauthtest.ngrok.io") {
+                self.identity.storeClient.readNoteByName(noteName: noteName) {
                     result in
                     switch (result){
                     case .success(let note):

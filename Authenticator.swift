@@ -6,26 +6,7 @@
 //
 
 import Foundation
-
-
-// Extend URLSession to use Swift5's result type
-extension URLSession {
-    func dataTask(with url: URLRequest, result: @escaping (Result<(URLResponse, Data), Error>) -> Void) -> URLSessionDataTask {
-        return dataTask(with: url) { (data, response, error) in
-            if let error = error {
-                result(.failure(error))
-                return
-            }
-            guard let response = response, let data = data else {
-                let error = NSError(domain: "error", code: 0, userInfo: nil)
-                result(.failure(error))
-                return
-            }
-            result(.success((response, data)))
-        }
-    }
-}
-
+import Result
 
 public struct AuthenticatorConfig {
     let publicSigningKey: String
@@ -81,7 +62,7 @@ public class Authenticator {
         }
         return String(format:"%@; %@", headerString, fullSignature.signature)
     }
-    
+
     public func tsv1Request(request unauthedReq: URLRequest, completionHandler: @escaping (Result<(URLResponse, Data), Error>) -> Void) {
         guard let authHeader = tsv1AuthHeader(url: unauthedReq.url, method: unauthedReq.httpMethod) else {
             let error = NSError(domain: "header error", code: 0, userInfo: nil)
@@ -94,10 +75,17 @@ public class Authenticator {
         task.resume()
     }
 
-    public func handledTsv1Request<T: Decodable, Z: Any>(request: URLRequest, errorHandler: @escaping (Result<Z, Error>) -> Void, successHandler: @escaping (T) -> Void) {
+//    public func handledTsv1Request<T: Decodable, Z: Any>(request: URLRequest, errorHandler: @escaping (Result<Z, Error>) -> Void, successHandler: @escaping (T) -> Void) {
+//        tsv1Request(request: request) {
+//            result -> Void in
+//            Authenticator.handleURLResponse(urlResult: result, errorHandler: errorCompletion(errorHandler),  successHandler: successHandler)
+//        }
+//    }
+
+    public func handledTsv1Request<T: Decodable, Z: Any>(request: URLRequest, errorHandler: @escaping E3dbCompletion<Z>, successHandler: @escaping (T) -> Void) {
         tsv1Request(request: request) {
             result -> Void in
-            Authenticator.handleURLResponse(urlResult: result, errorHandler: errorCompletion(errorHandler),  successHandler: successHandler)
+            Authenticator.handleURLResponse(result, errorHandler, completionHandler: successHandler)
         }
     }
     
@@ -106,7 +94,7 @@ public class Authenticator {
         task.resume()
     }
 
-//    static func handledRequest<T: Decodable, Z: Any>(unauthedReq request: URLRequest, urlSession: URLSession = URLSession.shared, errorHandler: @escaping (Result<Z, Error>) -> Void, successHandler: @escaping (T) -> Void) {
+//    static func handledRequest<T: Decodable>(unauthedReq request: URLRequest, urlSession: URLSession = URLSession.shared, errorHandler: @escaping (Error) -> Void, successHandler: @escaping (T) -> Void) {
 //        let task = urlSession.dataTask(with: request) {
 //            result -> Void in
 //            Authenticator.handleURLResponse(urlResult: result, errorHandler: errorHandler, successHandler: successHandler)
@@ -114,32 +102,55 @@ public class Authenticator {
 //        task.resume()
 //    }
 
-    static func handledRequest<T: Decodable>(unauthedReq request: URLRequest, urlSession: URLSession = URLSession.shared, errorHandler: @escaping (Error) -> Void, successHandler: @escaping (T) -> Void) {
+    static func handledRequest<T: Decodable, Z: Any>(unauthedReq request: URLRequest, urlSession: URLSession = URLSession.shared, errorHandler: @escaping E3dbCompletion<Z>, successHandler: @escaping (T) -> Void) {
         let task = urlSession.dataTask(with: request) {
             result -> Void in
-            Authenticator.handleURLResponse(urlResult: result, errorHandler: errorHandler, successHandler: successHandler)
+            Authenticator.handleURLResponse(result, errorHandler, completionHandler: successHandler)
         }
         task.resume()
     }
 
-    static func handleURLResponse<T: Decodable>(urlResult result: Result<(URLResponse, Data), Error>, errorHandler: @escaping (Error) -> Void, successHandler: @escaping (T) -> Void) {
+//    static func handleURLResponse<T: Decodable>(urlResult result: Result<(URLResponse, Data), Error>, errorHandler: @escaping (Error) -> Void, successHandler: @escaping (T) -> Void) {
+//        switch (result) {
+//        case .failure(let error):
+//            return errorHandler(error)
+//        case .success(let response, let data):
+//            if let httpResponse = response as? HTTPURLResponse {
+//                if httpResponse.statusCode < 200 || httpResponse.statusCode > 299 {
+//                    return errorHandler(E3dbError.apiError(code: httpResponse.statusCode, message: String(decoding: data, as: UTF8.self)))
+//                }
+//                let decoder = JSONDecoder()
+//                decoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Full)
+//
+//                guard let response = try? decoder.decode(T.self, from: data) else {
+//                    return errorHandler(E3dbError.jsonError(expected: "Could not decode server response", actual: String(decoding: data, as: UTF8.self)))
+//                }
+//                successHandler(response)
+//            } else {
+//                return errorHandler(E3dbError.jsonError(expected: "valid json object", actual: response.description))
+//            }
+//        }
+//    }
+
+    static func handleURLResponse<T: Decodable, Z: Any>(_ result: Result<(URLResponse, Data), Error>,_ errorHandler: @escaping E3dbCompletion<Z>, completionHandler: @escaping (T) -> Void) {
+        let handleError = errorCompletion(errorHandler)
         switch (result) {
         case .failure(let error):
-            return errorHandler(error)
+            let err = E3dbError.networkError(error.localizedDescription)
+            return handleError(err)
         case .success(let response, let data):
             if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode < 200 || httpResponse.statusCode > 299 {
-                    return errorHandler(E3dbError.apiError(code: httpResponse.statusCode, message: String(decoding: data, as: UTF8.self)))
+                    return handleError(E3dbError.apiError(code: httpResponse.statusCode, message: String(decoding: data, as: UTF8.self)))
                 }
                 let decoder = JSONDecoder()
                 decoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Full)
-
                 guard let response = try? decoder.decode(T.self, from: data) else {
-                    return errorHandler(E3dbError.jsonError(expected: "Could not decode server response", actual: String(decoding: data, as: UTF8.self)))
+                    return handleError(E3dbError.jsonError(expected: String(describing: type(of: T.self)), actual: String(decoding: data, as: UTF8.self)))
                 }
-                successHandler(response)
+                completionHandler(response)
             } else {
-                return errorHandler(E3dbError.jsonError(expected: "valid json object", actual: response.description))
+                return handleError(E3dbError.networkError("invalid network response"))
             }
         }
     }
@@ -166,7 +177,14 @@ public class Authenticator {
 //    }
 }
 
-public func errorCompletion<Z: Any>(_ errorHandler: @escaping (Result<Z, Error>) -> Void) -> (Error) -> Void {
+//public func errorCompletion<Z: Any>(_ errorHandler: @escaping (Result<Z, Error>) -> Void) -> (Error) -> Void {
+//    return {
+//        error -> Void in
+//        errorHandler(.failure(error))
+//    }
+//}
+
+public func errorCompletion<T: Any>(_ errorHandler: @escaping E3dbCompletion<T>) -> (E3dbError) -> Void {
     return {
         error -> Void in
         errorHandler(.failure(error))
@@ -199,4 +217,21 @@ public func encodeBodyAsUrl(_ data: [String: Any]) throws -> String {
         return String(urlEncodedValues.dropLast())
     }
     return urlEncodedValues
+}
+
+extension URLSession {
+    func dataTask(with url: URLRequest, result: @escaping (Result<(URLResponse, Data), Error>) -> Void) -> URLSessionDataTask {
+        return dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                result(.failure(error))
+                return
+            }
+            guard let response = response, let data = data else {
+                let error = NSError(domain: "error", code: 0, userInfo: nil)
+                result(.failure(error))
+                return
+            }
+            result(.success((response, data)))
+        }
+    }
 }

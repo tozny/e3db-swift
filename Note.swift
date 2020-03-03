@@ -7,7 +7,251 @@
 
 import Foundation
 import Sodium
+import Result
 
+// Mark Note CRUD operations
+extension Client {
+
+    public func readNoteByName(noteName: String, completionHandler: @escaping E3dbCompletion<Note>) {
+        let params = ["id_string": noteName]
+        Client.internalReadNote(params: params, authenticator: self.tsv1AuthClient) {
+            result -> Void in
+            Authenticator.handleURLResponse(result, completionHandler) {
+                (note: Note) -> Void in
+                guard let unencryptedNote = try? Crypto.decryptNote(encryptedNote: note,
+                                                                    privateEncryptionKey: self.config.privateKey,
+                                                                    publicEncryptionKey:  note.noteKeys.writerEncryptionKey,
+                                                                    publicSigningKey: note.noteKeys.writerSigningKey) else {
+                    return completionHandler(.failure(E3dbError.cryptoError("Failed to decrypt note")))
+                }
+                return completionHandler(.success(unencryptedNote))
+            }
+        }
+    }
+
+    static func readNoteByName(noteName: String,
+                               privateEncryptionKey: String,
+                               publicEncryptionKey: String,
+                               publicSigningKey: String,
+                               privateSigningKey: String,
+                               additionalHeaders: [String: String]? = nil,
+                               urlSession: URLSession = URLSession.shared,
+                               apiUrl: String = "https://api.e3db.com",
+                               completionHandler: @escaping E3dbCompletion<Note>) {
+        let params = ["id_string": noteName]
+        let config = AuthenticatorConfig(publicSigningKey: publicSigningKey, privateSigningKey: privateSigningKey, apiUrl: apiUrl, clientId: nil)
+        let auth = Authenticator(config: config, urlSession: urlSession)
+        Client.internalReadNote(params: params, authenticator: auth, additionalHeaders: additionalHeaders) {
+            result -> Void in
+            Authenticator.handleURLResponse(result, completionHandler) {
+                (note: Note) -> Void in
+                guard let unencryptedNote = try? Crypto.decryptNote(encryptedNote: note,
+                                                                    privateEncryptionKey: privateEncryptionKey,
+                                                                    publicEncryptionKey: note.noteKeys.writerEncryptionKey,
+                                                                    publicSigningKey: note.noteKeys.writerSigningKey) else {
+                    return completionHandler(.failure(E3dbError.cryptoError("Failed to decrypt note")))
+                }
+                return completionHandler(.success(unencryptedNote))
+            }
+        }
+    }
+
+    // ReadNote
+    public func readNote(noteID: String, completionHandler: @escaping E3dbCompletion<Note>) {
+        let params = ["note_id": noteID]
+        Client.internalReadNote(params: params, authenticator: self.tsv1AuthClient) {
+            result -> Void in
+            Authenticator.handleURLResponse(result, completionHandler) {
+                (note: Note) -> Void in
+                guard let unencryptedNote = try? Crypto.decryptNote(encryptedNote: note,
+                                                                    privateEncryptionKey: self.config.privateKey,
+                                                                    publicEncryptionKey: note.noteKeys.writerEncryptionKey,
+                                                                    publicSigningKey: note.noteKeys.writerSigningKey) else {
+                    return completionHandler(.failure(E3dbError.cryptoError("Failed to decrypt note")))
+                }
+                return completionHandler(.success(unencryptedNote))
+            }
+        }
+    }
+
+    // TODO: default api constant
+    static func readNote(noteID: String,
+                         privateEncryptionKey: String,
+                         publicEncryptionKey: String,
+                         publicSigningKey: String,
+                         privateSigningKey: String,
+                         urlSession: URLSession = URLSession.shared,
+                         apiUrl: String = "https://api.e3db.com",
+                         additionalHeaders: [String: String]? = nil,
+                         completionHandler: @escaping E3dbCompletion<Note>) {
+        let config = AuthenticatorConfig(publicSigningKey: publicSigningKey, privateSigningKey: privateSigningKey, apiUrl: apiUrl, clientId: nil)
+        let auth = Authenticator(config: config, urlSession: urlSession)
+        let params = ["note_id": noteID]
+        Client.internalReadNote(params: params, authenticator: auth, additionalHeaders: additionalHeaders) {
+            result -> Void in
+            Authenticator.handleURLResponse(result, completionHandler) {
+                (note: Note) -> Void in
+                guard let unencryptedNote = try? Crypto.decryptNote(encryptedNote: note, privateEncryptionKey: privateEncryptionKey, publicEncryptionKey: note.noteKeys.writerEncryptionKey, publicSigningKey: note.noteKeys.writerSigningKey) else {
+                    return completionHandler(.failure(E3dbError.cryptoError("Failed to decrypt note")))
+                }
+                return completionHandler(.success(unencryptedNote))
+            }
+        }
+    }
+
+    public func writeNote(data: NoteData,
+                          recipientEncryptionKey: String,
+                          recipientSigningKey: String,
+                          options: NoteOptions?,
+                          completionHandler: @escaping E3dbCompletion<Note>){
+        var options = options
+        if options == nil {
+            options = NoteOptions(clientId: self.config.clientId.uuidString)
+        } else {
+            options?.clientId = self.config.clientId.uuidString
+        }
+        let encryptionKeyPair = EncryptionKeyPair(privateKey: self.config.privateKey, publicKey: self.config.publicKey)
+        let signingKeyPair = SigningKeyPair(privateKey: self.config.privateSigKey, publicKey: self.config.publicSigKey)
+        Client.internalWriteNote(data: data,
+                                   recipientEncryptionKey: recipientEncryptionKey,
+                                   recipientSigningKey: recipientSigningKey,
+                                   options: options,
+                                   encryptionKeys: encryptionKeyPair,
+                                   signingKeys: signingKeyPair,
+                                   authenticator: self.tsv1AuthClient) {
+            result -> Void in
+            Authenticator.handleURLResponse(result, completionHandler) {
+                (note: Note) -> Void in
+                return completionHandler(.success(note))
+            }
+        }
+    }
+
+    static func writeNote(data: NoteData,
+                          recipientEncryptionKey: String,
+                          recipientSigningKey: String,
+                          privateEncryptionKey: String,
+                          publicEncryptionKey: String,
+                          publicSigningKey: String,
+                          privateSigningKey: String,
+                          urlSession: URLSession = URLSession.shared,
+                          apiUrl: String = "https://api.e3db.com",
+                          options: NoteOptions?,
+                          completionHandler: @escaping E3dbCompletion<Note>) {
+        let encryptionKeyPair = EncryptionKeyPair(privateKey: privateEncryptionKey, publicKey: publicEncryptionKey)
+        let signingKeyPair = SigningKeyPair(privateKey: privateSigningKey, publicKey: publicSigningKey)
+        let config = AuthenticatorConfig(publicSigningKey: publicSigningKey, privateSigningKey: privateSigningKey, apiUrl: apiUrl, clientId: nil)
+        let auth = Authenticator(config: config, urlSession: urlSession)
+        Client.internalWriteNote(data: data,
+                                   recipientEncryptionKey: recipientEncryptionKey,
+                                   recipientSigningKey: recipientSigningKey,
+                                   options: options,
+                                   encryptionKeys: encryptionKeyPair,
+                                   signingKeys: signingKeyPair,
+                                   authenticator: auth) {
+            result -> Void in
+            Authenticator.handleURLResponse(result, completionHandler) {
+                (note: Note) -> Void in
+                return completionHandler(.success(note))
+            }
+        }
+    }
+
+    static func internalReadNote(params: [String: String],
+                                 authenticator: Authenticator,
+                                 additionalHeaders: [String: String]? = nil,
+                                 completionHandler: @escaping (Result<(URLResponse, Data), Error>) -> Void) {
+        guard let paramString = try? encodeBodyAsUrl(params) else {
+            return completionHandler(.failure(E3dbError.jsonError(expected: "{param: field}", actual: "params"))) // TODO please
+        }
+        var request = URLRequest(url: URL(string: authenticator.config.apiUrl + "/v2/storage/notes?" + paramString)!)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        if let additionalHeaders = additionalHeaders {
+            for (key, value) in additionalHeaders {
+                request.addValue(value, forHTTPHeaderField: key)
+            }
+        }
+        authenticator.tsv1Request(request: request, completionHandler: completionHandler)
+    }
+
+    static func internalWriteNote(data: NoteData,
+                                  recipientEncryptionKey: String,
+                                  recipientSigningKey: String,
+                                  options: NoteOptions?,
+                                  encryptionKeys: EncryptionKeyPair,
+                                  signingKeys: SigningKeyPair,
+                                  authenticator: Authenticator,
+                                  completionHandler: @escaping (Result<(URLResponse, Data), Error>) -> Void) {
+        do {
+            let encryptedNote = try createEncryptedNote(data: data, recipientEncryptionKey: recipientEncryptionKey, recipientSigningKey: recipientSigningKey, options: options, encryptionKeys: encryptionKeys, signingKeys: signingKeys)
+            var request = URLRequest(url: URL(string: authenticator.config.apiUrl + "/v2/storage/notes")!)
+            request.httpMethod = "POST"
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            guard let body = try? JSONEncoder().encode(encryptedNote) else { // TODO bang
+                return completionHandler(.failure(E3dbError.jsonError(expected: "Expected note", actual: ""))) // TODO FIX ME
+            }
+            request.httpBody = body
+            authenticator.tsv1Request(request: request, completionHandler: completionHandler)
+        } catch {
+            return completionHandler(.failure(error))
+        }
+    }
+
+    static func createEncryptedNote(data:NoteData,
+                                    recipientEncryptionKey: String,
+                                    recipientSigningKey: String,
+                                    options: NoteOptions?,
+                                    encryptionKeys: EncryptionKeyPair,
+                                    signingKeys: SigningKeyPair) throws -> Note {
+
+        let accessKey = Crypto.generateAccessKey()
+        guard let authorizerPrivKey = Box.SecretKey(base64UrlEncoded: encryptionKeys.privateKey),
+              let encryptedAccessKey = Crypto.encrypt(accessKey: accessKey!, readerClientKey: ClientKey(curve25519: recipientEncryptionKey), authorizerPrivKey: authorizerPrivKey) else {
+            throw E3dbError.cryptoError("Couldn't create access key")
+        }
+        let noteKeys = NoteKeys(mode: "Sodium", recipientSigningKey: recipientSigningKey, writerSigningKey: signingKeys.publicKey, writerEncryptionKey: encryptionKeys.publicKey, encryptedAccessKey: encryptedAccessKey)
+        let unencryptedNote = Note(data: data, noteKeys: noteKeys, noteOptions: options)
+        return try Crypto.encryptNote(note: unencryptedNote, accessKey: accessKey!, signingKey: signingKeys.privateKey)
+    }
+
+    public func replaceNoteByName(data: NoteData,
+                                  recipientEncryptionKey: String,
+                                  recipientSigningKey: String,
+                                  options: NoteOptions?,
+                                  completionHandler: @escaping E3dbCompletion<Note>) {
+
+        var options = options
+        if options == nil {
+            options = NoteOptions(clientId: self.config.clientId.uuidString)
+        } else {
+            options?.clientId = self.config.clientId.uuidString
+        }
+        let encryptionKeyPair = EncryptionKeyPair(privateKey: self.config.privateKey, publicKey: self.config.publicKey)
+        let signingKeyPair = SigningKeyPair(privateKey: self.config.privateSigKey, publicKey: self.config.publicSigKey)
+        guard let encryptedNote = try? Client.createEncryptedNote(data: data,
+                                                             recipientEncryptionKey: recipientEncryptionKey,
+                                                             recipientSigningKey: recipientSigningKey,
+                                                             options: options,
+                                                             encryptionKeys: encryptionKeyPair,
+                                                             signingKeys: signingKeyPair),
+              let noteBody = try? JSONEncoder().encode(encryptedNote) else {
+            return completionHandler(.failure(E3dbError.cryptoError("Couldn't generate and encode note to request body")))
+        }
+        var request = URLRequest(url: URL(string: self.tsv1AuthClient.config.apiUrl + "/v2/storage/notes")!)
+        request.httpMethod = "PUT"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = noteBody
+        self.tsv1AuthClient.tsv1Request(request: request) {
+            result -> Void in
+            Authenticator.handleURLResponse(result, completionHandler) {
+                (note: Note) -> Void in
+                // TODO Must be a better way to handle this completion...
+                return completionHandler(.success(note))
+            }
+        }
+    }
+}
 
 public class Note: Codable {
     internal init(data: NoteData, plain: NoteData? = nil, fileMeta: NoteData? = nil, type: String? = nil, signature: String? = nil, createdAt: String? = nil, noteID: String? = nil, noteKeys: NoteKeys, noteOptions: NoteOptions? = nil, views: Int? = nil) {
@@ -22,26 +266,26 @@ public class Note: Codable {
         self.noteOptions = noteOptions
         self.views = views
     }
-    
+
     public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         data = try values.decode([String: String].self, forKey: .data)
         fileMeta = try? values.decode([String: String].self, forKey: .fileMeta)
         plain = try? values.decode([String: String].self, forKey: .plain)
-        
+
         type = try? values.decode(String.self, forKey: .type)
         signature = try? values.decode(String.self, forKey: .signature)
         createdAt = try? values.decode(String.self, forKey: .createdAt)
         noteID = try? values.decode(String.self, forKey: .noteID)
-        
+
         let recipientSigningKey = try values.decode(String.self, forKey: .recipientSigningKey)
         let encryptedAccessKey = try values.decode(String.self, forKey: .encryptedAccessKey)
         let writerEncryptionKey = try values.decode(String.self, forKey: .writerEncryptionKey)
         let writerSigningKey = try values.decode(String.self, forKey: .writerSigningKey)
         let mode = try values.decode(String.self, forKey: .mode)
-        
+
         noteKeys = NoteKeys(mode: mode, recipientSigningKey: recipientSigningKey, writerSigningKey: writerSigningKey, writerEncryptionKey: writerEncryptionKey, encryptedAccessKey: encryptedAccessKey)
-        
+
         views = try? values.decode(Int.self, forKey: .views)
 
         let clientID = try? values.decode(String.self, forKey: .clientId)
@@ -52,9 +296,9 @@ public class Note: Codable {
         let eacp = try? values.decode(NoteEacp.self, forKey: .eacp)
 
         noteOptions = NoteOptions(clientId: clientID, IdString: idString, maxViews: maxViews, expiration: expiration, expires: expires, eacp: eacp)
-        
+
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         // core
@@ -63,12 +307,12 @@ public class Note: Codable {
         try container.encode(self.fileMeta, forKey: .fileMeta)
         try container.encode(self.type, forKey: .type)
         try container.encode(self.signature, forKey: .signature)
-        
+
         // server defined
         try container.encode(self.noteID, forKey: .noteID)
         try container.encode(self.createdAt, forKey: .createdAt)
         try container.encode(self.views, forKey: .views)
-        
+
         // note keys
         try container.encode(self.noteKeys.recipientSigningKey, forKey: .recipientSigningKey)
         try container.encode(self.noteKeys.encryptedAccessKey, forKey: .encryptedAccessKey)
@@ -84,16 +328,16 @@ public class Note: Codable {
         try container.encode(self.noteOptions?.expires, forKey: .expires)
         try container.encode(self.noteOptions?.eacp, forKey: .eacp)
     }
-    
+
     var data: NoteData
     var plain: NoteData?
     var fileMeta: NoteData?
     var type: String?
-    
+
     var signature: String?
     var createdAt: String?
     var noteID: String?
-    
+
     var noteKeys: NoteKeys
     var noteOptions: NoteOptions?
     var views: Int?
@@ -110,7 +354,7 @@ public class Note: Codable {
         case createdAt = "created_at"
         case noteID = "note_id"
         case views = "views"
-        
+
         // note keys
         case mode = "mode"
         case recipientSigningKey = "recipient_signing_key"
@@ -124,7 +368,7 @@ public class Note: Codable {
         case maxViews = "max_views"
         case expiration = "expiration"
         case expires = "expires"
-        
+
         case eacp = "eacp"
     }
 }
@@ -146,7 +390,7 @@ public class NoteOptions: Codable {
         self.expires = expires
         self.eacp = eacp
     }
-    
+
     var clientId: String?
     var IdString: String?
     var maxViews: Int?
@@ -270,17 +514,17 @@ public class EmailEacp: NoteEacp {
         self.templateFields = templateFields
         super.init()
     }
-    
+
     let emailAddress: String
     let template: String
     let providerLink: String
     let defaultExpirationMinutes: Int
     let templateFields: [String:String]?
-    
+
     enum CodingKeys: String, CodingKey {
         case eacp = "email_eacp"
     }
-    
+
     enum EacpInfoKeys: String, CodingKey {
         case emailAddress = "email_address"
         case template
@@ -288,7 +532,7 @@ public class EmailEacp: NoteEacp {
         case providerLink = "provider_link"
         case defaultExpirationMinutes = "default_expiration_minutes"
     }
-    
+
     required public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         let eacpInfo = try values.nestedContainer(keyedBy: EacpInfoKeys.self, forKey: .eacp)
@@ -299,11 +543,11 @@ public class EmailEacp: NoteEacp {
         providerLink = try eacpInfo.decode(String.self, forKey: .providerLink)
         super.init()
     }
-    
+
     public override func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         var eacpInfo = container.nestedContainer(keyedBy: EacpInfoKeys.self, forKey: .eacp)
-        
+
         try eacpInfo.encode(emailAddress, forKey: .emailAddress)
         try eacpInfo.encode(template, forKey: .template)
         try eacpInfo.encode(providerLink, forKey: .providerLink)
@@ -312,217 +556,3 @@ public class EmailEacp: NoteEacp {
     }
 }
 
-
-// Extend Note CRUD operations
-extension Client {
-    public func replaceNoteByName(data: NoteData,
-                                  recipientEncryptionKey: String,
-                                  recipientSigningKey: String,
-                                  options: NoteOptions?,
-                                  completionHandler: @escaping (Result<Note, Error>) -> Void) {
-        var options = options
-        if options == nil {
-            options = NoteOptions(clientId: self.config.clientId.uuidString)
-        } else {
-            options?.clientId = self.config.clientId.uuidString
-        }
-        let encryptionKeyPair = EncryptionKeyPair(privateKey: self.config.privateKey, publicKey: self.config.publicKey)
-        let signingKeyPair = SigningKeyPair(privateKey: self.config.privateSigKey, publicKey: self.config.publicSigKey)
-
-        guard let encryptedNote = Client.createEncryptedNote(data: data,
-                                                                      recipientEncryptionKey: recipientEncryptionKey,
-                                                                      recipientSigningKey: recipientSigningKey,
-                                                                      options: options,
-                                                                      encryptionKeys: encryptionKeyPair,
-                                                                      signingKeys: signingKeyPair),
-              let noteBody = try? JSONEncoder().encode(encryptedNote) else {
-            return completionHandler(.failure(E3dbError.cryptoError("Couldnt generate and encode note to request body")))
-        }
-        var request = URLRequest(url: URL(string: self.tsv1AuthClient.config.apiUrl + "/v2/storage/notes")!)
-        request.httpMethod = "PUT"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = noteBody
-
-        self.tsv1AuthClient.tsv1Request(request: request) {
-            result -> Void in
-            Authenticator.handleURLResponse(urlResult: result, errorHandler: errorCompletion(completionHandler)) {
-                (note: Note) -> Void in
-                // TODO Must be a better way to handle this completion...
-                return completionHandler(.success(note))
-            }
-        }
-    }
-
-    public func readNoteByName(noteName: String, completionHandler: @escaping (Result<Note, Error>) -> Void) {
-        let params = ["id_string": noteName]
-        Client.internalReadNote(params: params, authenticator: self.tsv1AuthClient) {
-            result -> Void in
-            Authenticator.handleURLResponse(urlResult: result, errorHandler: errorCompletion(completionHandler)) {
-                (note: Note) -> Void in
-                guard let unencryptedNote = try? Crypto.decryptNote(encryptedNote: note,
-                                                                    privateEncryptionKey: self.config.privateKey,
-                                                                    publicEncryptionKey:  note.noteKeys.writerEncryptionKey,
-                                                                    publicSigningKey: note.noteKeys.writerSigningKey) else {
-                    return completionHandler(.failure(E3dbError.cryptoError("Failed to decrypt note")))
-                }
-                return completionHandler(.success(unencryptedNote))
-            }
-        }
-    }
-
-    static func readNoteByName(noteName: String,
-                               privateEncryptionKey: String,
-                               publicEncryptionKey: String,
-                               publicSigningKey: String,
-                               privateSigningKey: String,
-                               additionalHeaders: [String: String]? = nil,
-                               urlSession: URLSession = URLSession.shared,
-                               apiUrl: String = "https://api.e3db.com",
-                               completionHandler: @escaping (Result<Note, Error>) -> Void) {
-        let params = ["id_string": noteName]
-        let config = AuthenticatorConfig(publicSigningKey: publicSigningKey, privateSigningKey: privateSigningKey, apiUrl: apiUrl, clientId: nil)
-        let auth = Authenticator(config: config, urlSession: urlSession)
-        Client.internalReadNote(params: params, authenticator: auth, additionalHeaders: additionalHeaders) {
-            result -> Void in
-            Authenticator.handleURLResponse(urlResult: result, errorHandler: errorCompletion(completionHandler)) {
-                (note: Note) -> Void in
-                guard let unencryptedNote = try? Crypto.decryptNote(encryptedNote: note,
-                                                                    privateEncryptionKey: privateEncryptionKey,
-                                                                    publicEncryptionKey: note.noteKeys.writerEncryptionKey,
-                                                                    publicSigningKey: note.noteKeys.writerSigningKey) else {
-                    return completionHandler(.failure(E3dbError.cryptoError("Failed to decrypt note")))
-                }
-                return completionHandler(.success(unencryptedNote))
-            }
-        }
-    }
-
-    // ReadNote
-    public func readNote(noteID: String, completionHandler: @escaping (Result<Note, Error>) -> Void) {
-        let params = ["note_id": noteID]
-        Client.internalReadNote(params: params, authenticator: self.tsv1AuthClient) {
-            result -> Void in
-            Authenticator.handleURLResponse(urlResult: result, errorHandler: errorCompletion(completionHandler)) {
-                (note: Note) -> Void in
-                guard let unencryptedNote = try? Crypto.decryptNote(encryptedNote: note,
-                                                                    privateEncryptionKey: self.config.privateKey,
-                                                                    publicEncryptionKey: note.noteKeys.writerEncryptionKey,
-                                                                    publicSigningKey: note.noteKeys.writerSigningKey) else {
-                    return completionHandler(.failure(E3dbError.cryptoError("Failed to decrypt note")))
-                }
-                return completionHandler(.success(unencryptedNote))
-            }
-        }
-    }
-
-    // TODO: default api constant
-    static func readNote(noteID: String,
-                         privateEncryptionKey: String,
-                         publicEncryptionKey: String,
-                         publicSigningKey: String,
-                         privateSigningKey: String,
-                         urlSession: URLSession = URLSession.shared,
-                         apiUrl: String = "https://api.e3db.com",
-                         additionalHeaders: [String: String]? = nil,
-                         completionHandler: @escaping (Result<Note, Error>) -> Void) {
-        let config = AuthenticatorConfig(publicSigningKey: publicSigningKey, privateSigningKey: privateSigningKey, apiUrl: apiUrl, clientId: nil)
-        let auth = Authenticator(config: config, urlSession: urlSession)
-        let params = ["note_id": noteID]
-        Client.internalReadNote(params: params, authenticator: auth, additionalHeaders: additionalHeaders) {
-            result -> Void in
-            Authenticator.handleURLResponse(urlResult: result, errorHandler: errorCompletion(completionHandler)) {
-                (note: Note) -> Void in
-                guard let unencryptedNote = try? Crypto.decryptNote(encryptedNote: note, privateEncryptionKey: privateEncryptionKey, publicEncryptionKey: note.noteKeys.writerEncryptionKey, publicSigningKey: note.noteKeys.writerSigningKey) else {
-                    return completionHandler(.failure(E3dbError.cryptoError("Failed to decrypt note")))
-                }
-                return completionHandler(.success(unencryptedNote))
-            }
-        }
-    }
-
-    static func internalReadNote(params: [String: String], authenticator: Authenticator, additionalHeaders: [String: String]? = nil, completionHandler: @escaping (Result<(URLResponse, Data), Error>) -> Void) {
-        guard let paramString = try? encodeBodyAsUrl(params) else {
-            return completionHandler(.failure(E3dbError.jsonError(expected: "{param: field}", actual: "params"))) // TODO please
-        }
-
-        var request = URLRequest(url: URL(string: authenticator.config.apiUrl + "/v2/storage/notes?" + paramString)!)
-        request.httpMethod = "GET"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        if let additionalHeaders = additionalHeaders {
-            for (key, value) in additionalHeaders {
-                request.addValue(value, forHTTPHeaderField: key)
-            }
-        }
-        authenticator.tsv1Request(request: request, completionHandler: completionHandler)
-    }
-
-
-    public func writeNote(data: NoteData, recipientEncryptionKey: String, recipientSigningKey: String, options: NoteOptions?, completionHandler: @escaping (Result<Note, Error>) -> Void){
-        var options = options
-        if options == nil {
-            options = NoteOptions(clientId: self.config.clientId.uuidString)
-        } else {
-            options?.clientId = self.config.clientId.uuidString
-        }
-
-        let encryptionKeyPair = EncryptionKeyPair(privateKey: self.config.privateKey, publicKey: self.config.publicKey)
-        let signingKeyPair = SigningKeyPair(privateKey: self.config.privateSigKey, publicKey: self.config.publicSigKey)
-
-        Client.internalWriteNote(data: data,
-                                   recipientEncryptionKey: recipientEncryptionKey,
-                                   recipientSigningKey: recipientSigningKey,
-                                   options: options,
-                                   encryptionKeys: encryptionKeyPair,
-                                   signingKeys: signingKeyPair,
-                                   authenticator: self.tsv1AuthClient) {
-            result -> Void in
-            Authenticator.handleURLResponse(urlResult: result, errorHandler: errorCompletion(completionHandler)) {
-                (note: Note) -> Void in
-                return completionHandler(.success(note))
-            }
-        }
-    }
-
-    static func writeNote(data: NoteData, recipientEncryptionKey: String, recipientSigningKey: String, privateEncryptionKey: String, publicEncryptionKey: String, publicSigningKey: String, privateSigningKey: String, urlSession: URLSession = URLSession.shared, apiUrl: String = "https://api.e3db.com", options: NoteOptions?, completionHandler: @escaping (Result<Note, Error>) -> Void) {
-        let encryptionKeyPair = EncryptionKeyPair(privateKey: privateEncryptionKey, publicKey: publicEncryptionKey)
-        let signingKeyPair = SigningKeyPair(privateKey: privateSigningKey, publicKey: publicSigningKey)
-        let config = AuthenticatorConfig(publicSigningKey: publicSigningKey, privateSigningKey: privateSigningKey, apiUrl: apiUrl, clientId: nil)
-        let auth = Authenticator(config: config, urlSession: urlSession)
-        Client.internalWriteNote(data: data,
-                                   recipientEncryptionKey: recipientEncryptionKey,
-                                   recipientSigningKey: recipientSigningKey,
-                                   options: options,
-                                   encryptionKeys: encryptionKeyPair,
-                                   signingKeys: signingKeyPair,
-                                   authenticator: auth) {
-            result -> Void in
-            Authenticator.handleURLResponse(urlResult: result, errorHandler: errorCompletion(completionHandler)) {
-                (note: Note) -> Void in
-                return completionHandler(.success(note))
-            }
-        }
-    }
-
-    static func internalWriteNote(data: NoteData, recipientEncryptionKey: String, recipientSigningKey: String, options: NoteOptions?, encryptionKeys: EncryptionKeyPair, signingKeys: SigningKeyPair, authenticator: Authenticator, completionHandler: @escaping (Result<(URLResponse, Data), Error>) -> Void) {
-        let encryptedNote = createEncryptedNote(data: data, recipientEncryptionKey: recipientEncryptionKey, recipientSigningKey: recipientSigningKey, options: options, encryptionKeys: encryptionKeys, signingKeys: signingKeys)
-        var request = URLRequest(url: URL(string: authenticator.config.apiUrl + "/v2/storage/notes")!)
-        request.httpMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        guard let body = try? JSONEncoder().encode(encryptedNote!) else {
-            return completionHandler(.failure(E3dbError.jsonError(expected: "Expected note", actual: ""))) // TODO FIX ME
-        }
-        request.httpBody = body
-        authenticator.tsv1Request(request: request, completionHandler: completionHandler)
-    }
-
-    static func createEncryptedNote(data:NoteData, recipientEncryptionKey: String, recipientSigningKey: String, options: NoteOptions?, encryptionKeys: EncryptionKeyPair, signingKeys: SigningKeyPair) -> Note? {
-        let accessKey = Crypto.generateAccessKey()
-        guard let authorizerPrivKey = Box.SecretKey(base64UrlEncoded: encryptionKeys.privateKey),
-              let encryptedAccessKey = Crypto.encrypt(accessKey: accessKey!, readerClientKey: ClientKey(curve25519: recipientEncryptionKey), authorizerPrivKey: authorizerPrivKey) else {
-            return nil
-        }
-        let noteKeys = NoteKeys(mode: "Sodium", recipientSigningKey: recipientSigningKey, writerSigningKey: signingKeys.publicKey, writerEncryptionKey: encryptionKeys.publicKey, encryptedAccessKey: encryptedAccessKey)
-        let unencryptedNote = Note(data: data, noteKeys: noteKeys, noteOptions: options)
-        return try? Crypto.encryptNote(note: unencryptedNote, accessKey: accessKey!, signingKey: signingKeys.privateKey)
-    }
-}
