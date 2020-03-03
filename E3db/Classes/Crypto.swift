@@ -276,18 +276,13 @@ extension Crypto {
         }
         let ak = try Crypto.decrypt(eak: unencryptedNote.noteKeys.encryptedAccessKey, authorizerPubKey: publicEncryptionKey, clientPrivateKey: privateEncryptionKey)
         
-        // TODO: Does this need to be here??
         guard let verifiedSalt = try? Crypto.validateField(key: "signature", value: unencryptedNote.signature!, signingKey: signingKeyBytes) else {
             throw E3dbError.cryptoError("Could not verify signature salt")
         }
-
-        // TODO: Fix me??
         var copySalt: String? = verifiedSalt
         if verifiedSalt == unencryptedNote.signature! {
             copySalt = nil
         }
-
-
         var encryptedData:[String: String] = [:]
         for (plain, data) in unencryptedNote.data {
             let decryptedData = try Crypto.decryptField(encrypted: data, ak: ak)
@@ -522,7 +517,6 @@ extension Crypto {
         return NoteCredentials(name: noteName, encryptionKeyPair: cryptoKeyPair, signingKeyPair: signingKeyPair)
     }
 
-    // TODO: Extract 10000 to constant?
     static func deriveSigningKeys(password: String, salt: String, rounds: UInt32 = 10000) throws -> SigningKeyPair {
         let seed = try Crypto.derivePassword(secret: password, salt: salt, rounds: rounds)
         let baseSeed = try Crypto.base64UrlDecoded(string: seed)
@@ -561,8 +555,7 @@ extension Crypto {
         return pbkString
     }
 
-    // TODO: output key needs 32 bytes
-    static func pbkdf2(hash: CCPBKDFAlgorithm, password: String, salt: [UInt8], keyCount: Int, rounds: UInt32!) throws -> Data {
+    static func pbkdf2(hash: CCPBKDFAlgorithm, password: String, salt: [UInt8], keyCount: Int, rounds: UInt32) throws -> Data {
         var localDerivedKeyData:Data = Data(count: keyCount)
         let status = try localDerivedKeyData.withUnsafeMutableBytes() {
             (outputBytes: UnsafeMutablePointer<UInt8>) -> Void in

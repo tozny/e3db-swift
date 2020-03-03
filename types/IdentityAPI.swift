@@ -50,13 +50,6 @@ public struct IdentityLoginSession: Codable {
     }
 }
 
-extension Encodable {
-    var dictionary: [String: Any]? {
-        guard let data = try? JSONEncoder().encode(self) else { return nil }
-        return (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)).flatMap { $0 as? [String: Any] }
-    }
-}
-
 public struct IdentityRegisterRequest: Encodable {
     let realmRegistrationToken: String
     let realmName: String
@@ -131,7 +124,7 @@ public struct NoteCredentials {
 public struct SavedNote: Codable {
     struct idConfig: Codable {
         let realmName: String
-        let appName: String?
+        let appName: String
         let apiUrl: String
         let username: String
         let brokerTargetUrl: String
@@ -214,5 +207,12 @@ public struct SavedNote: Codable {
     enum CodingKeys: String, CodingKey {
         case config
         case storage
+    }
+}
+
+extension Encodable {
+    var dictionary: [String: Any]? {
+        guard let data = try? JSONEncoder().encode(self) else { return nil }
+        return (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)).flatMap { $0 as? [String: Any] }
     }
 }

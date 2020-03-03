@@ -304,7 +304,7 @@ public class IdentityConfig: Codable {
                                    privateSigKey: noteData.storage.privateSigKey)
 
         self.init(realmName:noteData.config.realmName,
-                  appName: noteData.config.appName ?? "account",
+                  appName: noteData.config.appName,
                   apiUrl: noteData.config.apiUrl,
                   username: noteData.config.username,
                   userId: noteData.config.userId,
@@ -326,20 +326,6 @@ public class IdentityConfig: Codable {
     var userId: Int?
     var firstName: String?
     var lastName: String?
-}
-
-
-
-// Allows for decoding the Date format returned by Tozny services
-extension DateFormatter {
-    static let iso8601Full: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
-        formatter.calendar = Calendar(identifier: .iso8601)
-        formatter.timeZone = TimeZone(secondsFromGMT: 0)
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        return formatter
-    }()
 }
 
 // AgentToken is the token that indicates a user is logged in with TozId
@@ -376,4 +362,16 @@ public class Token: Codable {
         case sessionState = "session_state"
         case scope
     }
+}
+
+// Allows for decoding the Date format returned by Tozny services
+extension DateFormatter {
+    static let iso8601Full: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+        formatter.calendar = Calendar(identifier: .iso8601)
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        return formatter
+    }()
 }

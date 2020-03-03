@@ -36,10 +36,9 @@ public class PartialIdentity {
         guard let newCredentials = try? Crypto.deriveNoteCreds(realmName: self.idConfig.realmName, username: self.idConfig.username, password: newPassword) else {
             return completionHandler(.failure(E3dbError.cryptoError("Couldn't derive note credentials from new password")))
         }
-        // TODO: storage config is in id config, and not needed
         let passNote = SavedNote(identity: self.idConfig, store: self.idConfig.storageConfig)
         guard let passNoteData = try? JSONEncoder().encode(passNote),
-              let passNoteDataEncryptable  = try? JSONSerialization.jsonObject(with: passNoteData) as! [String: String] else {
+              let passNoteDataEncryptable  = try? JSONSerialization.jsonObject(with: passNoteData) as? [String: String] else {
             return completionHandler(.failure(E3dbError.configError("Current identity configuration was invalid")))
         }
         let options = NoteOptions(IdString: newCredentials.name, maxViews: -1, expires: false, eacp: TozIdEacp(realmName: self.idConfig.realmName))
@@ -49,7 +48,7 @@ public class PartialIdentity {
     public func fetchToken(appName: String, completionHandler: @escaping E3dbCompletion<Token>) {
         let body = ["grant_type": "password", "client_id": appName]
         guard let bodyData = (try? encodeBodyAsUrl(body))?.data(using: .utf8) else {
-            return completionHandler(.failure(E3dbError.jsonError(expected: "valid body", actual: "body"))) // TODO: Fix me
+            return completionHandler(.failure(E3dbError.jsonError(expected: "encodable dictionary", actual: body.description)))
         }
         var request = URLRequest(url: URL(string: self.idConfig.apiUrl + "/auth/realms/" + self.idConfig.realmName + "/protocol/openid-connect/token")!)
         request.httpMethod = "POST"

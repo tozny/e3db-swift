@@ -19,7 +19,6 @@ public class Application {
     }
 
     public func login(username: String, password: String, actionHandler: @escaping (IdentityLoginAction) -> [String:String], completionHandler: @escaping E3dbCompletion<Identity>) {
-        do {
             var username = username
             username = username.lowercased()
 
@@ -31,8 +30,10 @@ public class Application {
 
             var initiateLoginRequest = URLRequest(url: URL(string: self.apiUrl + "/v1/identity/login")!)
             initiateLoginRequest.httpMethod = "POST"
-            initiateLoginRequest.httpBody = try JSONSerialization.data(withJSONObject: ["username": username, "realm_name": self.realmName, "app_name": self.appName, "login_style": "api"])
-
+            guard let body = try? JSONSerialization.data(withJSONObject: ["username": username, "realm_name": self.realmName, "app_name": self.appName, "login_style": "api"]) else {
+                return completionHandler(.failure(E3dbError.encodingError("initial login request failed to encode")))
+            }
+            initiateLoginRequest.httpBody = body
             anonAuth.handledTsv1Request(request: initiateLoginRequest, errorHandler: completionHandler) {
                 (loginSession: [String: String]) -> Void in
                 guard let encodedString = try? encodeBodyAsUrl(loginSession),
@@ -61,14 +62,14 @@ public class Application {
                             }
                             semaphore.wait()
 
-                            var body: Data? // TODO: Handle my questions :(
+                            var body: Data?
                             if loginAction.contentType == "application/x-www-form-urlencoded" {
                                 body = try? encodeBodyAsUrl(data!).data(using: .utf8)
                             } else {
                                 body = try? JSONSerialization.data(withJSONObject: data)
                             }
                             guard let bodyData = body else {
-                                return completionHandler(.failure(E3dbError.jsonError(expected: "data returned from actionHandler should be codable to data", actual: "")))
+                                return completionHandler(.failure(E3dbError.encodingError("data returned from actionHandler failed to encode")))
                             }
                             var loginActionRequest = URLRequest(url: URL(string: loginAction.actionUrl)!)
                             loginActionRequest.httpMethod = "POST"
@@ -79,9 +80,8 @@ public class Application {
                                 loginAction = newLoginAction
                                 semaphore.signal()
                             }
-                            semaphore.wait(timeout: .now() + 5) // TODO: 5s long time to wait
+                            semaphore.wait(timeout: .now() + 10)
                         }
-
                         // Final request
                         var finalRequest = URLRequest(url: URL(string: self.apiUrl + "/v1/identity/tozid/redirect")!)
                         finalRequest.httpMethod = "POST"
@@ -93,17 +93,16 @@ public class Application {
                             "client_id": loginAction.context["client_id"],
                             "auth_session_id": loginAction.context["auth_session_id"],
                         ]) else {
-                            return completionHandler(.failure(E3dbError.jsonError(expected: "failed to marshal final request body", actual: "uh")))
+                            return completionHandler(.failure(E3dbError.encodingError("final body request failed to encode, login context contains invalid data")))
                         }
                         finalRequest.httpBody = finalRequestBody
-
                         var potentialToken: AgentToken? = nil
                         anonAuth.handledTsv1Request(request: finalRequest, errorHandler: completionHandler) {
                             (token: AgentToken) -> Void in
                             potentialToken = token
                             semaphore.signal()
                         }
-                        semaphore.wait(timeout: .now() + 5) // TODO: 5s long time to wait
+                        semaphore.wait(timeout: .now() + 10)
                         guard let token = potentialToken else {
                             return completionHandler(.failure(E3dbError.networkError("failed to get access token")))
                         }
@@ -120,7 +119,7 @@ public class Application {
                                 return completionHandler(.failure(error))
                             case .success(let note):
                                 guard let idConfig = try? IdentityConfig(fromPassNote: note) else {
-                                    return completionHandler(.failure(E3dbError.jsonError(expected: "Saved Note", actual: "Invalid Note Json")))
+                                    return completionHandler(.failure(E3dbError.jsonError(expected: "valid identity configuration", actual: "note data missing configuration")))
                                 }
                                 let partialIdentity = PartialIdentity(idConfig: idConfig)
                                 completionHandler(.success(Identity(fromPartial: partialIdentity, identityServiceToken: token)))
@@ -129,9 +128,6 @@ public class Application {
                     }
                 }
             }
-        } catch {
-            completionHandler(.failure(E3dbError.apiError(code: 500, message: "Unexpected error attempting to login")))
-        }
     }
 
     public func register(username: String, password: String, email: String, token: String, firstName: String? = nil, lastName: String? = nil, emailEacpExpiryMinutes: Int = 60, completionHandler: @escaping E3dbCompletion<PartialIdentity>) {
@@ -182,14 +178,12 @@ public class Application {
 
                     let partialIdentity = PartialIdentity(idConfig: idConfig)
 
-                    let data = try JSONEncoder().encode(passNote)
-                    // TODO: rename this form json data
-                    let jsonData = try JSONSerialization.jsonObject(with: data) as! [String: String]
-
+                    let passData = try JSONEncoder().encode(passNote)
+                    let passNoteData = try JSONSerialization.jsonObject(with: passData) as! [String: String]
 
                     let tozIdEacp = TozIdEacp(realmName: self.realmName)
                     let options = NoteOptions(IdString: noteCreds.name, maxViews: -1, expires: false, eacp: tozIdEacp)
-                    partialIdentity.storeClient.writeNote(data: jsonData,
+                    partialIdentity.storeClient.writeNote(data: passNoteData,
                                                       recipientEncryptionKey: noteCreds.encryptionKeyPair.publicKey,
                                                       recipientSigningKey: noteCreds.signingKeyPair.publicKey,
                                                       options: options) {
@@ -209,13 +203,13 @@ public class Application {
                                     return completionHandler(.failure(error))
                                 case .success(let brokerInfo as ClientInfo):
                                     // Email recovery notes through broker
-                                    self.registerBrokerEmailHelper(username: username, brokerInfo: brokerInfo, email: email, firstName: firstName, lastName: lastName, partialIdentity: partialIdentity, passwordNoteContents: jsonData) {
+                                    self.registerBrokerEmailHelper(username: username, brokerInfo: brokerInfo, email: email, firstName: firstName, lastName: lastName, partialIdentity: partialIdentity, passwordNoteContents: passNoteData) {
                                         err -> Void in
                                         if let err = err {
                                             return completionHandler(.failure(err))
                                         }
                                         // OTP recovery notes through broker
-                                        self.registerBrokerOTPHelper(username: username, brokerInfo: brokerInfo, passwordNoteContents: jsonData, partialIdentity: partialIdentity) {
+                                        self.registerBrokerOTPHelper(username: username, brokerInfo: brokerInfo, passwordNoteContents: passNoteData, partialIdentity: partialIdentity) {
                                             err -> Void in
                                             if let err = err {
                                                 return completionHandler(.failure(err))
@@ -229,7 +223,7 @@ public class Application {
                         }
                     }
                 } catch {
-                    return completionHandler(.failure(error as! E3dbError))
+                    return completionHandler(.failure(E3dbError.generalError(error.localizedDescription)))
                 }
             }
         }
@@ -299,7 +293,6 @@ public class Application {
                 result -> Void in
                 switch(result) {
                 case .failure(let error):
-                    print("hey hey we failed to read transfer note \(error)")
                     return completionHandler(.failure(error))
                 case .success(let note):
                     guard let brokerKey = note.data["brokerKey"],
@@ -316,13 +309,11 @@ public class Application {
                         result -> Void in
                         switch(result) {
                         case .failure(let error):
-                            print("heye hey we failed to read password note \(error)")
                             return completionHandler(.failure(error))
                         case .success(let note):
                             guard let idConfig = try? IdentityConfig(fromPassNote: note) else {
                                 return completionHandler(.failure(E3dbError.jsonError(expected: "Saved Note", actual: "Invalid Note Json")))
                             }
-                            // TODO: backwards compat for username not written to note???
                             completionHandler(.success(PartialIdentity(idConfig: idConfig)))
                         }
                     }
@@ -333,7 +324,7 @@ public class Application {
 
     // MARK: Registration helpers
 
-    func registerBrokerEmailHelper(username: String, brokerInfo: ClientInfo, email: String, firstName: String?, lastName: String?, partialIdentity: PartialIdentity, passwordNoteContents: NoteData, completionHandler: @escaping (E3dbError?) -> Void) {
+    func registerBrokerEmailHelper(username: String, brokerInfo: ClientInfo, email: String, firstName: String?, lastName: String?, partialIdentity: PartialIdentity, passwordNoteContents: NoteData, errorHandler: @escaping (E3dbError?) -> Void) {
         do {
             let brokerKeyNoteName = try Crypto.hash(stringToHash: String(format: "brokerKey:%@@realm:%@", username, self.realmName))
             let brokerKey = try Crypto.randomBytes(length: 64)
@@ -354,7 +345,7 @@ public class Application {
                 result -> Void in
                 switch (result) {
                 case .failure(let error):
-                    return completionHandler(error)
+                    return errorHandler(error)
                 case .success(let brokerKeyNote):
                     let brokerPassNoteOptions = NoteOptions(IdString: brokerNoteCreds.name, maxViews: -1, expires: false, eacp: LastAccessEacp(lastReadNoteId: brokerKeyNote.noteID!))
                     partialIdentity.storeClient.writeNote(data: passwordNoteContents,
@@ -364,19 +355,19 @@ public class Application {
                         result -> Void in
                         switch (result) {
                         case .failure(let error):
-                            return completionHandler(error)
+                            return errorHandler(error)
                         case .success:
-                            return completionHandler(nil)
+                            return errorHandler(nil)
                         }
                     }
                 }
             }
         } catch {
-            completionHandler(error as! E3dbError)
+            errorHandler(E3dbError.generalError(error.localizedDescription))
         }
     }
 
-    func registerBrokerOTPHelper(username: String, brokerInfo: ClientInfo, passwordNoteContents: NoteData, partialIdentity: PartialIdentity, completionHandler: @escaping (E3dbError?) -> Void) {
+    func registerBrokerOTPHelper(username: String, brokerInfo: ClientInfo, passwordNoteContents: NoteData, partialIdentity: PartialIdentity, errorHandler: @escaping (E3dbError?) -> Void) {
         do {
             let brokerToznyOTPKeyNoteName = try Crypto.hash(stringToHash: String(format: "broker_otp:%@@realm:%@", username, self.realmName))
             let brokerToznyOTPKey = try Crypto.randomBytes(length: 64)
@@ -389,7 +380,7 @@ public class Application {
                 result -> Void in
                 switch (result) {
                 case .failure(let error):
-                    return completionHandler(error)
+                    return errorHandler(error)
                 case .success(let writtenBrokerNote):
                     let brokerPassNoteOptions = NoteOptions(IdString: brokerToznyOTPNoteCreds.name, maxViews: -1, expires: false, eacp: LastAccessEacp(lastReadNoteId: writtenBrokerNote.noteID!))
                     partialIdentity.storeClient.writeNote(data: passwordNoteContents,
@@ -399,15 +390,15 @@ public class Application {
                         result -> Void in
                         switch (result) {
                         case .failure(let error):
-                            return completionHandler(error)
+                            return errorHandler(error)
                         case .success:
-                            return completionHandler(nil)
+                            return errorHandler(nil)
                         }
                     }
                 }
             }
         } catch {
-            completionHandler(error as! E3dbError)
+            errorHandler(E3dbError.generalError(error.localizedDescription))
         }
     }
 }

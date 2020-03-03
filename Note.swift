@@ -36,7 +36,7 @@ extension Client {
                                privateSigningKey: String,
                                additionalHeaders: [String: String]? = nil,
                                urlSession: URLSession = URLSession.shared,
-                               apiUrl: String = "https://api.e3db.com",
+                               apiUrl: String = Api.defaultUrl,
                                completionHandler: @escaping E3dbCompletion<Note>) {
         let params = ["id_string": noteName]
         let config = AuthenticatorConfig(publicSigningKey: publicSigningKey, privateSigningKey: privateSigningKey, apiUrl: apiUrl, clientId: nil)
@@ -73,14 +73,13 @@ extension Client {
         }
     }
 
-    // TODO: default api constant
     static func readNote(noteID: String,
                          privateEncryptionKey: String,
                          publicEncryptionKey: String,
                          publicSigningKey: String,
                          privateSigningKey: String,
                          urlSession: URLSession = URLSession.shared,
-                         apiUrl: String = "https://api.e3db.com",
+                         apiUrl: String = Api.defaultUrl,
                          additionalHeaders: [String: String]? = nil,
                          completionHandler: @escaping E3dbCompletion<Note>) {
         let config = AuthenticatorConfig(publicSigningKey: publicSigningKey, privateSigningKey: privateSigningKey, apiUrl: apiUrl, clientId: nil)
@@ -134,7 +133,7 @@ extension Client {
                           publicSigningKey: String,
                           privateSigningKey: String,
                           urlSession: URLSession = URLSession.shared,
-                          apiUrl: String = "https://api.e3db.com",
+                          apiUrl: String = Api.defaultUrl,
                           options: NoteOptions?,
                           completionHandler: @escaping E3dbCompletion<Note>) {
         let encryptionKeyPair = EncryptionKeyPair(privateKey: privateEncryptionKey, publicKey: publicEncryptionKey)
@@ -161,7 +160,7 @@ extension Client {
                                  additionalHeaders: [String: String]? = nil,
                                  completionHandler: @escaping (Result<(URLResponse, Data), Error>) -> Void) {
         guard let paramString = try? encodeBodyAsUrl(params) else {
-            return completionHandler(.failure(E3dbError.jsonError(expected: "{param: field}", actual: "params"))) // TODO please
+            return completionHandler(.failure(E3dbError.encodingError("params failed to encode to string")))
         }
         var request = URLRequest(url: URL(string: authenticator.config.apiUrl + "/v2/storage/notes?" + paramString)!)
         request.httpMethod = "GET"
@@ -187,8 +186,8 @@ extension Client {
             var request = URLRequest(url: URL(string: authenticator.config.apiUrl + "/v2/storage/notes")!)
             request.httpMethod = "POST"
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            guard let body = try? JSONEncoder().encode(encryptedNote) else { // TODO bang
-                return completionHandler(.failure(E3dbError.jsonError(expected: "Expected note", actual: ""))) // TODO FIX ME
+            guard let body = try? JSONEncoder().encode(encryptedNote) else {
+                return completionHandler(.failure(E3dbError.encodingError("failed to encode encrypted note"))) 
             }
             request.httpBody = body
             authenticator.tsv1Request(request: request, completionHandler: completionHandler)
@@ -245,7 +244,6 @@ extension Client {
             result -> Void in
             Authenticator.handleURLResponse(result, completionHandler) {
                 (note: Note) -> Void in
-                // TODO Must be a better way to handle this completion...
                 return completionHandler(.success(note))
             }
         }
@@ -504,7 +502,6 @@ public class TozIdEacp: NoteEacp {
 }
 
 public class EmailEacp: NoteEacp {
-    // TODO: Extract 60 to constnat
     internal init(emailAddress: String, template: String, providerLink: String, defaultExpirationMinutes: Int = 60, templateFields: [String:String]? = nil) {
         self.emailAddress = emailAddress
         self.template = template
