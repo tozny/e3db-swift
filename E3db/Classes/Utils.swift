@@ -110,6 +110,11 @@ struct Api {
     }
 
     static let defaultUrl   = "https://api.e3db.com/"
+    static let decoder: JSONDecoder = {
+        let customDecoder = JSONDecoder()
+        customDecoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Full)
+        return customDecoder
+    }()
     private let version     = "v1"
     private let pdsService  = "storage"
     private let authService = "auth"

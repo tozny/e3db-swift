@@ -151,14 +151,14 @@ public struct PasswordNoteData: Codable {
         let version: Int = 2
 
         enum CodingKeys: String, CodingKey {
-            case apiKeyId = "api_key_id"
-            case apiSecret = "api_secret"
-            case apiUrl = "api_url"
-            case clientId = "client_id"
-            case publicKey = "public_key"
-            case privateKey = "private_key"
-            case publicSigKey = "public_signing_key"
-            case privateSigKey = "private_signing_key"
+            case apiKeyId
+            case apiSecret
+            case apiUrl
+            case clientId
+            case publicKey
+            case privateKey
+            case publicSigKey = "publicSigningKey"
+            case privateSigKey = "privateSigningKey"
             case version
         }
     }
@@ -199,8 +199,11 @@ public struct PasswordNoteData: Codable {
         let storageString = try values.decode(String.self, forKey: .storage)
         let configString = try values.decode(String.self, forKey: .config)
 
-        storage = try JSONDecoder().decode(storageConfig.self, from: storageString.data(using: .utf8)!)
-        config = try JSONDecoder().decode(idConfig.self, from: configString.data(using: .utf8)!)
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+        storage = try decoder.decode(storageConfig.self, from: storageString.data(using: .utf8)!)
+        config = try decoder.decode(idConfig.self, from: configString.data(using: .utf8)!)
     }
 
     enum CodingKeys: String, CodingKey {

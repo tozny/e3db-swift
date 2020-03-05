@@ -107,9 +107,7 @@ public class Authenticator {
                 if httpResponse.statusCode < 200 || httpResponse.statusCode > 299 {
                     return handleError(E3dbError.apiError(code: httpResponse.statusCode, message: String(decoding: data, as: UTF8.self)))
                 }
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Full)
-                guard let response = try? decoder.decode(T.self, from: data) else {
+                guard let response = try? Api.decoder.decode(T.self, from: data) else {
                     return handleError(E3dbError.jsonError(expected: String(describing: type(of: T.self)), actual: String(decoding: data, as: UTF8.self)))
                 }
                 completionHandler(response)
@@ -144,7 +142,10 @@ public func encodeBodyAsUrl(_ data: [String: Any]) throws -> String {
             urlEncodedValues += try encodeBodyAsUrl(value)
         }
         if let value = value as? String {
-            urlEncodedValues += key + "=" + value + "&"
+            guard let encodedValue = value.encodeURIComponent() else {
+                throw E3dbError.generalError("value \(value) could not be urlencoded")
+            }
+            urlEncodedValues += key + "=" + encodedValue + "&"
         } else {
             throw E3dbError.apiError(code: 400, message: "body could not be url encoded")
         }
@@ -153,6 +154,14 @@ public func encodeBodyAsUrl(_ data: [String: Any]) throws -> String {
         return String(urlEncodedValues.dropLast())
     }
     return urlEncodedValues
+}
+
+extension String {
+    func encodeURIComponent() -> String? {
+        var characterSet = CharacterSet.alphanumerics
+        characterSet.insert(charactersIn: "-_.!~*'()")
+        return self.addingPercentEncoding(withAllowedCharacters: characterSet)
+    }
 }
 
 extension URLSession {
