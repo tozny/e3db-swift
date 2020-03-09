@@ -240,23 +240,53 @@ class IdentityTests: XCTestCase, TestUtils {
         waitForExpectations(timeout: 5)
     }
 
-    func testFetchToken() {
+    func testRegisterAndLogin() {
+        let loginExpectation = self.expectation(description: "login")
         let registerExpectation = self.expectation(description: "registered")
+
+        let username = UUID.init().uuidString + "10@tozny.com"
+        let password = UUID.init().uuidString
+
+        print("username \(username)")
+        print("pass \(password)")
+
+        self.validApplication.register(username: username, password: password, email: username, token: regToken) {
+            result -> Void in
+            switch(result) {
+            case .failure(let error):
+                XCTFail("Found error when registering \(error)")
+                break
+            case .success:
+                registerExpectation.fulfill()
+                self.validApplication.login(username: username, password: password, actionHandler: self.emptyActionHandler) {
+                    result -> Void in
+                    switch(result) {
+                    case .failure(let error):
+                        XCTFail("Found error when logging in \(error)")
+                        break
+                    case .success:
+                        loginExpectation.fulfill()
+                        break
+                    }
+                }
+                break
+            }
+        }
+        waitForExpectations(timeout: 5)
+    }
+
+    func testFetchToken() {
+        let loginExpectation = self.expectation(description: "login")
         let tokenExpectation = self.expectation(description: "token")
 
-        var username = ""
-        username = UUID.init().uuidString + "-michael@example.com"
-
-        let password = "pass"
-
-        validApplication.register(username: username, password: password, email: username, token: regToken) {
+        validApplication.login(username: validUsername, password: validPass) {
             result -> Void in
             switch(result) {
             case .failure(let error):
                 XCTFail("Found error when registering \(error)")
                 break
             case .success(let identity):
-                registerExpectation.fulfill()
+                loginExpectation.fulfill()
                 identity.fetchToken(appName: "account") {
                     result -> Void in
                     switch(result) {

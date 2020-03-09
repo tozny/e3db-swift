@@ -194,7 +194,7 @@ extension Crypto {
 
 }
 
-// MARK: Identity Crypto
+// MARK: Note Crypto
 
 extension Crypto {
     static func signatureVersion() -> String{
@@ -218,13 +218,11 @@ extension Crypto {
     
     static func validateField(key: String, value: String, signingKey: Sign.SecretKey, objectSalt: String? = nil) throws -> String {
         let fields = value.split(separator: ";")
-        // If this field is not prefixed with the signature version, assume it is
-        // not a signed field.
         if (String(fields[0]) != Crypto.signatureVersion()) {
-          return value
+            throw E3dbError.cryptoError("signature version does not match \(fields[0])")
         }
         if objectSalt != nil && String(fields[1]) != objectSalt {
-          throw NSError(domain: "object salt does not match", code: 401, userInfo: nil)
+            throw E3dbError.cryptoError("object salt does not match")
         }
         let headerLength = fields[0].count + fields[1].count + fields[2].count + 3
         let signatureLength = Int(fields[2])!

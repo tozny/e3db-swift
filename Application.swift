@@ -119,7 +119,7 @@ public class Application {
                                 return completionHandler(.failure(error))
                             case .success(let note):
                                 guard let idConfig = try? IdentityConfig(fromPassNote: note) else {
-                                    return completionHandler(.failure(E3dbError.jsonError(expected: "valid identity configuration", actual: "note data missing configuration")))
+                                    return completionHandler(.failure(E3dbError.jsonError(expected: "valid identity configuration", actual: "note data configuration failed to parse")))
                                 }
                                 let partialIdentity = PartialIdentity(idConfig: idConfig)
                                 completionHandler(.success(Identity(fromPartial: partialIdentity, identityServiceToken: token)))
@@ -241,7 +241,7 @@ public class Application {
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Accepts")
         guard let body = try? JSONSerialization.data(withJSONObject: ["username": username, "action": "challenge"]) else {
-            return errorHandler(.failure(E3dbError.jsonError(expected: "{'username', 'action'}", actual: "")))
+            return errorHandler(.failure(E3dbError.jsonError(expected: "{'username': '...', 'action': '...'}", actual: "invalid json object"))) 
         }
         request.httpBody = body
         Authenticator.handledRequest(unauthedReq: request, errorHandler: errorHandler) {
@@ -295,7 +295,7 @@ public class Application {
                 case .failure(let error):
                     return completionHandler(.failure(error))
                 case .success(let note):
-                    guard let brokerKey = note.data["brokerKey"],
+                    guard let brokerKey = note.data["broker_key"],
                     let username = note.data["username"],
                     let brokerCreds = try? Crypto.deriveNoteCreds(realmName: self.realmName, username: username, password: brokerKey, type: brokerType) else {
                         return completionHandler(.failure(E3dbError.cryptoError("Couldn't generate credentials from broker note")))
@@ -340,7 +340,7 @@ public class Application {
             let emailEacp = EmailEacp(emailAddress: email, template: "claim_account", providerLink: self.brokerTargetUrl,  templateFields: templateOpts)
             let brokerNoteOptions = NoteOptions(IdString: brokerKeyNoteName, maxViews: -1, expires: false, eacp: emailEacp)
 
-            let brokerKeyNoteData = ["brokerKey": brokerKey, "username": username]
+            let brokerKeyNoteData = ["broker_key": brokerKey, "username": username]
             partialIdentity.storeClient.writeNote(data: brokerKeyNoteData, recipientEncryptionKey: brokerInfo.publicKey.curve25519, recipientSigningKey: brokerInfo.signingKey!.ed25519, options: brokerNoteOptions) {
                 result -> Void in
                 switch (result) {
@@ -373,7 +373,7 @@ public class Application {
             let brokerToznyOTPKey = try Crypto.randomBytes(length: 64)
             let brokerToznyOTPNoteCreds = try Crypto.deriveNoteCreds(realmName: self.realmName, username: username, password: brokerToznyOTPKey, type: "tozny_otp")
             let brokerOtpNoteOptions = NoteOptions(IdString: brokerToznyOTPKeyNoteName, maxViews: -1, expires: false, eacp: TozOtpEacp(include: true))
-            partialIdentity.storeClient.writeNote(data: ["brokerKey": brokerToznyOTPKey, "username": username],
+            partialIdentity.storeClient.writeNote(data: ["broker_key": brokerToznyOTPKey, "username": username],
                                                   recipientEncryptionKey: brokerInfo.publicKey.curve25519,
                                                   recipientSigningKey: brokerInfo.signingKey!.ed25519,
                                                   options: brokerOtpNoteOptions) {

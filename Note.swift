@@ -403,7 +403,7 @@ public class NoteEacp: Codable {
     public init() {}
 
     static func TozOtpEacp(include: Bool) -> Codable {
-        return ["tozny_otp_eacp": ["include": "true"]]
+        return ["tozny_otp_eacp": ["include": true]]
     }
 
     static func LastAccessEacp(lastReadId: String) -> Codable {

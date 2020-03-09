@@ -44,21 +44,6 @@ public class PartialIdentity {
         let options = NoteOptions(IdString: newCredentials.name, maxViews: -1, expires: false, eacp: TozIdEacp(realmName: self.idConfig.realmName))
         self.storeClient.replaceNoteByName(data: passNoteDataEncryptable, recipientEncryptionKey: newCredentials.encryptionKeyPair.publicKey, recipientSigningKey: newCredentials.signingKeyPair.publicKey, options: options, completionHandler: completionHandler)
     }
-
-    public func fetchToken(appName: String, completionHandler: @escaping E3dbCompletion<Token>) {
-        let body = ["grant_type": "password", "client_id": appName]
-        guard let bodyData = (try? encodeBodyAsUrl(body))?.data(using: .utf8) else {
-            return completionHandler(.failure(E3dbError.jsonError(expected: "encodable dictionary", actual: body.description)))
-        }
-        var request = URLRequest(url: URL(string: self.idConfig.apiUrl + "/auth/realms/" + self.idConfig.realmName + "/protocol/openid-connect/token")!)
-        request.httpMethod = "POST"
-        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        request.httpBody = bodyData
-        self.storeClient.tsv1AuthClient.handledTsv1Request(request: request, errorHandler: completionHandler) {
-            (token: Token) -> Void in
-            completionHandler(.success(token))
-        }
-    }
 }
 
 public class Identity: PartialIdentity {
@@ -97,6 +82,21 @@ public class Identity: PartialIdentity {
             return completionHandler(.success(keycloakToken))
         }
         self.fetchToken(appName: self.idConfig.appName, completionHandler: completionHandler)
+    }
+
+    public func fetchToken(appName: String, completionHandler: @escaping E3dbCompletion<Token>) {
+        let body = ["grant_type": "password", "client_id": appName]
+        guard let bodyData = (try? encodeBodyAsUrl(body))?.data(using: .utf8) else {
+            return completionHandler(.failure(E3dbError.jsonError(expected: "encodable dictionary", actual: body.description)))
+        }
+        var request = URLRequest(url: URL(string: self.idConfig.apiUrl + "/auth/realms/" + self.idConfig.realmName + "/protocol/openid-connect/token")!)
+        request.httpMethod = "POST"
+        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.httpBody = bodyData
+        self.storeClient.tsv1AuthClient.handledTsv1Request(request: request, errorHandler: completionHandler) {
+            (token: Token) -> Void in
+            completionHandler(.success(token))
+        }
     }
 }
 
