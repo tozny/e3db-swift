@@ -2,19 +2,8 @@
 //  IdentityTests.swift
 //  E3db_Tests
 //
-//  Created by michael lee on 2/13/20.
-//  Copyright © 2020 CocoaPods. All rights reserved.
-//
 
 import Foundation
-//
-//  IdentityTests.swift
-//  E3db_Example
-//
-//  Created by michael lee on 2/13/20.
-//  Copyright © 2020 CocoaPods. All rights reserved.
-//
-
 import XCTest
 import Sodium
 @testable import E3db
@@ -279,7 +268,7 @@ class IdentityTests: XCTestCase, TestUtils {
         let loginExpectation = self.expectation(description: "login")
         let tokenExpectation = self.expectation(description: "token")
 
-        validApplication.login(username: validUsername, password: validPass) {
+        validApplication.login(username: validUsername, password: validPass, actionHandler: emptyActionHandler) {
             result -> Void in
             switch(result) {
             case .failure(let error):

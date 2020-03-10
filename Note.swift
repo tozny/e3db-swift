@@ -2,8 +2,6 @@
 //  Note.swift
 //  E3db
 //
-//  Created by michael lee on 2/19/20.
-//
 
 import Foundation
 import Sodium

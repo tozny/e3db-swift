@@ -1,6 +1,8 @@
 //
-// Created by michael lee on 2/21/20.
+// Application.swift
+// E3db
 //
+
 
 import Foundation
 import Result
