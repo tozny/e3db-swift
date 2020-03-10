@@ -51,11 +51,17 @@ public enum E3dbError: Error {
     /// A network operation failed
     case networkError(String)
 
+    /// encoding failed
+    case encodingError(String)
+
     /// JSON parsing failed
     case jsonError(expected: String, actual: String)
 
     /// An API request encountered an error
     case apiError(code: Int, message: String)
+
+    /// Encapsulate general errors that need additional context
+    case generalError(String)
 
     init(swishError: SwishError) {
         switch swishError {
@@ -83,7 +89,7 @@ public enum E3dbError: Error {
     /// Get a human-readable context for the error.
     public var description: String {
         switch self {
-        case .cryptoError(let msg), .configError(let msg), .networkError(let msg):
+        case .cryptoError(let msg), .configError(let msg), .networkError(let msg), .encodingError(let msg), .generalError(let msg):
             return msg
         case let .jsonError(exp, act):
             return "Failed to decode response. \(exp + act)"
@@ -104,6 +110,11 @@ struct Api {
     }
 
     static let defaultUrl   = "https://api.e3db.com/"
+    static let decoder: JSONDecoder = {
+        let customDecoder = JSONDecoder()
+        customDecoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Full)
+        return customDecoder
+    }()
     private let version     = "v1"
     private let pdsService  = "storage"
     private let authService = "auth"

@@ -23,6 +23,8 @@ public final class Client {
     let session: URLSession
     let authedClient: APIClient
     let akCache = NSCache<AkCacheKey, AccessKey>()
+    let tsv1AuthClient: Authenticator
+
 
     init(config: Config, urlSession: URLSession, scheduler: @escaping Scheduler) {
         self.api     = Api(baseUrl: config.baseApiUrl)
@@ -35,7 +37,14 @@ public final class Client {
         let heimdallr     = Heimdallr(tokenURL: api.tokenUrl, credentials: credentials, accessTokenStore: tokenStore, httpClient: httpClient)
         let authPerformer = AuthedRequestPerformer(authenticator: heimdallr, session: urlSession)
         self.authedClient = APIClient(requestPerformer: authPerformer, scheduler: scheduler)
+
+        let tsv1AuthConfig = AuthenticatorConfig(publicSigningKey: config.publicSigKey,
+                                                 privateSigningKey: config.privateSigKey,
+                                                 apiUrl: config.baseApiUrl.absoluteString,
+                                                 clientId: config.clientId.uuidString.lowercased())
+        self.tsv1AuthClient = Authenticator(config: tsv1AuthConfig, urlSession: urlSession)
     }
+
 
     /// Initializer for the E3db client class.
     ///

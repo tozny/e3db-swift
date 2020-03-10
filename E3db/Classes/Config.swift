@@ -275,3 +275,103 @@ extension Config {
         return valet.set(object: config, forKey: userProfile)
     }
 }
+
+public class IdentityConfig: Codable {
+    internal init(realmName: String, appName: String, apiUrl: String = Api.defaultUrl, username: String, userId: Int? = nil, brokerTargetUrl: String, firstName: String? = nil, lastName: String? = nil, storageConfig: Config) {
+        self.realmName = realmName
+        self.appName = appName
+        self.apiUrl = apiUrl
+        self.username = username
+        self.storageConfig = storageConfig
+
+        self.firstName = firstName
+        self.lastName = lastName
+        self.userId = userId
+        self.brokerTargetUrl = brokerTargetUrl
+    }
+
+    convenience init(fromPassNote note: Note) throws {
+        let noteData = try JSONDecoder().decode(PasswordNoteData.self, from: JSONSerialization.data(withJSONObject: note.data))
+
+        let storageConfig = Config(clientName: noteData.config.username,
+                                   clientId: UUID.init(uuidString: noteData.storage.clientId)!,
+                                   apiKeyId: noteData.storage.apiKeyId,
+                                   apiSecret: noteData.storage.apiSecret,
+                                   publicKey: noteData.storage.publicKey,
+                                   privateKey: noteData.storage.privateKey,
+                                   baseApiUrl: URL(string: noteData.storage.apiUrl)!,
+                                   publicSigKey: noteData.storage.publicSigKey,
+                                   privateSigKey: noteData.storage.privateSigKey)
+
+        self.init(realmName:noteData.config.realmName,
+                  appName: noteData.config.appName,
+                  apiUrl: noteData.config.apiUrl,
+                  username: noteData.config.username,
+                  userId: noteData.config.userId,
+                  brokerTargetUrl: noteData.config.brokerTargetUrl,
+                  storageConfig: storageConfig)
+    }
+
+    // required to initialize and login to an identity client
+    let realmName: String
+    let appName: String
+    let apiUrl: String
+    let username: String
+    let brokerTargetUrl: String
+
+    // fully initialized config
+    let storageConfig: Config
+
+    // not required for identity functions
+    var userId: Int?
+    var firstName: String?
+    var lastName: String?
+}
+
+// AgentToken is the token that indicates a user is logged in with TozId
+public class AgentToken: Codable {
+    let accessToken: String
+    let tokenType: String
+    let expiry: Date
+
+    enum CodingKeys: String, CodingKey {
+        case accessToken = "access_token"
+        case tokenType = "token_type"
+        case expiry
+    }
+}
+
+// Token represents token returned to a partial identity
+public class Token: Codable {
+    let accessToken: String
+    let expiresIn: Int
+    let refreshExpiresIn: Int
+    let refreshToken: String
+    let tokenType: String
+    let notBeforePolicy: Int
+    let sessionState: String
+    let scope: String
+
+    enum CodingKeys: String, CodingKey {
+        case accessToken = "access_token"
+        case expiresIn = "expires_in"
+        case refreshExpiresIn = "refresh_expires_in"
+        case refreshToken = "refresh_token"
+        case tokenType = "token_type"
+        case notBeforePolicy = "not-before-policy" // TODO: Fixme from server response
+        case sessionState = "session_state"
+        case scope
+    }
+}
+
+// Allows for decoding the Date format returned by Tozny services
+extension DateFormatter {
+    static let iso8601Full: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+        formatter.calendar = Calendar(identifier: .iso8601)
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        return formatter
+    }()
+}
