@@ -9,10 +9,9 @@ import Sodium
 import Result
 
 public class PartialIdentity {
-    let storeClient: Client
-
+    public let storeClient: Client
     let api: Api
-    let idConfig: IdentityConfig
+    public let idConfig: IdentityConfig
 
     init(idConfig: IdentityConfig, urlSession: URLSession, scheduler: @escaping Scheduler) {
         self.api = Api(baseUrl: URL(string: idConfig.apiUrl)!)
