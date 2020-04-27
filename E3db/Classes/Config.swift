@@ -313,19 +313,19 @@ public class IdentityConfig: Codable {
     }
 
     // required to initialize and login to an identity client
-    let realmName: String
-    let appName: String
-    let apiUrl: String
-    let username: String
-    let brokerTargetUrl: String
+    public let realmName: String
+    public let appName: String
+    public let apiUrl: String
+    public let username: String
+    public let brokerTargetUrl: String
 
     // fully initialized config
-    let storageConfig: Config
+    public let storageConfig: Config
 
     // not required for identity functions
-    var userId: Int?
-    var firstName: String?
-    var lastName: String?
+    public var userId: Int?
+    public var firstName: String?
+    public var lastName: String?
 }
 
 // AgentToken is the token that indicates a user is logged in with TozId
