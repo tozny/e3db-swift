@@ -13,7 +13,7 @@ import Security
 typealias RawAccessKey       = SecretBox.Key
 typealias EncryptedAccessKey = String
 
-struct Crypto {
+public struct Crypto {
     typealias SecretBoxCipherNonce   = (authenticatedCipherText: Bytes, nonce: SecretBox.Nonce)
     typealias BoxCipherNonce         = (authenticatedCipherText: Bytes, nonce: Box.Nonce)
     fileprivate static let sodium    = Sodium()
@@ -159,6 +159,13 @@ extension Crypto {
         return plain
     }
 
+    public static func decryptAnonymous(ciphertext: Bytes, pubKey: Box.PublicKey, secretKey: Box.SecretKey) throws -> Bytes {
+        guard let plain = sodium.box.open(anonymousCipherText: ciphertext, recipientPublicKey: pubKey, recipientSecretKey: secretKey) else {
+            throw E3dbError.cryptoError("Failed to decrypt value")
+        }
+        return plain
+    }
+    
     static func decrypt(cipherData: CipherData, ak: RawAccessKey) throws -> RecordData {
         var decrypted = Cleartext()
 
@@ -172,6 +179,8 @@ extension Crypto {
         }
         return RecordData(cleartext: decrypted)
     }
+    
+    
 }
 
 // MARK: Document Crypto
@@ -181,8 +190,7 @@ extension Crypto {
     static func signature(doc: Signable, signingKey: Sign.SecretKey) -> String? {
         let message = Bytes(doc.serialized().utf8)
         let encodedMessage = try? Crypto.base64UrlDecoded(string: doc.serialized())
-
-        return sodium.sign.signature(message: encodedMessage!, secretKey: signingKey)?.base64UrlEncodedString()
+        return sodium.sign.signature(message: message, secretKey: signingKey)?.base64UrlEncodedString()
     }
 
     static func verify(doc: Signable, encodedSig: String, verifyingKey: Sign.PublicKey) -> Bool? {
