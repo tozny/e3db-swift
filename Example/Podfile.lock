@@ -1,12 +1,12 @@
 PODS:
-  - E3db (4.0.0):
-    - E3db/Core (= 4.0.0)
-  - E3db/Core (4.0.0):
-    - Sodium (~> 0.7)
+  - E3db (4.0.1):
+    - E3db/Core (= 4.0.1)
+  - E3db/Core (4.0.1):
+    - Sodium (= 0.8.0)
     - ToznyHeimdallr (~> 4.0)
     - ToznySwish (~> 5.0.0)
     - Valet (~> 3.1)
-  - ResponseDetective (1.3.0)
+  - ResponseDetective (1.4.0)
   - Result (4.1.0)
   - Sodium (0.8.0)
   - SwiftCheck (0.12.0)
@@ -16,7 +16,7 @@ PODS:
     - Result (~> 4.1.0)
   - ToznySwish (5.0.0):
     - Result (~> 4.1)
-  - Valet (3.2.6)
+  - Valet (3.2.8)
 
 DEPENDENCIES:
   - E3db (from `../`)
@@ -24,7 +24,7 @@ DEPENDENCIES:
   - SwiftCheck (~> 0.12)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
     - ResponseDetective
     - Result
     - Sodium
@@ -38,15 +38,15 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  E3db: 2dd06b33bca9cf4c466a8f4ba3fa219416a499da
-  ResponseDetective: 8422c5139cf6ff7d7db38b2bfea418b748b440cc
+  E3db: 95157ed5467391c69703759f9b28ae2f0104da4f
+  ResponseDetective: bfa12c55416a9167e84a1419108fab87c68c1e33
   Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
   Sodium: 63c0ca312a932e6da481689537d4b35568841bdc
   SwiftCheck: d1dd04d955cc76620b0f84e087536bd059a11c24
   ToznyHeimdallr: 69a0cff11b77ca36b304dede9009264473315695
   ToznySwish: 22cb7f57696adbb98cb9078b278b756215169dc0
-  Valet: dcc4ff74f0d010be665239ab89c7a4a5cd39ee33
+  Valet: 16d0537d70db79d9ba953b9060b5da4fb8004e51
 
 PODFILE CHECKSUM: 957b019295ab47ff29bd50b027b2a1a8b61fb011
 
-COCOAPODS: 1.7.5
+COCOAPODS: 1.10.0
