@@ -161,7 +161,7 @@ extension Client {
     }
 
     private func write(_ type: String, data: RecordData, plain: PlainMeta?, ak: RawAccessKey, completion: @escaping E3dbCompletion<Record>) {
-
+        print("Using new commit version!")
         let cipher: CipherData
         switch encrypt(data, ak: ak) {
         case .success(let thisCipher):

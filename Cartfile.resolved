@@ -1,5 +1,5 @@
-github "Square/Valet" "3.2.6"
+github "Square/Valet" "3.2.8"
 github "antitypical/Result" "4.1.0"
-github "jedisct1/swift-sodium" "0.8.0"
+github "jedisct1/swift-sodium" "0.9.1"
 github "tozny/Heimdallr.swift" "4.0.1"
 github "tozny/Swish" "v5.0.0"

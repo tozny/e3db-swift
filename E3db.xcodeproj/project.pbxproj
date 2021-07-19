@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -19,11 +19,11 @@
 		2C5AE684208E55D0008F52C5 /* Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5AE679208E55D0008F52C5 /* Register.swift */; };
 		2C5AE685208E55D0008F52C5 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5AE67A208E55D0008F52C5 /* Extensions.swift */; };
 		2C5AE686208E55D0008F52C5 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5AE67B208E55D0008F52C5 /* Client.swift */; };
-		2CEA3AF0208E6B7600AC46EE /* Heimdallr.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE68D208E55F7008F52C5 /* Heimdallr.framework */; settings = {ATTRIBUTES = (Required, ); }; };
-		2CEA3AF5208E6B7600AC46EE /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE690208E55F7008F52C5 /* Result.framework */; };
-		2CEA3AF6208E6B7600AC46EE /* Sodium.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE68A208E55F7008F52C5 /* Sodium.framework */; };
-		2CEA3AF7208E6B7600AC46EE /* Swish.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE689208E55F7008F52C5 /* Swish.framework */; };
-		2CEA3AF8208E6B7600AC46EE /* Valet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE68C208E55F7008F52C5 /* Valet.framework */; };
+		3023557626A6192300C0FCE0 /* Heimdallr.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3023557526A6192300C0FCE0 /* Heimdallr.xcframework */; };
+		3023557B26A6192A00C0FCE0 /* Swish.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3023557726A6192A00C0FCE0 /* Swish.xcframework */; };
+		3023557C26A6192A00C0FCE0 /* Sodium.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3023557826A6192A00C0FCE0 /* Sodium.xcframework */; };
+		3023557D26A6192A00C0FCE0 /* Result.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3023557926A6192A00C0FCE0 /* Result.xcframework */; };
+		3023557E26A6192B00C0FCE0 /* Valet.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3023557A26A6192A00C0FCE0 /* Valet.xcframework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,15 +41,11 @@
 		2C5AE679208E55D0008F52C5 /* Register.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Register.swift; path = Classes/Register.swift; sourceTree = "<group>"; };
 		2C5AE67A208E55D0008F52C5 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Extensions.swift; path = Classes/Extensions.swift; sourceTree = "<group>"; };
 		2C5AE67B208E55D0008F52C5 /* Client.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Client.swift; path = Classes/Client.swift; sourceTree = "<group>"; };
-		2C5AE688208E55F7008F52C5 /* ReactiveObjCBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveObjCBridge.framework; path = Carthage/Build/iOS/ReactiveObjCBridge.framework; sourceTree = "<group>"; };
-		2C5AE689208E55F7008F52C5 /* Swish.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Swish.framework; path = Carthage/Build/iOS/Swish.framework; sourceTree = "<group>"; };
-		2C5AE68A208E55F7008F52C5 /* Sodium.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sodium.framework; path = Carthage/Build/iOS/Sodium.framework; sourceTree = "<group>"; };
-		2C5AE68B208E55F7008F52C5 /* ReactiveHeimdallr.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveHeimdallr.framework; path = Carthage/Build/iOS/ReactiveHeimdallr.framework; sourceTree = "<group>"; };
-		2C5AE68C208E55F7008F52C5 /* Valet.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Valet.framework; path = Carthage/Build/iOS/Valet.framework; sourceTree = "<group>"; };
-		2C5AE68D208E55F7008F52C5 /* Heimdallr.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Heimdallr.framework; path = Carthage/Build/iOS/Heimdallr.framework; sourceTree = "<group>"; };
-		2C5AE68E208E55F7008F52C5 /* ReactiveObjC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveObjC.framework; path = Carthage/Build/iOS/ReactiveObjC.framework; sourceTree = "<group>"; };
-		2C5AE68F208E55F7008F52C5 /* ReactiveSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveSwift.framework; path = Carthage/Build/iOS/ReactiveSwift.framework; sourceTree = "<group>"; };
-		2C5AE690208E55F7008F52C5 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
+		3023557526A6192300C0FCE0 /* Heimdallr.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Heimdallr.xcframework; path = Carthage/Build/Heimdallr.xcframework; sourceTree = "<group>"; };
+		3023557726A6192A00C0FCE0 /* Swish.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Swish.xcframework; path = Carthage/Build/Swish.xcframework; sourceTree = "<group>"; };
+		3023557826A6192A00C0FCE0 /* Sodium.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Sodium.xcframework; path = Carthage/Build/Sodium.xcframework; sourceTree = "<group>"; };
+		3023557926A6192A00C0FCE0 /* Result.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Result.xcframework; path = Carthage/Build/Result.xcframework; sourceTree = "<group>"; };
+		3023557A26A6192A00C0FCE0 /* Valet.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Valet.xcframework; path = Carthage/Build/Valet.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,11 +53,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2CEA3AF0208E6B7600AC46EE /* Heimdallr.framework in Frameworks */,
-				2CEA3AF5208E6B7600AC46EE /* Result.framework in Frameworks */,
-				2CEA3AF6208E6B7600AC46EE /* Sodium.framework in Frameworks */,
-				2CEA3AF7208E6B7600AC46EE /* Swish.framework in Frameworks */,
-				2CEA3AF8208E6B7600AC46EE /* Valet.framework in Frameworks */,
+				3023557626A6192300C0FCE0 /* Heimdallr.xcframework in Frameworks */,
+				3023557B26A6192A00C0FCE0 /* Swish.xcframework in Frameworks */,
+				3023557C26A6192A00C0FCE0 /* Sodium.xcframework in Frameworks */,
+				3023557D26A6192A00C0FCE0 /* Result.xcframework in Frameworks */,
+				3023557E26A6192B00C0FCE0 /* Valet.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,15 +104,11 @@
 		2C5AE687208E55F6008F52C5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2C5AE68D208E55F7008F52C5 /* Heimdallr.framework */,
-				2C5AE68B208E55F7008F52C5 /* ReactiveHeimdallr.framework */,
-				2C5AE68E208E55F7008F52C5 /* ReactiveObjC.framework */,
-				2C5AE688208E55F7008F52C5 /* ReactiveObjCBridge.framework */,
-				2C5AE68F208E55F7008F52C5 /* ReactiveSwift.framework */,
-				2C5AE690208E55F7008F52C5 /* Result.framework */,
-				2C5AE68A208E55F7008F52C5 /* Sodium.framework */,
-				2C5AE689208E55F7008F52C5 /* Swish.framework */,
-				2C5AE68C208E55F7008F52C5 /* Valet.framework */,
+				3023557926A6192A00C0FCE0 /* Result.xcframework */,
+				3023557826A6192A00C0FCE0 /* Sodium.xcframework */,
+				3023557726A6192A00C0FCE0 /* Swish.xcframework */,
+				3023557A26A6192A00C0FCE0 /* Valet.xcframework */,
+				3023557526A6192300C0FCE0 /* Heimdallr.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
