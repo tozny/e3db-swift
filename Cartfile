@@ -1,4 +1,4 @@
-github "tozny/Heimdallr.swift"   ~> 4.0
+github "trivago/Heimdallr.swift"   ~> 3.6.1
 github "jedisct1/swift-sodium"   ~> 0.9.1
-github "tozny/Swish"             ~> 5.0
+github "thoughtbot/Swish"        ~> 4.0.0
 github "Square/Valet"            ~> 3.1

@@ -198,6 +198,7 @@ extension Client {
     ///   - plain: A user-defined, key-value store associated with the record that remains as plaintext
     ///   - completion: A handler to call when this operation completes to provide the record result
     public func write(type: String, data: RecordData, plain: PlainMeta? = nil, completion: @escaping E3dbCompletion<Record>) {
+        print("Using new version")
         let clientId = config.clientId
         getAccessKey(writerId: clientId, userId: clientId, readerId: clientId, recordType: type) { result in
             switch result {
