@@ -7,7 +7,7 @@ import UIKit
 import E3db
 
 // Create an account and generate
-// a client token from https://console.tozny.com
+// a client token from https://dashboard.tozny.com
 private let e3dbToken = ""
 
 class ViewController: UIViewController {
