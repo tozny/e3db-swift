@@ -188,9 +188,8 @@ extension Crypto {
 extension Crypto {
 
     static func signature(doc: Signable, signingKey: Sign.SecretKey) -> String? {
-        let message = Bytes(doc.serialized().utf8)
-        let encodedMessage = try? Crypto.base64UrlDecoded(string: doc.serialized())
-        return sodium.sign.signature(message: message, secretKey: signingKey)?.base64UrlEncodedString()
+        let message = try? Crypto.base64UrlDecoded(string: doc.serialized())
+        return sodium.sign.signature(message: message!, secretKey: signingKey)?.base64UrlEncodedString()
     }
 
     static func verify(doc: Signable, encodedSig: String, verifyingKey: Sign.PublicKey) -> Bool? {
