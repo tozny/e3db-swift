@@ -165,7 +165,9 @@ extension TestUtils where Self: XCTestCase {
 
     static func verboseUrlSession() -> URLSession {
         let verboseConfig = URLSession.shared.configuration
-        ResponseDetective.enable(inConfiguration: verboseConfig)
+        // Disabled for the time being as ResponseDetective (for the current versions of Xcode - 12)
+        // attempts to access the response after it has been cleanup resulting in all the tests to fail with `EXC_BAD_ACCESS`
+        // ResponseDetective.enable(inConfiguration: verboseConfig)
         return URLSession(configuration: verboseConfig)
     }
 
