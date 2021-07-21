@@ -3,10 +3,15 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		05329BD826A8AAEE00E8B081 /* Sodium.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05329BD326A8AAEE00E8B081 /* Sodium.xcframework */; };
+		05329BD926A8AAEE00E8B081 /* Heimdallr.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05329BD426A8AAEE00E8B081 /* Heimdallr.xcframework */; };
+		05329BDB26A8AAEE00E8B081 /* Valet.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05329BD626A8AAEE00E8B081 /* Valet.xcframework */; };
+		05329BDC26A8AAEE00E8B081 /* Result.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05329BD726A8AAEE00E8B081 /* Result.xcframework */; };
+		05329BDE26A8AF7F00E8B081 /* Swish.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05329BDD26A8AF7F00E8B081 /* Swish.xcframework */; };
 		2C5AE62A208E52A9008F52C5 /* E3db.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C5AE628208E52A9008F52C5 /* E3db.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2C5AE67C208E55D0008F52C5 /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5AE671208E55D0008F52C5 /* Crypto.swift */; };
 		2C5AE67D208E55D0008F52C5 /* Share.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5AE672208E55D0008F52C5 /* Share.swift */; };
@@ -19,14 +24,14 @@
 		2C5AE684208E55D0008F52C5 /* Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5AE679208E55D0008F52C5 /* Register.swift */; };
 		2C5AE685208E55D0008F52C5 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5AE67A208E55D0008F52C5 /* Extensions.swift */; };
 		2C5AE686208E55D0008F52C5 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5AE67B208E55D0008F52C5 /* Client.swift */; };
-		2CEA3AF0208E6B7600AC46EE /* Heimdallr.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE68D208E55F7008F52C5 /* Heimdallr.framework */; settings = {ATTRIBUTES = (Required, ); }; };
-		2CEA3AF5208E6B7600AC46EE /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE690208E55F7008F52C5 /* Result.framework */; };
-		2CEA3AF6208E6B7600AC46EE /* Sodium.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE68A208E55F7008F52C5 /* Sodium.framework */; };
-		2CEA3AF7208E6B7600AC46EE /* Swish.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE689208E55F7008F52C5 /* Swish.framework */; };
-		2CEA3AF8208E6B7600AC46EE /* Valet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE68C208E55F7008F52C5 /* Valet.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		05329BD326A8AAEE00E8B081 /* Sodium.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Sodium.xcframework; path = Carthage/Build/Sodium.xcframework; sourceTree = "<group>"; };
+		05329BD426A8AAEE00E8B081 /* Heimdallr.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Heimdallr.xcframework; path = Carthage/Build/Heimdallr.xcframework; sourceTree = "<group>"; };
+		05329BD626A8AAEE00E8B081 /* Valet.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Valet.xcframework; path = Carthage/Build/Valet.xcframework; sourceTree = "<group>"; };
+		05329BD726A8AAEE00E8B081 /* Result.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Result.xcframework; path = Carthage/Build/Result.xcframework; sourceTree = "<group>"; };
+		05329BDD26A8AF7F00E8B081 /* Swish.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Swish.xcframework; path = Carthage/Build/Swish.xcframework; sourceTree = "<group>"; };
 		2C5AE625208E52A9008F52C5 /* E3db.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = E3db.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C5AE628208E52A9008F52C5 /* E3db.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = E3db.h; sourceTree = "<group>"; };
 		2C5AE629208E52A9008F52C5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -41,15 +46,6 @@
 		2C5AE679208E55D0008F52C5 /* Register.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Register.swift; path = Classes/Register.swift; sourceTree = "<group>"; };
 		2C5AE67A208E55D0008F52C5 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Extensions.swift; path = Classes/Extensions.swift; sourceTree = "<group>"; };
 		2C5AE67B208E55D0008F52C5 /* Client.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Client.swift; path = Classes/Client.swift; sourceTree = "<group>"; };
-		2C5AE688208E55F7008F52C5 /* ReactiveObjCBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveObjCBridge.framework; path = Carthage/Build/iOS/ReactiveObjCBridge.framework; sourceTree = "<group>"; };
-		2C5AE689208E55F7008F52C5 /* Swish.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Swish.framework; path = Carthage/Build/iOS/Swish.framework; sourceTree = "<group>"; };
-		2C5AE68A208E55F7008F52C5 /* Sodium.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sodium.framework; path = Carthage/Build/iOS/Sodium.framework; sourceTree = "<group>"; };
-		2C5AE68B208E55F7008F52C5 /* ReactiveHeimdallr.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveHeimdallr.framework; path = Carthage/Build/iOS/ReactiveHeimdallr.framework; sourceTree = "<group>"; };
-		2C5AE68C208E55F7008F52C5 /* Valet.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Valet.framework; path = Carthage/Build/iOS/Valet.framework; sourceTree = "<group>"; };
-		2C5AE68D208E55F7008F52C5 /* Heimdallr.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Heimdallr.framework; path = Carthage/Build/iOS/Heimdallr.framework; sourceTree = "<group>"; };
-		2C5AE68E208E55F7008F52C5 /* ReactiveObjC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveObjC.framework; path = Carthage/Build/iOS/ReactiveObjC.framework; sourceTree = "<group>"; };
-		2C5AE68F208E55F7008F52C5 /* ReactiveSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveSwift.framework; path = Carthage/Build/iOS/ReactiveSwift.framework; sourceTree = "<group>"; };
-		2C5AE690208E55F7008F52C5 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,11 +53,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2CEA3AF0208E6B7600AC46EE /* Heimdallr.framework in Frameworks */,
-				2CEA3AF5208E6B7600AC46EE /* Result.framework in Frameworks */,
-				2CEA3AF6208E6B7600AC46EE /* Sodium.framework in Frameworks */,
-				2CEA3AF7208E6B7600AC46EE /* Swish.framework in Frameworks */,
-				2CEA3AF8208E6B7600AC46EE /* Valet.framework in Frameworks */,
+				05329BDB26A8AAEE00E8B081 /* Valet.xcframework in Frameworks */,
+				05329BDC26A8AAEE00E8B081 /* Result.xcframework in Frameworks */,
+				05329BD926A8AAEE00E8B081 /* Heimdallr.xcframework in Frameworks */,
+				05329BD826A8AAEE00E8B081 /* Sodium.xcframework in Frameworks */,
+				05329BDE26A8AF7F00E8B081 /* Swish.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,15 +104,11 @@
 		2C5AE687208E55F6008F52C5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2C5AE68D208E55F7008F52C5 /* Heimdallr.framework */,
-				2C5AE68B208E55F7008F52C5 /* ReactiveHeimdallr.framework */,
-				2C5AE68E208E55F7008F52C5 /* ReactiveObjC.framework */,
-				2C5AE688208E55F7008F52C5 /* ReactiveObjCBridge.framework */,
-				2C5AE68F208E55F7008F52C5 /* ReactiveSwift.framework */,
-				2C5AE690208E55F7008F52C5 /* Result.framework */,
-				2C5AE68A208E55F7008F52C5 /* Sodium.framework */,
-				2C5AE689208E55F7008F52C5 /* Swish.framework */,
-				2C5AE68C208E55F7008F52C5 /* Valet.framework */,
+				05329BD426A8AAEE00E8B081 /* Heimdallr.xcframework */,
+				05329BD726A8AAEE00E8B081 /* Result.xcframework */,
+				05329BD326A8AAEE00E8B081 /* Sodium.xcframework */,
+				05329BD626A8AAEE00E8B081 /* Valet.xcframework */,
+				05329BDD26A8AF7F00E8B081 /* Swish.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -159,7 +151,7 @@
 		2C5AE61C208E52A9008F52C5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1250;
 				ORGANIZATIONNAME = Tozny;
 				TargetAttributes = {
 					2C5AE624208E52A9008F52C5 = {
@@ -243,6 +235,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -269,7 +262,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -306,6 +299,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -326,7 +320,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -354,7 +348,7 @@
 				);
 				INFOPLIST_FILE = E3db/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -386,7 +380,7 @@
 				);
 				INFOPLIST_FILE = E3db/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
