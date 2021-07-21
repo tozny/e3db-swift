@@ -48,7 +48,7 @@ public class Authenticator {
         let timeStamp = Int(NSDate().timeIntervalSince1970)
         let authMethod = TSV1_SUPPORTED_ALGORITHMS[0]
         let nonce = UUID().uuidString.lowercased()
-        let userId = self.config.clientId ?? ""
+        let userId = self.config.clientId?.uppercased() ?? ""
         
         let headerString = String(format: "%@; %@; %d; %@; uid:%@", authMethod, self.config.publicSigningKey, timeStamp, nonce, userId)
         let stringToSign = String(format: "%@; %@; %@; %@", path, queryString!, method, headerString)
