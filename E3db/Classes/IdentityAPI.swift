@@ -30,10 +30,12 @@ public struct IdentityLoginSession: Codable {
     let responseType: String
     let scope: String
     let redirectUri: String
+    let responseMode: String
     let state: String
     let username: String
     let target: String
-    let authSessionId: String
+    let authSessionId: String?
+    let federated: Bool
 
     enum CodingKeys: String, CodingKey {
         case nonce
@@ -41,10 +43,12 @@ public struct IdentityLoginSession: Codable {
         case responseType = "response_type"
         case scope
         case redirectUri = "redirect_uri"
+        case responseMode = "response_mode"
         case state
         case username
         case target
         case authSessionId = "auth_session_id"
+        case federated
     }
 }
 

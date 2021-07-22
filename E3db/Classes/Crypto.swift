@@ -501,6 +501,14 @@ extension Crypto {
         return try Crypto.base64UrlEncoded(bytes: hash!)
     }
 
+    static func sha256(data: Data) -> String {
+        var digest = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
+        CC_SHA256(Array(data), UInt32(data.count), &digest)
+        // convert the sha256 to a url encoded string
+        let hashString = try? Crypto.base64UrlEncoded(bytes: digest)
+        return hashString!
+    }
+
     static func deriveNoteCreds(realmName: String, username: String, password: String, type: String = "password") throws -> NoteCredentials {
         var username = username.lowercased()
         var nameSeed = String(format: "%@@realm:%@", username, realmName)
