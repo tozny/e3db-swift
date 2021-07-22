@@ -8,9 +8,8 @@ import let ToznySwish.immediateScheduler
 // non-sensitive test data
 // for running integration tests
 struct TestData {
-    static let apiUrl = ""
-    static let token  = ""
-
+    static let apiUrl = "https://b6f631c1ae84.ngrok.io"
+    static let token  = "54b2ec85d8b81108b530753181573858cdda1d9eb82fe6cabb5ad8770a40b3d1"
     // Let's Encrypt: https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt
     // Intermediate certificate, converted to DER and encoded to base64
     static let validCert = """

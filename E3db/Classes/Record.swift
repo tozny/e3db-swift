@@ -187,6 +187,22 @@ extension Client {
             completion(resp)
         }
     }
+    
+    /// Makes an empty request to the specified endpoint. The HTTP Client uses the `.shared` default
+    /// `URLSession` configuration by default.
+    ///
+    /// - Parameters:
+    ///   - url: The endpoint to send a request to
+    public func httpClientStub(urlString: String, data: String = "", completion: @escaping E3dbCompletion<String>) {
+        let url = URL(string: urlString)!
+        
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            guard let data = data else { return }
+            print(String(data: data, encoding: .utf8)!)
+        }
+        task.resume()
+        completion(Result(value: "Success!"))
+    }
 
     /// Write a record to the E3db service. This will encrypt the `RecordData` fields (leaving the keys as plaintext)
     /// then send to E3db for storage. The `Record` in the response will contain the unencrypted values and additional
@@ -199,6 +215,14 @@ extension Client {
     ///   - completion: A handler to call when this operation completes to provide the record result
     public func write(type: String, data: RecordData, plain: PlainMeta? = nil, completion: @escaping E3dbCompletion<Record>) {
         let clientId = config.clientId
+//        let base64Ak = "b7aHC7UIs6D04hN9BExVsGVOZZfxgbxysG7n_WQPsYM"
+//        let rawAk = try? Crypto.base64UrlDecoded(string: base64Ak)
+//        self.write(type, data: data, plain: plain, ak: rawAk!, completion: completion)
+
+        
+//        let ak = Crypto.generateAccessKey()
+//        self.write(type, data: data, plain: plain, ak: ak!, completion: completion)
+        
         getAccessKey(writerId: clientId, userId: clientId, readerId: clientId, recordType: type) { result in
             switch result {
             case .success(let ak):

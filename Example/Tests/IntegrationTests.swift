@@ -141,11 +141,69 @@ class IntegrationTests: XCTestCase, TestUtils {
 //            }
 //        }
 //    }
+    
+//var creds = ClientCredentials(apiKey: "4ad16b108b216cadd1fbcfcafdd083094baa3c9fea62e602858d69a55768dcfb",
+//                              apiSecret: "ca35aa13978f697998acbfc5337f1efa3f520141320a4df087ddee759883115b",
+//                              clientId: "9a1b707c-6f9d-428f-8bbb-672ad5e0ec10",
+//                              publicKey: "O4ZbyyYKpntFrkVlt0d-RwjoriCEHDjbz-HfBKTMkGc",
+//                              privateKey: "G6IA8XFF6x7nyNyWeGCKr26gNdn-ilR2wGXtENKFpXs",
+//                              publicSignKey: "-lSD4QiNUQEBW7_e1Ovp8H7Q5zzI0pqz37OwDBz_7cY",
+//                              privateSigningKey: "TNSP7ArORR54jJe6O2ZEZKUNV9WR1nSdcnieT--3MID6VIPhCI1RAQFbv97U6-nwftDnPMjSmrPfs7AMHP_txg",
+//                              host: "https://b6f631c1ae84.ngrok.io",
+//                              email: "",
+//                              clientName: "clientWithConfig()3CD1C236-A8E7-4731-A05C-9310CBA3204A");
+
+    func testGetAccessKey() {
+        let conf = Config(clientName: "clientWithConfig()3CD1C236-A8E7-4731-A05C-9310CBA3204A", clientId: UUID(uuidString: "9a1b707c-6f9d-428f-8bbb-672ad5e0ec10")!, apiKeyId: "4ad16b108b216cadd1fbcfcafdd083094baa3c9fea62e602858d69a55768dcfb", apiSecret: "ca35aa13978f697998acbfc5337f1efa3f520141320a4df087ddee759883115b", publicKey: "O4ZbyyYKpntFrkVlt0d-RwjoriCEHDjbz-HfBKTMkGc", privateKey: "G6IA8XFF6x7nyNyWeGCKr26gNdn-ilR2wGXtENKFpXs", baseApiUrl: URL(string: "https://b6f631c1ae84.ngrok.io")!, publicSigKey: "-lSD4QiNUQEBW7_e1Ovp8H7Q5zzI0pqz37OwDBz_7cY", privateSigKey: "TNSP7ArORR54jJe6O2ZEZKUNV9WR1nSdcnieT--3MID6VIPhCI1RAQFbv97U6-nwftDnPMjSmrPfs7AMHP_txg")
+        let e3db = Client(config: conf, urlSession: .shared)
+        let clientId = conf.clientId
+        
+        let data = RecordData(cleartext: ["test": "message"])
+
+        asyncTest(#function + "write") { (expect) in
+            e3db.write(type: "testType1", data: data) { (result) in
+                XCTAssertNotNil(result.value)
+                
+                /// Get access key after write
+                e3db.getAccessKey(writerId: clientId, userId: clientId, readerId: clientId, recordType: "testType1") { (akResult) in
+                    XCTAssertNotNil(akResult.value)
+                    /// String(...) fails "Unexpectedly found nil while unwrapping an Optional value"
+//                    let string = String(bytes: akResult.value!.rawAk, encoding: .utf8)!
+                    let encoded = try? Crypto.base64UrlEncoded(bytes: akResult.value!.rawAk)
+                    print(encoded!)
+                }
+                expect.fulfill()
+            }
+        }
+    }
 
     func testWriteReadRecord() {
         let e3db = client()
         let data = RecordData(cleartext: ["test": "message"])
         var record: Record?
+        
+        /// E3db Client
+//        var client: Client?
+//        var conf: Config?
+//        let newClient = #function + UUID().uuidString
+//        Client.register(token: TestData.token, clientName: newClient, apiUrl: TestData.apiUrl) { (result) in
+//            conf = result.value
+//            client = Client(config: conf!)
+//        }
+//        
+//        /// HTTP Client
+//        let parameters: [String: String] = ["grant_type": "client_credentials"]
+//        let url = URL(string: "http://b6f631c1ae84.ngrok.io/v1/auth/token")!
+//        var request = URLRequest(url: url)
+//        request.httpMethod = "POST"
+//        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+//        request.setHTTPBody(parameters: parameters as [String: AnyObject])
+//
+//        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+//            guard let data = data else { return }
+//            print(String(data: data, encoding: .utf8)!)
+//        }
+//        task.resume()
 
         // write record
         asyncTest(#function + "write") { (expect) in

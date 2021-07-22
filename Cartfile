@@ -1,4 +1,4 @@
-github "jedisct1/swift-sodium" ~> 0.8
+github "jedisct1/swift-sodium" ~> 0.9.1
 github "Square/Valet"            ~> 3.1
 github "tozny/Swish" ~> 5.0
 github "tozny/Heimdallr.swift" ~> 4.0

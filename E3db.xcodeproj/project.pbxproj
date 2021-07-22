@@ -3,15 +3,10 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		05329BD826A8AAEE00E8B081 /* Sodium.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05329BD326A8AAEE00E8B081 /* Sodium.xcframework */; };
-		05329BD926A8AAEE00E8B081 /* Heimdallr.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05329BD426A8AAEE00E8B081 /* Heimdallr.xcframework */; };
-		05329BDB26A8AAEE00E8B081 /* Valet.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05329BD626A8AAEE00E8B081 /* Valet.xcframework */; };
-		05329BDC26A8AAEE00E8B081 /* Result.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05329BD726A8AAEE00E8B081 /* Result.xcframework */; };
-		05329BDE26A8AF7F00E8B081 /* Swish.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05329BDD26A8AF7F00E8B081 /* Swish.xcframework */; };
 		2C5AE62A208E52A9008F52C5 /* E3db.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C5AE628208E52A9008F52C5 /* E3db.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2C5AE67C208E55D0008F52C5 /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5AE671208E55D0008F52C5 /* Crypto.swift */; };
 		2C5AE67D208E55D0008F52C5 /* Share.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5AE672208E55D0008F52C5 /* Share.swift */; };
@@ -27,11 +22,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		05329BD326A8AAEE00E8B081 /* Sodium.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Sodium.xcframework; path = Carthage/Build/Sodium.xcframework; sourceTree = "<group>"; };
-		05329BD426A8AAEE00E8B081 /* Heimdallr.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Heimdallr.xcframework; path = Carthage/Build/Heimdallr.xcframework; sourceTree = "<group>"; };
-		05329BD626A8AAEE00E8B081 /* Valet.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Valet.xcframework; path = Carthage/Build/Valet.xcframework; sourceTree = "<group>"; };
-		05329BD726A8AAEE00E8B081 /* Result.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Result.xcframework; path = Carthage/Build/Result.xcframework; sourceTree = "<group>"; };
-		05329BDD26A8AF7F00E8B081 /* Swish.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Swish.xcframework; path = Carthage/Build/Swish.xcframework; sourceTree = "<group>"; };
 		2C5AE625208E52A9008F52C5 /* E3db.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = E3db.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C5AE628208E52A9008F52C5 /* E3db.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = E3db.h; sourceTree = "<group>"; };
 		2C5AE629208E52A9008F52C5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -53,11 +43,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				05329BDB26A8AAEE00E8B081 /* Valet.xcframework in Frameworks */,
-				05329BDC26A8AAEE00E8B081 /* Result.xcframework in Frameworks */,
-				05329BD926A8AAEE00E8B081 /* Heimdallr.xcframework in Frameworks */,
-				05329BD826A8AAEE00E8B081 /* Sodium.xcframework in Frameworks */,
-				05329BDE26A8AF7F00E8B081 /* Swish.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -104,11 +89,6 @@
 		2C5AE687208E55F6008F52C5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				05329BD426A8AAEE00E8B081 /* Heimdallr.xcframework */,
-				05329BD726A8AAEE00E8B081 /* Result.xcframework */,
-				05329BD326A8AAEE00E8B081 /* Sodium.xcframework */,
-				05329BD626A8AAEE00E8B081 /* Valet.xcframework */,
-				05329BDD26A8AF7F00E8B081 /* Swish.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

@@ -120,7 +120,7 @@ extension Client {
                 let ak = Crypto.generateAccessKey() else {
                     return completion(Result(error: .cryptoError("Could not create access key")))
             }
-
+//            let ak = Crypto.generateAccessKey()
             // encrypts and stores AK on server and local cache before returning it to caller
             self.putAccessKey(ak: ak, cacheKey: cacheKey, writerId: writerId, userId: userId, readerId: readerId, recordType: recordType, completion: completion)
         }
