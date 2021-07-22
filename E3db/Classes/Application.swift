@@ -32,100 +32,91 @@ public class Application {
 
             var initiateLoginRequest = URLRequest(url: URL(string: self.apiUrl + "/v1/identity/login")!)
             initiateLoginRequest.httpMethod = "POST"
-            guard let body = try? JSONSerialization.data(withJSONObject: ["username": username, "realm_name": self.realmName, "app_name": self.appName, "login_style": "api"]) else {
+            let pkceVerifier = try? Crypto.randomBytes(length: 32)
+            let pkceChallenge = Crypto.sha256(data: pkceVerifier!.data(using: .utf8)!)
+            guard let body = try? JSONSerialization.data(withJSONObject: ["username": username, "realm_name": self.realmName, "app_name": self.appName, "code_challenge": pkceChallenge,"login_style": "api"]) else {
                 return completionHandler(.failure(E3dbError.encodingError("initial login request failed to encode")))
             }
             initiateLoginRequest.httpBody = body
             anonAuth.handledTsv1Request(request: initiateLoginRequest, errorHandler: completionHandler) {
-                (loginSession: [String: String]) -> Void in
-                guard let encodedString = try? encodeBodyAsUrl(loginSession),
-                      let encodedBody = encodedString.data(using: .utf8) else {
-                    return completionHandler(.failure(E3dbError.apiError(code: 500, message: "Response from server was not encodable")))
-                }
-                var sessionRequest = URLRequest(url: URL(string: self.apiUrl + "/auth/realms/" + self.realmName + "/protocol/openid-connect/auth")!)
-                sessionRequest.httpMethod = "POST"
-                sessionRequest.addValue("application/json", forHTTPHeaderField: "Accepts")
-                sessionRequest.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-                sessionRequest.httpBody = encodedBody
-                anonAuth.handledTsv1Request(request: sessionRequest, errorHandler: completionHandler) {
-                    (loginAction: IdentityLoginAction) -> Void in
-                    let semaphore = DispatchSemaphore(value: 0)
-                    let actionQueue = DispatchQueue.global()
-                    actionQueue.async() {
-                        var loginAction = loginAction
-                        while loginAction.loginAction {
-                            if loginAction.type == "fetch" {
-                                break
-                            }
-                            var data: [String: String]? = nil
-                            actionQueue.async() {
-                                data = actionHandler(loginAction)
-                                semaphore.signal()
-                            }
-                            semaphore.wait()
+                (loginAction: IdentityLoginAction) -> Void in
+                let semaphore = DispatchSemaphore(value: 0)
+                let actionQueue = DispatchQueue.global()
+                actionQueue.async() {
+                    var loginAction = loginAction
+                    while loginAction.loginAction {
+                        if loginAction.type == "fetch" {
+                            break
+                        }
+                        var data: [String: String]? = nil
+                        actionQueue.async() {
+                            data = actionHandler(loginAction)
+                            semaphore.signal()
+                        }
+                        semaphore.wait()
 
-                            var body: Data?
-                            if loginAction.contentType == "application/x-www-form-urlencoded" {
-                                body = try? encodeBodyAsUrl(data!).data(using: .utf8)
-                            } else {
-                                body = try? JSONSerialization.data(withJSONObject: data)
-                            }
-                            guard let bodyData = body else {
-                                return completionHandler(.failure(E3dbError.encodingError("data returned from actionHandler failed to encode")))
-                            }
-                            var loginActionRequest = URLRequest(url: URL(string: loginAction.actionUrl)!)
-                            loginActionRequest.httpMethod = "POST"
-                            loginActionRequest.httpBody = bodyData
-                            loginActionRequest.addValue(loginAction.contentType, forHTTPHeaderField: "Content-Type")
-                            anonAuth.handledTsv1Request(request: loginActionRequest, errorHandler: completionHandler) {
-                                (newLoginAction: IdentityLoginAction) -> Void in
-                                loginAction = newLoginAction
-                                semaphore.signal()
-                            }
-                            semaphore.wait(timeout: .now() + 10)
+                        var body: Data?
+                        if loginAction.contentType == "application/x-www-form-urlencoded" {
+                            body = try? encodeBodyAsUrl(data!).data(using: .utf8)
+                        } else {
+                            body = try? JSONSerialization.data(withJSONObject: data)
                         }
-                        // Final request
-                        var finalRequest = URLRequest(url: URL(string: self.apiUrl + "/v1/identity/tozid/redirect")!)
-                        finalRequest.httpMethod = "POST"
-                        guard let finalRequestBody = try? JSONSerialization.data(withJSONObject: [
-                            "realm_name": self.realmName,
-                            "session_code": loginAction.context["session_code"],
-                            "execution": loginAction.context["execution"],
-                            "tab_id": loginAction.context["tab_id"],
-                            "client_id": loginAction.context["client_id"],
-                            "auth_session_id": loginAction.context["auth_session_id"],
-                        ]) else {
-                            return completionHandler(.failure(E3dbError.encodingError("final body request failed to encode, login context contains invalid data")))
+                        guard let bodyData = body else {
+                            return completionHandler(.failure(E3dbError.encodingError("data returned from actionHandler failed to encode")))
                         }
-                        finalRequest.httpBody = finalRequestBody
-                        var potentialToken: AgentToken? = nil
-                        anonAuth.handledTsv1Request(request: finalRequest, errorHandler: completionHandler) {
-                            (token: AgentToken) -> Void in
-                            potentialToken = token
+                        var loginActionRequest = URLRequest(url: URL(string: loginAction.actionUrl)!)
+                        loginActionRequest.httpMethod = "POST"
+                        loginActionRequest.httpBody = bodyData
+                        loginActionRequest.addValue(loginAction.contentType, forHTTPHeaderField: "Content-Type")
+                        anonAuth.handledTsv1Request(request: loginActionRequest, errorHandler: completionHandler) {
+                            (newLoginAction: IdentityLoginAction) -> Void in
+                            loginAction = newLoginAction
                             semaphore.signal()
                         }
                         semaphore.wait(timeout: .now() + 10)
-                        guard let token = potentialToken else {
-                            return completionHandler(.failure(E3dbError.networkError("failed to get access token")))
-                        }
-                        Client.readNoteByName(noteName: noteCredentials.name,
-                                              privateEncryptionKey: noteCredentials.encryptionKeyPair.privateKey,
-                                              publicEncryptionKey: noteCredentials.encryptionKeyPair.publicKey,
-                                              publicSigningKey: noteCredentials.signingKeyPair.publicKey,
-                                              privateSigningKey: noteCredentials.signingKeyPair.privateKey,
-                                              additionalHeaders: ["X-TOZID-LOGIN-TOKEN": token.accessToken],
-                                              apiUrl: self.apiUrl) {
-                            result -> Void in
-                            switch (result) {
-                            case .failure(let error):
-                                return completionHandler(.failure(error))
-                            case .success(let note):
-                                guard let idConfig = try? IdentityConfig(fromPassNote: note) else {
-                                    return completionHandler(.failure(E3dbError.jsonError(expected: "valid identity configuration", actual: "note data configuration failed to parse")))
-                                }
-                                let partialIdentity = PartialIdentity(idConfig: idConfig)
-                                completionHandler(.success(Identity(fromPartial: partialIdentity, identityServiceToken: token)))
+                    }
+                    // Final request
+                    var finalRequest = URLRequest(url: URL(string: self.apiUrl + "/v1/identity/tozid/redirect")!)
+                    finalRequest.httpMethod = "POST"
+                    guard let finalRequestBody = try? JSONSerialization.data(withJSONObject: [
+                        "realm_name": self.realmName,
+                        "session_code": loginAction.context["session_code"],
+                        "execution": loginAction.context["execution"],
+                        "tab_id": loginAction.context["tab_id"],
+                        "client_id": loginAction.context["client_id"],
+                        "auth_session_id": loginAction.context["auth_session_id"],
+                        "code_verifier": pkceVerifier,
+                    ]) else {
+                        return completionHandler(.failure(E3dbError.encodingError("final body request failed to encode, login context contains invalid data")))
+                    }
+                    finalRequest.httpBody = finalRequestBody
+                    var potentialToken: AgentToken? = nil
+                    anonAuth.handledTsv1Request(request: finalRequest, errorHandler: completionHandler) {
+                        (token: AgentToken) -> Void in
+                        potentialToken = token
+                        semaphore.signal()
+                    }
+                    semaphore.wait(timeout: .now() + 10)
+                    guard let token = potentialToken else {
+                        return completionHandler(.failure(E3dbError.networkError("failed to get access token")))
+                    }
+                    Client.readNoteByName(noteName: noteCredentials.name,
+                                          privateEncryptionKey: noteCredentials.encryptionKeyPair.privateKey,
+                                          publicEncryptionKey: noteCredentials.encryptionKeyPair.publicKey,
+                                          publicSigningKey: noteCredentials.signingKeyPair.publicKey,
+                                          privateSigningKey: noteCredentials.signingKeyPair.privateKey,
+                                          additionalHeaders: ["X-TOZID-LOGIN-TOKEN": token.accessToken],
+                                          apiUrl: self.apiUrl) {
+                        result -> Void in
+                        switch (result) {
+                        case .failure(let error):
+                            return completionHandler(.failure(error))
+                        case .success(let note):
+                            guard let idConfig = try? IdentityConfig(fromPassNote: note) else {
+                                return completionHandler(.failure(E3dbError.jsonError(expected: "valid identity configuration", actual: "note data configuration failed to parse")))
                             }
+                            let partialIdentity = PartialIdentity(idConfig: idConfig)
+                            completionHandler(.success(Identity(fromPartial: partialIdentity, identityServiceToken: token)))
                         }
                     }
                 }

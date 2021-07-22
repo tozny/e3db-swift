@@ -134,6 +134,9 @@ public struct signableString: Signable {
 }
 
 public func encodeBodyAsUrl(_ data: [String: Any]) throws -> String {
+    if data.count == 0 {
+        return ""
+    }
     var urlEncodedValues = ""
     for (key, value) in data {
         if let value = value as? [String: Any] {
