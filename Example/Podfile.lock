@@ -2,20 +2,20 @@ PODS:
   - E3db (4.1.0-alpha.2):
     - E3db/Core (= 4.1.0-alpha.2)
   - E3db/Core (4.1.0-alpha.2):
-    - Heimdallr (~> 3.6.1)
     - Sodium (~> 0.7)
-    - Swish (= 3.0.0)
+    - ToznyHeimdallr (~> 4.0)
+    - ToznySwish (~> 5.0.0)
     - Valet (~> 3.1)
-  - Heimdallr (3.6.1):
-    - Heimdallr/Core (= 3.6.1)
-  - Heimdallr/Core (3.6.1):
-    - Result (~> 3.0)
   - ResponseDetective (1.4.0)
-  - Result (3.2.4)
+  - Result (4.1.0)
   - Sodium (0.8.0)
   - SwiftCheck (0.12.0)
-  - Swish (3.0.0):
-    - Result (~> 3.1)
+  - ToznyHeimdallr (4.0.1):
+    - ToznyHeimdallr/Core (= 4.0.1)
+  - ToznyHeimdallr/Core (4.0.1):
+    - Result (~> 4.1.0)
+  - ToznySwish (5.0.0):
+    - Result (~> 4.1)
   - Valet (3.2.8)
 
 DEPENDENCIES:
@@ -25,12 +25,12 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - Heimdallr
     - ResponseDetective
     - Result
     - Sodium
     - SwiftCheck
-    - Swish
+    - ToznyHeimdallr
+    - ToznySwish
     - Valet
 
 EXTERNAL SOURCES:
@@ -38,13 +38,13 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  E3db: d8ea188a8f2408980dbc2310d4089e65ef9aab7d
-  Heimdallr: d2a8b1dc3ecc7ad249c9ffd20c990e2248fcd599
+  E3db: bd7478440ee6c8de9ed30b342409487c4072f3ea
   ResponseDetective: bfa12c55416a9167e84a1419108fab87c68c1e33
-  Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
+  Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
   Sodium: 63c0ca312a932e6da481689537d4b35568841bdc
   SwiftCheck: d1dd04d955cc76620b0f84e087536bd059a11c24
-  Swish: 68621dbf8f0c0ed1660cb620f3ce8d5218f6bf38
+  ToznyHeimdallr: 69a0cff11b77ca36b304dede9009264473315695
+  ToznySwish: 22cb7f57696adbb98cb9078b278b756215169dc0
   Valet: 16d0537d70db79d9ba953b9060b5da4fb8004e51
 
 PODFILE CHECKSUM: 957b019295ab47ff29bd50b027b2a1a8b61fb011
