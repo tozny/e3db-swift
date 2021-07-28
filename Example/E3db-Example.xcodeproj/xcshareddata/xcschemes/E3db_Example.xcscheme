@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scheme
+   LastUpgradeVersion = "1250"
+   version = "1.3">
+   <BuildAction
+      parallelizeBuildables = "YES"
+      buildImplicitDependencies = "YES">
+      <BuildActionEntries>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "607FACCF1AFB9204008FA782"
+               BuildableName = "E3db_Example.app"
+               BlueprintName = "E3db_Example"
+               ReferencedContainer = "container:E3db-Example.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+      </BuildActionEntries>
+   </BuildAction>
+   <TestAction
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      shouldUseLaunchSchemeArgsEnv = "YES">
+      <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "607FACE41AFB9204008FA782"
+               BuildableName = "E3db_Tests.xctest"
+               BlueprintName = "E3db_Tests"
+               ReferencedContainer = "container:E3db-Example.xcodeproj">
+            </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "BenchmarkTests">
+               </Test>
+               <Test
+                  Identifier = "CryptoTests">
+               </Test>
+               <Test
+                  Identifier = "DocumentTests">
+               </Test>
+               <Test
+                  Identifier = "IdentityTests/testChangePassword()">
+               </Test>
+               <Test
+                  Identifier = "IdentityTests/testFetchToken()">
+               </Test>
+               <Test
+                  Identifier = "IdentityTests/testGetKeycloakToken()">
+               </Test>
+               <Test
+                  Identifier = "IdentityTests/testReadNote()">
+               </Test>
+               <Test
+                  Identifier = "IdentityTests/testReadNoteByName()">
+               </Test>
+               <Test
+                  Identifier = "IdentityTests/testRegisterAndLogin()">
+               </Test>
+               <Test
+                  Identifier = "IdentityTests/testRegisterIdentity()">
+               </Test>
+               <Test
+                  Identifier = "IdentityTests/testReplaceNoteByName()">
+               </Test>
+               <Test
+                  Identifier = "IdentityTests/testSortQueryParameters()">
+               </Test>
+               <Test
+                  Identifier = "IdentityTests/testStaticReadNote()">
+               </Test>
+               <Test
+                  Identifier = "IdentityTests/testStaticWriteNote()">
+               </Test>
+               <Test
+                  Identifier = "IdentityTests/testWriteNote()">
+               </Test>
+               <Test
+                  Identifier = "IntegrationTests">
+               </Test>
+               <Test
+                  Identifier = "InvalidCertIntegrationTests">
+               </Test>
+               <Test
+                  Identifier = "PropertyTests">
+               </Test>
+               <Test
+                  Identifier = "ValidCertIntegrationTests">
+               </Test>
+            </SkippedTests>
+         </TestableReference>
+      </Testables>
+   </TestAction>
+   <LaunchAction
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      launchStyle = "0"
+      useCustomWorkingDirectory = "NO"
+      ignoresPersistentStateOnLaunch = "NO"
+      debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
+      allowLocationSimulation = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "607FACCF1AFB9204008FA782"
+            BuildableName = "E3db_Example.app"
+            BlueprintName = "E3db_Example"
+            ReferencedContainer = "container:E3db-Example.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+   </LaunchAction>
+   <ProfileAction
+      buildConfiguration = "Release"
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      savedToolIdentifier = ""
+      useCustomWorkingDirectory = "NO"
+      debugDocumentVersioning = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "607FACCF1AFB9204008FA782"
+            BuildableName = "E3db_Example.app"
+            BlueprintName = "E3db_Example"
+            ReferencedContainer = "container:E3db-Example.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+   </ProfileAction>
+   <AnalyzeAction
+      buildConfiguration = "Debug">
+   </AnalyzeAction>
+   <ArchiveAction
+      buildConfiguration = "Release"
+      revealArchiveInOrganizer = "YES">
+   </ArchiveAction>
+</Scheme>
