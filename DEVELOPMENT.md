@@ -92,6 +92,30 @@ Verify that the pod can be compiled with
 pod lib lint
 ```
 
+The above command currently fails with
+
+```
+ -> E3db (4.2.0)
+    - ERROR | [E3db/Core] xcodebuild: Returned an unsuccessful exit code. You can use `--verbose` for more information.
+    - NOTE  | [E3db/Core] xcodebuild:  note: Using new build system
+    - NOTE  | [E3db/Core] xcodebuild:  note: Building targets in parallel
+    - NOTE  | [E3db/Core] xcodebuild:  note: Using codesigning identity override: -
+    - NOTE  | [E3db/Core] xcodebuild:  note: Build preparation complete
+    - NOTE  | [E3db/Core] xcodebuild:  note: Planning build
+    - NOTE  | [E3db/Core] xcodebuild:  note: Analyzing workspace
+    - NOTE  | [E3db/Core] xcodebuild:  note: Constructing build description
+    - NOTE  | [E3db/Core] xcodebuild:  clang: error: linker command failed with exit code 1 (use -v to see invocation)
+    - NOTE  | [E3db/Core] xcodebuild:  warning: Skipping code signing because the target does not have an Info.plist file and one is not being generated automatically. (in target 'App' from project 'App')
+    - NOTE  | [E3db/Core] xcodebuild:  Pods.xcodeproj: warning: The iOS Simulator deployment target 'IPHONEOS_DEPLOYMENT_TARGET' is set to 8.0, but the range of supported deployment target versions is 9.0 to 14.5.99. (in target 'Sodium' from project 'Pods')
+    - NOTE  | [E3db/Core] xcodebuild:  Pods.xcodeproj: warning: The iOS Simulator deployment target 'IPHONEOS_DEPLOYMENT_TARGET' is set to 8.0, but the range of supported deployment target versions is 9.0 to 14.5.99. (in target 'ToznySwish' from project 'Pods')
+    - NOTE  | [E3db/Core] xcodebuild:  Pods.xcodeproj: warning: The iOS Simulator deployment target 'IPHONEOS_DEPLOYMENT_TARGET' is set to 8.0, but the range of supported deployment target versions is 9.0 to 14.5.99. (in target 'Result' from project 'Pods')
+
+[!] E3db did not pass validation, due to 1 error.
+You can use the `--no-clean` option to inspect any issue.
+```
+
+It's uncertain at this time whether the lint errors should be resolved, and they do not prevent new versions of Swift SDK from being picked up by downstream consumers such as the [Tozny Flutter Plugin](https://github.com/tozny/flutter_plugin)
+
 tag the release and push the tags to github
 ```
 git tag '4.1.0-alpha.1'
