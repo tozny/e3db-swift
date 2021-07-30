@@ -1,7 +1,7 @@
 PODS:
-  - E3db (4.1.0-alpha.2):
-    - E3db/Core (= 4.1.0-alpha.2)
-  - E3db/Core (4.1.0-alpha.2):
+  - E3db (4.2.0):
+    - E3db/Core (= 4.2.0)
+  - E3db/Core (4.2.0):
     - Sodium (~> 0.7)
     - ToznyHeimdallr (~> 4.0)
     - ToznySwish (~> 5.0.0)
@@ -38,7 +38,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  E3db: bd7478440ee6c8de9ed30b342409487c4072f3ea
+  E3db: f1ae25955416f7dcbc22aafcdcc86c9b088de0a1
   ResponseDetective: bfa12c55416a9167e84a1419108fab87c68c1e33
   Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
   Sodium: 63c0ca312a932e6da481689537d4b35568841bdc
