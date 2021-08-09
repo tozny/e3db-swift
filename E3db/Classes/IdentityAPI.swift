@@ -122,17 +122,31 @@ public struct NoteCredentials {
     let signingKeyPair: SigningKeyPair
 }
 
+public struct PublicRealmInfo: Codable {
+    let name: String
+    let brokerId: UUID?
+    let domain: String
+    
+    enum CodingKeys: String, CodingKey {
+        case name
+        case brokerId = "broker_id"
+        case domain
+    }
+}
+
 public struct PasswordNoteData: Codable {
     struct idConfig: Codable {
         let realmName: String
+        let realmDomain: String?
         let appName: String
         let apiUrl: String
-        let username: String
+        let username: String?
         let brokerTargetUrl: String
         let userId: Int?
 
         enum CodingKeys: String, CodingKey {
             case realmName = "realm_name"
+            case realmDomain = "realm_domain"
             case appName = "app_name"
             case apiUrl = "api_url"
             case username
@@ -170,6 +184,7 @@ public struct PasswordNoteData: Codable {
 
     init(identity: IdentityConfig, store: Config) {
         config = idConfig(realmName: identity.realmName,
+                          realmDomain: identity.realmDomain,
                           appName: identity.appName,
                           apiUrl: identity.apiUrl,
                           username: identity.username,

@@ -16,18 +16,44 @@ public class Application {
     public init(apiUrl: String, appName: String, realmName: String, brokerTargetUrl: String) {
         self.apiUrl = apiUrl
         self.appName = appName
-        self.realmName = realmName
+        self.realmName = realmName //.lowercased()
         self.brokerTargetUrl = brokerTargetUrl
+    }
+    
+    /// Get the public info for the current realm
+    public func info<Z: Any>(errorHandler: @escaping E3dbCompletion<Z>, completionHandler: @escaping (PublicRealmInfo) -> Void ) {
+        var request = URLRequest(url: URL(string: self.apiUrl + "/v1/identity/info/realm/" + self.realmName)!)
+        request.httpMethod = "GET"
+        Authenticator.request(unauthedReq: request) { result -> Void in
+            let handleError = errorCompletion(errorHandler)
+            switch(result) {
+            case .failure(let error):
+                let err = E3dbError.networkError(error.localizedDescription)
+                    return handleError(err)
+            case .success(let response, let data):
+                if let httpResponse = response as? HTTPURLResponse {
+                    if httpResponse.statusCode != 200 {
+                        return handleError(E3dbError.apiError(code: httpResponse.statusCode, message: String(decoding: data, as: UTF8.self)))
+                    }
+                    guard let response = try? Api.decoder.decode(PublicRealmInfo.self, from: data) else {
+                        return handleError(E3dbError.jsonError(expected: String(describing: type(of: PublicRealmInfo.self)), actual: String(decoding: data, as: UTF8.self)))
+                    }
+                    completionHandler(response)
+                } else {
+                    return handleError(E3dbError.networkError("invalid network response"))
+                }
+            }
+        }
     }
 
     public func login(username: String, password: String, actionHandler: @escaping (IdentityLoginAction) -> [String:String], completionHandler: @escaping E3dbCompletion<Identity>) {
             var username = username
             username = username.lowercased()
-
-            guard let noteCredentials = try? Crypto.deriveNoteCreds(realmName: self.realmName, username: username, password: password) else {
+        self.info(errorHandler: completionHandler) {
+            (realmInfo: PublicRealmInfo) -> Void in
+            guard let noteCredentials = try? Crypto.deriveNoteCreds(realmName: realmInfo.name, username: username, password: password) else {
                 return completionHandler(.failure(E3dbError.cryptoError("Couldn't derive crypto keys from username and password")))
             }
-
             let anonAuth = Authenticator(anonConfig: AuthenticatorConfig(publicSigningKey: noteCredentials.signingKeyPair.publicKey, privateSigningKey: noteCredentials.signingKeyPair.privateKey, apiUrl: self.apiUrl, clientId: nil))
 
             var initiateLoginRequest = URLRequest(url: URL(string: self.apiUrl + "/v1/identity/login")!)
@@ -79,7 +105,7 @@ public class Application {
                     var finalRequest = URLRequest(url: URL(string: self.apiUrl + "/v1/identity/tozid/redirect")!)
                     finalRequest.httpMethod = "POST"
                     guard let finalRequestBody = try? JSONSerialization.data(withJSONObject: [
-                        "realm_name": self.realmName,
+                        "realm_name": realmInfo.domain/*self.realmName*/,
                         "session_code": loginAction.context["session_code"],
                         "execution": loginAction.context["execution"],
                         "tab_id": loginAction.context["tab_id"],
@@ -121,6 +147,7 @@ public class Application {
                     }
                 }
             }
+        }
     }
 
     public func register(username: String, password: String, email: String, token: String, firstName: String? = nil, lastName: String? = nil, emailEacpExpiryMinutes: Int = 60, completionHandler: @escaping E3dbCompletion<PartialIdentity>) {
@@ -145,8 +172,10 @@ public class Application {
             result -> Void in
             Authenticator.handleURLResponse(result, completionHandler) {
                 (identityResponse: IdentityRegisterResponse) -> Void in
-                do {
-                    let storageConfig = Config(clientName: username,
+                self.info(errorHandler: completionHandler) {
+                    (realmInfo: PublicRealmInfo) -> Void in
+                    do {
+                        let storageConfig = Config(clientName: username,
                                                clientId: UUID.init(uuidString: identityResponse.identity.toznyId!)!,
                                                apiKeyId: identityResponse.identity.apiKeyID!,
                                                apiSecret: identityResponse.identity.apiKeySecret!,
@@ -156,7 +185,8 @@ public class Application {
                                                publicSigKey: signingKeys.publicKey,
                                                privateSigKey: signingKeys.secretKey)
 
-                    let idConfig = IdentityConfig(realmName: self.realmName,
+                        let idConfig = IdentityConfig(realmName: realmInfo.name,
+                                                  realmDomain: realmInfo.domain,
                                                   appName: self.appName,
                                                   apiUrl: self.apiUrl,
                                                   username: username,
@@ -166,57 +196,58 @@ public class Application {
                                                   lastName: lastName,
                                                   storageConfig: storageConfig)
 
-                    let noteCreds = try Crypto.deriveNoteCreds(realmName: self.realmName, username: username, password: password)
-                    let passNote = PasswordNoteData(identity: idConfig, store: storageConfig)
+                        let noteCreds = try Crypto.deriveNoteCreds(realmName: idConfig.realmName, username: username, password: password)
+                        let passNote = PasswordNoteData(identity: idConfig, store: storageConfig)
 
-                    let partialIdentity = PartialIdentity(idConfig: idConfig)
+                        let partialIdentity = PartialIdentity(idConfig: idConfig)
 
-                    let passData = try JSONEncoder().encode(passNote)
-                    let passNoteData = try JSONSerialization.jsonObject(with: passData) as! [String: String]
+                        let passData = try JSONEncoder().encode(passNote)
+                        let passNoteData = try JSONSerialization.jsonObject(with: passData) as! [String: String]
 
-                    let tozIdEacp = TozIdEacp(realmName: self.realmName)
-                    let options = NoteOptions(IdString: noteCreds.name, maxViews: -1, expires: false, eacp: tozIdEacp)
-                    partialIdentity.storeClient.writeNote(data: passNoteData,
+                        let tozIdEacp = TozIdEacp(realmName: idConfig.realmDomain)
+                        let options = NoteOptions(IdString: noteCreds.name, maxViews: -1, expires: false, eacp: tozIdEacp)
+                        partialIdentity.storeClient.writeNote(data: passNoteData,
                                                       recipientEncryptionKey: noteCreds.encryptionKeyPair.publicKey,
                                                       recipientSigningKey: noteCreds.signingKeyPair.publicKey,
                                                       options: options) {
-                        result -> Void in
-                        switch(result) {
-                        case .failure(let error):
-                            return completionHandler(.failure(error))
-                        case .success:
-                            let brokerClientID = identityResponse.realmBrokerIdentityToznyID
-                            if brokerClientID == nil || brokerClientID == "00000000-0000-0000-0000-000000000000" {
-                                return completionHandler(.success(partialIdentity))
-                            }
-                            partialIdentity.storeClient.getClientInfo(clientId: UUID(uuidString: brokerClientID!)) {
-                                result -> Void in
-                                switch(result) {
-                                case .failure(let error):
-                                    return completionHandler(.failure(error))
-                                case .success(let brokerInfo as ClientInfo):
+                            result -> Void in
+                            switch(result) {
+                            case .failure(let error):
+                                return completionHandler(.failure(error))
+                            case .success:
+                                let brokerClientID = identityResponse.realmBrokerIdentityToznyID
+                                if brokerClientID == nil || brokerClientID == "00000000-0000-0000-0000-000000000000" {
+                                    return completionHandler(.success(partialIdentity))
+                                }
+                                partialIdentity.storeClient.getClientInfo(clientId: UUID(uuidString: brokerClientID!)) {
+                                    result -> Void in
+                                    switch(result) {
+                                    case .failure(let error):
+                                        return completionHandler(.failure(error))
+                                    case .success(let brokerInfo as ClientInfo):
                                     // Email recovery notes through broker
-                                    self.registerBrokerEmailHelper(username: username, brokerInfo: brokerInfo, email: email, firstName: firstName, lastName: lastName, partialIdentity: partialIdentity, passwordNoteContents: passNoteData) {
-                                        err -> Void in
-                                        if let err = err {
-                                            return completionHandler(.failure(err))
-                                        }
-                                        // OTP recovery notes through broker
-                                        self.registerBrokerOTPHelper(username: username, brokerInfo: brokerInfo, passwordNoteContents: passNoteData, partialIdentity: partialIdentity) {
+                                        self.registerBrokerEmailHelper(username: username, brokerInfo: brokerInfo, email: email, firstName: firstName, lastName: lastName, partialIdentity: partialIdentity, passwordNoteContents: passNoteData) {
                                             err -> Void in
                                             if let err = err {
                                                 return completionHandler(.failure(err))
                                             }
-                                            return completionHandler(.success(partialIdentity))
+                                            // OTP recovery notes through broker
+                                            self.registerBrokerOTPHelper(username: username, brokerInfo: brokerInfo, passwordNoteContents: passNoteData, partialIdentity: partialIdentity) {
+                                                err -> Void in
+                                                if let err = err {
+                                                    return completionHandler(.failure(err))
+                                                }
+                                                return completionHandler(.success(partialIdentity))
+                                            }
                                         }
                                     }
                                 }
+                                return
                             }
-                            return
                         }
+                    } catch {
+                        return completionHandler(.failure(E3dbError.generalError(error.localizedDescription)))
                     }
-                } catch {
-                    return completionHandler(.failure(E3dbError.generalError(error.localizedDescription)))
                 }
             }
         }
