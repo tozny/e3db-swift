@@ -10,7 +10,7 @@ import Valet
 public struct Config: Codable {
 
     /// The name for this client
-    public let clientName: String
+    public let clientName: String?
 
     /// The client identifier
     public let clientId: UUID
@@ -51,7 +51,7 @@ public struct Config: Codable {
     ///   - privateKey: The client's secret key
     ///   - baseApiUrl: The base URL for the E3DB service
     public init(
-        clientName: String,
+        clientName: String?,
         clientId: UUID,
         apiKeyId: String,
         apiSecret: String,
@@ -61,7 +61,7 @@ public struct Config: Codable {
         publicSigKey: String,
         privateSigKey: String
     ) {
-        self.clientName = clientName
+        self.clientName = clientName ?? ""
         self.clientId = clientId
         self.apiKeyId = apiKeyId
         self.apiSecret = apiSecret
@@ -277,11 +277,12 @@ extension Config {
 }
 
 public class IdentityConfig: Codable {
-    internal init(realmName: String, appName: String, apiUrl: String = Api.defaultUrl, username: String, userId: Int? = nil, brokerTargetUrl: String, firstName: String? = nil, lastName: String? = nil, storageConfig: Config) {
+    internal init(realmName: String, realmDomain: String?, appName: String, apiUrl: String = Api.defaultUrl, username: String?, userId: Int? = nil, brokerTargetUrl: String, firstName: String? = nil, lastName: String? = nil, storageConfig: Config) {
         self.realmName = realmName
+        self.realmDomain = realmDomain ?? ""
         self.appName = appName
         self.apiUrl = apiUrl
-        self.username = username
+        self.username = username ?? ""
         self.storageConfig = storageConfig
 
         self.firstName = firstName
@@ -304,6 +305,7 @@ public class IdentityConfig: Codable {
                                    privateSigKey: noteData.storage.privateSigKey)
 
         self.init(realmName:noteData.config.realmName,
+                  realmDomain:noteData.config.realmDomain,
                   appName: noteData.config.appName,
                   apiUrl: noteData.config.apiUrl,
                   username: noteData.config.username,
@@ -314,6 +316,7 @@ public class IdentityConfig: Codable {
 
     // required to initialize and login to an identity client
     public let realmName: String
+    public let realmDomain: String
     public let appName: String
     public let apiUrl: String
     public let username: String
