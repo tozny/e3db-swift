@@ -5,7 +5,7 @@
 
 import Foundation
 import Result
-import ToznySwish
+import Swish
 
 /// Data type to specify filters for querying records
 public struct QueryParams: Encodable {

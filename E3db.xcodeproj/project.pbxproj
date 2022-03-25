@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -19,12 +19,32 @@
 		2C5AE684208E55D0008F52C5 /* Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5AE679208E55D0008F52C5 /* Register.swift */; };
 		2C5AE685208E55D0008F52C5 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5AE67A208E55D0008F52C5 /* Extensions.swift */; };
 		2C5AE686208E55D0008F52C5 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5AE67B208E55D0008F52C5 /* Client.swift */; };
-		2CEA3AF0208E6B7600AC46EE /* Heimdallr.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE68D208E55F7008F52C5 /* Heimdallr.framework */; settings = {ATTRIBUTES = (Required, ); }; };
-		2CEA3AF5208E6B7600AC46EE /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE690208E55F7008F52C5 /* Result.framework */; };
-		2CEA3AF6208E6B7600AC46EE /* Sodium.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE68A208E55F7008F52C5 /* Sodium.framework */; };
-		2CEA3AF7208E6B7600AC46EE /* Swish.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE689208E55F7008F52C5 /* Swish.framework */; };
-		2CEA3AF8208E6B7600AC46EE /* Valet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE68C208E55F7008F52C5 /* Valet.framework */; };
+		30B48D0C27EE5404004C4DE1 /* Result.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 302DAC5827EE44BC001929B5 /* Result.xcframework */; };
+		30B48D0D27EE5404004C4DE1 /* Result.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 302DAC5827EE44BC001929B5 /* Result.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		30B48D0F27EE5405004C4DE1 /* Sodium.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 302DAC5527EE44BC001929B5 /* Sodium.xcframework */; };
+		30B48D1027EE5405004C4DE1 /* Sodium.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 302DAC5527EE44BC001929B5 /* Sodium.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		30B48D1127EE5407004C4DE1 /* ToznySwish.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 307EB47427EE537400FB34C7 /* ToznySwish.xcframework */; };
+		30B48D1227EE5407004C4DE1 /* ToznySwish.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 307EB47427EE537400FB34C7 /* ToznySwish.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		30B48D1327EE5408004C4DE1 /* Valet.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 302DAC5627EE44BC001929B5 /* Valet.xcframework */; };
+		30B48D1427EE5408004C4DE1 /* Valet.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 302DAC5627EE44BC001929B5 /* Valet.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		30B48D0E27EE5404004C4DE1 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				30B48D1427EE5408004C4DE1 /* Valet.xcframework in Embed Frameworks */,
+				30B48D1027EE5405004C4DE1 /* Sodium.xcframework in Embed Frameworks */,
+				30B48D1227EE5407004C4DE1 /* ToznySwish.xcframework in Embed Frameworks */,
+				30B48D0D27EE5404004C4DE1 /* Result.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		2C5AE625208E52A9008F52C5 /* E3db.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = E3db.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -50,6 +70,11 @@
 		2C5AE68E208E55F7008F52C5 /* ReactiveObjC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveObjC.framework; path = Carthage/Build/iOS/ReactiveObjC.framework; sourceTree = "<group>"; };
 		2C5AE68F208E55F7008F52C5 /* ReactiveSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveSwift.framework; path = Carthage/Build/iOS/ReactiveSwift.framework; sourceTree = "<group>"; };
 		2C5AE690208E55F7008F52C5 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
+		302DAC5527EE44BC001929B5 /* Sodium.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Sodium.xcframework; path = Carthage/Build/Sodium.xcframework; sourceTree = "<group>"; };
+		302DAC5627EE44BC001929B5 /* Valet.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Valet.xcframework; path = Carthage/Build/Valet.xcframework; sourceTree = "<group>"; };
+		302DAC5727EE44BC001929B5 /* Swish.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Swish.xcframework; path = Carthage/Build/Swish.xcframework; sourceTree = "<group>"; };
+		302DAC5827EE44BC001929B5 /* Result.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Result.xcframework; path = Carthage/Build/Result.xcframework; sourceTree = "<group>"; };
+		307EB47427EE537400FB34C7 /* ToznySwish.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = ToznySwish.xcframework; path = Carthage/Build/ToznySwish.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,11 +82,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2CEA3AF0208E6B7600AC46EE /* Heimdallr.framework in Frameworks */,
-				2CEA3AF5208E6B7600AC46EE /* Result.framework in Frameworks */,
-				2CEA3AF6208E6B7600AC46EE /* Sodium.framework in Frameworks */,
-				2CEA3AF7208E6B7600AC46EE /* Swish.framework in Frameworks */,
-				2CEA3AF8208E6B7600AC46EE /* Valet.framework in Frameworks */,
+				30B48D1127EE5407004C4DE1 /* ToznySwish.xcframework in Frameworks */,
+				30B48D0C27EE5404004C4DE1 /* Result.xcframework in Frameworks */,
+				30B48D1327EE5408004C4DE1 /* Valet.xcframework in Frameworks */,
+				30B48D0F27EE5405004C4DE1 /* Sodium.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,6 +132,11 @@
 		2C5AE687208E55F6008F52C5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				307EB47427EE537400FB34C7 /* ToznySwish.xcframework */,
+				302DAC5827EE44BC001929B5 /* Result.xcframework */,
+				302DAC5527EE44BC001929B5 /* Sodium.xcframework */,
+				302DAC5727EE44BC001929B5 /* Swish.xcframework */,
+				302DAC5627EE44BC001929B5 /* Valet.xcframework */,
 				2C5AE68D208E55F7008F52C5 /* Heimdallr.framework */,
 				2C5AE68B208E55F7008F52C5 /* ReactiveHeimdallr.framework */,
 				2C5AE68E208E55F7008F52C5 /* ReactiveObjC.framework */,
@@ -143,6 +172,7 @@
 				2C5AE621208E52A9008F52C5 /* Frameworks */,
 				2C5AE622208E52A9008F52C5 /* Headers */,
 				2C5AE623208E52A9008F52C5 /* Resources */,
+				30B48D0E27EE5404004C4DE1 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -255,6 +285,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				"FRAMEWORK_SEARCH_PATHS[arch=*]" = "$(SRCROOT)/**";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -269,7 +300,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -318,6 +349,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				"FRAMEWORK_SEARCH_PATHS[arch=*]" = "$(SRCROOT)/**";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -326,7 +358,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -349,12 +381,12 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(inherited)/**",
+					"$(PROJECT_DIR)/Carthage/Build/iOS/**",
 				);
 				INFOPLIST_FILE = E3db/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -381,12 +413,12 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(inherited)/**",
+					"$(PROJECT_DIR)/Carthage/Build/iOS/**",
 				);
 				INFOPLIST_FILE = E3db/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

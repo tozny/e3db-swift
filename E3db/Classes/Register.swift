@@ -5,7 +5,7 @@
 
 import Foundation
 import Sodium
-import ToznySwish
+import Swish
 
 struct ClientRequest: Encodable {
     let name: String

@@ -8,7 +8,7 @@ import CommonCrypto
 #endif
 import Foundation
 import Result
-import ToznySwish
+import Swish
 
 extension Formatter {
     static let iso8601: DateFormatter = {
