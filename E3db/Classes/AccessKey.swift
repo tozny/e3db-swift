@@ -6,7 +6,7 @@
 import Foundation
 import ToznyHeimdallr
 import Result
-import Sodium
+import ToznySodium
 import ToznySwish
 
 // MARK: Access Key Management

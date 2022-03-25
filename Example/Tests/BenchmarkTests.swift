@@ -1,5 +1,5 @@
 import XCTest
-import Sodium
+import ToznySodium
 @testable import E3db
 
 class BenchmarkTests: XCTestCase, TestUtils {

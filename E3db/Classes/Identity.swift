@@ -5,7 +5,7 @@
 
 import Foundation
 import ToznySwish
-import Sodium
+import ToznySodium
 import Result
 
 public class PartialIdentity {

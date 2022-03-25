@@ -4,7 +4,7 @@
 //
 
 import Foundation
-import Sodium
+import ToznySodium
 import ToznySwish
 
 struct ClientRequest: Encodable {

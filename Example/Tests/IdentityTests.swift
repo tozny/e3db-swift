@@ -5,7 +5,7 @@
 
 import Foundation
 import XCTest
-import Sodium
+import ToznySodium
 @testable import E3db
 
 class IdentityTests: XCTestCase, TestUtils {

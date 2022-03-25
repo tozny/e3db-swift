@@ -19,14 +19,17 @@
 		2C5AE684208E55D0008F52C5 /* Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5AE679208E55D0008F52C5 /* Register.swift */; };
 		2C5AE685208E55D0008F52C5 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5AE67A208E55D0008F52C5 /* Extensions.swift */; };
 		2C5AE686208E55D0008F52C5 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5AE67B208E55D0008F52C5 /* Client.swift */; };
-		2CEA3AF0208E6B7600AC46EE /* Heimdallr.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE68D208E55F7008F52C5 /* Heimdallr.framework */; settings = {ATTRIBUTES = (Required, ); }; };
-		2CEA3AF5208E6B7600AC46EE /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE690208E55F7008F52C5 /* Result.framework */; };
-		2CEA3AF6208E6B7600AC46EE /* Sodium.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE68A208E55F7008F52C5 /* Sodium.framework */; };
-		2CEA3AF7208E6B7600AC46EE /* Swish.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE689208E55F7008F52C5 /* Swish.framework */; };
-		2CEA3AF8208E6B7600AC46EE /* Valet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5AE68C208E55F7008F52C5 /* Valet.framework */; };
+		30F783F027EE812C0061209B /* IdentityAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F783EA27EE812C0061209B /* IdentityAPI.swift */; };
+		30F783F127EE812C0061209B /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F783EB27EE812C0061209B /* Application.swift */; };
+		30F783F227EE812C0061209B /* Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F783EC27EE812C0061209B /* Identity.swift */; };
+		30F783F327EE812C0061209B /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F783ED27EE812C0061209B /* Note.swift */; };
+		30F783F427EE812C0061209B /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F783EE27EE812C0061209B /* File.swift */; };
+		30F783F527EE812C0061209B /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F783EF27EE812C0061209B /* Authenticator.swift */; };
+		A9C2188B34DCD0C39F312338 /* Pods_E3db.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1ACB07317E2F94BED71831A1 /* Pods_E3db.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1ACB07317E2F94BED71831A1 /* Pods_E3db.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_E3db.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C5AE625208E52A9008F52C5 /* E3db.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = E3db.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C5AE628208E52A9008F52C5 /* E3db.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = E3db.h; sourceTree = "<group>"; };
 		2C5AE629208E52A9008F52C5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -50,6 +53,14 @@
 		2C5AE68E208E55F7008F52C5 /* ReactiveObjC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveObjC.framework; path = Carthage/Build/iOS/ReactiveObjC.framework; sourceTree = "<group>"; };
 		2C5AE68F208E55F7008F52C5 /* ReactiveSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveSwift.framework; path = Carthage/Build/iOS/ReactiveSwift.framework; sourceTree = "<group>"; };
 		2C5AE690208E55F7008F52C5 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
+		30F783EA27EE812C0061209B /* IdentityAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IdentityAPI.swift; path = Classes/IdentityAPI.swift; sourceTree = "<group>"; };
+		30F783EB27EE812C0061209B /* Application.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Application.swift; path = Classes/Application.swift; sourceTree = "<group>"; };
+		30F783EC27EE812C0061209B /* Identity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Identity.swift; path = Classes/Identity.swift; sourceTree = "<group>"; };
+		30F783ED27EE812C0061209B /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Note.swift; path = Classes/Note.swift; sourceTree = "<group>"; };
+		30F783EE27EE812C0061209B /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = File.swift; path = Classes/File.swift; sourceTree = "<group>"; };
+		30F783EF27EE812C0061209B /* Authenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Authenticator.swift; path = Classes/Authenticator.swift; sourceTree = "<group>"; };
+		AD823D8E913D8727C7D12557 /* Pods-E3db.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-E3db.release.xcconfig"; path = "Target Support Files/Pods-E3db/Pods-E3db.release.xcconfig"; sourceTree = "<group>"; };
+		FA4AB750719225B02A5AA8C8 /* Pods-E3db.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-E3db.debug.xcconfig"; path = "Target Support Files/Pods-E3db/Pods-E3db.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,11 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2CEA3AF0208E6B7600AC46EE /* Heimdallr.framework in Frameworks */,
-				2CEA3AF5208E6B7600AC46EE /* Result.framework in Frameworks */,
-				2CEA3AF6208E6B7600AC46EE /* Sodium.framework in Frameworks */,
-				2CEA3AF7208E6B7600AC46EE /* Swish.framework in Frameworks */,
-				2CEA3AF8208E6B7600AC46EE /* Valet.framework in Frameworks */,
+				A9C2188B34DCD0C39F312338 /* Pods_E3db.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,6 +81,7 @@
 				2C5AE627208E52A9008F52C5 /* E3db */,
 				2C5AE626208E52A9008F52C5 /* Products */,
 				2C5AE687208E55F6008F52C5 /* Frameworks */,
+				537A78479C8C6E6CE99BDF7B /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -90,6 +98,12 @@
 			children = (
 				2C5AE677208E55D0008F52C5 /* AccessKey.swift */,
 				2C5AE67B208E55D0008F52C5 /* Client.swift */,
+				30F783EB27EE812C0061209B /* Application.swift */,
+				30F783EF27EE812C0061209B /* Authenticator.swift */,
+				30F783EE27EE812C0061209B /* File.swift */,
+				30F783EC27EE812C0061209B /* Identity.swift */,
+				30F783EA27EE812C0061209B /* IdentityAPI.swift */,
+				30F783ED27EE812C0061209B /* Note.swift */,
 				2C5AE676208E55D0008F52C5 /* Config.swift */,
 				2C5AE671208E55D0008F52C5 /* Crypto.swift */,
 				2C5AE678208E55D0008F52C5 /* Document.swift */,
@@ -117,8 +131,18 @@
 				2C5AE68A208E55F7008F52C5 /* Sodium.framework */,
 				2C5AE689208E55F7008F52C5 /* Swish.framework */,
 				2C5AE68C208E55F7008F52C5 /* Valet.framework */,
+				1ACB07317E2F94BED71831A1 /* Pods_E3db.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		537A78479C8C6E6CE99BDF7B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				FA4AB750719225B02A5AA8C8 /* Pods-E3db.debug.xcconfig */,
+				AD823D8E913D8727C7D12557 /* Pods-E3db.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -139,6 +163,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2C5AE62D208E52A9008F52C5 /* Build configuration list for PBXNativeTarget "E3db" */;
 			buildPhases = (
+				42B5854A823A4C81A12590D8 /* [CP] Check Pods Manifest.lock */,
 				2C5AE620208E52A9008F52C5 /* Sources */,
 				2C5AE621208E52A9008F52C5 /* Frameworks */,
 				2C5AE622208E52A9008F52C5 /* Headers */,
@@ -195,6 +220,31 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		42B5854A823A4C81A12590D8 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-E3db-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		2C5AE620208E52A9008F52C5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -205,12 +255,18 @@
 				2C5AE682208E55D0008F52C5 /* AccessKey.swift in Sources */,
 				2C5AE684208E55D0008F52C5 /* Register.swift in Sources */,
 				2C5AE686208E55D0008F52C5 /* Client.swift in Sources */,
+				30F783F427EE812C0061209B /* File.swift in Sources */,
+				30F783F327EE812C0061209B /* Note.swift in Sources */,
 				2C5AE67C208E55D0008F52C5 /* Crypto.swift in Sources */,
 				2C5AE685208E55D0008F52C5 /* Extensions.swift in Sources */,
 				2C5AE680208E55D0008F52C5 /* Record.swift in Sources */,
+				30F783F027EE812C0061209B /* IdentityAPI.swift in Sources */,
 				2C5AE67D208E55D0008F52C5 /* Share.swift in Sources */,
+				30F783F527EE812C0061209B /* Authenticator.swift in Sources */,
 				2C5AE67E208E55D0008F52C5 /* Utils.swift in Sources */,
+				30F783F127EE812C0061209B /* Application.swift in Sources */,
 				2C5AE681208E55D0008F52C5 /* Config.swift in Sources */,
+				30F783F227EE812C0061209B /* Identity.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -339,6 +395,7 @@
 		};
 		2C5AE62E208E52A9008F52C5 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FA4AB750719225B02A5AA8C8 /* Pods-E3db.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -371,6 +428,7 @@
 		};
 		2C5AE62F208E52A9008F52C5 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AD823D8E913D8727C7D12557 /* Pods-E3db.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";

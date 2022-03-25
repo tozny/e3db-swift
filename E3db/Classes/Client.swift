@@ -6,7 +6,7 @@
 import Foundation
 import ToznyHeimdallr
 import Result
-import Sodium
+import ToznySodium
 import ToznySwish
 
 /// A type that contains either a value of type `T` or an `E3dbError`

@@ -7,7 +7,7 @@
 import CommonCrypto
 #endif
 import Foundation
-import Sodium
+import ToznySodium
 import Security
 
 typealias RawAccessKey       = SecretBox.Key

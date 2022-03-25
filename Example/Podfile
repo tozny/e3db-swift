@@ -8,7 +8,7 @@ target 'E3db_Example' do
         inherit! :search_paths
         pod 'E3db', :path => '../'
 
-        pod 'ResponseDetective', '~> 1.2'
+        pod 'ResponseDetective', '~> 1.4'
         pod 'SwiftCheck', '~> 0.12'
         end
 end
