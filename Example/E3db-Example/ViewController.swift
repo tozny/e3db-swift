@@ -60,7 +60,48 @@ class ViewController: UIViewController {
     }
 
 
+    
+    /// Demonstrates encrypting Documents securely with E3db.
+    @IBAction func encryptDocument() {
+        guard let msg = messageView.text else {
+            return print("Text field contains no text")
+        }
+        
+        // Wrap message in RecordData type
+        let recordData = RecordData(cleartext:  ["secret message": msg])
+        
+        // Get EAKInfo and attempt to encrypt data to receive a Document
+        var encryptText = ""
+        var decryptText = ""
 
+        e3db?.createWriterKey(type: "example", completion: { result in
+            switch result {
+            case .success(let eak):
+                // Perform encrypt operation
+                let encrypted = try? self.e3db?.encrypt(type: "mobility-app", data: recordData, eakInfo: eak, plain: ["sent from": "my iphone"])
+                encryptText = "Encrypted document! \(String(describing: encrypted?.serialized()))"
+
+                // Attempt to decrypt an encrypted document with the EAKInfo instance
+                do {
+                    let decrypted = try self.e3db?.decrypt(encryptedDoc: encrypted!, eakInfo: eak)
+                    decryptText = "Decrypted document! \(String(describing: decrypted))"
+                }
+                catch {
+                    decryptText = "Failed to decrypt!"
+                }
+                
+            case .failure(let error):
+                encryptText = "An error occured attempting to encrypt a document: \(error)"
+            }
+            
+            // Present response
+            print(encryptText)
+            self.responseLabel.text = encryptText
+            
+            print(decryptText)
+            self.responseLabel.text = decryptText
+        })
+    }
 
     /// Demonstrates writing data securely to E3db.
     /// The `write` operation will encrypt the secret message

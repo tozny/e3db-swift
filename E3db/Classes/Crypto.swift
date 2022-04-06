@@ -187,11 +187,25 @@ extension Crypto {
 
 extension Crypto {
 
+    /**
+     Signature method that signs data with the signer's secret key. The data is expected to be an object conforming to the Signable protocol, and thus
+     serializable to a string. The data, if when serialized is a plain string, will be encoded to utf8 bytes. If the data is already bytes, then it will attempt
+     to be base64Url decoded. 
+     
+     - parameter doc: An object that conforms to the Signable protocol (e.g. EncryptedDocument or SignableDocument)
+     - parameter signingKey: The byte representation of the private signing key of the signer
+     */
     static func signature(doc: Signable, signingKey: Sign.SecretKey) -> String? {
-        let message = try? Crypto.base64UrlDecoded(string: doc.serialized())
-        return sodium.sign.signature(message: message!, secretKey: signingKey)?.base64UrlEncodedString()
+        var message: [UInt8] = Array("".utf8)
+        do {
+            message =  try Crypto.base64UrlDecoded(string: doc.serialized())
+        }
+        catch {
+            message = Array(doc.serialized().utf8)
+        }
+        return sodium.sign.signature(message: message, secretKey: signingKey)?.base64UrlEncodedString()
     }
-
+    
     static func verify(doc: Signable, encodedSig: String, verifyingKey: Sign.PublicKey) -> Bool? {
         let message = Bytes(doc.serialized().utf8)
         return Bytes(base64UrlEncoded: encodedSig)

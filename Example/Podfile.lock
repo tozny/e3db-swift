@@ -1,7 +1,7 @@
 PODS:
-  - E3db (4.2.2):
-    - E3db/Core (= 4.2.2)
-  - E3db/Core (4.2.2):
+  - E3db (4.2.3):
+    - E3db/Core (= 4.2.3)
+  - E3db/Core (4.2.3):
     - ToznyHeimdallr (~> 4.0.2)
     - ToznySodium (~> 0.10.0)
     - ToznySwish (~> 5.0.1)

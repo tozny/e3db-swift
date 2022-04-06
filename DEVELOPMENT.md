@@ -57,8 +57,8 @@ Before running the Example app you will want to add configuration for a valid To
 private let e3dbToken = "259918a1804c89f4acd10b134810442284e4b2d93776c5a7a1c8934e14113a81"
 ```
 
-## Building (Release 4.2.2)
-Due to difficulties using Carthage as a package manager for the project, for release 4.2.2 the SDK has transitioned to using [Cocoapods](https://cocoapods.org/) for both the `E3db` SDK and `E3db-example` test application projects in this repository. The current build instructions for version 4.2.2 and beyond are detailed here.
+## Building (Release >=4.2.2)
+As of 4.2.2, the Carthage package manager is no longer supported. The SDK should be install with [Cocoapods](https://cocoapods.org/) for both the `E3db` SDK and `E3db-example` test application projects in this repository. The current build instructions for 4.2.2 and beyond are detailed here.
 
 1. `cd e3db-swift`
 2. `pod install` - The SDK dependencies are downloaded and built.
@@ -76,7 +76,7 @@ pod install --repo update
 
 What happened is that `pod install` references specs in the local `~/.cocoapods/repos` directory when installing dependencies. The `--repo-update` will update these references so that the latest pod versions can be found. The above command will update the repo specs, and run `pod install`.
 
-## Running (Release 4.2.2)
+## Running (Release >=4.2.2)
 After following the build steps in the [Building](#Building) section, the example application can be ran to test some functionality of the SDK.
 
 1. Open the `E3db-example.xcworkspace` file in Xcode
